@@ -83,42 +83,42 @@ export const cardVariants = cva(
       {
         variant: "outline",
         color: "secondary",
-        className: "border-gray-200",
+        className: "bg-white border-gray-200",
       },
       {
         variant: "outline",
         color: "success",
-        className: "border-success-500",
+        className: "bg-white border-success-500",
       },
       {
         variant: "outline",
         color: "danger",
-        className: "border-danger-500",
+        className: "bg-white border-danger-500",
       },
       {
         variant: "outline",
         color: "warning",
-        className: "border-warning-500",
+        className: "bg-white border-warning-500",
       },
       {
         variant: "outline",
         color: "info",
-        className: "border-info-500",
+        className: "bg-white border-info-500",
       },
       {
         variant: "outline",
         color: "orange",
-        className: "border-orange-500",
+        className: "bg-white border-orange-500",
       },
       {
         variant: "outline",
         color: "purple",
-        className: "border-purple-500",
+        className: "bg-white border-purple-500",
       },
       {
         variant: "outline",
         color: "gray",
-        className: "border-gray-700",
+        className: "bg-white border-gray-700",
       },
     ],
 
