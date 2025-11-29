@@ -83,8 +83,12 @@ import { MessageTextNotification } from "./icons/MessageTextNotification";
 import { ClipBoardEdit } from "./icons/ClipBoardEdit";
 import { CircleAndSquare } from "./icons/CircleAndSquare";
 import { GridSquare } from "./icons/GridSquare";
+import { ArrowLeftCircle } from "./icons/ArrowLeftCircle";
+import { ArrowRightCircle } from "./icons/ArrowRightCircle";
 
 export const iconRegistry = {
+  "arrow-left-circle": ArrowLeftCircle,
+  "arrow-right-circle": ArrowRightCircle,
   search: Search,
   user: User,
   eye: Eye,
