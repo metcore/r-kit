@@ -12,11 +12,18 @@ import { Icon, type IconNameProps } from "../../components/icons";
 import { useSidebar } from "../../components/sidebar";
 import { cn } from "../../lib/utils";
 
+type RouteType = {
+  path?: string;
+  label: string;
+  icon?: IconNameProps;
+  children?: RouteType[];
+};
+
 function AppSidebar() {
   const location = useLocation();
   const { state, isHovered } = useSidebar();
 
-  const menuItems = [
+  const menuItems: RouteType[] = [
     { path: "/", label: "Overview", icon: "grid-square" },
     { path: "/foundation", label: "Foundation", icon: "circle-and-square" },
     { path: "/form", label: "Form", icon: "clipboard-edit" },
@@ -24,9 +31,10 @@ function AppSidebar() {
       label: "Components",
       icon: "book-open-text",
       children: [
-        { path: "/input", label: "Input", icon: "caret-down" },
+        { path: "/input", label: "Input" },
         { path: "/button", label: "Button" },
         { path: "/card", label: "Card" },
+        { path: "/chip", label: "Chip" },
       ],
     },
 
@@ -79,7 +87,7 @@ function AppSidebar() {
                       key={index}
                       active={child.path === location.pathname}
                     >
-                      <Link to={child.path}>{child.label}</Link>
+                      <Link to={child.path || "/"}>{child.label}</Link>
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenuGroup>
@@ -97,7 +105,7 @@ function AppSidebar() {
                 key={index}
                 active={item.path === location.pathname}
               >
-                <Link to={item.path}>{item.label}</Link>
+                <Link to={item.path || "/"}>{item.label}</Link>
               </SidebarMenuItem>
             );
           })}

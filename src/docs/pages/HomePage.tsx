@@ -1,5 +1,5 @@
+import { Hero } from "../../components/hero";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { Hero } from "../../components/hero/Hero";
 
 function HomePage() {
   return (

@@ -6,6 +6,7 @@ import ButtonPage from "./pages/ButtonPage";
 import InputPage from "./pages/InputPage";
 import CardPage from "./pages/CardPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import ChipPage from "./pages/ChipPage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/button" element={<ButtonPage />} />
         <Route path="/input" element={<InputPage />} />
-
+        <Route path="/chip" element={<ChipPage />} />
         <Route path="/card" element={<CardPage />} />
 
         <Route path="*" element={<NotFoundPage />} />

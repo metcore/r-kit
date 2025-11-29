@@ -2,15 +2,15 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { Card, CardBody, CardHeader } from "../../components/card";
 import { Button } from "../../components/button";
 import { Icon } from "../../components/icons";
-import RoundedSpinner from "../../components/loading/RoundedSpinner";
-import { Hero } from "../../components/hero/Hero";
+import { Hero } from "../../components/hero";
+import { RoundedSpinner } from "../../components/loading";
 
 function ButtonPage() {
   return (
     <DashboardLayout>
       <Hero className="mb-4">
         <p className="text-sm font-semibold text-gray-900">Components</p>
-        <h1 className="text-3xl font-semibold text-gray-900">Buttons</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Button</h1>
         <p>
           Elemen interaktif utama yang digunakan untuk mengeksekusi perintah
           atau memulai alur tindakan.
@@ -19,7 +19,7 @@ function ButtonPage() {
       <div className="grid grid-cols-1 gap-4">
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons
+            Button
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
             <Button color="primary">Primary</Button>
@@ -36,7 +36,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons with Icon
+            Button with Icon
           </CardHeader>
           <CardBody className="flex gap-8 flex-wrap">
             <Button className="gap-2" color="primary">
@@ -80,7 +80,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons Outline
+            Button Outline
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
             <Button variant={"outline"} color="primary">
@@ -115,7 +115,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons Tertiary
+            Button Tertiary
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
             <Button variant={"tertiary"} color="primary">
@@ -150,7 +150,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons Icon Only
+            Button Icon Only
           </CardHeader>
           <CardBody className="flex gap-8 flex-wrap">
             <Button size={"icon"} color="primary">
@@ -185,7 +185,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons Disabled
+            Button Disabled
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
             <Button disabled color="primary">
@@ -220,7 +220,7 @@ function ButtonPage() {
 
         <Card size={"lg"}>
           <CardHeader divider className="font-semibold text-gray-900">
-            Buttons Loading
+            Button Loading
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
             <Button className="gap-2" color="primary">
@@ -250,6 +250,101 @@ function ButtonPage() {
             <Button className="gap-2" color="gray">
               <RoundedSpinner size={16} stroke={1.5} /> Gray
             </Button>
+          </CardBody>
+        </Card>
+
+        <Card size={"lg"}>
+          <CardHeader divider className="font-semibold text-gray-900">
+            Button Size
+          </CardHeader>
+          <CardBody className="flex flex-wrap gap-8">
+            <div className="flex flex-wrap gap-2">
+              <Button size={"sm"} color="primary">
+                Primary sm
+              </Button>
+              <Button size={"sm"} color="secondary">
+                Secondary sm
+              </Button>
+              <Button size={"sm"} color="success">
+                Success sm
+              </Button>
+              <Button size={"sm"} color="danger">
+                Danger sm
+              </Button>
+              <Button size={"sm"} color="warning">
+                Warning sm
+              </Button>
+              <Button size={"sm"} color="info">
+                Info sm
+              </Button>
+              <Button size={"sm"} color="orange">
+                Orange sm
+              </Button>
+              <Button size={"sm"} color="purple">
+                Purple sm
+              </Button>
+              <Button size={"sm"} color="gray">
+                Gray sm
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button size={"md"} color="primary">
+                Primary md
+              </Button>
+              <Button size={"md"} color="secondary">
+                Secondary md
+              </Button>
+              <Button size={"md"} color="success">
+                Success md
+              </Button>
+              <Button size={"md"} color="danger">
+                Danger md
+              </Button>
+              <Button size={"md"} color="warning">
+                Warning md
+              </Button>
+              <Button size={"md"} color="info">
+                Info md
+              </Button>
+              <Button size={"md"} color="orange">
+                Orange md
+              </Button>
+              <Button size={"md"} color="purple">
+                Purple md
+              </Button>
+              <Button size={"md"} color="gray">
+                Gray md
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button size={"lg"} color="primary">
+                Primary lg
+              </Button>
+              <Button size={"lg"} color="secondary">
+                Secondary lg
+              </Button>
+              <Button size={"lg"} color="success">
+                Success lg
+              </Button>
+              <Button size={"lg"} color="danger">
+                Danger lg
+              </Button>
+              <Button size={"lg"} color="warning">
+                Warning lg
+              </Button>
+              <Button size={"lg"} color="info">
+                Info lg
+              </Button>
+              <Button size={"lg"} color="orange">
+                Orange lg
+              </Button>
+              <Button size={"lg"} color="purple">
+                Purple lg
+              </Button>
+              <Button size={"lg"} color="gray">
+                Gray lg
+              </Button>
+            </div>
           </CardBody>
         </Card>
       </div>
