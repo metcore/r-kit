@@ -5,7 +5,7 @@ interface RoundedSpinnerProps {
   duration?: number;
 }
 
-export default function RoundedSpinner({
+function RoundedSpinner({
   size = 28,
   radius = 4,
   stroke = 2,
@@ -59,3 +59,5 @@ export default function RoundedSpinner({
     </div>
   );
 }
+
+export { RoundedSpinner };

@@ -1,10 +1,7 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 
-export const Hero: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
-  className,
-  ...props
-}) => {
+function Hero({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -14,4 +11,6 @@ export const Hero: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
       {...props}
     />
   );
-};
+}
+
+export { Hero };
