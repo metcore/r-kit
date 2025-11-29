@@ -13,6 +13,7 @@ export const buttonVariants = cva(
         sm: "px-4 py-1.5 text-xs",
         md: "px-5 py-2.5 text-sm",
         lg: "px-5.5 py-3 text-sm",
+        icon: "p-1.5",
       },
       color: {
         primary: "",
