@@ -35,11 +35,6 @@ function AppSidebar() {
     { path: "/data-display", label: "Data Display", icon: "desktop" },
     { path: "/pages", label: "Pages", icon: "cpu" },
     { path: "/auth", label: "Authentication", icon: "lock" },
-    { path: "/navigation", label: "Navigation", icon: "cursor" },
-    { path: "/feedback", label: "Feedback", icon: "message-text-notification" },
-    { path: "/data-display", label: "Data Display", icon: "desktop" },
-    { path: "/pages", label: "Pages", icon: "cpu" },
-    { path: "/auth", label: "Authentication", icon: "lock" },
   ];
 
   return (
