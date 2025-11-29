@@ -48,7 +48,6 @@ import BriefCaseOutline from "./icons/BriefcaseOutline";
 import EditSquareOutline from "./icons/Edit";
 import GlobeEarth from "./icons/GlobeEarth";
 import LockFill from "./icons/LockFill";
-import LogoHercaHris from "./icons/LogoHercaHris";
 import QuestionCircleOutline from "./icons/QuestionCircleOutline";
 import ShieldFill from "./icons/ShieldFill";
 import Users from "./icons/Users";
@@ -139,7 +138,6 @@ export const iconRegistry = {
   "edit-square-outline": EditSquareOutline,
   "globe-earth": GlobeEarth,
   "lock-fill": LockFill,
-  "logo-herca-hris": LogoHercaHris,
   "question-circle-outline": QuestionCircleOutline,
   "shield-fill": ShieldFill,
   users: Users,
