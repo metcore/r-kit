@@ -35,6 +35,7 @@ function AppSidebar() {
         { path: "/button", label: "Button" },
         { path: "/card", label: "Card" },
         { path: "/chip", label: "Chip" },
+        { path: "/avatar", label: "Avatar" },
       ],
     },
 
