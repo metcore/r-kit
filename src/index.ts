@@ -10,3 +10,6 @@ export * from "./components/icons";
 export * from "./components/sidebar";
 export * from "./components/tooltip";
 export * from "./components/loading";
+export * from "./components/chip";
+export * from "./components/sheet";
+export * from "./components/avatar";
