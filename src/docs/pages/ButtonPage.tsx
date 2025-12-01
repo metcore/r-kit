@@ -9,9 +9,9 @@ function ButtonPage() {
   return (
     <DashboardLayout>
       <Hero className="mb-4">
-        <p className="text-sm font-semibold text-gray-900">Components</p>
-        <h1 className="text-3xl font-semibold text-gray-900">Button</h1>
-        <p>
+        <p className="text-xs text-gray-800">Components</p>
+        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Button</h1>
+        <p className="text-sm text-gray-800">
           Elemen interaktif utama yang digunakan untuk mengeksekusi perintah
           atau memulai alur tindakan.
         </p>
@@ -38,7 +38,7 @@ function ButtonPage() {
           <CardHeader divider className="font-semibold text-gray-900">
             Button with Icon
           </CardHeader>
-          <CardBody className="flex gap-8 flex-wrap">
+          <CardBody className="flex flex-wrap gap-8">
             <Button className="gap-2" color="primary">
               <Icon name="arrow-left-circle" size={16} /> Primary
               <Icon name="arrow-right-circle" size={16} />
@@ -152,7 +152,7 @@ function ButtonPage() {
           <CardHeader divider className="font-semibold text-gray-900">
             Button Icon Only
           </CardHeader>
-          <CardBody className="flex gap-8 flex-wrap">
+          <CardBody className="flex flex-wrap gap-8">
             <Button size={"icon"} color="primary">
               <Icon name="arrow-left-circle" size={16} />
             </Button>

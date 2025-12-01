@@ -26,7 +26,12 @@ function AppSidebar() {
   const menuItems: RouteType[] = [
     { path: "/", label: "Overview", icon: "grid-square" },
     { path: "/foundation", label: "Foundation", icon: "circle-and-square" },
-    { path: "/form", label: "Form", icon: "clipboard-edit" },
+    {
+      path: "/form",
+      label: "Form",
+      icon: "clipboard-edit",
+      children: [{ path: "/switch", label: "Switches" }],
+    },
     {
       label: "Components",
       icon: "book-open-text",
@@ -53,7 +58,7 @@ function AppSidebar() {
         <div
           className={cn(
             state === "collapsed" && "hidden",
-            isHovered && "block"
+            isHovered && "block",
           )}
         >
           <SidebarTrigger />
@@ -64,7 +69,7 @@ function AppSidebar() {
           {menuItems.map((item, index) => {
             if (item.children) {
               const isAnyChildActive = item.children?.some(
-                (child) => child.path === location.pathname
+                (child) => child.path === location.pathname,
               );
               return (
                 <SidebarMenuGroup
