@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const AvatarVariants = cva(
-  "flex justify-center items-center text-white",
+  "flex items-center justify-center text-white",
   {
     variants: {
       variant: {
@@ -34,5 +34,5 @@ export const AvatarVariants = cva(
       color: "gray",
       variant: "circle",
     },
-  }
+  },
 );

@@ -2,6 +2,7 @@ import React, { useId } from "react";
 import type { SwitchProps } from "./type";
 import { SwitchVariants, SwitchThumbVariants } from "./switch-variants";
 import { cn } from "../../lib/utils";
+import { FormField, FormLabel } from "../form";
 
 export const BaseSwitch: React.FC<SwitchProps> = ({
   id: providedId,
@@ -95,20 +96,12 @@ export const Switch: React.FC<
 
   const labelSizeClasses = {
     sm: "text-xs",
-    md: "text-sm",
+    md: "text-xs",
     lg: "text-base",
   };
 
-  const hasError = Boolean(errorMessages);
-
-  const errorList = Array.isArray(errorMessages)
-    ? errorMessages
-    : errorMessages
-      ? [errorMessages]
-      : [];
-
   return (
-    <div className={cn("flex flex-col", className)}>
+    <FormField hint={hint} errorMessages={errorMessages} className={className}>
       <div
         className={cn(
           "flex flex-col gap-2",
@@ -117,29 +110,12 @@ export const Switch: React.FC<
         )}
       >
         {label && (
-          <label
-            htmlFor={id}
-            className={cn(
-              labelSizeClasses[size],
-              "block text-xs font-semibold text-gray-900",
-            )}
-          >
+          <FormLabel htmlFor={id} className={labelSizeClasses[size]}>
             {label}
-          </label>
+          </FormLabel>
         )}
         <BaseSwitch {...props} id={id} size={size} />
       </div>
-      {hint && <p className="mt-1 text-xs text-gray-700">{hint}</p>}
-
-      {hasError && (
-        <div className="mt-1 space-y-0.5">
-          {errorList.map((msg, i) => (
-            <p key={i} className="text-danger-500 text-xs">
-              {msg}
-            </p>
-          ))}
-        </div>
-      )}
-    </div>
+    </FormField>
   );
 };

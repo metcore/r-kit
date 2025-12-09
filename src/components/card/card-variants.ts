@@ -1,12 +1,12 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const cardVariants = cva(
-  "rounded-xl border flex flex-col transition-colors",
+  "flex flex-col rounded-xl border transition-colors",
   {
     variants: {
       variant: {
         filled: "",
-        outline: "bg-transparent border",
+        outline: "border bg-transparent",
       },
       size: {
         sm: "",
@@ -83,42 +83,42 @@ export const cardVariants = cva(
       {
         variant: "outline",
         color: "secondary",
-        className: "bg-white border-gray-200",
+        className: "border-gray-200 bg-white",
       },
       {
         variant: "outline",
         color: "success",
-        className: "bg-white border-success-500",
+        className: "border-success-500 bg-white",
       },
       {
         variant: "outline",
         color: "danger",
-        className: "bg-white border-danger-500",
+        className: "border-danger-500 bg-white",
       },
       {
         variant: "outline",
         color: "warning",
-        className: "bg-white border-warning-500",
+        className: "border-warning-500 bg-white",
       },
       {
         variant: "outline",
         color: "info",
-        className: "bg-white border-info-500",
+        className: "border-info-500 bg-white",
       },
       {
         variant: "outline",
         color: "orange",
-        className: "bg-white border-orange-500",
+        className: "border-orange-500 bg-white",
       },
       {
         variant: "outline",
         color: "purple",
-        className: "bg-white border-purple-500",
+        className: "border-purple-500 bg-white",
       },
       {
         variant: "outline",
         color: "gray",
-        className: "bg-white border-gray-700",
+        className: "border-gray-700 bg-white",
       },
     ],
 
@@ -127,7 +127,7 @@ export const cardVariants = cva(
       variant: "outline",
       color: "secondary",
     },
-  }
+  },
 );
 
 export type CardVariantProps = VariantProps<typeof cardVariants>;

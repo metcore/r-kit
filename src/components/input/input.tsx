@@ -1,16 +1,17 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
 import { inputVariants, type InputVariantProps } from "./input-variants";
+import { FormField } from "../form";
 
 export interface InputProps
-  extends Omit<React.ComponentProps<"input">, "size">,
-    InputVariantProps {
+  extends Omit<React.ComponentProps<"input">, "size">, InputVariantProps {
   leftAddon?: React.ReactNode;
   rightAddon?: React.ReactNode;
   label?: string;
   hint?: string;
   errorMessages?: string | string[];
   inputSize?: number;
+  description?: string;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -25,44 +26,38 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       errorMessages,
       size,
       inputSize,
+      description,
       ...props
     },
-    ref
+    ref,
   ) => {
     const hasError = Boolean(errorMessages);
 
-    const errorList = Array.isArray(errorMessages)
-      ? errorMessages
-      : errorMessages
-      ? [errorMessages]
-      : [];
-
     return (
-      <div>
-        {label && (
-          <label
-            {...(props.id && { htmlFor: props.id })}
-            className="mb-1 block text-xs font-semibold text-gray-900"
-          >
-            {label}
-          </label>
-        )}
-
+      <FormField
+        label={label}
+        hint={hint}
+        description={description}
+        errorMessages={errorMessages}
+        className={className}
+        required={props.required}
+        size={size}
+      >
         <div
           className={cn(
-            "flex items-stretch w-full rounded-lg border bg-white",
+            "flex w-full items-stretch rounded-lg border bg-white",
             hasError
               ? "border-danger-500 focus-within:border-danger-500"
-              : "border-gray-200 focus-within:border-primary-300"
+              : "focus-within:border-primary-300 border-gray-200",
           )}
         >
           {leftAddon && (
             <div
               className={cn(
-                "px-3 flex items-center justify-center border-r",
+                "flex items-center justify-center border-r px-3",
                 hasError
                   ? "text-danger-500 border-danger-500"
-                  : "text-gray-600 border-gray-200"
+                  : "border-gray-200 text-gray-600",
               )}
             >
               {leftAddon}
@@ -75,11 +70,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             size={inputSize}
             className={cn(
               inputVariants({ size }),
-              "border-none rounded-none focus-visible:outline-none w-full",
+              "w-full rounded-none border-none focus-visible:outline-none",
               leftAddon && "pl-2",
               rightAddon && "pr-2",
               props.disabled && "cursor-not-allowed bg-gray-100",
-              className
+              className,
             )}
             {...props}
           />
@@ -87,29 +82,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {rightAddon && (
             <div
               className={cn(
-                "px-3 flex items-center justify-center",
-                hasError ? "text-danger-500" : "text-gray-600"
+                "flex items-center justify-center px-3",
+                hasError ? "text-danger-500" : "text-gray-600",
               )}
             >
               {rightAddon}
             </div>
           )}
         </div>
-
-        {hint && <p className="mt-1 text-xs text-gray-700">{hint}</p>}
-
-        {hasError && (
-          <div className="mt-1 space-y-0.5">
-            {errorList.map((msg, i) => (
-              <p key={i} className="text-xs text-danger-500">
-                {msg}
-              </p>
-            ))}
-          </div>
-        )}
-      </div>
+      </FormField>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

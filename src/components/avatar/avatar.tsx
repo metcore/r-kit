@@ -40,7 +40,7 @@ const AvatarImage = ({
     <img
       src={url}
       alt={alt}
-      className={cn("object-cover w-full h-full", className)}
+      className={cn("h-full w-full object-cover", className)}
     />
   );
 };
