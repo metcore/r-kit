@@ -1,0 +1,24 @@
+import React from "react";
+
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+  color?: string;
+}
+
+const CommentTextIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = "currentColor",
+  ...props
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <path fill={color} d="M12 4c-4.97 0-9 3-9 8.001 0 2.12.73 3.891 1.95 5.211-.15.96-.69 2.06-1.78 2.94-.33.28-.14.83.29.84 1.42.05 3.61-.14 4.95-1.57 1.1.38 2.31.58 3.59.58 4.97 0 9-3.001 9-8.001C21 7 16.97 4 12 4Zm1 10.75H8a.75.75 0 0 1 0-1.5h5a.75.75 0 0 1 0 1.5Zm3-4H8a.75.75 0 0 1 0-1.5h8a.75.75 0 0 1 0 1.5Z"/>
+  </svg>
+);
+
+export default CommentTextIcon;

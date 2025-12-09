@@ -1,0 +1,24 @@
+import React from "react";
+
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+  color?: string;
+}
+
+const ChartLineIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = "currentColor",
+  ...props
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <path fill={color} d="M21 21H4.5C2.958 21 2 20.042 2 18.5V4a1 1 0 0 1 2 0v14.5c0 .449.051.5.5.5H21a1 1 0 0 1 0 2ZM7.707 14.707l3.295-3.295 1.606 1.595c.782.776 2.05.772 2.826-.008l4.274-4.292a.999.999 0 1 0-1.417-1.411l-4.274 4.292-1.605-1.594a2.004 2.004 0 0 0-2.824.005l-3.295 3.295a.999.999 0 1 0 1.414 1.413Z"/>
+  </svg>
+);
+
+export default ChartLineIcon;

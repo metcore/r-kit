@@ -1,0 +1,24 @@
+import React from "react";
+
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+  color?: string;
+}
+
+const MoneyBillMinusIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = "currentColor",
+  ...props
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <path fill={color} d="M18 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4Zm1.25 4.5h-2.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h2.5c.28 0 .5.22.5.5s-.22.5-.5.5ZM17 4H5C3 4 2 5 2 7v8c0 2 1 3 3 3h7.23c.17 0 .31-.14.31-.31A5.51 5.51 0 0 1 18 11.5c.56 0 1.1.08 1.6.24.2.06.4-.08.4-.28V7c0-2-1-3-3-3ZM5 12c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1Zm6 2c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3Z"/>
+  </svg>
+);
+
+export default MoneyBillMinusIcon;

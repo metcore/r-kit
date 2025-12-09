@@ -1,0 +1,24 @@
+import React from "react";
+
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+  color?: string;
+}
+
+const MoneyBillBanIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = "currentColor",
+  ...props
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    {...props}
+  >
+    <path fill={color} d="M17 4H5C3 4 2 5 2 7v8c0 2 1 3 3 3h7.46c.16 0 .3-.14.29-.31 0-.15 0-.3.01-.46.15-2.67 2.13-4.98 4.76-5.4.74-.12 1.45-.11 2.12.04.18.04.36-.09.36-.29V7c0-2-1-3-3-3ZM5 12c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1Zm6 2c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3Zm7.5-.75a4.26 4.26 0 0 0-4.25 4.25 4.26 4.26 0 0 0 4.25 4.25 4.26 4.26 0 0 0 4.25-4.25 4.26 4.26 0 0 0-4.25-4.25Zm-2.75 4.25c0-1.52 1.23-2.75 2.75-2.75.49 0 .93.14 1.33.36l-3.72 3.72c-.22-.4-.36-.84-.36-1.33Zm2.75 2.75c-.49 0-.93-.14-1.33-.36l3.72-3.72c.22.4.36.84.36 1.33 0 1.52-1.23 2.75-2.75 2.75Z"/>
+  </svg>
+);
+
+export default MoneyBillBanIcon;
