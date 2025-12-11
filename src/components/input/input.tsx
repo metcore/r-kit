@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/utils";
+import { cn, fieldHasError } from "../../lib/utils";
 import { inputVariants, type InputVariantProps } from "./input-variants";
 import { FormField } from "../form";
 
@@ -31,7 +31,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
-    const hasError = Boolean(errorMessages);
+    const hasError = fieldHasError(errorMessages);
+    const generatedId = React.useId();
 
     return (
       <FormField
@@ -42,6 +43,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         className={className}
         required={props.required}
         size={size}
+        htmlFor={props?.id || generatedId}
       >
         <div
           className={cn(
@@ -68,6 +70,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             type={type}
             size={inputSize}
+            id={props?.id || generatedId}
             className={cn(
               inputVariants({ size }),
               "w-full rounded-none border-none focus-visible:outline-none",
