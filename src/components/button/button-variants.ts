@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const buttonVariants = cva(
-  "inline-flex h-fit cursor-pointer items-center justify-center rounded-lg font-medium transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex cursor-pointer items-center justify-center rounded-lg font-medium transition-all duration-200 focus:ring focus:ring-offset-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -10,9 +10,9 @@ export const buttonVariants = cva(
         tertiary: "border-none bg-transparent shadow-none",
       },
       size: {
-        sm: "px-4 py-1.5 text-xs",
-        md: "px-5 py-2.5 text-sm",
-        lg: "px-5.5 py-3 text-sm",
+        sm: "h-8 px-4 text-xs",
+        md: "h-9 px-5 text-sm",
+        lg: "h-10 px-5.5 text-sm",
         icon: "p-1.5",
       },
       color: {
@@ -40,7 +40,7 @@ export const buttonVariants = cva(
         variant: "outline",
         color: "primary",
         className:
-          "border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500",
+          "border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900",
       },
       {
         variant: "tertiary",
@@ -57,7 +57,8 @@ export const buttonVariants = cva(
       {
         variant: "outline",
         color: "secondary",
-        className: "bg-primary-1000 focus:ring-primary-900 text-white",
+        className:
+          "border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900",
       },
       {
         variant: "tertiary",
@@ -201,7 +202,7 @@ export const buttonVariants = cva(
 
     defaultVariants: {
       variant: "default",
-      size: "sm",
+      size: "md",
       color: "primary",
     },
   },
