@@ -252,6 +252,7 @@ import VolumeHighIcon from "./icons/VolumeHighIcon";
 import WhatsappIcon from "./icons/WhatsappIcon";
 import XlsIcon from "./icons/XlsIcon";
 import ClipboardListCheck2Icon from "./icons/ClipboardListCheck2Icon";
+import TimesCircleIcon from "./icons/TimesCircleIcon";
 
 
 export const iconRegistry = {
@@ -490,6 +491,7 @@ export const iconRegistry = {
   telegram: TelegramIcon,
   "time-past": TimePastIcon,
   timelapse: TimelapseIcon,
+  "times-circle": TimesCircleIcon,
   tool: ToolIcon,
   "trash-check": TrashCheckIcon,
   "trash-regular": TrashRegularIcon,
