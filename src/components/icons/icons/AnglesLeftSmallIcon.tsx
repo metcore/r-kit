@@ -1,9 +1,6 @@
 import React from "react";
+import type { IconProps } from "../type";
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {
-  size?: number;
-  color?: string;
-}
 
 const AnglesLeftSmallIcon: React.FC<IconProps> = ({
   size = 24,
