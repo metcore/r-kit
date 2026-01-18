@@ -30,7 +30,13 @@ function AppSidebar() {
       path: "/form",
       label: "Form",
       icon: "clipboard-edit",
-      children: [{ path: "/switch", label: "Switches" }],
+      children: [
+        { path: "/switch", label: "Switches" },
+        { path: "/checkbox", label: "Checkbox" },
+        { path: "/radio-button", label: "Radio Button" },
+        { path: "/file-input", label: "File Input" },
+        { path: "/select", label: "Select" },
+      ],
     },
     {
       label: "Components",
@@ -41,10 +47,16 @@ function AppSidebar() {
         { path: "/card", label: "Card" },
         { path: "/chip", label: "Chip" },
         { path: "/avatar", label: "Avatar" },
+        { path: "/modal", label: "Modal" },
       ],
     },
 
-    { path: "/navigation", label: "Navigation", icon: "cursor" },
+    {
+      path: "/navigation",
+      label: "Navigation",
+      icon: "cursor",
+      children: [{ path: "/tabs", label: "Tabs" }],
+    },
     { path: "/feedback", label: "Feedback", icon: "message-text-notification" },
     { path: "/data-display", label: "Data Display", icon: "desktop" },
     { path: "/pages", label: "Pages", icon: "cpu" },
