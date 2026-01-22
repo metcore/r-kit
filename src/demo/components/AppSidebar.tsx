@@ -1,3 +1,7 @@
+import { Link, useLocation } from "react-router-dom";
+import { BrandLogo } from "../../components/brand-logo";
+import { Icon, type IconNameProps } from "../../components/icons";
+import { useSidebar } from "../../components/sidebar";
 import {
   Sidebar,
   SidebarContent,
@@ -7,10 +11,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "../../components/sidebar/sidebar";
-import { Link, useLocation } from "react-router-dom";
-import { Icon, type IconNameProps } from "../../components/icons";
-import { useSidebar } from "../../components/sidebar";
 import { cn } from "../../lib/utils";
+import brandLogo from "../assets/images/brand-logo.png";
 
 type RouteType = {
   path?: string;
@@ -25,7 +27,15 @@ function AppSidebar() {
 
   const menuItems: RouteType[] = [
     { path: "/", label: "Overview", icon: "grid-square" },
-    { path: "/foundation", label: "Foundation", icon: "circle-and-square" },
+    {
+      path: "/foundation",
+      label: "Foundation",
+      icon: "circle-and-square",
+      children: [
+        { path: "/typography", label: "Typography" },
+        { path: "/color", label: "Color" },
+      ],
+    },
     {
       path: "/form",
       label: "Form",
@@ -65,8 +75,8 @@ function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="justify-between">
-        <div className="font-bold">Logo</div>
+      <SidebarHeader className="h-[76px] flex-row items-center justify-between pl-5">
+        <BrandLogo name="Herca Design" brandLogo={brandLogo} />
         <div
           className={cn(
             state === "collapsed" && "hidden",
@@ -123,7 +133,9 @@ function AppSidebar() {
                 key={index}
                 active={item.path === location.pathname}
               >
-                <Link to={item.path || "/"}>{item.label}</Link>
+                <Link className="text-nowrap" to={item.path || "/"}>
+                  {item.label}
+                </Link>
               </SidebarMenuItem>
             );
           })}

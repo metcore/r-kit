@@ -12,6 +12,8 @@ export interface InputProps
   errorMessages?: string | string[];
   inputSize?: number;
   description?: string;
+  leftAddonClassName?: string;
+  rightAddonClassName?: string;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -27,6 +29,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       size,
       inputSize,
       description,
+      leftAddonClassName,
+      rightAddonClassName,
       ...props
     },
     ref,
@@ -57,6 +61,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <div
               className={cn(
                 "flex items-center justify-center border-r px-3",
+                leftAddonClassName,
                 hasError
                   ? "text-danger-500 border-danger-500"
                   : "border-gray-200 text-gray-600",
@@ -86,6 +91,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <div
               className={cn(
                 "flex items-center justify-center px-3",
+                rightAddonClassName,
                 hasError ? "text-danger-500" : "text-gray-600",
               )}
             >

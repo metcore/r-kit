@@ -253,7 +253,7 @@ import WhatsappIcon from "./icons/WhatsappIcon";
 import XlsIcon from "./icons/XlsIcon";
 import ClipboardListCheck2Icon from "./icons/ClipboardListCheck2Icon";
 import TimesCircleIcon from "./icons/TimesCircleIcon";
-
+import CodeIcon from "./icons/Code";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -511,4 +511,5 @@ export const iconRegistry = {
   "volume-high": VolumeHighIcon,
   whatsapp: WhatsappIcon,
   xls: XlsIcon,
+  code: CodeIcon,
 };
