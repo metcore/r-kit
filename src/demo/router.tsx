@@ -14,6 +14,7 @@ import FileInputPage from "./pages/FileInputPage";
 import TabsPage from "./pages/TabsPage";
 import SelectPage from "./pages/SelectPage";
 import ModalPage from "./pages/ModalPage";
+import TypographyPage from "./pages/TypographyPage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/select" element={<SelectPage />} />
         <Route path="/switch" element={<SwitchPage />} />
         <Route path="/tabs" element={<TabsPage />} />
+        <Route path="/typography" element={<TypographyPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
