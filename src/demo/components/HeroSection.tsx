@@ -16,7 +16,7 @@ export default function HeroSection({
 }: Props) {
   return (
     <Hero className="relative mb-4 flex gap-5 overflow-hidden">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-1 flex-col gap-2">
         <Text
           as={"h5"}
           value={title}

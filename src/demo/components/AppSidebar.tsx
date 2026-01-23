@@ -41,8 +41,8 @@ function AppSidebar() {
       label: "Form",
       icon: "clipboard-edit",
       children: [
-        { path: "/switch", label: "Switches" },
         { path: "/checkbox", label: "Checkbox" },
+        { path: "/switch", label: "Switches" },
         { path: "/radio-button", label: "Radio Button" },
         { path: "/file-input", label: "File Input" },
         { path: "/select", label: "Select" },
