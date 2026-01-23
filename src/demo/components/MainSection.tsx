@@ -15,7 +15,8 @@ interface Props {
   title: string;
   downloadUrl?: string;
   children: React.ReactNode;
-  code: string;
+  code?: string;
+  className?: string;
 }
 
 interface ActionButtonProps {
@@ -30,13 +31,14 @@ export default function MainSection({
   title,
   downloadUrl,
   code,
+  className,
 }: Props) {
   const { copy, copied } = useCopy();
 
   const [isExampleVisible, setIsExampleVisible] = useState(true);
 
   return (
-    <Card size={"lg"}>
+    <Card size={"lg"} className={className}>
       <CardHeader
         divider
         className="flex flex-row items-center justify-between"
@@ -65,31 +67,33 @@ export default function MainSection({
 
       <CardBody>{children}</CardBody>
 
-      <CardFooter className="flex flex-col gap-3 border-t">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-row items-center justify-between">
-            <Text value="Contoh Kode" variant="t1" weight="medium" />
-            <div className="flex flex-row items-center gap-2">
-              <ActionButton
-                key={copied ? "copied" : "copy"}
-                tooltip={!copied ? "Salin Kode" : "Kode Disalin!"}
-                icon="copy-fill"
-                onClick={() => copy(code)}
-                side="bottom"
-              />
-              <ActionButton
-                side="left"
-                tooltip={
-                  isExampleVisible ? "Sembunyikan Kode" : "Tampilkan Kode"
-                }
-                icon="code"
-                onClick={() => setIsExampleVisible(!isExampleVisible)}
-              />
+      {!!code && (
+        <CardFooter className="flex flex-col gap-3 border-t">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-row items-center justify-between">
+              <Text value="Contoh Kode" variant="t1" weight="medium" />
+              <div className="flex flex-row items-center gap-2">
+                <ActionButton
+                  key={copied ? "copied" : "copy"}
+                  tooltip={!copied ? "Salin Kode" : "Kode Disalin!"}
+                  icon="copy-fill"
+                  onClick={() => copy(code)}
+                  side="bottom"
+                />
+                <ActionButton
+                  side="left"
+                  tooltip={
+                    isExampleVisible ? "Sembunyikan Kode" : "Tampilkan Kode"
+                  }
+                  icon="code"
+                  onClick={() => setIsExampleVisible(!isExampleVisible)}
+                />
+              </div>
             </div>
+            {isExampleVisible && <CodeBlock code={code} />}
           </div>
-          {isExampleVisible && <CodeBlock code={code} />}
-        </div>
-      </CardFooter>
+        </CardFooter>
+      )}
     </Card>
   );
 }

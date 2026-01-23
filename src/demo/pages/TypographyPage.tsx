@@ -1,12 +1,13 @@
 import dedent from "dedent";
+import { Card, CardBody } from "../../components/card";
 import { Text } from "../../components/text";
 import illust from "../assets/images/typography.png";
+import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
 import MainSection from "../components/MainSection";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { useMarkdown } from "../hooks/useMarkdown";
-import { Card, CardBody } from "../../components/card";
 import MarkdownRenderer from "../components/MarkdownRenderer";
+import { useMarkdown } from "../hooks/useMarkdown";
+import DashboardLayout from "../layouts/DashboardLayout";
 
 interface FontVariantProps {
   variant: string;
@@ -371,6 +372,8 @@ export default function TypographyPage() {
             <MarkdownRenderer content={doc?.content || ""} />
           </CardBody>
         </Card>
+
+        <Footer title="Typography" nextTo="/colors" nextToTitle="Colors" />
       </div>
     </DashboardLayout>
   );

@@ -33,7 +33,7 @@ function AppSidebar() {
       icon: "circle-and-square",
       children: [
         { path: "/typography", label: "Typography" },
-        { path: "/color", label: "Color" },
+        { path: "/colors", label: "Color" },
       ],
     },
     {
