@@ -1,9 +1,8 @@
 import { Card, CardBody } from "../../components/card";
 import { Checkbox, CheckboxGroup } from "../../components/checkbox/checkbox";
-import { useIsMobile } from "../../hooks/use-mobile";
-import { cn } from "../../lib/utils";
 import illust from "../assets/images/forms.png";
 import Footer from "../components/Footer";
+import GridWrapper from "../components/GridWrapper";
 import HeroSection from "../components/HeroSection";
 import MainSection from "../components/MainSection";
 import MarkdownRenderer from "../components/MarkdownRenderer";
@@ -289,18 +288,3 @@ export default function CheckboxPage() {
     </DashboardLayout>
   );
 }
-
-const GridWrapper = ({ children }: { children: React.ReactNode }) => {
-  const isMobile = useIsMobile();
-
-  return (
-    <div
-      className={cn(
-        "grid items-start gap-4",
-        isMobile ? "grid-cols-1" : "grid-cols-2",
-      )}
-    >
-      {children}
-    </div>
-  );
-};

@@ -17,6 +17,7 @@ import ModalPage from "./pages/ModalPage";
 import TypographyPage from "./pages/TypographyPage";
 import ColorsPage from "./pages/ColorsPage";
 import CheckboxPage from "./pages/CheckboxPage";
+import InputFieldPage from "./pages/InputFieldPage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -37,6 +38,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/typography" element={<TypographyPage />} />
         <Route path="/colors" element={<ColorsPage />} />
         <Route path="/checkbox" element={<CheckboxPage />} />
+        <Route path="/input-field" element={<InputFieldPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
