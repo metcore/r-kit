@@ -19,7 +19,7 @@ export const FormLabel: React.FC<FormLabelProps> = ({
       htmlFor={htmlFor}
       className={cn(
         sizeClasses[size || "md"],
-        "block font-semibold text-gray-900",
+        "font-metropolis block font-semibold text-gray-900",
         className,
       )}
     >

@@ -18,6 +18,7 @@ import TypographyPage from "./pages/TypographyPage";
 import ColorsPage from "./pages/ColorsPage";
 import CheckboxPage from "./pages/CheckboxPage";
 import InputFieldPage from "./pages/InputFieldPage";
+import InputGroupPage from "./pages/InputGroupPage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -39,6 +40,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/colors" element={<ColorsPage />} />
         <Route path="/checkbox" element={<CheckboxPage />} />
         <Route path="/input-field" element={<InputFieldPage />} />
+        <Route path="/input-group" element={<InputGroupPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

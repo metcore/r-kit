@@ -43,6 +43,7 @@ function AppSidebar() {
       children: [
         { path: "/checkbox", label: "Checkbox" },
         { path: "/input-field", label: "Input Field" },
+        { path: "/input-group", label: "Input Group" },
         { path: "/switch", label: "Switches" },
         { path: "/radio-button", label: "Radio Button" },
         { path: "/file-input", label: "File Input" },

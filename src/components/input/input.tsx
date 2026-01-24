@@ -15,6 +15,8 @@ export interface InputProps
   leftAddonClassName?: string;
   rightAddonClassName?: string;
   isError?: boolean;
+  mergedAddon?: boolean;
+  onContainerResize?: (width: number) => void;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -32,16 +34,31 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       description,
       leftAddonClassName,
       rightAddonClassName,
+      mergedAddon,
       isError,
+      onContainerResize,
       ...props
     },
     ref,
   ) => {
     const hasError = fieldHasError(errorMessages) || isError;
     const generatedId = React.useId();
+    const fieldRef = React.useRef<HTMLDivElement | null>(null);
+
+    React.useEffect(() => {
+      if (!fieldRef.current || !onContainerResize) return;
+
+      const ro = new ResizeObserver(([entry]) => {
+        onContainerResize(entry.contentRect.width);
+      });
+
+      ro.observe(fieldRef.current);
+      return () => ro.disconnect();
+    }, [onContainerResize]);
 
     return (
       <FormField
+        ref={fieldRef}
         label={label}
         hint={hint}
         description={description}
@@ -62,8 +79,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {leftAddon && (
             <div
               className={cn(
-                "flex items-center justify-center border-r px-3",
                 leftAddonClassName,
+                "flex items-center justify-center border-r border-gray-200 px-3",
+                mergedAddon && "border-r-0",
                 hasError
                   ? "text-danger-500 border-danger-500"
                   : "border-gray-200 text-gray-600",
@@ -80,7 +98,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={props?.id || generatedId}
             className={cn(
               inputVariants({ size }),
-              "w-full rounded-none border-none focus-visible:outline-none",
+              "font-metropolis w-full rounded-none border-none focus-visible:outline-none",
               leftAddon && "pl-2",
               rightAddon && "pr-2",
               props.disabled && "cursor-not-allowed bg-gray-100",
@@ -92,9 +110,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {rightAddon && (
             <div
               className={cn(
-                "flex items-center justify-center px-3",
                 rightAddonClassName,
+                "flex items-center justify-center border-l border-gray-200 px-3",
                 hasError ? "text-danger-500" : "text-gray-600",
+                mergedAddon && "border-l-0",
               )}
             >
               {rightAddon}

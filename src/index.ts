@@ -22,3 +22,4 @@ export * from "./components/indicator";
 export * from "./components/brand-logo";
 export * from "./components/checkbox";
 export * from "./components/input-otp";
+export * from "./components/dropdown";
