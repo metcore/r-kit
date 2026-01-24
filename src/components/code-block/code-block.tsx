@@ -22,5 +22,5 @@ export function CodeBlock({ code, lang = "tsx", theme = "dark-plus" }: Props) {
     ],
   });
 
-  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div className="w-full" dangerouslySetInnerHTML={{ __html: html }} />;
 }

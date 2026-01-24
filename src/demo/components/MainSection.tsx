@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../../components/button";
 import { Card, CardBody, CardFooter, CardHeader } from "../../components/card";
 import { CodeBlock } from "../../components/code-block";
@@ -35,7 +35,7 @@ export default function MainSection({
 }: Props) {
   const { copy, copied } = useCopy();
 
-  const [isExampleVisible, setIsExampleVisible] = useState(true);
+  const [isExampleVisible, setIsExampleVisible] = useState(false);
 
   return (
     <Card size={"lg"} className={className}>
@@ -90,7 +90,11 @@ export default function MainSection({
                 />
               </div>
             </div>
-            {isExampleVisible && <CodeBlock code={code} />}
+            {isExampleVisible && (
+              <div className="relative w-full">
+                <CodeBlock code={code} />
+              </div>
+            )}
           </div>
         </CardFooter>
       )}
@@ -104,16 +108,8 @@ const ActionButton = ({
   tooltip,
   side = "top",
 }: ActionButtonProps) => {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setOpen(false);
-    const timer = setTimeout(() => setOpen(true), 10);
-    return () => clearTimeout(timer);
-  }, [tooltip]);
-
   return (
-    <Tooltip open={open} onOpenChange={setOpen}>
+    <Tooltip>
       <TooltipTrigger asChild>
         <button onClick={onClick} className="cursor-pointer">
           <Icon name={icon} className="text-gray-900" />

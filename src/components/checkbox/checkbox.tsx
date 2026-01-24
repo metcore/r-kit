@@ -135,6 +135,17 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
     }
   };
 
+  const disabledColorClass: Record<string, string> = {
+    primary: "bg-primary-100 border-primary-200",
+    success: "bg-success-100 border-success-200",
+    danger: "bg-danger-100 border-danger-200",
+    info: "bg-info-100 border-info-200",
+    warning: "bg-warning-100 border-warning-200",
+    orange: "bg-orange-100 border-orange-200",
+    purple: "bg-purple-100 border-purple-200",
+    gray: "bg-gray-100 border-gray-200",
+  };
+
   return (
     <button
       type="button"
@@ -146,7 +157,8 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
       onClick={handleChange}
       className={cn(
         CheckboxVariants({ size, color, checked: isChecked }),
-        disabled && "cursor-not-allowed opacity-50",
+        disabled && "cursor-not-allowed",
+        disabled && disabledColorClass[color],
         !disabled && "hover:border-opacity-80 cursor-pointer",
         className,
       )}
@@ -211,6 +223,7 @@ export const Checkbox: React.FC<
     description?: string;
     hint?: string;
     errorMessages?: string | string[];
+    vertical?: boolean;
   }
 > = ({
   label,
@@ -220,6 +233,7 @@ export const Checkbox: React.FC<
   className,
   size: sizeProp,
   icon: iconProp,
+  vertical,
   ...props
 }) => {
   const generatedId = useId();
@@ -235,10 +249,15 @@ export const Checkbox: React.FC<
   const hasError = Boolean(errorMessages) && showHintAndError;
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="inline-flex items-start gap-2">
+      <div
+        className={cn(
+          "inline-flex items-center gap-2",
+          vertical && "flex-col justify-center",
+        )}
+      >
         <BaseCheckbox {...props} id={id} size={size} icon={icon} />
 
-        <div className="flex flex-col">
+        <div className={cn("flex flex-col", vertical && "items-center")}>
           {label && (
             <FormLabel htmlFor={id} className={cn("cursor-pointer")}>
               {label}

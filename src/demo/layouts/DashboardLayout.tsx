@@ -35,9 +35,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           {/* sidebar trigger & search bar */}
           <div className="flex flex-1 flex-row items-center gap-2">
             <SidebarTrigger className="md:hidden" />
-            <button>
-              <Icon name="search" />
-            </button>
+            {isMobile && (
+              <button>
+                <Icon name="search" />
+              </button>
+            )}
             <Input
               className="hidden shadow-none md:flex lg:min-w-[300px]"
               leftAddon={<Icon name="search" size={16} />}

@@ -14,6 +14,7 @@ export interface InputProps
   description?: string;
   leftAddonClassName?: string;
   rightAddonClassName?: string;
+  isError?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -31,11 +32,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       description,
       leftAddonClassName,
       rightAddonClassName,
+      isError,
       ...props
     },
     ref,
   ) => {
-    const hasError = fieldHasError(errorMessages);
+    const hasError = fieldHasError(errorMessages) || isError;
     const generatedId = React.useId();
 
     return (
