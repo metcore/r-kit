@@ -57,7 +57,7 @@ function SidebarProvider({
       // This sets the cookie to keep the sidebar state.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
-    [setOpenProp, open]
+    [setOpenProp, open],
   );
 
   const [isHovered, setIsHovered] = React.useState(false);
@@ -108,7 +108,7 @@ function SidebarProvider({
       setOpenMobile,
       toggleSidebar,
       isHovered,
-    ]
+    ],
   );
 
   return (
@@ -123,7 +123,7 @@ function SidebarProvider({
         }
         className={cn(
           "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full",
-          className
+          className,
         )}
         {...props}
       >
@@ -158,7 +158,6 @@ function Sidebar({
     if (isMobile || state === "expanded") {
       return;
     }
-    console.log("handleMouseEnter");
     setIsHovered(true);
   }, [isMobile, state, setIsHovered]);
 
@@ -170,8 +169,8 @@ function Sidebar({
     return (
       <div
         className={cn(
-          "bg-white text-gray-900 flex h-full w-(--sidebar-width) flex-col",
-          className
+          "flex h-full w-(--sidebar-width) flex-col bg-white text-gray-900",
+          className,
         )}
         {...props}
       >
@@ -187,7 +186,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-white text-gray-900 w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="w-(--sidebar-width) bg-white p-0 text-gray-900 [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -207,7 +206,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-gray-900 hidden md:block"
+      className="group peer hidden text-gray-900 md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -222,7 +221,7 @@ function Sidebar({
           "group-data-[side=right]:rotate-180",
           variant === "floating" || variant === "inset"
             ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
-            : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
+            : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
         )}
       />
       <div
@@ -237,7 +236,7 @@ function Sidebar({
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=left]:border-gray-200 group-data-[side=right]:border-l group-data-[side=right]:border-gray-200",
 
           "group-data-[collapsible=icon]:group-data-[hovered=true]:w-(--sidebar-width)",
-          className
+          className,
         )}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -245,7 +244,7 @@ function Sidebar({
       >
         <div
           data-sidebar="sidebar"
-          className="bg-white group-data-[variant=floating]:border-gray-200 flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className="flex h-full w-full flex-col bg-white group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-gray-200 group-data-[variant=floating]:shadow-sm"
         >
           {children}
         </div>
@@ -281,9 +280,9 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   return (
     <main
       className={cn(
-        "bg-gray-50 relative flex w-full flex-1 flex-col",
+        "relative flex w-full flex-1 flex-col bg-gray-50",
         "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
-        className
+        className,
       )}
       {...props}
     />
@@ -322,8 +321,8 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 p-3 flex-col gap-2 overflow-auto",
-        className
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-3",
+        className,
       )}
       {...props}
     />
@@ -356,10 +355,10 @@ function SidebarMenuItem({
 }: SidebarMenuItemProps) {
   const { state, isHovered } = useSidebar();
   const itemClassName = cn(
-    "flex items-center gap-2 px-3 py-2.5 bg-white text-gray-800 text-sm rounded-sm transition-colors w-full",
+    "flex w-full items-center gap-2 rounded-sm bg-white px-3 py-2.5 text-sm text-gray-800 transition-colors",
     "hover:bg-primary-100",
     active &&
-      "bg-primary-100 text-primary-1000 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-1 before:bg-primary-1000 before:rounded-r-md"
+      "bg-primary-100 text-primary-1000 before:bg-primary-1000 before:absolute before:top-1/2 before:left-0 before:h-5 before:w-1 before:-translate-y-1/2 before:rounded-r-md",
   );
 
   const iconElement = icon ? (
@@ -382,7 +381,7 @@ function SidebarMenuItem({
 
           if (!React.isValidElement(child)) {
             throw new Error(
-              "SidebarMenuItem with asChild requires a single valid React element as child"
+              "SidebarMenuItem with asChild requires a single valid React element as child",
             );
           }
 
@@ -399,7 +398,7 @@ function SidebarMenuItem({
                 <span
                   className={cn(
                     "flex-1",
-                    state === "collapsed" && !isHovered && "hidden"
+                    state === "collapsed" && !isHovered && "hidden",
                   )}
                 >
                   {childElement.props.children}
@@ -414,7 +413,7 @@ function SidebarMenuItem({
           <span
             className={cn(
               "flex-1",
-              state === "collapsed" && !isHovered && "hidden"
+              state === "collapsed" && !isHovered && "hidden",
             )}
           >
             {children}
@@ -445,10 +444,10 @@ function SidebarMenuGroup({
   const [isOpen, setIsOpen] = React.useState(active);
 
   const triggerClassName = cn(
-    "relative flex items-center gap-2 px-3 py-2.5 bg-white hover:bg-primary-100 text-gray-800 text-sm rounded-sm transition-colors w-full",
-    " cursor-pointer",
+    "hover:bg-primary-100 relative flex w-full items-center gap-2 rounded-sm bg-white px-3 py-2.5 text-sm text-gray-800 transition-colors",
+    "cursor-pointer",
     active &&
-      "bg-primary-100 text-primary-1000 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-1 before:bg-primary-1000 before:rounded-r-md"
+      "bg-primary-100 text-primary-1000 before:bg-primary-1000 before:absolute before:top-1/2 before:left-0 before:h-5 before:w-1 before:-translate-y-1/2 before:rounded-r-md",
   );
 
   const iconElement = icon ? (
@@ -463,7 +462,7 @@ function SidebarMenuGroup({
     <Collapsible
       open={isOpen && (state === "expanded" || isHovered)}
       onOpenChange={setIsOpen}
-      className={cn("group/menu-group gap-y-1 flex flex-col", className)}
+      className={cn("group/menu-group flex flex-col gap-y-1", className)}
       {...props}
     >
       <CollapsibleTrigger className={triggerClassName}>
@@ -471,7 +470,7 @@ function SidebarMenuGroup({
         <span
           className={cn(
             "flex-1 text-left",
-            state === "collapsed" && !isHovered && "hidden"
+            state === "collapsed" && !isHovered && "hidden",
           )}
         >
           {label}
@@ -482,11 +481,11 @@ function SidebarMenuGroup({
           className={cn(
             "shrink-0 transition-transform duration-200",
             state === "collapsed" && "hidden",
-            isOpen && "rotate-180"
+            isOpen && "rotate-180",
           )}
         />
       </CollapsibleTrigger>
-      <CollapsibleContent className="pl-3 flex flex-col gap-1">
+      <CollapsibleContent className="flex flex-col gap-1 pl-3">
         {children}
       </CollapsibleContent>
     </Collapsible>

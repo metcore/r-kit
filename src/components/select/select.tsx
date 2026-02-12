@@ -79,8 +79,6 @@ export const Select: React.FC<SelectProps> = ({
         behavior: "smooth",
       });
     }
-
-    console.log(highlightedIndex);
   }, [highlightedIndex]);
 
   const asArray = (

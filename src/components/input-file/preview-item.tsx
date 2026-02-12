@@ -59,8 +59,6 @@ const PreviewItem = ({
     }, 200); // samakan dengan duration CSS
   };
 
-  console.log({ data });
-
   return (
     <div className="flex flex-col gap-3">
       {!!onCustomNameChange && (
