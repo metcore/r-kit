@@ -187,6 +187,10 @@
   }
 }
 
+.calendar-cols {
+  @apply grid-cols-[36px_36px_36px_36px_36px_36px_36px];
+}
+
 .animate-modal-fade-out {
   animation: modal-fade-out 0.2s ease-in forwards;
 }

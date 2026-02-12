@@ -56,6 +56,7 @@ function AppSidebar() {
       label: "Components",
       icon: "book-open-text",
       children: [
+        { path: "/calendar", label: "Calendar" },
         { path: "/input", label: "Input" },
         { path: "/button", label: "Button" },
         { path: "/card", label: "Card" },

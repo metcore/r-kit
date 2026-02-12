@@ -70,7 +70,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       >
         <div
           className={cn(
-            "flex w-full items-stretch rounded-lg border bg-white",
+            "flex w-full items-stretch overflow-hidden rounded-lg border bg-white",
             hasError
               ? "border-danger-500 focus-within:border-danger-500"
               : "focus-within:border-primary-300 border-gray-200",
