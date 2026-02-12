@@ -1,25 +1,25 @@
 import { useState } from "react";
-import { Icon } from "../../components/icons";
-import { Input } from "../../components/input";
-import { Text } from "../../components/text";
-import illust from "../assets/images/forms.png";
-import GridWrapper from "../components/GridWrapper";
-import HeroSection from "../components/HeroSection";
-import MainSection from "../components/MainSection";
-import DashboardLayout from "../layouts/DashboardLayout";
+import { Icon } from "../../../components/icons";
+import { Input } from "../../../components/input";
+import { Text } from "../../../components/text";
+import illust from "../../assets/images/forms.png";
+import GridWrapper from "../../components/GridWrapper";
+import HeroSection from "../../components/HeroSection";
+import MainSection from "../../components/MainSection";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 import {
   Dropdown,
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-} from "../../components/dropdown";
-import afghanistan from "../assets/images/flag/afghanistan.png";
-import albania from "../assets/images/flag/albania.png";
-import algeria from "../assets/images/flag/algeria.png";
-import america from "../assets/images/flag/america.png";
-import andorra from "../assets/images/flag/andorra.png";
-import Footer from "../components/Footer";
+} from "../../../components/dropdown";
+import afghanistan from "../../assets/images/flag/afghanistan.png";
+import albania from "../../assets/images/flag/albania.png";
+import algeria from "../../assets/images/flag/algeria.png";
+import america from "../../assets/images/flag/america.png";
+import andorra from "../../assets/images/flag/andorra.png";
+import Footer from "../../components/Footer";
 import dedent from "dedent";
 
 interface Countries {
@@ -388,9 +388,9 @@ export default function InputGroupPage() {
         <Footer
           backTo="/input-field"
           backToTitle="Input Field"
-          nextTo="/input-number"
+          nextTo="/counter"
           title="Input Group"
-          nextToTitle="Input Number"
+          nextToTitle="Counter"
         />
       </div>
     </DashboardLayout>

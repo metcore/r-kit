@@ -16,9 +16,8 @@ const Italic: React.FC<BaseIconProps> = ({
     <path
       d="M12.8334 1.41016H5.33341M8.66675 14.7435H1.16675M9.50008 1.41016L4.50008 14.7435"
       stroke={color}
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinejoin="round"
     />
   </svg>
 );

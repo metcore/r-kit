@@ -16,9 +16,11 @@ import SelectPage from "./pages/SelectPage";
 import ModalPage from "./pages/ModalPage";
 import TypographyPage from "./pages/TypographyPage";
 import ColorsPage from "./pages/ColorsPage";
-import CheckboxPage from "./pages/CheckboxPage";
-import InputFieldPage from "./pages/InputFieldPage";
-import InputGroupPage from "./pages/InputGroupPage";
+import InputGroupPage from "./pages/form-field/InputGroupPage";
+import CheckboxPage from "./pages/form-field/CheckboxPage";
+import InputFieldPage from "./pages/form-field/InputFieldPage";
+import CounterPage from "./pages/form-field/CounterPage";
+import InputFilePage from "./pages/form-field/InputFilePage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -41,6 +43,8 @@ const DocsRouter: React.FC = () => {
         <Route path="/checkbox" element={<CheckboxPage />} />
         <Route path="/input-field" element={<InputFieldPage />} />
         <Route path="/input-group" element={<InputGroupPage />} />
+        <Route path="/counter" element={<CounterPage />} />
+        <Route path="/input-file" element={<InputFilePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,6 @@
 import { cn } from "../../lib/utils";
-import type { ColorVariant } from "../types/ui";
 import { colorMap, positionMap, sizeMap } from "./indicator-variants";
+import type { ColorVariant } from "./type";
 
 type IndicatorPosition =
   | "top-right"
@@ -9,7 +9,7 @@ type IndicatorPosition =
   | "bottom-left";
 
 interface Props {
-  color: Exclude<ColorVariant, "default" | "muted" | "primary" | "orange">;
+  color: ColorVariant;
   size?: "sm" | "md" | "lg";
   value?: number;
   position?: IndicatorPosition;

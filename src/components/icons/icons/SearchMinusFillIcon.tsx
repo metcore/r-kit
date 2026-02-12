@@ -1,0 +1,28 @@
+import React from "react";
+import type { BaseIconProps } from "../type";
+
+const SearchMinusFillIcon: React.FC<BaseIconProps> = ({
+  size = 24,
+  color = "currentColor",
+  className,
+  ...props
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    {...props}
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M17.9417 17.0583L14.3 13.4167C15.2583 12.2667 15.8333 10.7833 15.8333 9.16667C15.8333 5.48333 12.85 2.5 9.16667 2.5C5.48333 2.5 2.5 5.48333 2.5 9.16667C2.5 12.85 5.48333 15.8333 9.16667 15.8333C10.7833 15.8333 12.2666 15.2583 13.4166 14.3L17.0583 17.9417C17.1833 18.0667 17.3417 18.125 17.5 18.125C17.6583 18.125 17.8167 18.0667 17.9417 17.9417C18.1834 17.7 18.1834 17.3 17.9417 17.0583ZM11.6667 9.79167H6.66667C6.325 9.79167 6.04167 9.50833 6.04167 9.16667C6.04167 8.825 6.325 8.54167 6.66667 8.54167H11.6667C12.0083 8.54167 12.2917 8.825 12.2917 9.16667C12.2917 9.50833 12.0083 9.79167 11.6667 9.79167Z"
+      fill={color}
+    />
+  </svg>
+);
+
+export default SearchMinusFillIcon;
