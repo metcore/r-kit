@@ -1,13 +1,10 @@
 import React from "react";
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {
-  size?: number;
-  color?: string;
-}
+import type { IconProps } from "../type";
 
 const PptIcon: React.FC<IconProps> = ({
   size = 24,
-  color = "currentColor",
+  // color = "currentColor",
   ...props
 }) => (
   <svg

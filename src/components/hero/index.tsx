@@ -1,1 +1,2 @@
-export * from "./hero";
+/* eslint-disable react-refresh/only-export-components */
+export * from './hero';

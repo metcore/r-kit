@@ -1,8 +1,8 @@
 import React from "react";
 import { iconRegistry } from "./icon-registry";
-import type { IconProps } from "./type";
+import type { IconNameProps, IconProps } from "./type";
 
-const Icon: React.FC<IconProps> = ({
+const Icon: React.FC<IconProps & { name: IconNameProps }> = ({
   name,
   size = 24,
   color = "currentColor",

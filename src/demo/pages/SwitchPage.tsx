@@ -47,6 +47,7 @@ export const SwitchPage = () => {
               onCheckedChange={setChecked3}
               color="danger"
               label="Danger"
+              size="lg"
             />
             <Switch
               checked={checked4}

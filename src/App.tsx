@@ -1,4 +1,4 @@
-import DocsRouter from "./docs/router";
+import DocsRouter from "./demo/router";
 
 function App() {
   return <DocsRouter />;

@@ -13,7 +13,14 @@ export const Avatar: React.FC<AvatarProps> = ({
   alt,
   ...props
 }) => {
-  const avatarClasses = cn(AvatarVariants({ size, color, variant }), className);
+  const initials = getInitials(name);
+  const bgColor = stringToColor(initials);
+
+  const avatarClasses = cn(
+    AvatarVariants({ size, color, variant }),
+    className,
+    bgColor,
+  );
 
   return url ? (
     <AvatarImage
@@ -66,4 +73,39 @@ const AvatarFallback = ({
       <span>{initials}</span>
     </div>
   );
+};
+
+const AVATAR_COLORS = [
+  "bg-danger-500",
+  "bg-warning-500",
+  "bg-orange-500",
+  "bg-success-500",
+  "bg-primary-500",
+  "bg-info-500",
+  "bg-purple-500",
+  "bg-gray-900",
+  "bg-info-900",
+  "bg-primary-1000",
+];
+
+const stringToColor = (str: string) => {
+  let hash = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const index = Math.abs(hash) % AVATAR_COLORS.length;
+  return AVATAR_COLORS[index];
+};
+
+const getInitials = (name: string) => {
+  if (!name) return "?";
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
 };

@@ -1,9 +1,6 @@
 import React from "react";
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {
-  size?: number;
-  color?: string;
-}
+import type { IconProps } from "../type";
 
 const PackageIcon: React.FC<IconProps> = ({
   size = 24,

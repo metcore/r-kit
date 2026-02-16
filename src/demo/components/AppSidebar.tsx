@@ -1,3 +1,7 @@
+import { Link, useLocation } from "react-router-dom";
+import { BrandLogo } from "../../components/brand-logo";
+import { Icon, type IconNameProps } from "../../components/icons";
+import { useSidebar } from "../../components/sidebar";
 import {
   Sidebar,
   SidebarContent,
@@ -7,10 +11,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "../../components/sidebar/sidebar";
-import { Link, useLocation } from "react-router-dom";
-import { Icon, type IconNameProps } from "../../components/icons";
-import { useSidebar } from "../../components/sidebar";
 import { cn } from "../../lib/utils";
+import brandLogo from "../assets/images/brand-logo.png";
 
 type RouteType = {
   path?: string;
@@ -25,12 +27,27 @@ function AppSidebar() {
 
   const menuItems: RouteType[] = [
     { path: "/", label: "Overview", icon: "grid-square" },
-    { path: "/foundation", label: "Foundation", icon: "circle-and-square" },
+    {
+      path: "/foundation",
+      label: "Foundation",
+      icon: "circle-and-square",
+      children: [
+        { path: "/typography", label: "Typography" },
+        { path: "/colors", label: "Color" },
+      ],
+    },
     {
       path: "/form",
       label: "Form",
       icon: "clipboard-edit",
-      children: [{ path: "/switch", label: "Switches" }],
+      children: [
+        { path: "/checkbox", label: "Checkbox" },
+        { path: "/input-field", label: "Input Field" },
+        { path: "/switch", label: "Switches" },
+        { path: "/radio-button", label: "Radio Button" },
+        { path: "/file-input", label: "File Input" },
+        { path: "/select", label: "Select" },
+      ],
     },
     {
       label: "Components",
@@ -41,10 +58,16 @@ function AppSidebar() {
         { path: "/card", label: "Card" },
         { path: "/chip", label: "Chip" },
         { path: "/avatar", label: "Avatar" },
+        { path: "/modal", label: "Modal" },
       ],
     },
 
-    { path: "/navigation", label: "Navigation", icon: "cursor" },
+    {
+      path: "/navigation",
+      label: "Navigation",
+      icon: "cursor",
+      children: [{ path: "/tabs", label: "Tabs" }],
+    },
     { path: "/feedback", label: "Feedback", icon: "message-text-notification" },
     { path: "/data-display", label: "Data Display", icon: "desktop" },
     { path: "/pages", label: "Pages", icon: "cpu" },
@@ -53,8 +76,8 @@ function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="justify-between">
-        <div className="font-bold">Logo</div>
+      <SidebarHeader className="h-[76px] flex-row items-center justify-between pl-5">
+        <BrandLogo name="Herca Design" brandLogo={brandLogo} />
         <div
           className={cn(
             state === "collapsed" && "hidden",
@@ -111,7 +134,9 @@ function AppSidebar() {
                 key={index}
                 active={item.path === location.pathname}
               >
-                <Link to={item.path || "/"}>{item.label}</Link>
+                <Link className="text-nowrap" to={item.path || "/"}>
+                  {item.label}
+                </Link>
               </SidebarMenuItem>
             );
           })}
