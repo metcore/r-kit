@@ -95,7 +95,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             </button>
           </div>
         </nav>
-        <main className="grow bg-gray-50 p-5">{children}</main>
+        <main className="min-h-dvh grow bg-gray-50 p-5">{children}</main>
       </div>
     </SidebarProvider>
   );

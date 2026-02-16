@@ -22,3 +22,6 @@ export * from "./components/indicator";
 export * from "./components/brand-logo";
 export * from "./components/checkbox";
 export * from "./components/input-otp";
+export * from "./components/dropdown";
+export * from "./components/counter";
+export * from "./components/input-file";

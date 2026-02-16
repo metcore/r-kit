@@ -21,7 +21,7 @@ export default function Footer({
 }: Props) {
   const navigate = useNavigate();
   return (
-    <Card>
+    <Card className="mt-10">
       <CardBody className="relative flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <Button

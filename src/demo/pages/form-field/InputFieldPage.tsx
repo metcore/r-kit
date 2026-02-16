@@ -1,16 +1,16 @@
-import HeroSection from "../components/HeroSection";
-import DashboardLayout from "../layouts/DashboardLayout";
-import illust from "../assets/images/forms.png";
-import GridWrapper from "../components/GridWrapper";
-import MainSection from "../components/MainSection";
-import { Input } from "../../components/input";
+import HeroSection from "../../components/HeroSection";
+import DashboardLayout from "../../layouts/DashboardLayout";
+import illust from "../../assets/images/forms.png";
+import GridWrapper from "../../components/GridWrapper";
+import MainSection from "../../components/MainSection";
+import { Input } from "../../../components/input";
 import { useState } from "react";
-import { Icon } from "../../components/icons";
-import { InputOTP } from "../../components/input-otp";
-import Footer from "../components/Footer";
-import { useMarkdown } from "../hooks/useMarkdown";
-import { Card, CardBody } from "../../components/card";
-import MarkdownRenderer from "../components/MarkdownRenderer";
+import { Icon } from "../../../components/icons";
+import { InputOTP } from "../../../components/input-otp";
+import Footer from "../../components/Footer";
+import { useMarkdown } from "../../hooks/useMarkdown";
+import { Card, CardBody } from "../../../components/card";
+import MarkdownRenderer from "../../components/MarkdownRenderer";
 import dedent from "dedent";
 
 export default function InputFieldPage() {

@@ -15,8 +15,9 @@ interface Props {
   title: string;
   downloadUrl?: string;
   children: React.ReactNode;
-  code?: string;
+  code?: string | null;
   className?: string;
+  contentClassName?: string;
 }
 
 interface ActionButtonProps {
@@ -32,6 +33,7 @@ export default function MainSection({
   downloadUrl,
   code,
   className,
+  contentClassName,
 }: Props) {
   const { copy, copied } = useCopy();
 
@@ -65,7 +67,7 @@ export default function MainSection({
         )}
       </CardHeader>
 
-      <CardBody>{children}</CardBody>
+      <CardBody className={contentClassName}>{children}</CardBody>
 
       {!!code && (
         <CardFooter className="flex flex-col gap-3 border-t">

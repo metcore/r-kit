@@ -255,6 +255,11 @@ import ClipboardListCheck2Icon from "./icons/ClipboardListCheck2Icon";
 import TimesCircleIcon from "./icons/TimesCircleIcon";
 import CodeIcon from "./icons/Code";
 import InfoCircleFillIcon from "./icons/InfoCircleFill";
+import ExlamationTriangle from "./icons/ExclamationTriangleIcon";
+import RotateRightIcon from "./icons/RotateRightIcon";
+import CloudUploadIcon from "./icons/CloudUploadIcon";
+import SearchPlusFillIcon from "./icons/SearchPlusFillIcon";
+import SearchMinusFillIcon from "./icons/SearchMinusFillIcon";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -514,4 +519,9 @@ export const iconRegistry = {
   xls: XlsIcon,
   code: CodeIcon,
   "info-circle-fill": InfoCircleFillIcon,
+  "rotate-right": RotateRightIcon,
+  "exclamation-triangle": ExlamationTriangle,
+  "cloud-upload": CloudUploadIcon,
+  "search-plus-fill": SearchPlusFillIcon,
+  "search-minus-fill": SearchMinusFillIcon,
 };

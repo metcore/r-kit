@@ -80,7 +80,11 @@ export const Switch: React.FC<
     description?: string;
     errorMessages?: string | string[];
     hint?: string;
-    direction?: "horizontal" | "vertical";
+    direction?:
+      | "horizontal"
+      | "vertical"
+      | "horizontal-reverse"
+      | "vertical-reverse";
   }
 > = ({
   label,
@@ -104,9 +108,10 @@ export const Switch: React.FC<
     <FormField hint={hint} errorMessages={errorMessages} className={className}>
       <div
         className={cn(
-          "flex flex-col gap-2",
-          direction === "horizontal" &&
-            "inline-flex flex-row-reverse items-center justify-end",
+          "flex flex-col items-center gap-2",
+          direction === "horizontal" && "inline-flex flex-row-reverse items-center justify-end", //prettier-ignore
+          direction === "horizontal-reverse" && "inline-flex flex-row items-center justify-start text-end", //prettier-ignore
+          direction === "vertical-reverse" && "inline-flex flex-col-reverse items-center", //prettier-ignore
         )}
       >
         {label && (

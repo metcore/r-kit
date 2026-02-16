@@ -43,8 +43,11 @@ function AppSidebar() {
       children: [
         { path: "/checkbox", label: "Checkbox" },
         { path: "/input-field", label: "Input Field" },
-        { path: "/switch", label: "Switches" },
+        { path: "/input-group", label: "Input Group" },
+        { path: "/counter", label: "Counter" },
+        { path: "/input-file", label: "Input File" },
         { path: "/radio-button", label: "Radio Button" },
+        { path: "/switch", label: "Switches" },
         { path: "/file-input", label: "File Input" },
         { path: "/select", label: "Select" },
       ],
@@ -53,6 +56,7 @@ function AppSidebar() {
       label: "Components",
       icon: "book-open-text",
       children: [
+        { path: "/calendar", label: "Calendar" },
         { path: "/input", label: "Input" },
         { path: "/button", label: "Button" },
         { path: "/card", label: "Card" },
