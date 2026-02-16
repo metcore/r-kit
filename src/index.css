@@ -107,6 +107,9 @@
 
   /* font family */
   --font-metropolis: "Metropolis", sans-serif, system-ui, -apple-system;
+
+  /* shadow */
+  --shadow-dropdown: "0 4px 30px 0 rgba(46,45,116,0.05)";
 }
 
 @utility scrollbar-hide {
@@ -184,6 +187,10 @@
   }
 }
 
+.calendar-cols {
+  @apply grid-cols-[36px_36px_36px_36px_36px_36px_36px];
+}
+
 .animate-modal-fade-out {
   animation: modal-fade-out 0.2s ease-in forwards;
 }
@@ -229,4 +236,17 @@ pre[data-line-numbers] code > span::before {
   width: 2rem;
   text-align: right;
   color: #6b7280;
+}
+
+/* input number */
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

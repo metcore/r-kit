@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
 import { RadioGroup, Radio } from "../../components/radio";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Checkbox, CheckboxGroup } from "../../components/checkbox/checkbox";
 import { Input } from "../../components/input";
+import React from "react";
 
 export const RadioButtonPage = () => {
   return (
@@ -19,9 +19,6 @@ function RadioExample() {
   const [value2, setValue2] = React.useState("option1");
   const [value3, setValue3] = React.useState("option1");
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
   return (
     <DashboardLayout>
       <div className="space-y-8 p-6">
@@ -123,9 +120,6 @@ function RadioExample() {
               value="reading"
               label="Membaca"
               color="danger"
-              onCheckedChange={(e) => {
-                console.log("e", e);
-              }}
               description="Buku, artikel, dll"
             />
             <Checkbox

@@ -1,148 +1,247 @@
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Hero } from "../../components/hero";
-import { Card, CardBody, CardHeader } from "../../components/card";
+import dedent from "dedent";
 import { Switch } from "../../components/switch";
-import React from "react";
+import illust from "../assets/images/forms.png";
+import GridWrapper from "../components/GridWrapper";
+import HeroSection from "../components/HeroSection";
+import MainSection from "../components/MainSection";
+import DashboardLayout from "../layouts/DashboardLayout";
+import Footer from "../components/Footer";
 
 export const SwitchPage = () => {
-  const [checked, setChecked] = React.useState(false);
-  const [checked2, setChecked2] = React.useState(true);
-  const [checked3, setChecked3] = React.useState(true);
-  const [checked4, setChecked4] = React.useState(true);
-  const [checked5, setChecked5] = React.useState(true);
-  const [checked6, setChecked6] = React.useState(true);
-  const [checked7, setChecked7] = React.useState(true);
-  const [checked8, setChecked8] = React.useState(true);
+  // const [checked, setChecked] = useState(false);
+
+  const defaultExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch />
+      <Switch checked />
+      <Switch disabled />
+      <Switch checked disabled />
+    </div>
+  `);
+
+  const defaultHorizontalExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch />
+      <Switch checked />
+      <Switch disabled />
+      <Switch checked disabled />
+    </div>
+  `);
+
+  const defaultVerticalExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch label="Default" direction="vertical" />
+      <Switch checked label="Active" direction="vertical" />
+      <Switch disabled label="Disable Default" direction="vertical" />
+      <Switch
+        checked
+        disabled
+        label="Disabled Active"
+        direction="vertical"
+      />
+    </div>
+  `);
+
+  const verticalReverseExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch label="Default" direction="vertical-reverse" />
+      <Switch checked label="Active" direction="vertical-reverse" />
+      <Switch
+        disabled
+        label="Disable Default"
+        direction="vertical-reverse"
+      />
+      <Switch
+        checked
+        disabled
+        label="Disabled Active"
+        direction="vertical-reverse"
+      />
+    </div>
+  `);
+
+  const horizontalReverseExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch label="Default" direction="horizontal-reverse" />
+      <Switch checked label="Active" direction="horizontal-reverse" />
+      <Switch
+        disabled
+        label="Disable Default"
+        direction="horizontal-reverse"
+      />
+      <Switch
+        checked
+        disabled
+        label="Disabled Active"
+        direction="horizontal-reverse"
+      />
+    </div>
+  `);
+
+  const validasiExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch label="Default" errorMessages={"Error Message"} />
+      <Switch checked label="Active" errorMessages={"Error Message"} />
+    </div>
+  `);
+
+  const sizeExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch size="sm" label="Small (sm)" checked />
+      <Switch size="md" label="Medium (md)" checked />
+      <Switch size="lg" label="Large (lg)" checked />
+    </div>
+  `);
+
+  const colorsExample = dedent(`
+    <div className="flex flex-row gap-8">
+      <Switch checked />
+      <Switch color="danger" checked />
+      <Switch color="gray" checked />
+      <Switch color="info" checked />
+      <Switch color="orange" checked />
+      <Switch color="primary" checked />
+      <Switch color="purple" checked />
+      <Switch color="secondary" checked />
+      <Switch color="success" checked />
+      <Switch color="warning" checked />
+    </div>
+  `);
 
   return (
     <DashboardLayout>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Switch</h1>
-        <p className="text-sm text-gray-800">
-          Kontrol on/off yang memberi pengguna cara instan untuk mengubah status
-          sebuah fungsi.
-        </p>
-      </Hero>
-      <div className="grid grid-cols-1 gap-4">
-        <Card size={"lg"}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Switch Horizontal (Default)
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Switch
-              checked={checked}
-              onCheckedChange={setChecked}
-              color="primary"
-              label="Primary"
-            />
-            <Switch
-              checked={checked2}
-              onCheckedChange={setChecked2}
-              color="success"
-              label="Success"
-            />
-            <Switch
-              checked={checked3}
-              onCheckedChange={setChecked3}
-              color="danger"
-              label="Danger"
-              size="lg"
-            />
-            <Switch
-              checked={checked4}
-              onCheckedChange={setChecked4}
-              color="warning"
-              label="Warning"
-            />
-            <Switch
-              checked={checked5}
-              onCheckedChange={setChecked5}
-              color="info"
-              label="Info"
-            />
-            <Switch
-              checked={checked6}
-              onCheckedChange={setChecked6}
-              color="orange"
-              label="Orange"
-            />
-            <Switch
-              checked={checked7}
-              onCheckedChange={setChecked7}
-              color="purple"
-              label="Purple"
-            />
-            <Switch
-              checked={checked8}
-              onCheckedChange={setChecked8}
-              color="gray"
-              label="Gray"
-            />
-          </CardBody>
-        </Card>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Switches"
+        description="Kontrol on/off yang memberi user cara instan untuk mengubah status sebuah fungsi."
+      />
 
-        <Card size={"lg"}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Switch Vertical
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Switch color="primary" label="Primary" direction="vertical" />
-            <Switch color="success" label="Success" direction="vertical" />
-            <Switch color="danger" label="Danger" direction="vertical" />
-            <Switch color="warning" label="Warning" direction="vertical" />
-            <Switch color="info" label="Info" direction="vertical" />
-            <Switch color="orange" label="Orange" direction="vertical" />
-            <Switch color="purple" label="Purple" direction="vertical" />
-            <Switch color="gray" label="Gray" direction="vertical" />
-          </CardBody>
-        </Card>
-
-        <Card size={"lg"}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Switch Size
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Switch
-              color="primary"
-              size="sm"
-              label="Small (sm)"
-              direction="vertical"
-            />
-            <Switch
-              color="success"
-              size="md"
-              label="Medium (md)"
-              direction="vertical"
-            />
-            <Switch
-              color="danger"
-              size="lg"
-              label="Large (lg)"
-              direction="vertical"
-            />
-          </CardBody>
-        </Card>
-
-        <Card size={"lg"}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Switch With Hint
-          </CardHeader>
-          <CardBody className="flex flex-col gap-8">
-            <Switch
-              color="primary"
-              label="With hint"
-              direction="vertical"
-              hint="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-            />
-            <Switch
-              color="success"
-              label="Error message"
-              direction="vertical"
-              errorMessages={["Error message 1", "Error message 2"]}
-            />
-          </CardBody>
-        </Card>
+      <div className="flex flex-col gap-8">
+        <GridWrapper>
+          <MainSection
+            title="Switches"
+            code={defaultExample}
+            className="col-span-2"
+          >
+            <div className="flex flex-row gap-8">
+              <Switch />
+              <Switch checked />
+              <Switch disabled />
+              <Switch checked disabled />
+            </div>
+          </MainSection>
+          {/* direction */}
+          <MainSection
+            title="Default Switches Horizontal"
+            code={defaultHorizontalExample}
+          >
+            <div className="flex flex-row gap-8">
+              <Switch label="Default" />
+              <Switch checked label="Active" />
+              <Switch disabled label="Disable Default" />
+              <Switch checked disabled label="Disabled Active" />
+            </div>
+          </MainSection>
+          <MainSection
+            title="Default Switches Vertical"
+            code={defaultVerticalExample}
+          >
+            <div className="flex flex-row gap-8">
+              <Switch label="Default" direction="vertical" />
+              <Switch checked label="Active" direction="vertical" />
+              <Switch disabled label="Disable Default" direction="vertical" />
+              <Switch
+                checked
+                disabled
+                label="Disabled Active"
+                direction="vertical"
+              />
+            </div>
+          </MainSection>
+          {/* direction end */}
+          {/* revers direction */}
+          <MainSection
+            title="Switches Horizontal Reverse"
+            code={horizontalReverseExample}
+          >
+            <div className="flex flex-row gap-8">
+              <Switch label="Default" direction="horizontal-reverse" />
+              <Switch checked label="Active" direction="horizontal-reverse" />
+              <Switch
+                disabled
+                label="Disable Default"
+                direction="horizontal-reverse"
+              />
+              <Switch
+                checked
+                disabled
+                label="Disabled Active"
+                direction="horizontal-reverse"
+              />
+            </div>
+          </MainSection>
+          <MainSection
+            title="Switches Vertical Reverse"
+            code={verticalReverseExample}
+          >
+            <div className="flex flex-row gap-8">
+              <Switch label="Default" direction="vertical-reverse" />
+              <Switch checked label="Active" direction="vertical-reverse" />
+              <Switch
+                disabled
+                label="Disable Default"
+                direction="vertical-reverse"
+              />
+              <Switch
+                checked
+                disabled
+                label="Disabled Active"
+                direction="vertical-reverse"
+              />
+            </div>
+          </MainSection>
+          {/* revers direction end */}
+          {/* validation & size */}
+          <MainSection title="Switches Validasi" code={validasiExample}>
+            <div className="flex flex-row gap-8">
+              <Switch label="Default" errorMessages={"Error Message"} />
+              <Switch checked label="Active" errorMessages={"Error Message"} />
+            </div>
+          </MainSection>
+          <MainSection title="Switches Size" code={sizeExample}>
+            <div className="flex flex-row gap-8">
+              <Switch size="sm" label="Small (sm)" checked />
+              <Switch size="md" label="Medium (md)" checked />
+              <Switch size="lg" label="Large (lg)" checked />
+            </div>
+          </MainSection>
+          {/* validation & size end */}
+          <MainSection
+            title="Switches Colors"
+            code={colorsExample}
+            className="col-span-2"
+          >
+            <div className="flex flex-row gap-8">
+              <Switch checked />
+              <Switch color="danger" checked />
+              <Switch color="gray" checked />
+              <Switch color="info" checked />
+              <Switch color="orange" checked />
+              <Switch color="purple" checked />
+              <Switch color="secondary" checked />
+              <Switch color="success" checked />
+              <Switch color="warning" checked />
+            </div>
+          </MainSection>
+        </GridWrapper>
+        <Footer
+          backTo="/radio-button"
+          backToTitle="Radio Button"
+          nextTo="/color-picker"
+          title="Switches"
+          nextToTitle="Color Picker"
+        />
       </div>
     </DashboardLayout>
   );

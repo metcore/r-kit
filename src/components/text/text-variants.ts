@@ -34,6 +34,8 @@ export const TextVariants = cva("font-metropolis", {
       orange: "text-orange-500",
       danger: "text-danger-500",
       info: "text-info-500",
+      purple: "text-purple-500",
+      gray: "text-gray-500",
     },
 
     align: {

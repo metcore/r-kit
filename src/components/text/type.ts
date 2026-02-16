@@ -1,6 +1,18 @@
 import type React from "react";
-import type { AlignMent, ColorVariant } from "../types/ui";
 
+export type ColorVariant =
+  | "default"
+  | "muted"
+  | "primary"
+  | "success"
+  | "warning"
+  | "orange"
+  | "danger"
+  | "info"
+  | "purple"
+  | "gray";
+
+export type AlignMent = "start" | "center" | "end" | "justify";
 export type TextWeight = "regular" | "medium" | "semibold" | "bold";
 export type TextVariant =
   | "h1"
