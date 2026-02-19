@@ -101,6 +101,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "font-metropolis w-full rounded-none border-none focus-visible:outline-none",
               leftAddon && "pl-2",
               rightAddon && "pr-2",
+              mergedAddon && "shadow-none",
               props.disabled && "cursor-not-allowed bg-gray-100",
               className,
             )}

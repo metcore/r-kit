@@ -24,6 +24,12 @@
       "import": "./dist/index.js",
       "source": "./src/index.ts"
     },
+    "./clients": {
+      "types": "./dist/clients.d.ts",
+      "require": "./dist/clients.cjs",
+      "import": "./dist/clients.js",
+      "source": "./src/clients.ts"
+    },
     "./style": "./dist/index.css"
   },
   "main": "dist/index.cjs",
@@ -70,7 +76,7 @@
     "shiki": "^3.21.0",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.45.0",
+    "typescript-eslint": "^8.14.0",
     "vite": "^7.1.7"
   },
   "peerDependencies": {
