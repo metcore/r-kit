@@ -18,10 +18,14 @@ export function DropdownTrigger({
 export function DropdownContent({
   children,
   className,
+  portalProps,
   ...props
-}: { children: React.ReactNode } & DropdownMenu.DropdownMenuContentProps) {
+}: {
+  children: React.ReactNode;
+  portalProps?: DropdownMenu.DropdownMenuPortalProps;
+} & DropdownMenu.DropdownMenuContentProps) {
   return (
-    <DropdownMenu.Portal>
+    <DropdownMenu.Portal {...portalProps}>
       <DropdownMenu.Content
         sideOffset={props.sideOffset || 15}
         className={cn(
@@ -38,13 +42,14 @@ export function DropdownContent({
 
 export function DropdownItem({
   children,
+  className,
   ...props
 }: { children: React.ReactNode } & DropdownMenu.DropdownMenuItemProps) {
   return (
     <DropdownMenu.Item
       className={cn(
         "hover:bg-primary-50 hover:border-primary-300 flex cursor-pointer flex-row items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 outline-0 transition-all",
-        props.className,
+        className,
       )}
       {...props}
     >
