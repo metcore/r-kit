@@ -10,3 +10,4 @@ export * from "./components/avatar";
 export * from "./components/code-block";
 export * from "./components/indicator";
 export * from "./components/brand-logo";
+export * from "./components/kbd";
