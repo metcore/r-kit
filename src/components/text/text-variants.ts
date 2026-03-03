@@ -26,7 +26,7 @@ export const TextVariants = cva("font-metropolis", {
     },
 
     color: {
-      default: "text-gray-900",
+      default: "",
       muted: "text-gray-400",
       primary: "text-primary-500",
       success: "text-success-500",

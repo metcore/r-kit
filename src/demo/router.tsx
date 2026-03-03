@@ -22,6 +22,8 @@ import InputFieldPage from "./pages/form-field/InputFieldPage";
 import CounterPage from "./pages/form-field/CounterPage";
 import InputFilePage from "./pages/form-field/InputFilePage";
 import CalendarPage from "./pages/components/CalendarPage";
+import DatePickerPage from "./pages/form-field/DatePickerPage";
+import TablePage from "./pages/data-display/TablePage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -47,6 +49,8 @@ const DocsRouter: React.FC = () => {
         <Route path="/counter" element={<CounterPage />} />
         <Route path="/input-file" element={<InputFilePage />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/date-picker" element={<DatePickerPage />} />
+        <Route path="/table" element={<TablePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

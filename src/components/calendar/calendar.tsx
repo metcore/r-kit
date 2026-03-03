@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { cn } from "../../lib/utils";
-import { Dropdown, DropdownContent, DropdownTrigger } from "../dropdown";
 import { Text } from "../text";
 import { ButtonNavigator } from "./button-navigator";
 import { ButtonDropdown, ItemDropdown } from "./dropdown";
@@ -41,6 +40,10 @@ const Calendar = ({
     "November",
     "Desember",
   ],
+  showNextNavigator = true,
+  showPrevNavigator = true,
+  mode = "single",
+  rangeValue,
 }: CalendarProps) => {
   const currentDate = new Date();
 
@@ -50,6 +53,9 @@ const Calendar = ({
   const [currentYear, setCurrentYear] = useState(
     defaultYear ?? currentDate.getFullYear(),
   );
+
+  const [isDropdownYearShow, setIsDropdownYearShow] = useState(false);
+  const [isDropdownMonthShow, setIsDropdownMonthShow] = useState(false);
 
   // Generate array of years (current year ± 10 years)
   const years = useMemo(() => {
@@ -100,8 +106,9 @@ const Calendar = ({
     );
   };
 
-  // Helper to check if date is selected
+  // Helper to check if date is selected (single mode)
   const isDateSelected = (day: CalendarDay): boolean => {
+    if (mode === "range") return false;
     if (!value) return false;
     return (
       value.getDate() === day.fullDate.getDate() &&
@@ -110,13 +117,66 @@ const Calendar = ({
     );
   };
 
+  // Helper to check if date is in range
+  const isDateInRange = (day: CalendarDay): boolean => {
+    if (mode !== "range" || !rangeValue?.start || !rangeValue?.end)
+      return false;
+
+    const dayTime = day.fullDate.getTime();
+    const startTime = rangeValue.start.getTime();
+    const endTime = rangeValue.end.getTime();
+
+    return dayTime > startTime && dayTime < endTime;
+  };
+
+  // Helper to check if date is range start
+  const isRangeStart = (day: CalendarDay): boolean => {
+    if (mode !== "range" || !rangeValue?.start) return false;
+    return (
+      day.fullDate.getDate() === rangeValue.start.getDate() &&
+      day.fullDate.getMonth() === rangeValue.start.getMonth() &&
+      day.fullDate.getFullYear() === rangeValue.start.getFullYear()
+    );
+  };
+
+  // Helper to check if date is range end
+  const isRangeEnd = (day: CalendarDay): boolean => {
+    if (mode !== "range" || !rangeValue?.end) return false;
+    return (
+      day.fullDate.getDate() === rangeValue.end.getDate() &&
+      day.fullDate.getMonth() === rangeValue.end.getMonth() &&
+      day.fullDate.getFullYear() === rangeValue.end.getFullYear()
+    );
+  };
+
   const handleDateClick = (day: CalendarDay) => {
+    if (day.month !== "current") return;
+
     const dayConfig = getDayConfig(day);
     const disabled = dayConfig?.disabled || isDateDisabled(day);
 
     if (disabled) return;
 
     onChange?.(day.fullDate);
+  };
+
+  // Get range background class
+  const getRangeBackgroundClass = (day: CalendarDay): string => {
+    if (mode !== "range") return "";
+
+    const inRange = isDateInRange(day);
+    const rangeStart = isRangeStart(day);
+    const rangeEnd = isRangeEnd(day);
+
+    if (rangeStart || rangeEnd) {
+      return "bg-primary-1000 text-white!";
+    }
+
+    if (inRange) {
+      return "bg-primary-100";
+    }
+
+    return "";
   };
 
   return (
@@ -133,6 +193,7 @@ const Calendar = ({
             <ButtonNavigator
               onClick={handlePrevMonth}
               icon="angle-left-small"
+              className={showPrevNavigator ? "" : "opacity-0"}
             />
           )}
 
@@ -145,21 +206,29 @@ const Calendar = ({
           >
             {/* month */}
             {showNavigator && (
-              <Dropdown>
-                <DropdownTrigger>
-                  <ButtonDropdown />
-                </DropdownTrigger>
-                <DropdownContent className="max-h-48 max-w-[100px] space-y-1 overflow-y-auto p-1!">
-                  {months.map((month, index) => (
-                    <ItemDropdown
-                      onClick={() => setCurrentMonth(index)}
-                      key={index}
-                      active={currentMonth === index}
-                      value={month}
-                    />
-                  ))}
-                </DropdownContent>
-              </Dropdown>
+              <div>
+                <ButtonDropdown
+                  onClick={() => setIsDropdownMonthShow(!isDropdownMonthShow)}
+                  active={isDropdownMonthShow}
+                />
+                {isDropdownMonthShow && (
+                  <div
+                    className="relative"
+                    onClick={() => setIsDropdownMonthShow(false)}
+                  >
+                    <div className="absolute top-5 left-1/2 z-20 max-h-48 -translate-x-1/2 space-y-1 overflow-y-auto rounded-lg bg-white px-2 py-1 shadow-md">
+                      {months.map((month, index) => (
+                        <ItemDropdown
+                          onClick={() => setCurrentMonth(index)}
+                          key={index}
+                          active={currentMonth === index}
+                          value={month}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* current month - year */}
@@ -173,21 +242,29 @@ const Calendar = ({
 
             {/* year */}
             {showNavigator && (
-              <Dropdown>
-                <DropdownTrigger>
-                  <ButtonDropdown />
-                </DropdownTrigger>
-                <DropdownContent className="max-h-48 max-w-[100px] space-y-1 overflow-y-auto p-1!">
-                  {years.map((year) => (
-                    <ItemDropdown
-                      key={year}
-                      onClick={() => setCurrentYear(year)}
-                      active={currentYear === year}
-                      value={year.toString()}
-                    />
-                  ))}
-                </DropdownContent>
-              </Dropdown>
+              <div>
+                <ButtonDropdown
+                  onClick={() => setIsDropdownYearShow(!isDropdownYearShow)}
+                  active={isDropdownYearShow}
+                />
+                {isDropdownYearShow && (
+                  <div
+                    className="relative"
+                    onClick={() => setIsDropdownYearShow(false)}
+                  >
+                    <div className="absolute top-5 left-1/2 z-20 max-h-48 -translate-x-1/2 space-y-1 overflow-y-auto rounded-lg bg-white px-2 py-1 shadow-md">
+                      {years.map((year) => (
+                        <ItemDropdown
+                          key={year}
+                          onClick={() => setCurrentYear(year)}
+                          active={currentYear === year}
+                          value={year.toString()}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -196,6 +273,7 @@ const Calendar = ({
             <ButtonNavigator
               onClick={handleNextMonth}
               icon="angle-right-small"
+              className={showNextNavigator ? "" : "opacity-0"}
             />
           )}
         </div>
@@ -230,6 +308,9 @@ const Calendar = ({
           const isSelected = isDateSelected(day as CalendarDay);
           const dots = dayConfig?.dots || [];
           const isCurrentMonth = day.month === "current";
+          // const inRange = isDateInRange(day as CalendarDay);
+          const rangeStart = isRangeStart(day as CalendarDay);
+          const rangeEnd = isRangeEnd(day as CalendarDay);
 
           return (
             <button
@@ -237,7 +318,7 @@ const Calendar = ({
               onClick={() => handleDateClick(day as CalendarDay)}
               disabled={isDisabled && day.month === "current"}
               style={getDayStyle({
-                selected: isSelected,
+                selected: isSelected || rangeStart || rangeEnd,
                 day: day as CalendarDay,
                 disabled: isDisabled,
                 styleConfig,
@@ -247,16 +328,21 @@ const Calendar = ({
                 getCursorClass({ isDisabled, isCurrentMonth }),
                 getTextColorClass({
                   isCurrentMonth,
-                  isSelected,
+                  isSelected: isSelected || rangeStart || rangeEnd,
                   isDisabled,
                   styleConfig,
+                  day: day as CalendarDay,
                 }),
-                getBackgroundClass({
-                  isSelected,
-                  isDisabled,
-                  isCurrentMonth,
-                  styleConfig,
-                }),
+                mode === "single" &&
+                  getBackgroundClass({
+                    isSelected,
+                    isDisabled,
+                    isCurrentMonth,
+                    styleConfig,
+                  }),
+                mode === "range" &&
+                  !isDisabled &&
+                  getRangeBackgroundClass(day as CalendarDay),
               )}
             >
               <h5 className="font-metropolis text-xs font-medium">
