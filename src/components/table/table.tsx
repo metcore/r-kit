@@ -39,13 +39,14 @@ export function Table({
       <table
         className={clsx(
           className,
+          "overflow-hidden",
           (variant === "bordered" ||
             variant == "stripped" ||
             variant == "hovered" ||
             variant === "wrapped-row-bordered") &&
             "border-separate border-spacing-0",
           variant === "wrapped-row-bordered" &&
-            "rounded border border-gray-300",
+            "rounded-lg border border-gray-300",
         )}
       >
         {children}
