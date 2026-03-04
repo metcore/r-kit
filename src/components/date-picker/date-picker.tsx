@@ -1,8 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { cn } from "../../lib/utils";
 import { Calendar } from "../calendar";
+import { Dropdown, DropdownContent, DropdownTrigger } from "../dropdown";
 import { Icon } from "../icons";
 import { Input } from "../input";
-import { cn } from "../../lib/utils";
+import { formatDateToString, getFormatConfig, parseMonthName } from "./helpers";
+import { Button } from "../button";
 
 type DateFormat =
   | "DD-MM-YYYY"
@@ -19,6 +22,27 @@ interface DateRange {
   end: Date | null;
 }
 
+type CalendarBaseProps = React.ComponentProps<typeof Calendar>;
+type CalendarOverrideProps = Omit<
+  CalendarBaseProps,
+  | "wrapperClassname"
+  | "weekWrapperClassname"
+  | "dayWrapperClassname"
+  | "onChange"
+  | "mode"
+>;
+
+type CalendarRangeOverrideProps = Omit<
+  CalendarBaseProps,
+  | "wrapperClassname"
+  | "weekWrapperClassname"
+  | "dayWrapperClassname"
+  | "onChange"
+  | "value"
+  | "rangeValue"
+  | "mode"
+>;
+
 interface DatePickerProps {
   format?: DateFormat;
   mode?: DatePickerMode;
@@ -26,36 +50,14 @@ interface DatePickerProps {
   rangeValue?: DateRange;
   onChange?: (date: Date | null) => void;
   onRangeChange?: (range: DateRange) => void;
-}
+  trigger?: ReactNode;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
 
-const monthsShort = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "Mei",
-  "Jun",
-  "Jul",
-  "Agu",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Des",
-];
-const monthsFull = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
+  calendarProps?: CalendarOverrideProps;
+  startDateCalendarProps?: CalendarRangeOverrideProps;
+  endDateCalendarProps?: CalendarRangeOverrideProps;
+}
 
 const DatePicker = ({
   format = "DD-MM-YYYY",
@@ -64,6 +66,12 @@ const DatePicker = ({
   rangeValue: controlledRangeValue,
   onChange: controlledOnChange,
   onRangeChange: controlledOnRangeChange,
+  trigger,
+  open,
+  onOpenChange,
+  calendarProps,
+  endDateCalendarProps,
+  startDateCalendarProps,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null,
@@ -72,98 +80,22 @@ const DatePicker = ({
     controlledRangeValue || { start: null, end: null },
   );
   const [inputValue, setInputValue] = useState<string>("");
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isCalendarShow, setIsCalendarShow] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Check screen size
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // md breakpoint
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
   // Check if format uses month names
   const usesMonthName = format.includes("MMM");
-
-  // Get format configuration
-  const getFormatConfig = (format: DateFormat) => {
-    switch (format) {
-      case "DD-MM-YYYY":
-        return { separator: "-", placeholder: "DD-MM-YYYY", maxLength: 10 };
-      case "DD/MM/YYYY":
-        return { separator: "/", placeholder: "DD/MM/YYYY", maxLength: 10 };
-      case "DD MMM YYYY":
-        return { separator: " ", placeholder: "DD MMM YYYY", maxLength: 11 };
-      case "DD MMMM YYYY":
-        return { separator: " ", placeholder: "DD MMMM YYYY", maxLength: 18 };
-      case "YYYY-MM-DD":
-        return { separator: "-", placeholder: "YYYY-MM-DD", maxLength: 10 };
-      case "MM/DD/YYYY":
-        return { separator: "/", placeholder: "MM/DD/YYYY", maxLength: 10 };
-      default:
-        return { separator: "-", placeholder: "DD-MM-YYYY", maxLength: 10 };
-    }
-  };
-
   const formatConfig = getFormatConfig(format);
-
-  // Format Date to custom format
-  const formatDateToString = (date: Date | null): string => {
-    if (!date) return "";
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const monthShort = monthsShort[date.getMonth()];
-    const monthFull = monthsFull[date.getMonth()];
-    const year = date.getFullYear();
-
-    switch (format) {
-      case "DD-MM-YYYY":
-        return `${day}-${month}-${year}`;
-      case "DD/MM/YYYY":
-        return `${day}/${month}/${year}`;
-      case "DD MMM YYYY":
-        return `${day} ${monthShort} ${year}`;
-      case "DD MMMM YYYY":
-        return `${day} ${monthFull} ${year}`;
-      case "YYYY-MM-DD":
-        return `${year}-${month}-${day}`;
-      case "MM/DD/YYYY":
-        return `${month}/${day}/${year}`;
-      default:
-        return `${day}-${month}-${year}`;
-    }
-  };
 
   // Format date range to string
   const formatRangeToString = (range: DateRange): string => {
     if (!range.start && !range.end) return "";
-    if (range.start && !range.end) return formatDateToString(range.start);
-    if (!range.start && range.end) return formatDateToString(range.end);
-    return `${formatDateToString(range.start)} - ${formatDateToString(range.end)}`;
-  };
-
-  // Parse month name to number
-  const parseMonthName = (monthStr: string): number | null => {
-    const monthLower = monthStr.toLowerCase();
-
-    const shortIndex = monthsShort.findIndex(
-      (m) => m.toLowerCase() === monthLower,
-    );
-    if (shortIndex !== -1) return shortIndex + 1;
-
-    const fullIndex = monthsFull.findIndex(
-      (m) => m.toLowerCase() === monthLower,
-    );
-    if (fullIndex !== -1) return fullIndex + 1;
-
-    return null;
+    if (range.start && !range.end)
+      return formatDateToString(range.start, format);
+    if (!range.start && range.end) return formatDateToString(range.end, format);
+    return `${formatDateToString(range.start, format)} - ${formatDateToString(range.end, format)}`;
   };
 
   // Parse custom format to Date
@@ -331,9 +263,11 @@ const DatePicker = ({
   // Handle calendar selection for single mode
   const handleCalendarChange = (date: Date) => {
     setSelectedDate(date);
-    setInputValue(formatDateToString(date));
-    setShowCalendar(false);
+    setInputValue(formatDateToString(date, format));
     controlledOnChange?.(date);
+
+    setIsCalendarShow(false);
+    onOpenChange?.(false);
   };
 
   // Handle calendar selection for range mode
@@ -353,65 +287,15 @@ const DatePicker = ({
     }
 
     setDateRange(newRange);
-    setInputValue(formatRangeToString(newRange));
-    controlledOnRangeChange?.(newRange);
   };
 
-  // Handle input focus
-  const handleInputFocus = () => {
-    setShowCalendar(true);
+  const handleApplyDateRange = () => {
+    setInputValue(formatRangeToString(dateRange));
+    controlledOnRangeChange?.(dateRange);
+
+    onOpenChange?.(false);
+    setIsCalendarShow(false);
   };
-
-  // Handle input blur
-  const handleInputBlur = () => {
-    if (mode === "single") {
-      const parsedDate = parseStringToDate(inputValue);
-      if (parsedDate) {
-        setSelectedDate(parsedDate);
-        setInputValue(formatDateToString(parsedDate));
-        controlledOnChange?.(parsedDate);
-      } else if (inputValue.length > 0) {
-        setInputValue("");
-        setSelectedDate(null);
-        controlledOnChange?.(null);
-      }
-    }
-  };
-
-  // Handle click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setShowCalendar(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
-  // Sync with controlled value
-  useEffect(() => {
-    if (mode === "single" && controlledValue) {
-      setSelectedDate(controlledValue);
-      setInputValue(formatDateToString(controlledValue));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue, mode]);
-
-  // Sync with controlled range value
-  useEffect(() => {
-    if (mode === "range" && controlledRangeValue) {
-      setDateRange(controlledRangeValue);
-      setInputValue(formatRangeToString(controlledRangeValue));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledRangeValue, mode]);
 
   // Get next month for second calendar
   const getNextMonth = () => {
@@ -425,72 +309,267 @@ const DatePicker = ({
 
   const nextMonthData = getNextMonth();
 
+  // Sync with controlled value
+  useEffect(() => {
+    if (mode === "single" && controlledValue) {
+      setSelectedDate(controlledValue);
+      setInputValue(formatDateToString(controlledValue, format));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlledValue, mode]);
+
+  // Sync with controlled range value
+  useEffect(() => {
+    if (mode === "range" && controlledRangeValue) {
+      setDateRange(controlledRangeValue);
+      setInputValue(formatRangeToString(controlledRangeValue));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlledRangeValue, mode]);
+
+  // Check screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (open !== undefined) {
+      setIsCalendarShow(open);
+    }
+  }, [open]);
+
   return (
     <div ref={containerRef} className="relative flex max-w-sm flex-col">
-      <Input
-        type="text"
-        mergedAddon
-        className="pl-0"
-        leftAddonClassName="pr-1!"
-        leftAddon={<Icon name="calendar" className="text-gray-900" />}
-        placeholder={
-          mode === "range"
-            ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
-            : formatConfig.placeholder
-        }
-        onChange={handleInputChange}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        value={inputValue}
-        readOnly={mode === "range"}
-      />
-
-      {showCalendar && (
-        <div className="absolute top-full z-10 mt-2">
-          {mode === "single" ? (
-            <Calendar
-              wrapperClassname="w-full"
-              weekWrapperClassname="w-full justify-between"
-              dayWrapperClassname="justify-between"
-              onChange={handleCalendarChange}
-              value={selectedDate}
+      <Dropdown
+        open={isCalendarShow}
+        onOpenChange={(open) => {
+          setIsCalendarShow(open);
+          onOpenChange?.(open);
+        }}
+      >
+        <DropdownTrigger>
+          {!trigger ? (
+            <Input
+              type="text"
+              mergedAddon
+              className="pl-0"
+              leftAddonClassName="pr-1!"
+              leftAddon={<Icon name="calendar" className="text-gray-900" />}
+              placeholder={
+                mode === "range"
+                  ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
+                  : formatConfig.placeholder
+              }
+              onChange={handleInputChange}
+              value={inputValue}
+              readOnly={mode === "range"}
             />
           ) : (
-            <div className="flex flex-col">
-              <div className={cn("flex", isMobile ? "flex-col" : "flex-row")}>
-                {/* First Calendar */}
-                <Calendar
-                  wrapperClassname="w-full rounded-none! border-r-0"
-                  weekWrapperClassname="w-full justify-between"
-                  dayWrapperClassname="justify-between"
-                  onChange={handleRangeCalendarChange}
-                  value={dateRange.start}
-                  rangeValue={dateRange}
-                  mode="range"
-                  showNextNavigator={isMobile}
-                  showPrevNavigator={true}
-                />
-                {/* Second Calendar (desktop only) */}
-                {!isMobile && (
-                  <Calendar
-                    wrapperClassname="w-full rounded-none"
-                    weekWrapperClassname="w-full justify-between"
-                    dayWrapperClassname="justify-between"
-                    onChange={handleRangeCalendarChange}
-                    value={dateRange.start}
-                    rangeValue={dateRange}
-                    mode="range"
-                    defaultMonth={nextMonthData.month}
-                    defaultYear={nextMonthData.year}
-                    showNextNavigator={true}
-                    showPrevNavigator={false}
-                  />
-                )}
-              </div>
-            </div>
+            trigger
           )}
-        </div>
-      )}
+        </DropdownTrigger>
+
+        <DropdownContent
+          align="start"
+          sideOffset={5}
+          className="overflow-hidden p-0"
+        >
+          <div className="top-full z-10">
+            {mode === "single" ? (
+              <Calendar
+                wrapperClassname="w-full border-0"
+                weekWrapperClassname="w-full justify-between"
+                dayWrapperClassname="justify-between"
+                onChange={handleCalendarChange}
+                value={selectedDate}
+                {...calendarProps}
+              />
+            ) : (
+              <div className="flex">
+                <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
+                  <Button
+                    color="gray"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => {
+                      const now = new Date();
+
+                      const day = now.getDay(); // 0 = Minggu
+                      const diffToMonday = day === 0 ? -6 : 1 - day;
+
+                      const startOfThisWeek = new Date(now);
+                      startOfThisWeek.setDate(now.getDate() + diffToMonday);
+                      startOfThisWeek.setHours(0, 0, 0, 0);
+
+                      const startOfLastWeek = new Date(startOfThisWeek);
+                      startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+                      const endOfLastWeek = new Date(startOfThisWeek);
+                      endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+                      endOfLastWeek.setHours(23, 59, 59, 999);
+
+                      setDateRange({
+                        start: startOfLastWeek,
+                        end: endOfLastWeek,
+                      });
+                    }}
+                  >
+                    Last Week
+                  </Button>
+                  <Button
+                    color="gray"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => {
+                      const end = new Date();
+                      const start = new Date();
+
+                      start.setDate(end.getDate() - 7);
+
+                      start.setHours(0, 0, 0, 0);
+                      end.setHours(23, 59, 59, 999);
+
+                      setDateRange({
+                        start,
+                        end,
+                      });
+                    }}
+                  >
+                    Last 7 days
+                  </Button>
+                  <Button
+                    color="gray"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => {
+                      const end = new Date();
+                      const start = new Date();
+
+                      start.setDate(end.getDate() - 29);
+
+                      start.setHours(0, 0, 0, 0);
+                      end.setHours(23, 59, 59, 999);
+
+                      setDateRange({
+                        start,
+                        end,
+                      });
+                    }}
+                  >
+                    Last 30 days
+                  </Button>
+                  <Button
+                    color="gray"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => {
+                      const now = new Date();
+
+                      const start = new Date(
+                        now.getFullYear(),
+                        now.getMonth(),
+                        1,
+                      );
+                      const end = new Date(
+                        now.getFullYear(),
+                        now.getMonth() + 1,
+                        0,
+                      );
+
+                      start.setHours(0, 0, 0, 0);
+                      end.setHours(23, 59, 59, 999);
+
+                      setDateRange({
+                        start,
+                        end,
+                      });
+                    }}
+                  >
+                    Current Month
+                  </Button>
+                  <Button
+                    color="gray"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => {
+                      const end = new Date();
+                      const start = new Date();
+
+                      start.setFullYear(end.getFullYear() - 1);
+
+                      start.setHours(0, 0, 0, 0);
+                      end.setHours(23, 59, 59, 999);
+
+                      setDateRange({
+                        start,
+                        end,
+                      });
+                    }}
+                  >
+                    Last Years
+                  </Button>
+                  <Button
+                    color="danger"
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => setDateRange({ start: null, end: null })}
+                  >
+                    Reset
+                  </Button>
+                </div>
+
+                <div className="flex flex-col">
+                  <div
+                    className={cn("flex", isMobile ? "flex-col" : "flex-row")}
+                  >
+                    {/* First Calendar */}
+                    <Calendar
+                      wrapperClassname="w-full rounded-none! border-0"
+                      weekWrapperClassname="w-full justify-between"
+                      dayWrapperClassname="justify-between"
+                      onChange={handleRangeCalendarChange}
+                      value={dateRange.start}
+                      rangeValue={dateRange}
+                      mode="range"
+                      {...startDateCalendarProps}
+                    />
+                    {/* Second Calendar (desktop only) */}
+                    {!isMobile && (
+                      <Calendar
+                        wrapperClassname="w-full rounded-none border-0 border-l"
+                        weekWrapperClassname="w-full justify-between"
+                        dayWrapperClassname="justify-between"
+                        onChange={handleRangeCalendarChange}
+                        value={dateRange.end}
+                        rangeValue={dateRange}
+                        mode="range"
+                        defaultMonth={nextMonthData.month}
+                        defaultYear={nextMonthData.year}
+                        {...endDateCalendarProps}
+                      />
+                    )}
+                  </div>
+                  <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-4 py-3">
+                    <Button
+                      onClick={() => setIsCalendarShow(false)}
+                      variant={"tertiary"}
+                    >
+                      Cancel
+                    </Button>
+                    <Button onClick={handleApplyDateRange}>Apply</Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </DropdownContent>
+      </Dropdown>
     </div>
   );
 };

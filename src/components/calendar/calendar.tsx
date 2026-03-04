@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../lib/utils";
 import { Text } from "../text";
 import { ButtonNavigator } from "./button-navigator";
@@ -178,6 +178,18 @@ const Calendar = ({
 
     return "";
   };
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setCurrentMonth(
+        value?.getMonth() ?? defaultMonth ?? currentDate?.getMonth(),
+      );
+      setCurrentYear(
+        value?.getFullYear() ?? defaultYear ?? currentDate?.getFullYear(),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <div
