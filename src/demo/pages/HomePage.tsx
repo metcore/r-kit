@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "../../components/breadcrumbs";
 import { Hero } from "../../components/hero";
 import { Kbd } from "../../components/kbd";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -52,6 +53,20 @@ function HomePage() {
           <Kbd size="lg" color="neutral">
             ctrl
           </Kbd>
+
+          <Breadcrumbs
+            linkComponent={"Link"}
+            items={[
+              {
+                label: "Home",
+                href: "/",
+              },
+              {
+                label: "Projects",
+                href: "/tickets/projecrs",
+              },
+            ]}
+          />
         </div>
       </div>
     </DashboardLayout>
