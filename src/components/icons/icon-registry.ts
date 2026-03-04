@@ -264,6 +264,7 @@ import FolderAdd from "./icons/FolderAdd";
 import Folder from "./icons/Folder";
 import Layer from "./icons/Layer";
 import People from "./icons/People";
+import SortDescending from "./icons/SortDescending";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -532,4 +533,5 @@ export const iconRegistry = {
   folder: Folder,
   layer: Layer,
   people: People,
+  "sort-descending": SortDescending,
 };
