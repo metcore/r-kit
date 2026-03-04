@@ -1,4 +1,4 @@
-import type { DateFormat } from "./date-picker";
+import type { DateFormat } from "./type";
 
 const monthsShort = [
   "Jan",
@@ -8,11 +8,11 @@ const monthsShort = [
   "Mei",
   "Jun",
   "Jul",
-  "Agu",
+  "Aug",
   "Sep",
   "Oct",
   "Nov",
-  "Des",
+  "Dec",
 ];
 const monthsFull = [
   "January",
@@ -50,7 +50,7 @@ const getFormatConfig = (format: DateFormat) => {
 };
 
 // Format Date to custom format
-const formatDateToString = (date: Date | null, format: string): string => {
+const formatDateToString = (date: Date | null, format: DateFormat): string => {
   if (!date) return "";
 
   const day = String(date.getDate()).padStart(2, "0");

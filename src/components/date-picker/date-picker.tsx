@@ -1,63 +1,13 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
-import { Calendar } from "../calendar";
+import { Calendar, type DateRange } from "../calendar";
 import { Dropdown, DropdownContent, DropdownTrigger } from "../dropdown";
 import { Icon } from "../icons";
 import { Input } from "../input";
 import { formatDateToString, getFormatConfig, parseMonthName } from "./helpers";
 import { Button } from "../button";
-
-type DateFormat =
-  | "DD-MM-YYYY"
-  | "DD/MM/YYYY"
-  | "DD MMM YYYY"
-  | "DD MMMM YYYY"
-  | "YYYY-MM-DD"
-  | "MM/DD/YYYY";
-
-type DatePickerMode = "single" | "range";
-
-interface DateRange {
-  start: Date | null;
-  end: Date | null;
-}
-
-type CalendarBaseProps = React.ComponentProps<typeof Calendar>;
-type CalendarOverrideProps = Omit<
-  CalendarBaseProps,
-  | "wrapperClassname"
-  | "weekWrapperClassname"
-  | "dayWrapperClassname"
-  | "onChange"
-  | "mode"
->;
-
-type CalendarRangeOverrideProps = Omit<
-  CalendarBaseProps,
-  | "wrapperClassname"
-  | "weekWrapperClassname"
-  | "dayWrapperClassname"
-  | "onChange"
-  | "value"
-  | "rangeValue"
-  | "mode"
->;
-
-interface DatePickerProps {
-  format?: DateFormat;
-  mode?: DatePickerMode;
-  value?: Date | null;
-  rangeValue?: DateRange;
-  onChange?: (date: Date | null) => void;
-  onRangeChange?: (range: DateRange) => void;
-  trigger?: ReactNode;
-  onOpenChange?: (open: boolean) => void;
-  open?: boolean;
-
-  calendarProps?: CalendarOverrideProps;
-  startDateCalendarProps?: CalendarRangeOverrideProps;
-  endDateCalendarProps?: CalendarRangeOverrideProps;
-}
+import { ChipGroup, type ChipOptionProps, type ChipValue } from "../chip";
+import type { DatePickerProps } from "./type";
 
 const DatePicker = ({
   format = "DD-MM-YYYY",
@@ -82,8 +32,32 @@ const DatePicker = ({
   const [inputValue, setInputValue] = useState<string>("");
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isCalendarShow, setIsCalendarShow] = useState<boolean>(false);
+  const [selectedFilter, setSelectedFilter] = useState<ChipValue[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const filterCalendar: ChipOptionProps[] = [
+    {
+      label: "Last Week",
+      value: 0,
+    },
+    {
+      label: "Last 7 Days",
+      value: 1,
+    },
+    {
+      label: "Last 30 Days",
+      value: 2,
+    },
+    {
+      label: "Current Month",
+      value: 3,
+    },
+    {
+      label: "Last Year",
+      value: 4,
+    },
+  ];
 
   // Check if format uses month names
   const usesMonthName = format.includes("MMM");
@@ -286,6 +260,7 @@ const DatePicker = ({
       }
     }
 
+    setSelectedFilter([]);
     setDateRange(newRange);
   };
 
@@ -393,132 +368,98 @@ const DatePicker = ({
             ) : (
               <div className="flex">
                 <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
-                  <Button
-                    color="gray"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
+                  <ChipGroup
+                    direction="vertical"
+                    options={filterCalendar}
+                    selected={selectedFilter}
+                    onSelect={(val) => {
+                      setSelectedFilter(val);
                       const now = new Date();
 
-                      const day = now.getDay(); // 0 = Minggu
-                      const diffToMonday = day === 0 ? -6 : 1 - day;
-
-                      const startOfThisWeek = new Date(now);
-                      startOfThisWeek.setDate(now.getDate() + diffToMonday);
-                      startOfThisWeek.setHours(0, 0, 0, 0);
-
-                      const startOfLastWeek = new Date(startOfThisWeek);
-                      startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
-
-                      const endOfLastWeek = new Date(startOfThisWeek);
-                      endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
-                      endOfLastWeek.setHours(23, 59, 59, 999);
-
-                      setDateRange({
-                        start: startOfLastWeek,
-                        end: endOfLastWeek,
-                      });
-                    }}
-                  >
-                    Last Week
-                  </Button>
-                  <Button
-                    color="gray"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
                       const end = new Date();
                       const start = new Date();
 
-                      start.setDate(end.getDate() - 7);
+                      if (val[0] === 0) {
+                        const day = now.getDay(); // 0 = Minggu
+                        const diffToMonday = day === 0 ? -6 : 1 - day;
 
-                      start.setHours(0, 0, 0, 0);
-                      end.setHours(23, 59, 59, 999);
+                        const startOfThisWeek = new Date(now);
+                        startOfThisWeek.setDate(now.getDate() + diffToMonday);
+                        startOfThisWeek.setHours(0, 0, 0, 0);
 
-                      setDateRange({
-                        start,
-                        end,
-                      });
+                        const startOfLastWeek = new Date(startOfThisWeek);
+                        startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+                        const endOfLastWeek = new Date(startOfThisWeek);
+                        endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+                        endOfLastWeek.setHours(23, 59, 59, 999);
+
+                        setDateRange({
+                          start: startOfLastWeek,
+                          end: endOfLastWeek,
+                        });
+                      } else if (val[0] === 1) {
+                        start.setDate(end.getDate() - 7);
+
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(23, 59, 59, 999);
+
+                        setDateRange({
+                          start,
+                          end,
+                        });
+                      } else if (val[0] === 2) {
+                        start.setDate(end.getDate() - 29);
+
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(23, 59, 59, 999);
+
+                        setDateRange({
+                          start,
+                          end,
+                        });
+                      } else if (val[0] === 3) {
+                        const start = new Date(
+                          now.getFullYear(),
+                          now.getMonth(),
+                          1,
+                        );
+                        const end = new Date(
+                          now.getFullYear(),
+                          now.getMonth() + 1,
+                          0,
+                        );
+
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(23, 59, 59, 999);
+
+                        setDateRange({
+                          start,
+                          end,
+                        });
+                      } else if (val[0] === 4) {
+                        start.setFullYear(end.getFullYear() - 1);
+
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(23, 59, 59, 999);
+
+                        setDateRange({
+                          start,
+                          end,
+                        });
+                      }
                     }}
-                  >
-                    Last 7 days
-                  </Button>
-                  <Button
                     color="gray"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
-                      const end = new Date();
-                      const start = new Date();
-
-                      start.setDate(end.getDate() - 29);
-
-                      start.setHours(0, 0, 0, 0);
-                      end.setHours(23, 59, 59, 999);
-
-                      setDateRange({
-                        start,
-                        end,
-                      });
-                    }}
-                  >
-                    Last 30 days
-                  </Button>
-                  <Button
-                    color="gray"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
-                      const now = new Date();
-
-                      const start = new Date(
-                        now.getFullYear(),
-                        now.getMonth(),
-                        1,
-                      );
-                      const end = new Date(
-                        now.getFullYear(),
-                        now.getMonth() + 1,
-                        0,
-                      );
-
-                      start.setHours(0, 0, 0, 0);
-                      end.setHours(23, 59, 59, 999);
-
-                      setDateRange({
-                        start,
-                        end,
-                      });
-                    }}
-                  >
-                    Current Month
-                  </Button>
-                  <Button
-                    color="gray"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
-                      const end = new Date();
-                      const start = new Date();
-
-                      start.setFullYear(end.getFullYear() - 1);
-
-                      start.setHours(0, 0, 0, 0);
-                      end.setHours(23, 59, 59, 999);
-
-                      setDateRange({
-                        start,
-                        end,
-                      });
-                    }}
-                  >
-                    Last Years
-                  </Button>
+                    size="md"
+                  />
                   <Button
                     color="danger"
                     variant={"outline"}
                     size={"sm"}
-                    onClick={() => setDateRange({ start: null, end: null })}
+                    onClick={() => {
+                      setDateRange({ start: null, end: null });
+                      setSelectedFilter([]);
+                    }}
                   >
                     Reset
                   </Button>
@@ -555,14 +496,35 @@ const DatePicker = ({
                       />
                     )}
                   </div>
-                  <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-4 py-3">
-                    <Button
-                      onClick={() => setIsCalendarShow(false)}
-                      variant={"tertiary"}
-                    >
-                      Cancel
-                    </Button>
-                    <Button onClick={handleApplyDateRange}>Apply</Button>
+                  <div className="flex items-center justify-between gap-2 border-t border-gray-300 px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        readOnly
+                        className="w-30 truncate"
+                        placeholder="Start Date"
+                        value={formatDateToString(
+                          dateRange.start,
+                          "DD MMM YYYY",
+                        )}
+                      />
+                      <Icon name="minus" size={16} />
+                      <Input
+                        readOnly
+                        placeholder="End Date"
+                        className="w-30 truncate"
+                        value={formatDateToString(dateRange.end, "DD MMM YYYY")}
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Button
+                        onClick={() => setIsCalendarShow(false)}
+                        variant={"tertiary"}
+                      >
+                        Cancel
+                      </Button>
+                      <Button onClick={handleApplyDateRange}>Apply</Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -575,4 +537,3 @@ const DatePicker = ({
 };
 
 export { DatePicker };
-export type { DateFormat, DatePickerMode, DateRange };

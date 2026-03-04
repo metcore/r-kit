@@ -13,3 +13,4 @@ export * from "./components/input";
 export * from "./hooks/use-copy";
 export * from "./hooks/use-mobile";
 export * from "./components/table";
+export * from "./components/date-picker";
