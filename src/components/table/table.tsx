@@ -69,7 +69,7 @@ export function TableBody({ children }: TableBodyProps) {
     <tbody
       className={clsx(
         (isBordered || isStripped || isHovered) &&
-          "[&>tr:last-child>td:first-child]:rounded-bl [&>tr:last-child>td:last-child]:rounded-br",
+          "[&>tr:last-child>td:first-child]:rounded-bl-lg [&>tr:last-child>td:last-child]:rounded-br-lg",
       )}
     >
       {children}
@@ -79,7 +79,6 @@ export function TableBody({ children }: TableBodyProps) {
 
 export function TableRow({ children, isLast, isHeader }: TableRowProps) {
   const { variant } = useContext(TableContext);
-  const isRowBordered = variant === "row-bordered";
   const isBordered = variant === "bordered";
   const isHeaded = variant === "headed";
   const isStripped = variant === "stripped";
@@ -90,8 +89,8 @@ export function TableRow({ children, isLast, isHeader }: TableRowProps) {
     <tr
       className={clsx(
         TableVariants({ tableRow: variant }),
-        "[&>th:first-child]:rounded-tl [&>th:last-child]:rounded-tr",
-        isRowBordered && isLast && "border-b-0!",
+        "[&>th:first-child]:rounded-tl-lg [&>th:last-child]:rounded-tr-lg",
+        isLast && "border-b-0!",
         (isHeaded || isWrapped) &&
           isHeader &&
           "border-b border-b-gray-300! *:bg-gray-50",
