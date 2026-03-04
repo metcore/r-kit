@@ -46,6 +46,7 @@ function AppSidebar() {
         { path: "/input-group", label: "Input Group" },
         { path: "/counter", label: "Counter" },
         { path: "/input-file", label: "Input File" },
+        { path: "/date-picker", label: "Date Picker" },
         { path: "/radio-button", label: "Radio Button" },
         { path: "/switch", label: "Switches" },
         { path: "/file-input", label: "File Input" },
@@ -72,8 +73,17 @@ function AppSidebar() {
       icon: "cursor",
       children: [{ path: "/tabs", label: "Tabs" }],
     },
-    { path: "/feedback", label: "Feedback", icon: "message-text-notification" },
-    { path: "/data-display", label: "Data Display", icon: "desktop" },
+    {
+      path: "/feedback",
+      label: "Feedback",
+      icon: "message-text-notification",
+      children: [{ label: "Snackbar/Toast", path: "/toast" }],
+    },
+    {
+      label: "Data Display",
+      icon: "desktop",
+      children: [{ path: "/table", label: "Table" }],
+    },
     { path: "/pages", label: "Pages", icon: "cpu" },
     { path: "/auth", label: "Authentication", icon: "lock" },
   ];

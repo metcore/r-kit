@@ -58,6 +58,15 @@ const isSameDate = (date1: CalendarDay, date2: CalendarDay) => {
   );
 };
 
+const isToday = (day: CalendarDay): boolean => {
+  const today = new Date();
+  return (
+    day.fullDate.getDate() === today.getDate() &&
+    day.fullDate.getMonth() === today.getMonth() &&
+    day.fullDate.getFullYear() === today.getFullYear()
+  );
+};
+
 // =====styling helpers====
 // Get style for selected date
 const getSelectedStyle = (styleConfig?: CalendarStyleConfig) => {
@@ -117,11 +126,13 @@ const getTextColorClass = ({
   isSelected,
   isDisabled,
   styleConfig,
+  day,
 }: {
   isCurrentMonth: boolean;
   isSelected: boolean;
   isDisabled: boolean;
   styleConfig?: CalendarStyleConfig;
+  day: CalendarDay;
 }) => {
   if (!isCurrentMonth) {
     return "*:text-gray-500";
@@ -143,8 +154,13 @@ const getTextColorClass = ({
     return "*:text-red-500!";
   }
 
+  if (isToday(day)) {
+    return "*:text-info-500!";
+  }
+
   return "*:text-gray-700!";
 };
+
 // Get background color classes
 const getBackgroundClass = ({
   isSelected,
@@ -187,4 +203,5 @@ export {
   getTextColorClass,
   getCursorClass,
   getBackgroundClass,
+  isToday,
 };

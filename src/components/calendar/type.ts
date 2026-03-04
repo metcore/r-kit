@@ -5,6 +5,7 @@ export interface GetCalendarDaysProps {
 
 export interface ButtonDropdownProps {
   onClick?: () => void;
+  active?: boolean;
 }
 
 export interface CalendarDay {
@@ -35,6 +36,11 @@ export interface CalendarStyleConfig {
   };
 }
 
+export interface DateRange {
+  start: Date | null;
+  end: Date | null;
+}
+
 export interface CalendarProps {
   showNavigator?: boolean;
   showHeader?: boolean;
@@ -50,4 +56,8 @@ export interface CalendarProps {
   wrapperClassname?: string;
   dayWrapperClassname?: string;
   weekWrapperClassname?: string;
+  showNextNavigator?: boolean;
+  showPrevNavigator?: boolean;
+  mode?: "single" | "range";
+  rangeValue?: DateRange;
 }

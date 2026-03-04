@@ -9,7 +9,9 @@ import type {
 } from "../../../components/calendar";
 
 export default function CalendarPage() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    new Date("2003-12-18"),
+  );
 
   // Disable weekend dates
   const disabledDates = [
