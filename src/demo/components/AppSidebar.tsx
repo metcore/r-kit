@@ -73,7 +73,12 @@ function AppSidebar() {
       icon: "cursor",
       children: [{ path: "/tabs", label: "Tabs" }],
     },
-    { path: "/feedback", label: "Feedback", icon: "message-text-notification" },
+    {
+      path: "/feedback",
+      label: "Feedback",
+      icon: "message-text-notification",
+      children: [{ label: "Snackbar/Toast", path: "/toast" }],
+    },
     {
       label: "Data Display",
       icon: "desktop",

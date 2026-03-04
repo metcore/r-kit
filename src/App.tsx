@@ -1,7 +1,12 @@
+import { ToastProvider } from "./components/toast";
 import DocsRouter from "./demo/router";
 
 function App() {
-  return <DocsRouter />;
+  return (
+    <ToastProvider>
+      <DocsRouter />
+    </ToastProvider>
+  );
 }
 
 export default App;

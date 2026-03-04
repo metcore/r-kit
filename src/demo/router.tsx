@@ -24,6 +24,7 @@ import InputFilePage from "./pages/form-field/InputFilePage";
 import CalendarPage from "./pages/components/CalendarPage";
 import DatePickerPage from "./pages/form-field/DatePickerPage";
 import TablePage from "./pages/data-display/TablePage";
+import ToastPage from "./pages/feedback/ToastPage";
 
 const DocsRouter: React.FC = () => {
   return (
@@ -51,6 +52,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/date-picker" element={<DatePickerPage />} />
         <Route path="/table" element={<TablePage />} />
+        <Route path="/toast" element={<ToastPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
