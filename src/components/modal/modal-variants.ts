@@ -5,6 +5,7 @@ export const modalVariants = cva(
   {
     variants: {
       size: {
+        xs: "max-w-[327px]",
         sm: "max-w-[480px]",
         md: "max-w-[700px]",
         lg: "max-w-[1000px]",

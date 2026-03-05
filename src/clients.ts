@@ -16,3 +16,4 @@ export * from "./components/table";
 export * from "./components/date-picker";
 export * from "./components/textarea";
 export * from "./components/switch";
+export * from "./components/toast";

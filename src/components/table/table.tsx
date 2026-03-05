@@ -69,12 +69,14 @@ export function TableBody({ children }: TableBodyProps) {
   const isBordered = variant === "bordered";
   const isStripped = variant === "stripped";
   const isHovered = variant === "hovered";
+  const isWrapped = variant === "wrapped-row-bordered";
 
   return (
     <tbody
       className={clsx(
         (isBordered || isStripped || isHovered) &&
           "[&>tr:last-child>td:first-child]:rounded-bl-lg [&>tr:last-child>td:last-child]:rounded-br-lg",
+        isWrapped && "[&>tr>td:first-child]:border-l-0!",
       )}
     >
       {children}
@@ -105,6 +107,9 @@ export function TableRow({ children, isLast, isHeader }: TableRowProps) {
           isHeader && isStripped && "bg-gray-50",
           !isHeader && isHovered && "hover:bg-primary-50 transition-colors",
           !isHeader && isStripped && "even:bg-gray-50",
+          isHeader &&
+            isWrapped &&
+            "[&>th]:border-l [&>th]:border-gray-300 [&>th:first-child]:border-l-0",
         )}
       >
         {children}
@@ -163,8 +168,8 @@ export function TableCell({
       className={cn(
         className,
         "border-gray-300 px-4 py-3",
-        (isBordered || isStripped || isHovered) && "border-b border-l",
-        isWrapped && "border-b",
+        (isBordered || isStripped || isHovered || isWrapped) &&
+          "border-b border-l",
         isLast && "border-b-0!",
       )}
       onClick={onClick}
