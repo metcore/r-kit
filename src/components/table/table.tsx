@@ -27,7 +27,12 @@ type TableContextType = {
   variant?: TableRootProps["variant"];
 };
 
+type TableRowContextType = {
+  isLast?: boolean;
+};
+
 const TableContext = createContext<TableContextType>({});
+const TableRowContext = createContext<TableRowContextType>({});
 
 export function Table({
   children,
@@ -86,23 +91,25 @@ export function TableRow({ children, isLast, isHeader }: TableRowProps) {
   const isWrapped = variant === "wrapped-row-bordered";
 
   return (
-    <tr
-      className={clsx(
-        TableVariants({ tableRow: variant }),
-        "[&>th:first-child]:rounded-tl-lg [&>th:last-child]:rounded-tr-lg",
-        isLast && "border-b-0!",
-        (isHeaded || isWrapped) &&
-          isHeader &&
-          "border-b border-b-gray-300! *:bg-gray-50",
-        (isBordered || isStripped || isHovered) &&
-          "*:border-gray-300 [&>td:last-child]:border-r [&>th]:border-t [&>th]:border-b [&>th]:border-l [&>th:last-child]:border-r",
-        isHeader && isStripped && "bg-gray-50",
-        !isHeader && isHovered && "hover:bg-primary-50 transition-colors",
-        !isHeader && isStripped && "even:bg-gray-50",
-      )}
-    >
-      {children}
-    </tr>
+    <TableRowContext.Provider value={{ isLast }}>
+      <tr
+        className={clsx(
+          TableVariants({ tableRow: variant }),
+          "[&>th:first-child]:rounded-tl-lg [&>th:last-child]:rounded-tr-lg",
+          isLast && "border-b-0!",
+          (isHeaded || isWrapped) &&
+            isHeader &&
+            "border-b border-b-gray-300! *:bg-gray-50",
+          (isBordered || isStripped || isHovered) &&
+            "*:border-gray-300 [&>td:last-child]:border-r [&>th]:border-t [&>th]:border-b [&>th]:border-l [&>th:last-child]:border-r",
+          isHeader && isStripped && "bg-gray-50",
+          !isHeader && isHovered && "hover:bg-primary-50 transition-colors",
+          !isHeader && isStripped && "even:bg-gray-50",
+        )}
+      >
+        {children}
+      </tr>
+    </TableRowContext.Provider>
   );
 }
 
@@ -144,6 +151,8 @@ export function TableCell({
   ...props
 }: TableCellProps) {
   const { variant } = useContext(TableContext);
+  const { isLast } = useContext(TableRowContext);
+
   const isBordered = variant === "bordered";
   const isStripped = variant === "stripped";
   const isHovered = variant === "hovered";
@@ -156,6 +165,7 @@ export function TableCell({
         "border-gray-300 px-4 py-3",
         (isBordered || isStripped || isHovered) && "border-b border-l",
         isWrapped && "border-b",
+        isLast && "border-b-0!",
       )}
       onClick={onClick}
       {...props}
