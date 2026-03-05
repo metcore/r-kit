@@ -35,7 +35,7 @@ export function Breadcrumbs({
               ) : item.href ? (
                 <LinkComponent
                   href={item.href}
-                  className="inline-flex items-center underline-offset-2 transition-colors hover:underline"
+                  className="hover:*:text-info-600 inline-flex items-center underline-offset-2 transition-colors"
                 >
                   <Text
                     value={item.label}
