@@ -51,4 +51,11 @@ export type DateFormat =
   | "DD MMM YYYY"
   | "DD MMMM YYYY"
   | "YYYY-MM-DD"
-  | "MM/DD/YYYY";
+  | "MM/DD/YYYY"
+  | "DD-MM-YYYY HH:mm:ss"
+  | "DD/MM/YYYY HH:mm:ss"
+  | "DD MMM YYYY HH:mm:ss"
+  | "DD MMMM YYYY HH:mm:ss"
+  | "YYYY-MM-DD HH:mm:ss"
+  | "MM/DD/YYYY HH:mm:ss"
+  | "DD MMM YYYY - HH:mm:ss";
