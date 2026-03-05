@@ -38,7 +38,7 @@ const ItemDropdown = ({
     <button
       onClick={onClick}
       className={cn(
-        "w-full min-w-[94px] cursor-pointer rounded-md border px-1.5 py-1 text-sm transition-colors outline-none",
+        "w-full min-w-23.5 cursor-pointer rounded-md border px-1.5 py-1 text-sm transition-colors outline-none",
         active
           ? "bg-primary-50 border-primary-300"
           : "border-transparent hover:bg-gray-50",

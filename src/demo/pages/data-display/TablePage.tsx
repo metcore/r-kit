@@ -10,7 +10,7 @@ import {
   TablePagination,
   TableRow,
 } from "../../../clients";
-import { Bagde } from "../../../components/bagde";
+import { Badge } from "../../../components/badge";
 import { Text } from "../../../components/text";
 import illust from "../../assets/images/forms.png";
 import HeroSection from "../../components/HeroSection";
@@ -133,7 +133,7 @@ export default function TablePage() {
                     textClassName="text-gray-800"
                   />
                   <TableCell>
-                    <Bagde color={status_map[item.status]}>{item.status}</Bagde>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
@@ -175,7 +175,7 @@ export default function TablePage() {
                     textClassName="text-gray-800"
                   />
                   <TableCell>
-                    <Bagde color={status_map[item.status]}>{item.status}</Bagde>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
@@ -213,7 +213,7 @@ export default function TablePage() {
                     textClassName="text-gray-800"
                   />
                   <TableCell>
-                    <Bagde color={status_map[item.status]}>{item.status}</Bagde>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
@@ -251,7 +251,7 @@ export default function TablePage() {
                     textClassName="text-gray-800"
                   />
                   <TableCell>
-                    <Bagde color={status_map[item.status]}>{item.status}</Bagde>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
@@ -289,7 +289,7 @@ export default function TablePage() {
                     textClassName="text-gray-800"
                   />
                   <TableCell>
-                    <Bagde color={status_map[item.status]}>{item.status}</Bagde>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell

@@ -265,6 +265,8 @@ import Folder from "./icons/Folder";
 import Layer from "./icons/Layer";
 import People from "./icons/People";
 import SortDescending from "./icons/SortDescending";
+import MoreHorizontalIcon from "./icons/MoreHorizontalIcon";
+import TrashFillIcon from "./icons/TrashFillIcon";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -534,4 +536,6 @@ export const iconRegistry = {
   layer: Layer,
   people: People,
   "sort-descending": SortDescending,
+  "more-horizontal": MoreHorizontalIcon,
+  "trash-fill": TrashFillIcon,
 };
