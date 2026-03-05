@@ -1,18 +1,7 @@
 import clsx from "clsx";
-import { Icon, type IconNameProps } from "../icons";
+import { Icon } from "../icons";
 import { Text } from "../text";
-
-interface BreadcrumbItem {
-  href?: string;
-  label: string;
-}
-
-interface BreadcrumbsProps {
-  separator?: IconNameProps;
-  items: BreadcrumbItem[];
-  linkComponent?: React.ElementType | string;
-  separatorClassName?: string;
-}
+import type { BreadcrumbsProps } from "./type";
 
 export function Breadcrumbs({
   items = [],
