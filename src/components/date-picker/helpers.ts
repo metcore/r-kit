@@ -99,6 +99,9 @@ const formatDateToString = (date: Date | null, format: DateFormat): string => {
     case "DD MMMM YYYY HH:mm:ss":
       return `${day} ${monthFull} ${year} ${time}`;
 
+    case "DD MMMM YYYY - HH:mm:ss":
+      return `${day} ${monthFull} ${year} - ${time}`;
+
     case "YYYY-MM-DD HH:mm:ss":
       return `${year}-${month}-${day} ${time}`;
 
