@@ -59,19 +59,52 @@ const formatDateToString = (date: Date | null, format: DateFormat): string => {
   const monthFull = monthsFull[date.getMonth()];
   const year = date.getFullYear();
 
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  const time = `${hours}:${minutes}:${seconds}`;
+
   switch (format) {
     case "DD-MM-YYYY":
       return `${day}-${month}-${year}`;
+
     case "DD/MM/YYYY":
       return `${day}/${month}/${year}`;
+
     case "DD MMM YYYY":
       return `${day} ${monthShort} ${year}`;
+
     case "DD MMMM YYYY":
       return `${day} ${monthFull} ${year}`;
+
     case "YYYY-MM-DD":
       return `${year}-${month}-${day}`;
+
     case "MM/DD/YYYY":
       return `${month}/${day}/${year}`;
+
+    case "DD-MM-YYYY HH:mm:ss":
+      return `${day}-${month}-${year} ${time}`;
+
+    case "DD/MM/YYYY HH:mm:ss":
+      return `${day}/${month}/${year} ${time}`;
+
+    case "DD MMM YYYY HH:mm:ss":
+      return `${day} ${monthShort} ${year} ${time}`;
+
+    case "DD MMM YYYY - HH:mm:ss":
+      return `${day} ${monthShort} ${year} - ${time}`;
+
+    case "DD MMMM YYYY HH:mm:ss":
+      return `${day} ${monthFull} ${year} ${time}`;
+
+    case "DD MMMM YYYY - HH:mm:ss":
+      return `${day} ${monthFull} ${year} - ${time}`;
+
+    case "YYYY-MM-DD HH:mm:ss":
+      return `${year}-${month}-${day} ${time}`;
+
     default:
       return `${day}-${month}-${year}`;
   }

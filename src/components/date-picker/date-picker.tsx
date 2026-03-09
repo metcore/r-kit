@@ -8,6 +8,7 @@ import { formatDateToString, getFormatConfig, parseMonthName } from "./helpers";
 import { Button } from "../button";
 import { ChipGroup, type ChipOptionProps, type ChipValue } from "../chip";
 import type { DatePickerProps } from "./type";
+import clsx from "clsx";
 
 const DatePicker = ({
   format = "DD-MM-YYYY",
@@ -22,6 +23,10 @@ const DatePicker = ({
   calendarProps,
   endDateCalendarProps,
   startDateCalendarProps,
+  wrapperClassName,
+  size = "md",
+  showController = true,
+  align = "start",
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null,
@@ -33,7 +38,6 @@ const DatePicker = ({
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isCalendarShow, setIsCalendarShow] = useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = useState<ChipValue[]>([]);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const filterCalendar: ChipOptionProps[] = [
@@ -300,7 +304,7 @@ const DatePicker = ({
       setInputValue(formatRangeToString(controlledRangeValue));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledRangeValue, mode]);
+  }, [controlledRangeValue, mode, open]);
 
   // Check screen size
   useEffect(() => {
@@ -326,9 +330,13 @@ const DatePicker = ({
         onOpenChange={(open) => {
           setIsCalendarShow(open);
           onOpenChange?.(open);
+
+          if (mode === "range" && controlledRangeValue) {
+            setDateRange(controlledRangeValue);
+          }
         }}
       >
-        <DropdownTrigger>
+        <DropdownTrigger asChild={!!trigger}>
           {!trigger ? (
             <Input
               type="text"
@@ -351,13 +359,14 @@ const DatePicker = ({
         </DropdownTrigger>
 
         <DropdownContent
-          align="start"
+          align={align}
           sideOffset={5}
-          className="overflow-hidden p-0"
+          className={clsx("overflow-hidden p-0", wrapperClassName)}
         >
           <div className="top-full z-10">
             {mode === "single" ? (
               <Calendar
+                size={size}
                 wrapperClassname="w-full border-0"
                 weekWrapperClassname="w-full justify-between"
                 dayWrapperClassname="justify-between"
@@ -367,103 +376,107 @@ const DatePicker = ({
               />
             ) : (
               <div className="flex">
-                <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
-                  <ChipGroup
-                    direction="vertical"
-                    options={filterCalendar}
-                    selected={selectedFilter}
-                    onSelect={(val) => {
-                      setSelectedFilter(val);
-                      const now = new Date();
+                {showController && (
+                  <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
+                    <ChipGroup
+                      direction="vertical"
+                      options={filterCalendar}
+                      selected={selectedFilter}
+                      onSelect={(val) => {
+                        setSelectedFilter(val);
+                        const now = new Date();
 
-                      const end = new Date();
-                      const start = new Date();
+                        const end = new Date();
+                        const start = new Date();
 
-                      if (val[0] === 0) {
-                        const day = now.getDay(); // 0 = Minggu
-                        const diffToMonday = day === 0 ? -6 : 1 - day;
+                        if (val[0] === 0) {
+                          const day = now.getDay(); // 0 = Minggu
+                          const diffToMonday = day === 0 ? -6 : 1 - day;
 
-                        const startOfThisWeek = new Date(now);
-                        startOfThisWeek.setDate(now.getDate() + diffToMonday);
-                        startOfThisWeek.setHours(0, 0, 0, 0);
+                          const startOfThisWeek = new Date(now);
+                          startOfThisWeek.setDate(now.getDate() + diffToMonday);
+                          startOfThisWeek.setHours(0, 0, 0, 0);
 
-                        const startOfLastWeek = new Date(startOfThisWeek);
-                        startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+                          const startOfLastWeek = new Date(startOfThisWeek);
+                          startOfLastWeek.setDate(
+                            startOfThisWeek.getDate() - 7,
+                          );
 
-                        const endOfLastWeek = new Date(startOfThisWeek);
-                        endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
-                        endOfLastWeek.setHours(23, 59, 59, 999);
+                          const endOfLastWeek = new Date(startOfThisWeek);
+                          endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+                          endOfLastWeek.setHours(23, 59, 59, 999);
 
-                        setDateRange({
-                          start: startOfLastWeek,
-                          end: endOfLastWeek,
-                        });
-                      } else if (val[0] === 1) {
-                        start.setDate(end.getDate() - 7);
+                          setDateRange({
+                            start: startOfLastWeek,
+                            end: endOfLastWeek,
+                          });
+                        } else if (val[0] === 1) {
+                          start.setDate(end.getDate() - 7);
 
-                        start.setHours(0, 0, 0, 0);
-                        end.setHours(23, 59, 59, 999);
+                          start.setHours(0, 0, 0, 0);
+                          end.setHours(23, 59, 59, 999);
 
-                        setDateRange({
-                          start,
-                          end,
-                        });
-                      } else if (val[0] === 2) {
-                        start.setDate(end.getDate() - 29);
+                          setDateRange({
+                            start,
+                            end,
+                          });
+                        } else if (val[0] === 2) {
+                          start.setDate(end.getDate() - 29);
 
-                        start.setHours(0, 0, 0, 0);
-                        end.setHours(23, 59, 59, 999);
+                          start.setHours(0, 0, 0, 0);
+                          end.setHours(23, 59, 59, 999);
 
-                        setDateRange({
-                          start,
-                          end,
-                        });
-                      } else if (val[0] === 3) {
-                        const start = new Date(
-                          now.getFullYear(),
-                          now.getMonth(),
-                          1,
-                        );
-                        const end = new Date(
-                          now.getFullYear(),
-                          now.getMonth() + 1,
-                          0,
-                        );
+                          setDateRange({
+                            start,
+                            end,
+                          });
+                        } else if (val[0] === 3) {
+                          const start = new Date(
+                            now.getFullYear(),
+                            now.getMonth(),
+                            1,
+                          );
+                          const end = new Date(
+                            now.getFullYear(),
+                            now.getMonth() + 1,
+                            0,
+                          );
 
-                        start.setHours(0, 0, 0, 0);
-                        end.setHours(23, 59, 59, 999);
+                          start.setHours(0, 0, 0, 0);
+                          end.setHours(23, 59, 59, 999);
 
-                        setDateRange({
-                          start,
-                          end,
-                        });
-                      } else if (val[0] === 4) {
-                        start.setFullYear(end.getFullYear() - 1);
+                          setDateRange({
+                            start,
+                            end,
+                          });
+                        } else if (val[0] === 4) {
+                          start.setFullYear(end.getFullYear() - 1);
 
-                        start.setHours(0, 0, 0, 0);
-                        end.setHours(23, 59, 59, 999);
+                          start.setHours(0, 0, 0, 0);
+                          end.setHours(23, 59, 59, 999);
 
-                        setDateRange({
-                          start,
-                          end,
-                        });
-                      }
-                    }}
-                    color="gray"
-                    size="md"
-                  />
-                  <Button
-                    color="danger"
-                    variant={"outline"}
-                    size={"sm"}
-                    onClick={() => {
-                      setDateRange({ start: null, end: null });
-                      setSelectedFilter([]);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
+                          setDateRange({
+                            start,
+                            end,
+                          });
+                        }
+                      }}
+                      color="gray"
+                      size={size}
+                    />
+                    <Button
+                      color="danger"
+                      variant={"outline"}
+                      size={size}
+                      onClick={() => {
+                        setDateRange({ start: null, end: null });
+                        setSelectedFilter([]);
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </div>
+                )}
 
                 <div className="flex flex-col">
                   <div
@@ -471,6 +484,7 @@ const DatePicker = ({
                   >
                     {/* First Calendar */}
                     <Calendar
+                      size={size}
                       wrapperClassname="w-full rounded-none! border-0"
                       weekWrapperClassname="w-full justify-between"
                       dayWrapperClassname="justify-between"
@@ -483,6 +497,7 @@ const DatePicker = ({
                     {/* Second Calendar (desktop only) */}
                     {!isMobile && (
                       <Calendar
+                        size={size}
                         wrapperClassname="w-full rounded-none border-0 border-l"
                         weekWrapperClassname="w-full justify-between"
                         dayWrapperClassname="justify-between"
@@ -499,6 +514,7 @@ const DatePicker = ({
                   <div className="flex items-center justify-between gap-2 border-t border-gray-300 px-4 py-3">
                     <div className="flex items-center gap-2">
                       <Input
+                        size={size}
                         readOnly
                         className="w-30 truncate"
                         placeholder="Start Date"
@@ -509,6 +525,7 @@ const DatePicker = ({
                       />
                       <Icon name="minus" size={16} />
                       <Input
+                        size={size}
                         readOnly
                         placeholder="End Date"
                         className="w-30 truncate"

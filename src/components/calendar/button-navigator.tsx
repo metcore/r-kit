@@ -6,11 +6,19 @@ const ButtonNavigator = ({
   onClick,
   icon,
   className,
+  size = "md",
 }: {
   onClick: () => void;
   icon: IconNameProps;
   className?: string;
+  size?: "sm" | "md" | "lg";
 }) => {
+  const size_map = {
+    sm: 16,
+    md: 20,
+    lg: 25,
+  };
+
   return (
     <Button
       onClick={onClick}
@@ -18,7 +26,7 @@ const ButtonNavigator = ({
       color="gray"
       className={cn("bg-gray-500 hover:bg-gray-600", className)}
     >
-      <Icon name={icon} className="h-5 w-5 text-white" />
+      <Icon name={icon} className="text-white" size={size_map[size]} />
     </Button>
   );
 };

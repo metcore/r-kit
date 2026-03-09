@@ -3,8 +3,7 @@ import { badgeVariants, type BadgeVariantProps } from "./badge-variants";
 import { cn } from "../../lib/utils";
 
 interface BadgeProps
-  extends HtmlHTMLAttributes<HTMLDivElement>,
-    BadgeVariantProps {
+  extends HtmlHTMLAttributes<HTMLDivElement>, BadgeVariantProps {
   color?:
     | "primary"
     | "secondary"
@@ -17,7 +16,7 @@ interface BadgeProps
     | "gray";
 }
 
-export const Bagde = ({ children, className, size, color }: BadgeProps) => {
+export const Badge = ({ children, className, size, color }: BadgeProps) => {
   return (
     <div className={cn(badgeVariants({ size, color }), className)}>
       {children}

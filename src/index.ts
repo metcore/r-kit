@@ -1,6 +1,6 @@
 export * from "./lib/utils";
 export * from "./components/button";
-export * from "./components/bagde";
+export * from "./components/badge";
 export * from "./components/card";
 export * from "./components/hero";
 export * from "./components/icons";
@@ -11,3 +11,4 @@ export * from "./components/code-block";
 export * from "./components/indicator";
 export * from "./components/brand-logo";
 export * from "./components/kbd";
+export * from "./components/breadcrumbs";

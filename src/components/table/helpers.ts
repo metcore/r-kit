@@ -5,9 +5,9 @@ export function generatePages(current: number, total: number) {
 
   const pages: (number | "...")[] = [];
 
-  // 🔹 Awal: tampilkan 1 2 3 4 ... last
-  if (current <= 3) {
-    pages.push(1, 2, 3, 4);
+  // 🔹 Awal: tampilkan 1 2 3 ... last
+  if (current <= 2) {
+    pages.push(1, 2, 3);
     pages.push("...");
     pages.push(total);
     return pages;
@@ -24,7 +24,7 @@ export function generatePages(current: number, total: number) {
   // 🔹 Tengah: 1 ... prev current next ... last
   pages.push(1);
   pages.push("...");
-  pages.push(current - 1, current, current + 1);
+  pages.push(current, current + 1);
   pages.push("...");
   pages.push(total);
 

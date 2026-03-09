@@ -25,7 +25,7 @@ export const Chip: React.FC<ChipProps> = ({
   // Determine if selected from context or prop
   const isSelected = context
     ? value !== undefined && context.selectedValues.includes(value)
-    : selectedProp ?? false;
+    : (selectedProp ?? false);
 
   const state = disabled ? "disabled" : isSelected ? "selected" : "default";
 
@@ -41,6 +41,7 @@ export const Chip: React.FC<ChipProps> = ({
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       disabled={disabled}
       className={cn(chipVariants({ size, color, state, block }), className)}

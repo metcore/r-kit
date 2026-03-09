@@ -286,7 +286,7 @@ export const Select: React.FC<SelectProps> = ({
             )}
 
             {/* Options */}
-            <div className="max-h-[250px] space-y-2 overflow-y-auto focus:outline-none">
+            <div className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none">
               {filteredOptions.length === 0 ? (
                 <div className="px-3 py-8 text-center text-sm text-gray-500">
                   No options found

@@ -6,6 +6,7 @@ export interface GetCalendarDaysProps {
 export interface ButtonDropdownProps {
   onClick?: () => void;
   active?: boolean;
+  size?: "sm" | "md" | "lg";
 }
 
 export interface CalendarDay {
@@ -60,4 +61,5 @@ export interface CalendarProps {
   showPrevNavigator?: boolean;
   mode?: "single" | "range";
   rangeValue?: DateRange;
+  size?: "sm" | "md" | "lg";
 }

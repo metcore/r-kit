@@ -4,7 +4,16 @@ import { Icon } from "../icons";
 import { Text } from "../text";
 import type { ButtonDropdownProps } from "./type";
 
-const ButtonDropdown = ({ onClick, active }: ButtonDropdownProps) => {
+const ButtonDropdown = ({
+  onClick,
+  active,
+  size = "md",
+}: ButtonDropdownProps) => {
+  const size_map = {
+    sm: 11,
+    md: 12,
+    lg: 18,
+  };
   return (
     <Button
       size={"icon"}
@@ -16,10 +25,8 @@ const ButtonDropdown = ({ onClick, active }: ButtonDropdownProps) => {
     >
       <Icon
         name="arrow-down"
-        className={cn(
-          "text-primary-1000 size-3",
-          active ? "rotate-180" : "rotate-0",
-        )}
+        size={size_map[size]}
+        className={cn("text-primary-1000", active ? "rotate-180" : "rotate-0")}
       />
     </Button>
   );
@@ -38,7 +45,7 @@ const ItemDropdown = ({
     <button
       onClick={onClick}
       className={cn(
-        "w-full min-w-[94px] cursor-pointer rounded-md border px-1.5 py-1 text-sm transition-colors outline-none",
+        "w-full min-w-23.5 cursor-pointer rounded-md border px-1.5 py-1 text-sm transition-colors outline-none",
         active
           ? "bg-primary-50 border-primary-300"
           : "border-transparent hover:bg-gray-50",

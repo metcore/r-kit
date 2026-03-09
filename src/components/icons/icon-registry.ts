@@ -260,6 +260,13 @@ import RotateRightIcon from "./icons/RotateRightIcon";
 import CloudUploadIcon from "./icons/CloudUploadIcon";
 import SearchPlusFillIcon from "./icons/SearchPlusFillIcon";
 import SearchMinusFillIcon from "./icons/SearchMinusFillIcon";
+import FolderAdd from "./icons/FolderAdd";
+import Folder from "./icons/Folder";
+import Layer from "./icons/Layer";
+import People from "./icons/People";
+import SortDescending from "./icons/SortDescending";
+import MoreHorizontalIcon from "./icons/MoreHorizontalIcon";
+import TrashFillIcon from "./icons/TrashFillIcon";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -524,4 +531,11 @@ export const iconRegistry = {
   "cloud-upload": CloudUploadIcon,
   "search-plus-fill": SearchPlusFillIcon,
   "search-minus-fill": SearchMinusFillIcon,
+  "folder-add": FolderAdd,
+  folder: Folder,
+  layer: Layer,
+  people: People,
+  "sort-descending": SortDescending,
+  "more-horizontal": MoreHorizontalIcon,
+  "trash-fill": TrashFillIcon,
 };

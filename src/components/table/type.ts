@@ -66,4 +66,6 @@ export type TablePaginationProps = {
   numberOnClick?: (page: number) => void;
   nextOnClick?: () => void;
   prevOnClick?: () => void;
+
+  wrapperClassName?: string;
 };
