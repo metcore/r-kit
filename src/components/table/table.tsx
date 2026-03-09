@@ -212,6 +212,8 @@ export function TablePagination({
   numberOnClick,
   nextOnClick,
   prevOnClick,
+
+  wrapperClassName,
 }: TablePaginationProps) {
   const isControlled = selectedPerpage !== undefined;
 
@@ -228,7 +230,12 @@ export function TablePagination({
   };
 
   return (
-    <div className="flex w-full items-center justify-between">
+    <div
+      className={clsx(
+        "flex w-full items-center justify-between md:flex-nowrap",
+        wrapperClassName,
+      )}
+    >
       {showController && (
         <div className="flex items-center gap-3">
           <Text

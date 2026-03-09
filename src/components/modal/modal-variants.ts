@@ -22,7 +22,7 @@ export const modalVariants = cva(
   },
 );
 
-export const modalOverlayVariants = cva("fixed inset-0 z-[999] flex p-4", {
+export const modalOverlayVariants = cva("fixed inset-0 z-[999] m-0 flex p-4", {
   variants: {
     position: {
       center: "items-center justify-center",

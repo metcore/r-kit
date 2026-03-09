@@ -346,6 +346,21 @@ export default function TablePage() {
             </TableFooter>
           </Table>
         </MainSection>
+
+        <MainSection title="pagination">
+          <TablePagination
+            currentPage={page}
+            totalPage={lastPage}
+            onChangePerpage={(val) => {
+              setPerPage(val);
+              setPage(1); // reset ke page 1
+            }}
+            selectedPerpage={perPage}
+            numberOnClick={(p) => setPage(p)}
+            prevOnClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            nextOnClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
+          />
+        </MainSection>
       </div>
     </DashboardLayout>
   );

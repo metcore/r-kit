@@ -336,7 +336,7 @@ const DatePicker = ({
           }
         }}
       >
-        <DropdownTrigger>
+        <DropdownTrigger asChild={!!trigger}>
           {!trigger ? (
             <Input
               type="text"
