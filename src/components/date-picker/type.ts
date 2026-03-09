@@ -43,6 +43,10 @@ export interface DatePickerProps {
   calendarProps?: CalendarOverrideProps;
   startDateCalendarProps?: CalendarRangeOverrideProps;
   endDateCalendarProps?: CalendarRangeOverrideProps;
+  wrapperClassName?: string;
+  size?: "sm" | "lg" | "md";
+  showController?: boolean;
+  align?: "start" | "center" | "end";
 }
 
 export type DateFormat =

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../lib/utils";
-import { Text } from "../text";
+import { Text, type TextVariant } from "../text";
 import { ButtonNavigator } from "./button-navigator";
 import { ButtonDropdown, ItemDropdown } from "./dropdown";
 import {
@@ -44,6 +44,7 @@ const Calendar = ({
   showPrevNavigator = true,
   mode = "single",
   rangeValue,
+  size = "md",
 }: CalendarProps) => {
   const currentDate = new Date();
 
@@ -191,6 +192,24 @@ const Calendar = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  const header_size_map: Record<string, TextVariant> = {
+    sm: "t2",
+    md: "t1",
+    lg: "p3",
+  };
+
+  const day_of_week_size: Record<string, TextVariant> = {
+    sm: "t3",
+    md: "t2",
+    lg: "t1",
+  };
+
+  const date_size_map: Record<string, string> = {
+    md: "size-9",
+    sm: "size-6",
+    lg: "size-9",
+  };
+
   return (
     <div
       className={cn(
@@ -203,6 +222,7 @@ const Calendar = ({
         <div className="mb-6 flex items-center justify-between">
           {showNavigator && (
             <ButtonNavigator
+              size={size}
               onClick={handlePrevMonth}
               icon="angle-left-small"
               className={showPrevNavigator ? "" : "opacity-0"}
@@ -220,6 +240,7 @@ const Calendar = ({
             {showNavigator && (
               <div>
                 <ButtonDropdown
+                  size={size}
                   onClick={() => setIsDropdownMonthShow(!isDropdownMonthShow)}
                   active={isDropdownMonthShow}
                 />
@@ -246,7 +267,7 @@ const Calendar = ({
             {/* current month - year */}
             <Text
               as={"span"}
-              variant="t1"
+              variant={header_size_map[size]}
               weight="semibold"
               value={`${months[currentMonth]} - ${currentYear}`}
               align={"center"}
@@ -283,6 +304,7 @@ const Calendar = ({
           {/* Next Month Button */}
           {showNavigator && (
             <ButtonNavigator
+              size={size}
               onClick={handleNextMonth}
               icon="angle-right-small"
               className={showNextNavigator ? "" : "opacity-0"}
@@ -293,7 +315,10 @@ const Calendar = ({
 
       {/* Days of week */}
       <div
-        className={cn("calendar-cols mb-3 grid gap-x-1", weekWrapperClassname)}
+        className={cn(
+          "calendar-cols mb-3 grid justify-items-center gap-x-1",
+          weekWrapperClassname,
+        )}
       >
         {daysOfWeek.map((day) => (
           <Text
@@ -303,6 +328,7 @@ const Calendar = ({
             value={day}
             className="text-gray-600!"
             align="center"
+            variant={day_of_week_size[size]}
           />
         ))}
       </div>
@@ -310,7 +336,7 @@ const Calendar = ({
       {/* Calendar grid */}
       <div
         className={cn(
-          "calendar-cols grid gap-x-1 gap-y-1",
+          "calendar-cols grid justify-items-center gap-x-1 gap-y-1",
           dayWrapperClassname,
         )}
       >
@@ -336,7 +362,8 @@ const Calendar = ({
                 styleConfig,
               })}
               className={cn(
-                "flex size-9 flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
+                "flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
+                date_size_map[size],
                 getCursorClass({ isDisabled, isCurrentMonth }),
                 getTextColorClass({
                   isCurrentMonth,

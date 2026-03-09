@@ -5,9 +5,16 @@ import { DatePicker } from "../../../components/date-picker";
 import { useState } from "react";
 
 export default function DatePickerPage() {
-  const [date, setDate] = useState<any | null>(null);
+  const [range, setRange] = useState<{
+    start: Date | null;
+    end: Date | null;
+  }>({
+    start: null,
+    end: null,
+  });
 
-  console.log({ date });
+  console.log(range);
+
   return (
     <DashboardLayout>
       <HeroSection
@@ -17,10 +24,13 @@ export default function DatePickerPage() {
         description="Digunakan untuk memilih tanggal secara akurat menggunakan tampilan kalender yang interaktif."
       />
 
-      <DatePicker format="DD-MM-YYYY" onChange={setDate} />
-      <DatePicker mode="range" onRangeChange={setDate} format="DD MMMM YYYY" />
-      {/* <p>{date?.getDate()}</p> */}
-      {/* <p>{date}</p> */}
+      <DatePicker
+        size="sm"
+        mode="range"
+        format="DD-MM-YYYY"
+        rangeValue={range}
+        onRangeChange={setRange}
+      />
     </DashboardLayout>
   );
 }

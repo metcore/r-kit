@@ -129,6 +129,7 @@ export const Modal: React.FC<ModalProps> = ({
         >
           {closable && !hasHeader && (
             <button
+              type="button"
               onClick={onClose}
               className="focus:ring-primary-300 absolute top-4 right-4 cursor-pointer rounded-sm p-1 text-gray-900 opacity-70 transition hover:opacity-100 focus:ring-2 focus:outline-none"
               aria-label="Close"
@@ -148,6 +149,7 @@ export const Modal: React.FC<ModalProps> = ({
 
                 {closable && (
                   <button
+                    type="button"
                     onClick={onClose}
                     className="focus:ring-primary-300 mt-0.5 shrink-0 cursor-pointer rounded-sm p-1 text-gray-900 opacity-70 transition hover:opacity-100 focus:ring-2 focus:outline-none"
                     aria-label="Close"

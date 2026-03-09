@@ -133,11 +133,12 @@ export function TableCellHead({
             !!onClick && "cursor-pointer",
           )}
           onClick={onClick}
+          type="button"
         >
           <Text as={"h5"} variant="t1" weight="semibold">
             {value}
           </Text>
-          <Icon name="sort-vertical" size={16} />
+          <Icon name="sort-vertical" size={16} className="shrink-0" />
         </button>
       ) : (
         children

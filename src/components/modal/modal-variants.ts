@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const modalVariants = cva(
-  "relative w-full rounded-2xl bg-white shadow-xl focus:outline-none",
+  "relative z-50 w-full rounded-2xl bg-white shadow-xl focus:outline-none",
   {
     variants: {
       size: {
@@ -22,7 +22,7 @@ export const modalVariants = cva(
   },
 );
 
-export const modalOverlayVariants = cva("fixed inset-0 z-0 flex p-4", {
+export const modalOverlayVariants = cva("fixed inset-0 z-[999] flex p-4", {
   variants: {
     position: {
       center: "items-center justify-center",
