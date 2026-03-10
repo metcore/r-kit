@@ -16,24 +16,29 @@ export interface TableRootProps {
 
 export interface TableHeadProps {
   children: ReactNode;
+  className?: string;
 }
 export interface TableBodyProps {
   children: ReactNode;
+  className?: string;
 }
 export interface TableRowProps {
   children: ReactNode;
   isLast?: boolean;
   isHeader?: boolean;
+  className?: string;
 }
 export interface TableFooterProps {
   children: ReactNode;
   colSpan: number;
+  className?: string;
 }
 
 // table cell
 type WithChildren = {
   children: ReactNode;
   value?: never;
+  className?: string;
 };
 
 type WithValue = {

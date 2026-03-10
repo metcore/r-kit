@@ -21,4 +21,5 @@ export interface ToastProps {
   actionLabel?: string;
   iconSize?: number;
   variant?: "outline";
+  duration?: number;
 }

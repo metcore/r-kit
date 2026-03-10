@@ -294,6 +294,7 @@ export default function ToastPage() {
                   title: "Success!",
                   description: "Data Created Successfully!",
                   color: "primary",
+                  duration: 10000,
                 })
               }
             >
