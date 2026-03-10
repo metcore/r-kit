@@ -8,7 +8,6 @@ export default function ToastItem({
   ...props
 }: ToastProps & {
   onRemove: () => void;
-  duration?: number;
 }) {
   const [open, setOpen] = useState(false);
 
