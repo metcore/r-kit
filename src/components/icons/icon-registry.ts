@@ -270,6 +270,13 @@ import TrashFillIcon from "./icons/TrashFillIcon";
 import EnvelopeIcon from "./icons/EnvelopeIcon";
 import PhoneIcon from "./icons/PhoneIcon";
 import BriefcaseIcon from "./icons/BriefcaseIcon";
+import UserClockIcon from "./icons/UserClockIcon";
+import MoneyBillIcon from "./icons/MoneyBillIcon";
+import HourglassIcon from "./icons/HourglassIcon";
+import GiftIcon from "./icons/GiftIcon";
+import DocumentListIcon from "./icons/DocumentListIcon";
+import DeliveryCartArrowDownIcon from "./icons/DeliveryCartArrowDownIcon";
+import CreditCardIcon from "./icons/CreditCardIcon";
 
 export const iconRegistry = {
   "arrow-left-circle": ArrowLeftCircle,
@@ -544,4 +551,11 @@ export const iconRegistry = {
   envelope: EnvelopeIcon,
   phone: PhoneIcon,
   "briefcase-fill": BriefcaseIcon,
+  "user-clock": UserClockIcon,
+  "money-bill": MoneyBillIcon,
+  hourglass: HourglassIcon,
+  gift: GiftIcon,
+  "document-list": DocumentListIcon,
+  "delivery-cart-arrow-down": DeliveryCartArrowDownIcon,
+  "credit-card": CreditCardIcon,
 };
