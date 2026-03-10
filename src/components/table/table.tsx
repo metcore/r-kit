@@ -60,11 +60,11 @@ export function Table({
   );
 }
 
-export function TableHead({ children }: TableHeadProps) {
-  return <thead>{children}</thead>;
+export function TableHead({ children, className }: TableHeadProps) {
+  return <thead className={className}>{children}</thead>;
 }
 
-export function TableBody({ children }: TableBodyProps) {
+export function TableBody({ children, className }: TableBodyProps) {
   const { variant } = useContext(TableContext);
   const isBordered = variant === "bordered";
   const isStripped = variant === "stripped";
@@ -77,6 +77,7 @@ export function TableBody({ children }: TableBodyProps) {
         (isBordered || isStripped || isHovered) &&
           "[&>tr:last-child>td:first-child]:rounded-bl-lg [&>tr:last-child>td:last-child]:rounded-br-lg",
         isWrapped && "[&>tr>td:first-child]:border-l-0!",
+        className,
       )}
     >
       {children}
@@ -84,7 +85,12 @@ export function TableBody({ children }: TableBodyProps) {
   );
 }
 
-export function TableRow({ children, isLast, isHeader }: TableRowProps) {
+export function TableRow({
+  children,
+  isLast,
+  isHeader,
+  className,
+}: TableRowProps) {
   const { variant } = useContext(TableContext);
   const isBordered = variant === "bordered";
   const isHeaded = variant === "headed";
@@ -110,6 +116,7 @@ export function TableRow({ children, isLast, isHeader }: TableRowProps) {
           isHeader &&
             isWrapped &&
             "[&>th]:border-l [&>th]:border-gray-300 [&>th:first-child]:border-l-0",
+          className,
         )}
       >
         {children}
@@ -187,9 +194,13 @@ export function TableCell({
   );
 }
 
-export function TableFooter({ children, colSpan = 2 }: TableFooterProps) {
+export function TableFooter({
+  children,
+  colSpan = 2,
+  className,
+}: TableFooterProps) {
   return (
-    <tfoot>
+    <tfoot className={className}>
       <tr className="border-b-0">
         <td colSpan={colSpan} className="px-4 py-3">
           {children}
