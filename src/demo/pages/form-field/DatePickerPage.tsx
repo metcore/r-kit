@@ -25,6 +25,7 @@ export default function DatePickerPage() {
       />
 
       <DatePicker
+        showController={false}
         size="sm"
         mode="range"
         format="DD-MM-YYYY"
