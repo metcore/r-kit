@@ -323,6 +323,13 @@ const DatePicker = ({
     }
   }, [open]);
 
+  useEffect(() => {
+    if (dateRange.end) {
+      handleApplyDateRange();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange]);
+
   return (
     <div ref={containerRef} className="relative flex max-w-sm flex-col">
       <Dropdown
@@ -511,38 +518,43 @@ const DatePicker = ({
                       />
                     )}
                   </div>
-                  <div className="flex items-center justify-between gap-2 border-t border-gray-300 px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Input
-                        size={size}
-                        readOnly
-                        className="w-30 truncate"
-                        placeholder="Start Date"
-                        value={formatDateToString(
-                          dateRange.start,
-                          "DD MMM YYYY",
-                        )}
-                      />
-                      <Icon name="minus" size={16} />
-                      <Input
-                        size={size}
-                        readOnly
-                        placeholder="End Date"
-                        className="w-30 truncate"
-                        value={formatDateToString(dateRange.end, "DD MMM YYYY")}
-                      />
-                    </div>
+                  {showController && (
+                    <div className="flex items-center justify-between gap-2 border-t border-gray-300 px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          size={size}
+                          readOnly
+                          className="w-30 truncate"
+                          placeholder="Start Date"
+                          value={formatDateToString(
+                            dateRange.start,
+                            "DD MMM YYYY",
+                          )}
+                        />
+                        <Icon name="minus" size={16} />
+                        <Input
+                          size={size}
+                          readOnly
+                          placeholder="End Date"
+                          className="w-30 truncate"
+                          value={formatDateToString(
+                            dateRange.end,
+                            "DD MMM YYYY",
+                          )}
+                        />
+                      </div>
 
-                    <div className="flex items-center gap-2">
-                      <Button
-                        onClick={() => setIsCalendarShow(false)}
-                        variant={"tertiary"}
-                      >
-                        Cancel
-                      </Button>
-                      <Button onClick={handleApplyDateRange}>Apply</Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          onClick={() => setIsCalendarShow(false)}
+                          variant={"tertiary"}
+                        >
+                          Cancel
+                        </Button>
+                        <Button onClick={handleApplyDateRange}>Apply</Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             )}
