@@ -302,6 +302,7 @@ export const Select: React.FC<SelectProps> = ({
                       ref={(el) => {
                         optionRefs.current[index] = el;
                       }}
+                      onMouseEnter={() => setHighlightedIndex(index)}
                       onClick={() => handleSelect(option)}
                       className={cn(
                         "flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none",
