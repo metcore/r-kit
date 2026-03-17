@@ -27,6 +27,7 @@ const DatePicker = ({
   size = "md",
   showController = true,
   align = "start",
+  containerClassName,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null,
@@ -324,7 +325,10 @@ const DatePicker = ({
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative flex max-w-sm flex-col">
+    <div
+      ref={containerRef}
+      className={clsx("relative flex max-w-sm flex-col", containerClassName)}
+    >
       <Dropdown
         open={isCalendarShow}
         onOpenChange={(open) => {
