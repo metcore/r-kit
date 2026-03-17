@@ -49,4 +49,7 @@ export interface SelectProps {
   description?: string;
   hint?: string;
   errorMessages?: string | string[];
+  onLoadMore?: () => void;
+  isLoadingMore?: boolean;
+  treshold?: number;
 }

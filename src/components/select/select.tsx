@@ -9,6 +9,8 @@ import type { SelectOption, SelectProps } from "./type";
 import { Icon } from "../icons";
 import { cn, fieldHasError } from "../../lib/utils";
 import { FormField } from "../form";
+import { RoundedSpinner } from "../loading";
+import clsx from "clsx";
 
 export const Select: React.FC<SelectProps> = ({
   options = [],
@@ -26,6 +28,9 @@ export const Select: React.FC<SelectProps> = ({
   description,
   hint,
   errorMessages,
+  isLoadingMore,
+  onLoadMore,
+  treshold = 0,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,52 +39,25 @@ export const Select: React.FC<SelectProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const listContainerRef = useRef<HTMLDivElement>(null);
 
-  //   Handle outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node | null;
+  const handleScroll = () => {
+    const el = listContainerRef.current;
+    if (!el || isLoadingMore) return;
 
-      if (
-        target &&
-        containerRef.current &&
-        !containerRef.current.contains(target)
-      ) {
-        setIsOpen(false);
-        setSearchTerm("");
-      }
-    };
+    const isAtBottom =
+      el.scrollTop + el.clientHeight >= el.scrollHeight - treshold;
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen && isSearchable) {
-      searchInputRef.current?.focus();
+    if (isAtBottom) {
+      onLoadMore?.();
     }
-  }, [isOpen, isSearchable]);
+  };
 
   const filteredOptions = React.useMemo(() => {
     return options.filter((option) =>
       option.label.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [options, searchTerm]);
-
-  /* Reset highlight when filtering */
-  useEffect(() => {
-    setHighlightedIndex(0);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    const el = optionRefs.current[highlightedIndex];
-    if (el) {
-      el.scrollIntoView({
-        block: "nearest",
-        behavior: "smooth",
-      });
-    }
-  }, [highlightedIndex]);
 
   const asArray = (
     val: SelectOption | SelectOption[] | null,
@@ -178,6 +156,46 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
+  /* Reset highlight when filtering */
+  useEffect(() => {
+    setHighlightedIndex(0);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const el = optionRefs.current[highlightedIndex];
+    if (el) {
+      el.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }, [highlightedIndex]);
+
+  //   Handle outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+
+      if (
+        target &&
+        containerRef.current &&
+        !containerRef.current.contains(target)
+      ) {
+        setIsOpen(false);
+        setSearchTerm("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && isSearchable) {
+      searchInputRef.current?.focus();
+    }
+  }, [isOpen, isSearchable]);
+
   const getDisplayValue = () => {
     if (!value || (isMulti && asArray(value).length === 0)) {
       return <span className="text-gray-500">{placeholder}</span>;
@@ -247,8 +265,9 @@ export const Select: React.FC<SelectProps> = ({
           <div className="ml-2 flex items-center gap-1">
             {showClearButton && (
               <button
+                type="button"
                 onClick={handleClear}
-                className="rounded text-center text-gray-700"
+                className="cursor-pointer rounded text-center text-gray-700"
               >
                 <Icon name="times-circle" size={20} />
               </button>
@@ -286,7 +305,11 @@ export const Select: React.FC<SelectProps> = ({
             )}
 
             {/* Options */}
-            <div className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none">
+            <div
+              className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none"
+              ref={listContainerRef}
+              onScroll={onLoadMore ? handleScroll : undefined}
+            >
               {filteredOptions.length === 0 ? (
                 <div className="px-3 py-8 text-center text-sm text-gray-500">
                   No options found
@@ -324,6 +347,18 @@ export const Select: React.FC<SelectProps> = ({
                     </div>
                   );
                 })
+              )}
+
+              {onLoadMore && (
+                <div
+                  className={clsx(
+                    "flex h-5 items-center justify-center py-2 duration-300",
+                  )}
+                >
+                  {isLoadingMore && (
+                    <RoundedSpinner size={20} color="primary" />
+                  )}
+                </div>
               )}
             </div>
           </div>
