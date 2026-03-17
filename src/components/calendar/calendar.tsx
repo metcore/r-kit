@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
-import { cn } from "../../lib/utils";
-import { Text, type TextVariant } from "../text";
-import { ButtonNavigator } from "./button-navigator";
-import { ButtonDropdown, ItemDropdown } from "./dropdown";
+import { useEffect, useMemo, useState } from 'react';
+import { cn } from '../../lib/utils';
+import { Text, type TextVariant } from '../text';
+import { ButtonNavigator } from './button-navigator';
+import { ButtonDropdown, ItemDropdown } from './dropdown';
 import {
   getBackgroundClass,
   getCalendarDays,
   getCursorClass,
   getDayStyle,
   getTextColorClass,
-} from "./helpers";
-import type { CalendarDay, CalendarDayConfig, CalendarProps } from "./type";
+} from './helpers';
+import type { CalendarDay, CalendarDayConfig, CalendarProps } from './type';
 
 const Calendar = ({
   showNavigator = true,
@@ -25,34 +25,34 @@ const Calendar = ({
   wrapperClassname,
   weekWrapperClassname,
   dayWrapperClassname,
-  daysOfWeek = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+  daysOfWeek = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
   months = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ],
   showNextNavigator = true,
   showPrevNavigator = true,
-  mode = "single",
+  mode = 'single',
   rangeValue,
-  size = "md",
+  size = 'md',
 }: CalendarProps) => {
   const currentDate = new Date();
 
   const [currentMonth, setCurrentMonth] = useState(
-    defaultMonth ?? currentDate.getMonth(),
+    defaultMonth ?? currentDate.getMonth()
   );
   const [currentYear, setCurrentYear] = useState(
-    defaultYear ?? currentDate.getFullYear(),
+    defaultYear ?? currentDate.getFullYear()
   );
 
   const [isDropdownYearShow, setIsDropdownYearShow] = useState(false);
@@ -93,7 +93,7 @@ const Calendar = ({
       (disabledDate) =>
         disabledDate.getDate() === day.fullDate.getDate() &&
         disabledDate.getMonth() === day.fullDate.getMonth() &&
-        disabledDate.getFullYear() === day.fullDate.getFullYear(),
+        disabledDate.getFullYear() === day.fullDate.getFullYear()
     );
   };
 
@@ -103,13 +103,13 @@ const Calendar = ({
       (config) =>
         config.date.getDate() === day.fullDate.getDate() &&
         config.date.getMonth() === day.fullDate.getMonth() &&
-        config.date.getFullYear() === day.fullDate.getFullYear(),
+        config.date.getFullYear() === day.fullDate.getFullYear()
     );
   };
 
   // Helper to check if date is selected (single mode)
   const isDateSelected = (day: CalendarDay): boolean => {
-    if (mode === "range") return false;
+    if (mode === 'range') return false;
     if (!value) return false;
     return (
       value.getDate() === day.fullDate.getDate() &&
@@ -120,7 +120,7 @@ const Calendar = ({
 
   // Helper to check if date is in range
   const isDateInRange = (day: CalendarDay): boolean => {
-    if (mode !== "range" || !rangeValue?.start || !rangeValue?.end)
+    if (mode !== 'range' || !rangeValue?.start || !rangeValue?.end)
       return false;
 
     const dayTime = day.fullDate.getTime();
@@ -132,7 +132,7 @@ const Calendar = ({
 
   // Helper to check if date is range start
   const isRangeStart = (day: CalendarDay): boolean => {
-    if (mode !== "range" || !rangeValue?.start) return false;
+    if (mode !== 'range' || !rangeValue?.start) return false;
     return (
       day.fullDate.getDate() === rangeValue.start.getDate() &&
       day.fullDate.getMonth() === rangeValue.start.getMonth() &&
@@ -142,7 +142,7 @@ const Calendar = ({
 
   // Helper to check if date is range end
   const isRangeEnd = (day: CalendarDay): boolean => {
-    if (mode !== "range" || !rangeValue?.end) return false;
+    if (mode !== 'range' || !rangeValue?.end) return false;
     return (
       day.fullDate.getDate() === rangeValue.end.getDate() &&
       day.fullDate.getMonth() === rangeValue.end.getMonth() &&
@@ -151,11 +151,10 @@ const Calendar = ({
   };
 
   const handleDateClick = (day: CalendarDay) => {
-    if (day.month !== "current") return;
+    if (day.month !== 'current') return;
 
     const dayConfig = getDayConfig(day);
-    const disabled = dayConfig?.disabled || isDateDisabled(day);
-
+    const disabled = (dayConfig?.disabled ?? false) || isDateDisabled(day);
     if (disabled) return;
 
     onChange?.(day.fullDate);
@@ -163,58 +162,58 @@ const Calendar = ({
 
   // Get range background class
   const getRangeBackgroundClass = (day: CalendarDay): string => {
-    if (mode !== "range") return "";
+    if (mode !== 'range') return '';
 
     const inRange = isDateInRange(day);
     const rangeStart = isRangeStart(day);
     const rangeEnd = isRangeEnd(day);
 
     if (rangeStart || rangeEnd) {
-      return "bg-primary-1000 text-white!";
+      return 'bg-primary-1000 text-white!';
     }
 
     if (inRange) {
-      return "bg-primary-100";
+      return 'bg-primary-100';
     }
 
-    return "";
+    return '';
   };
 
   useEffect(() => {
     if (value !== undefined) {
       setCurrentMonth(
-        value?.getMonth() ?? defaultMonth ?? currentDate?.getMonth(),
+        value?.getMonth() ?? defaultMonth ?? currentDate?.getMonth()
       );
       setCurrentYear(
-        value?.getFullYear() ?? defaultYear ?? currentDate?.getFullYear(),
+        value?.getFullYear() ?? defaultYear ?? currentDate?.getFullYear()
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const header_size_map: Record<string, TextVariant> = {
-    sm: "t2",
-    md: "t1",
-    lg: "p3",
+    sm: 't2',
+    md: 't1',
+    lg: 'p3',
   };
 
   const day_of_week_size: Record<string, TextVariant> = {
-    sm: "t3",
-    md: "t2",
-    lg: "t1",
+    sm: 't3',
+    md: 't2',
+    lg: 't1',
   };
 
   const date_size_map: Record<string, string> = {
-    md: "size-9",
-    sm: "size-6",
-    lg: "size-9",
+    md: 'size-9',
+    sm: 'size-6',
+    lg: 'size-9',
   };
 
   return (
     <div
       className={cn(
-        "mx-auto w-fit rounded-2xl border border-gray-200 bg-white p-6",
-        wrapperClassname,
+        'mx-auto w-fit rounded-2xl border border-gray-200 bg-white p-6',
+        wrapperClassname
       )}
     >
       {/* Header with navigation */}
@@ -225,15 +224,15 @@ const Calendar = ({
               size={size}
               onClick={handlePrevMonth}
               icon="angle-left-small"
-              className={showPrevNavigator ? "" : "opacity-0"}
+              className={showPrevNavigator ? '' : 'opacity-0'}
             />
           )}
 
           {/* Month - Year Dropdown */}
           <div
             className={cn(
-              "flex items-center gap-2",
-              !showNavigator && "w-full justify-center",
+              'flex items-center gap-2',
+              !showNavigator && 'w-full justify-center'
             )}
           >
             {/* month */}
@@ -266,11 +265,11 @@ const Calendar = ({
 
             {/* current month - year */}
             <Text
-              as={"span"}
+              as={'span'}
               variant={header_size_map[size]}
               weight="semibold"
               value={`${months[currentMonth]} - ${currentYear}`}
-              align={"center"}
+              align="center"
             />
 
             {/* year */}
@@ -307,7 +306,7 @@ const Calendar = ({
               size={size}
               onClick={handleNextMonth}
               icon="angle-right-small"
-              className={showNextNavigator ? "" : "opacity-0"}
+              className={showNextNavigator ? '' : 'opacity-0'}
             />
           )}
         </div>
@@ -316,14 +315,14 @@ const Calendar = ({
       {/* Days of week */}
       <div
         className={cn(
-          "calendar-cols mb-3 grid justify-items-center gap-x-1",
-          weekWrapperClassname,
+          'calendar-cols mb-3 grid justify-items-center gap-x-1',
+          weekWrapperClassname
         )}
       >
         {daysOfWeek.map((day) => (
           <Text
             key={day}
-            as={"h5"}
+            as="h5"
             weight="medium"
             value={day}
             className="text-gray-600!"
@@ -336,16 +335,18 @@ const Calendar = ({
       {/* Calendar grid */}
       <div
         className={cn(
-          "calendar-cols grid justify-items-center gap-x-1 gap-y-1",
-          dayWrapperClassname,
+          'calendar-cols grid justify-items-center gap-x-1 gap-y-1',
+          dayWrapperClassname
         )}
       >
         {calendarDays.map((day, index) => {
           const dayConfig = getDayConfig(day as CalendarDay);
-          const isDisabled = dayConfig?.disabled || isDateDisabled(day as CalendarDay); //prettier-ignore
+          const isDisabled =
+            (dayConfig?.disabled ?? false) ||
+            isDateDisabled(day as CalendarDay);
           const isSelected = isDateSelected(day as CalendarDay);
           const dots = dayConfig?.dots || [];
-          const isCurrentMonth = day.month === "current";
+          const isCurrentMonth = day.month === 'current';
           // const inRange = isDateInRange(day as CalendarDay);
           const rangeStart = isRangeStart(day as CalendarDay);
           const rangeEnd = isRangeEnd(day as CalendarDay);
@@ -354,7 +355,7 @@ const Calendar = ({
             <button
               key={index}
               onClick={() => handleDateClick(day as CalendarDay)}
-              disabled={isDisabled && day.month === "current"}
+              disabled={isDisabled && day.month === 'current'}
               style={getDayStyle({
                 selected: isSelected || rangeStart || rangeEnd,
                 day: day as CalendarDay,
@@ -362,7 +363,7 @@ const Calendar = ({
                 styleConfig,
               })}
               className={cn(
-                "flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
+                'flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200',
                 date_size_map[size],
                 getCursorClass({ isDisabled, isCurrentMonth }),
                 getTextColorClass({
@@ -372,16 +373,16 @@ const Calendar = ({
                   styleConfig,
                   day: day as CalendarDay,
                 }),
-                mode === "single" &&
+                mode === 'single' &&
                   getBackgroundClass({
                     isSelected,
                     isDisabled,
                     isCurrentMonth,
                     styleConfig,
                   }),
-                mode === "range" &&
+                mode === 'range' &&
                   !isDisabled &&
-                  getRangeBackgroundClass(day as CalendarDay),
+                  getRangeBackgroundClass(day as CalendarDay)
               )}
             >
               <h5 className="font-metropolis text-xs font-medium">
@@ -396,7 +397,7 @@ const Calendar = ({
                       key={dotIndex}
                       className="size-1 rounded-full"
                       style={{
-                        backgroundColor: dot.color || "#d1d5db",
+                        backgroundColor: dot.color ?? '#d1d5db',
                       }}
                     />
                   ))}

@@ -1,22 +1,21 @@
-import { type ButtonHTMLAttributes } from "react";
-import { cn } from "../../lib/utils";
-import { buttonVariants, type ButtonVariantProps } from "./button-variants";
-import { Slot } from "@radix-ui/react-slot";
+import { type ButtonHTMLAttributes } from 'react';
+import { cn } from '../../lib/utils';
+import { buttonVariants, type ButtonVariantProps } from './button-variants';
+import { Slot } from '@radix-ui/react-slot';
 
 interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariantProps {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantProps {
   asChild?: boolean;
   color?:
-    | "primary"
-    | "secondary"
-    | "success"
-    | "danger"
-    | "warning"
-    | "info"
-    | "orange"
-    | "purple"
-    | "gray";
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'danger'
+    | 'warning'
+    | 'info'
+    | 'orange'
+    | 'purple'
+    | 'gray';
 }
 
 export const Button = ({
@@ -28,7 +27,7 @@ export const Button = ({
   asChild = false,
   ...props
 }: ButtonProps) => {
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp

@@ -1,4 +1,4 @@
-import type { IconNameProps } from "../icons";
+import type { IconNameProps } from '../icons';
 
 export interface BreadcrumbItem {
   href?: string;

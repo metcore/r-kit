@@ -1,14 +1,14 @@
-import React from "react";
-import { AvatarVariants } from "./avatar-variants";
-import type { AvatarProps } from "./type";
-import { cn } from "../../lib/utils";
+import React from 'react';
+import { AvatarVariants } from './avatar-variants';
+import type { AvatarProps } from './type';
+import { cn } from '../../lib/utils';
 
 export const Avatar: React.FC<AvatarProps> = ({
   url,
-  name = "",
-  size = "md",
-  color = "gray",
-  variant = "circle",
+  name = '',
+  size = 'md',
+  color = 'gray',
+  variant = 'circle',
   className,
   alt,
   ...props
@@ -19,14 +19,15 @@ export const Avatar: React.FC<AvatarProps> = ({
   const avatarClasses = cn(
     AvatarVariants({ size, color, variant }),
     className,
-    bgColor,
+    bgColor
   );
+  const hasUrl = (url ?? '').length > 0;
 
-  return url ? (
+  return hasUrl ? (
     <AvatarImage
-      url={url}
+      url={url ?? 'none'}
       className={avatarClasses}
-      alt={alt || name}
+      alt={alt ?? name}
       {...props}
     />
   ) : (
@@ -37,7 +38,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 const AvatarImage = ({
   url,
   className,
-  alt = "avatar",
+  alt = 'avatar',
 }: {
   url: string;
   className?: string;
@@ -47,7 +48,7 @@ const AvatarImage = ({
     <img
       src={url}
       alt={alt}
-      className={cn("h-full w-full object-cover", className)}
+      className={cn('h-full w-full object-cover', className)}
     />
   );
 };
@@ -61,12 +62,12 @@ const AvatarFallback = ({
 }) => {
   const initials = name
     ? name
-        .split(" ")
+        .split(' ')
         .filter((word) => word.length > 0)
         .slice(0, 2)
         .map((word) => word[0].toUpperCase())
-        .join("")
-    : "?";
+        .join('')
+    : '?';
 
   return (
     <div className={className}>
@@ -76,16 +77,16 @@ const AvatarFallback = ({
 };
 
 const AVATAR_COLORS = [
-  "bg-danger-500",
-  "bg-warning-500",
-  "bg-orange-500",
-  "bg-success-500",
-  "bg-primary-500",
-  "bg-info-500",
-  "bg-purple-500",
-  "bg-gray-900",
-  "bg-info-900",
-  "bg-primary-1000",
+  'bg-danger-500',
+  'bg-warning-500',
+  'bg-orange-500',
+  'bg-success-500',
+  'bg-primary-500',
+  'bg-info-500',
+  'bg-purple-500',
+  'bg-gray-900',
+  'bg-info-900',
+  'bg-primary-1000',
 ];
 
 const stringToColor = (str: string) => {
@@ -100,12 +101,12 @@ const stringToColor = (str: string) => {
 };
 
 const getInitials = (name: string) => {
-  if (!name) return "?";
+  if (!name) return '?';
 
   return name
     .trim()
     .split(/\s+/)
     .slice(0, 2)
     .map((word) => word[0].toUpperCase())
-    .join("");
+    .join('');
 };

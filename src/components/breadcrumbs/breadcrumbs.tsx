@@ -1,13 +1,13 @@
-import clsx from "clsx";
-import { Icon } from "../icons";
-import { Text } from "../text";
-import type { BreadcrumbsProps } from "./type";
+import clsx from 'clsx';
+import { Icon } from '../icons';
+import { Text } from '../text';
+import type { BreadcrumbsProps } from './type';
 
 export function Breadcrumbs({
   items = [],
-  separator = "caret-right",
+  separator = 'caret-right',
   separatorClassName,
-  linkComponent: LinkComponent = "a",
+  linkComponent: LinkComponent = 'a',
 }: BreadcrumbsProps) {
   return (
     <nav aria-label="breadcrumb">
@@ -20,7 +20,7 @@ export function Breadcrumbs({
               {index > 0 && (
                 <Icon
                   name={separator}
-                  className={clsx("shrink-0 text-gray-600", separatorClassName)}
+                  className={clsx('shrink-0 text-gray-600', separatorClassName)}
                   size={16}
                 />
               )}
@@ -32,7 +32,7 @@ export function Breadcrumbs({
                   weight="medium"
                   className="text-gray-700"
                 />
-              ) : item.href ? (
+              ) : item?.href != null && item?.href ? (
                 <LinkComponent
                   href={item.href}
                   className="hover:*:text-info-600 inline-flex items-center underline-offset-2 transition-colors"
