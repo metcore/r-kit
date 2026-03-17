@@ -1,10 +1,22 @@
 {
-  "name": "r-kit",
-  "version": "0.0.1",
+  "name": "@herca/r-kit",
+  "version": "0.0.4",
+  "description": "UI Kit untuk pengembangan aplikasi internal HerCa.",
+  "keywords": [
+    "React",
+    "Kit"
+  ],
+  "homepage": "https://github.com/metcore/r-kit#readme",
+  "bugs": {
+    "url": "https://github.com/metcore/r-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metcore/r-kit.git"
+  },
+  "license": "ISC",
+  "author": "metcore2@gmail.com",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,6 +32,8 @@
     },
     "./style": "./dist/index.css"
   },
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -28,11 +42,6 @@
     "build": "tsup",
     "lint": "eslint .",
     "preview": "vite preview"
-  },
-  "peerDependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "tailwindcss": "^4.0.0"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.1.12",
@@ -69,5 +78,11 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.14.0",
     "vite": "^7.1.7"
-  }
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.0.0"
+  },
+  "module": "dist/index.js"
 }
