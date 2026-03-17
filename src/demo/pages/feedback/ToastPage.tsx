@@ -1,16 +1,15 @@
-import { Button } from "../../../components/button";
-import { useToast } from "../../../components/toast";
-import Toast from "../../../components/toast/toast-card";
-import MainSection from "../../components/MainSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
+import { Button } from '../../../components/button';
+import { useToast } from '../../../components/toast';
+import Toast from '../../../components/toast/toast-card';
+import MainSection from '../../components/MainSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 export default function ToastPage() {
   const toast = useToast();
 
   return (
     <DashboardLayout>
-      <div 
-      className='flex flex-col gap-4'>
+      <div className="flex flex-col gap-4">
         <MainSection title="Snackbar Toast">
           <div className="flex flex-row flex-wrap gap-4">
             <Toast title="Primary" description="Description" color="primary" />
@@ -92,55 +91,55 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="primary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="secondary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="danger"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="gray"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="info"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="orange"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="purple"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="success"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               title="Primary"
               description="Description"
               color="warning"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
           </div>
         </MainSection>
@@ -151,63 +150,63 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="primary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="secondary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="danger"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="gray"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="info"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="orange"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="purple"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="success"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               icon="copy-fill"
               title="Primary"
               description="Description"
               color="warning"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
           </div>
         </MainSection>
@@ -219,7 +218,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="primary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -227,7 +226,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="secondary"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -235,7 +234,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="danger"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -243,7 +242,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="gray"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -251,7 +250,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="info"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -259,7 +258,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="orange"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -267,7 +266,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="purple"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -275,7 +274,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="success"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
             <Toast
               variant="outline"
@@ -283,7 +282,7 @@ export default function ToastPage() {
               title="Primary"
               description="Description"
               color="warning"
-              onClickAction={() => console.log("ok")}
+              onClickAction={() => console.log('ok')}
             />
           </div>
         </MainSection>
@@ -292,9 +291,9 @@ export default function ToastPage() {
             <Button
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "primary",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'primary',
                   duration: 10000,
                 })
               }
@@ -305,9 +304,9 @@ export default function ToastPage() {
               color="secondary"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "secondary",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'secondary',
                 })
               }
             >
@@ -317,9 +316,9 @@ export default function ToastPage() {
               color="danger"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "danger",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'danger',
                 })
               }
             >
@@ -329,9 +328,9 @@ export default function ToastPage() {
               color="gray"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "gray",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'gray',
                 })
               }
             >
@@ -341,9 +340,9 @@ export default function ToastPage() {
               color="info"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "info",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'info',
                 })
               }
             >
@@ -353,9 +352,9 @@ export default function ToastPage() {
               color="orange"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "orange",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'orange',
                 })
               }
             >
@@ -365,9 +364,9 @@ export default function ToastPage() {
               color="purple"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "purple",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'purple',
                 })
               }
             >
@@ -377,9 +376,9 @@ export default function ToastPage() {
               color="success"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "success",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'success',
                 })
               }
             >
@@ -389,9 +388,9 @@ export default function ToastPage() {
               color="warning"
               onClick={() =>
                 toast.show({
-                  title: "Success!",
-                  description: "Data Created Successfully!",
-                  color: "warning",
+                  title: 'Success!',
+                  description: 'Data Created Successfully!',
+                  color: 'warning',
                 })
               }
             >
