@@ -47,6 +47,8 @@ export interface DatePickerProps {
   size?: "sm" | "lg" | "md";
   showController?: boolean;
   align?: "start" | "center" | "end";
+
+  containerClassName?: string;
 }
 
 export type DateFormat =
