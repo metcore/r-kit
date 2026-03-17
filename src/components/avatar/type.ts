@@ -1,16 +1,16 @@
-export type AvatarSizeType = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+export type AvatarSizeType = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export type AvatarColorType =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "danger"
-  | "warning"
-  | "info"
-  | "purple"
-  | "orange"
-  | "gray";
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'purple'
+  | 'orange'
+  | 'gray';
 
-export type AvatarVariantType = "circle" | "square" | "rounded";
+export type AvatarVariantType = 'circle' | 'square' | 'rounded';
 
 export interface AvatarProps {
   size?: AvatarSizeType;

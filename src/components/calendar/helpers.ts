@@ -2,7 +2,7 @@ import type {
   CalendarDay,
   CalendarStyleConfig,
   GetCalendarDaysProps,
-} from "./type";
+} from './type';
 
 const getCalendarDays = ({
   currentYear,
@@ -22,7 +22,7 @@ const getCalendarDays = ({
   for (let i = firstDayOfWeek; i > 0; i--) {
     days.push({
       date: prevLastDate - i + 1,
-      month: "prev",
+      month: 'prev',
       fullDate: new Date(currentYear, currentMonth - 1, prevLastDate - i + 1),
     });
   }
@@ -31,7 +31,7 @@ const getCalendarDays = ({
   for (let i = 1; i <= lastDateOfMonth; i++) {
     days.push({
       date: i,
-      month: "current",
+      month: 'current',
       fullDate: new Date(currentYear, currentMonth, i),
     });
   }
@@ -41,7 +41,7 @@ const getCalendarDays = ({
   for (let i = 1; i <= remainingDays; i++) {
     days.push({
       date: i,
-      month: "next",
+      month: 'next',
       fullDate: new Date(currentYear, currentMonth + 1, i),
     });
   }
@@ -50,7 +50,7 @@ const getCalendarDays = ({
 };
 
 const isSameDate = (date1: CalendarDay, date2: CalendarDay) => {
-  if (!date1 || !date2) return false;
+  if (date1 == null || date2 == null) return false;
   return (
     date1.fullDate.getDate() === date2.fullDate.getDate() &&
     date1.fullDate.getMonth() === date2.fullDate.getMonth() &&
@@ -98,7 +98,7 @@ const getDayStyle = ({
 }) => {
   if (selected) {
     return getSelectedStyle(styleConfig);
-  } else if (disabled && day.month === "current") {
+  } else if (disabled && day.month === 'current') {
     return getDisabledStyle(styleConfig);
   }
 
@@ -114,10 +114,10 @@ const getCursorClass = ({
   isCurrentMonth: boolean;
 }) => {
   if (isDisabled && isCurrentMonth) {
-    return "cursor-not-allowed";
+    return 'cursor-not-allowed';
   }
 
-  return "cursor-pointer";
+  return 'cursor-pointer';
 };
 
 // Get text color classes
@@ -135,30 +135,30 @@ const getTextColorClass = ({
   day: CalendarDay;
 }) => {
   if (!isCurrentMonth) {
-    return "*:text-gray-500";
+    return '*:text-gray-500';
   }
 
-  if (isSelected && styleConfig?.selected?.text) {
-    return ""; // Use inline style
+  if (isSelected && styleConfig?.selected?.text != null) {
+    return '';
   }
 
   if (isSelected) {
-    return "*:text-white!";
+    return '*:text-white!';
   }
 
-  if (isDisabled && styleConfig?.disabled?.text) {
-    return ""; // Use inline style
+  if (isDisabled && styleConfig?.disabled?.text != null) {
+    return '';
   }
 
   if (isDisabled) {
-    return "*:text-red-500!";
+    return '*:text-red-500!';
   }
 
   if (isToday(day)) {
-    return "*:text-info-500!";
+    return '*:text-info-500!';
   }
 
-  return "*:text-gray-700!";
+  return '*:text-gray-700!';
 };
 
 // Get background color classes
@@ -173,27 +173,31 @@ const getBackgroundClass = ({
   isCurrentMonth: boolean;
   styleConfig?: CalendarStyleConfig;
 }) => {
-  if (isSelected && styleConfig?.selected?.background) {
-    return ""; // Use inline style
+  if (isSelected && styleConfig?.selected?.background != null) {
+    return '';
   }
 
   if (isSelected) {
-    return "bg-primary-1000";
+    return 'bg-primary-1000';
   }
 
-  if (isDisabled && isCurrentMonth && styleConfig?.disabled?.background) {
-    return ""; // Use inline style
+  if (
+    isDisabled &&
+    isCurrentMonth &&
+    styleConfig?.disabled?.background != null
+  ) {
+    return '';
   }
 
   if (isDisabled && isCurrentMonth) {
-    return "bg-red-500/30";
+    return 'bg-red-500/30';
   }
 
   if (!isDisabled) {
-    return "hover:bg-gray-100";
+    return 'hover:bg-gray-100';
   }
 
-  return "";
+  return '';
 };
 
 export {
