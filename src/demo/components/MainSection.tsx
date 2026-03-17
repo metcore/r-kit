@@ -30,7 +30,6 @@ interface ActionButtonProps {
 export default function MainSection({
   children,
   title,
-  downloadUrl,
   code,
   className,
   contentClassName,
