@@ -9,7 +9,8 @@ export default function ToastPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col gap-4">
+      <div 
+      className='flex flex-col gap-4'>
         <MainSection title="Snackbar Toast">
           <div className="flex flex-row flex-wrap gap-4">
             <Toast title="Primary" description="Description" color="primary" />
