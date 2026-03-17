@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { Button } from "../../components/button";
-import { Card, CardBody, CardFooter, CardHeader } from "../../components/card";
-import { CodeBlock } from "../../components/code-block";
-import { Icon, type IconNameProps } from "../../components/icons";
-import { Text } from "../../components/text";
+import { useState } from 'react';
+import { Button } from '../../components/button';
+import { Card, CardBody, CardFooter, CardHeader } from '../../components/card';
+import { CodeBlock } from '../../components/code-block';
+import { Icon, type IconNameProps } from '../../components/icons';
+import { Text } from '../../components/text';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../components/tooltip";
-import { useCopy } from "../../hooks/use-copy";
+} from '../../components/tooltip';
+import { useCopy } from '../../hooks/use-copy';
 
 interface Props {
   title: string;
@@ -24,7 +24,7 @@ interface ActionButtonProps {
   tooltip: string;
   icon: IconNameProps;
   onClick: () => void;
-  side?: "bottom" | "top" | "left";
+  side?: 'bottom' | 'top' | 'left';
 }
 
 export default function MainSection({
@@ -40,20 +40,19 @@ export default function MainSection({
   const [isExampleVisible, setIsExampleVisible] = useState(false);
 
   return (
-    <Card size={"lg"} className={className}>
+    <Card size="lg" className={className}>
       <CardHeader
         divider
         className="flex flex-row items-center justify-between"
       >
-        <Text as={"h3"} variant="p2" weight="semibold" value={title} />
-
-        {!!downloadUrl && (
+        <Text as="h3" variant="p2" weight="semibold" value={title} />
+        {downloadUrl != null && downloadUrl.length > 0 && (
           <Button
             color="success"
-            variant={"tertiary"}
+            variant="tertiary"
             className="flex shrink-0 items-center gap-2"
             onClick={() => {
-              window.open(downloadUrl, "_blank");
+              window.open(downloadUrl, '_blank');
             }}
           >
             <Text
@@ -69,15 +68,15 @@ export default function MainSection({
 
       <CardBody className={contentClassName}>{children}</CardBody>
 
-      {!!code && (
+      {code != null && code.length > 0 && (
         <CardFooter className="flex flex-col gap-3 border-t">
           <div className="flex flex-col gap-3">
             <div className="flex flex-row items-center justify-between">
               <Text value="Contoh Kode" variant="t1" weight="medium" />
               <div className="flex flex-row items-center gap-2">
                 <ActionButton
-                  key={copied ? "copied" : "copy"}
-                  tooltip={!copied ? "Salin Kode" : "Kode Disalin!"}
+                  key={copied ? 'copied' : 'copy'}
+                  tooltip={!copied ? 'Salin Kode' : 'Kode Disalin!'}
                   icon="copy-fill"
                   onClick={() => copy(code)}
                   side="bottom"
@@ -85,7 +84,7 @@ export default function MainSection({
                 <ActionButton
                   side="left"
                   tooltip={
-                    isExampleVisible ? "Sembunyikan Kode" : "Tampilkan Kode"
+                    isExampleVisible ? 'Sembunyikan Kode' : 'Tampilkan Kode'
                   }
                   icon="code"
                   onClick={() => setIsExampleVisible(!isExampleVisible)}
@@ -108,7 +107,7 @@ const ActionButton = ({
   icon,
   onClick,
   tooltip,
-  side = "top",
+  side = 'top',
 }: ActionButtonProps) => {
   return (
     <Tooltip>
