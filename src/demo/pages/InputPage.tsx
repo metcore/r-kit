@@ -1,10 +1,9 @@
-import React from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Input } from "../../components/input";
-import { Card, CardBody } from "../../components/card";
-import { Button } from "../../components/button";
-import { Textarea } from "../../components/textarea";
-import { RoundedSpinner } from "../../components/loading";
+import { Button } from '../../components/button';
+import { Card, CardBody } from '../../components/card';
+import { Input } from '../../components/input';
+import { RoundedSpinner } from '../../components/loading';
+import { Textarea } from '../../components/textarea';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 function InputPage() {
   return (
@@ -14,13 +13,13 @@ function InputPage() {
           <CardBody className="grid grid-cols-2">
             <div className="space-y-4">
               <Input
-                size={"md"}
+                size={'md'}
                 label="Email"
-                errorMessages={["email is required"]}
+                errorMessages={['email is required']}
                 hint="email nya jangan lupa diisi ya :)"
               />
               <Textarea disabled label="Email" id="email" maxLength={30} />
-              <Button size={"md"}>Submit</Button>
+              <Button size={'md'}>Submit</Button>
             </div>
           </CardBody>
         </Card>

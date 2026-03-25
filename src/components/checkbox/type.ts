@@ -1,16 +1,16 @@
-export type SizeType = "sm" | "md" | "lg";
+export type SizeType = 'sm' | 'md' | 'lg';
 export type ColorType =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "danger"
-  | "warning"
-  | "info"
-  | "orange"
-  | "purple"
-  | "gray";
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'orange'
+  | 'purple'
+  | 'gray';
 
-export type IconType = "check" | "minus";
+export type IconType = 'check' | 'minus';
 
 export interface CheckboxProps {
   id?: string;
@@ -47,5 +47,5 @@ export interface CheckboxGroupContextValue {
   name?: string;
   size?: SizeType;
   color?: ColorType;
-  icon?: "check" | "minus";
+  icon?: 'check' | 'minus';
 }

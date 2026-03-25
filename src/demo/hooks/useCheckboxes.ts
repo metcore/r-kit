@@ -1,5 +1,5 @@
-import dedent from "dedent";
-import type { ColorType, SizeType } from "../../components/checkbox/type";
+import dedent from 'dedent';
+import type { ColorType, SizeType } from '../../components/checkbox/type';
 
 export default function useCheckboxes() {
   const CHECKBOXES: {
@@ -9,15 +9,15 @@ export default function useCheckboxes() {
     label?: string;
     description?: string;
   }[] = [
-    { id: "1", color: "primary", label: "Primary", description: "Deskripsi" },
-    { id: "2", color: "danger", label: "Danger", description: "Deskripsi" },
-    { id: "3", color: "success", label: "Success", description: "Deskripsi" },
+    { id: '1', color: 'primary', label: 'Primary', description: 'Deskripsi' },
+    { id: '2', color: 'danger', label: 'Danger', description: 'Deskripsi' },
+    { id: '3', color: 'success', label: 'Success', description: 'Deskripsi' },
     {
-      id: "4",
-      color: "gray",
-      label: "Disabled",
+      id: '4',
+      color: 'gray',
+      label: 'Disabled',
       disabled: true,
-      description: "Deskripsi",
+      description: 'Deskripsi',
     },
   ] as const;
 
@@ -31,28 +31,28 @@ export default function useCheckboxes() {
     description?: string;
   }[] = [
     {
-      id: "1",
-      color: "primary",
-      size: "sm",
-      label: "Small Horizontal",
-      label2: "Small Vertical",
-      description: "Deskripsi",
+      id: '1',
+      color: 'primary',
+      size: 'sm',
+      label: 'Small Horizontal',
+      label2: 'Small Vertical',
+      description: 'Deskripsi',
     },
     {
-      id: "2",
-      color: "primary",
-      size: "md",
-      label: "Medium Horizontal",
-      label2: "Medium Vertical",
-      description: "Deskripsi",
+      id: '2',
+      color: 'primary',
+      size: 'md',
+      label: 'Medium Horizontal',
+      label2: 'Medium Vertical',
+      description: 'Deskripsi',
     },
     {
-      id: "3",
-      color: "primary",
-      size: "lg",
-      label: "Large Horizontal",
-      label2: "Large Vertical",
-      description: "Deskripsi",
+      id: '3',
+      color: 'primary',
+      size: 'lg',
+      label: 'Large Horizontal',
+      label2: 'Large Vertical',
+      description: 'Deskripsi',
     },
   ] as const;
 

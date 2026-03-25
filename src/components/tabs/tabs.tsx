@@ -4,22 +4,22 @@ import React, {
   useState,
   useRef,
   useEffect,
-} from "react";
+} from 'react';
 import type {
   TabsContentProps,
   TabsContextValue,
   TabsListProps,
   TabsProps,
   TabsTriggerProps,
-} from "./type";
-import { cn } from "../../lib/utils";
+} from './type';
+import { cn } from '../../lib/utils';
 
 const TabsContext = createContext<TabsContextValue | undefined>(undefined);
 
 const useTabsContext = () => {
   const context = useContext(TabsContext);
   if (!context) {
-    throw new Error("Tabs components must be used within Tabs");
+    throw new Error('Tabs components must be used within Tabs');
   }
   return context;
 };
@@ -27,12 +27,12 @@ export const Tabs: React.FC<TabsProps> = ({
   defaultValue,
   value: controlledValue,
   onValueChange,
-  orientation = "horizontal",
+  orientation = 'horizontal',
   className,
   children,
 }) => {
   const [uncontrolledValue, setUncontrolledValue] = useState(
-    defaultValue || "",
+    defaultValue ?? ''
   );
   const triggersRef = useRef<Map<string, HTMLButtonElement>>(new Map());
 
@@ -82,15 +82,15 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
       if (!listRef.current) return;
 
       const activeButton = listRef.current.querySelector(
-        `[aria-selected="true"]`,
+        `[aria-selected="true"]`
       ) as HTMLButtonElement;
 
-      if (!activeButton) return;
+      if (activeButton === null || activeButton === undefined) return;
 
       const listRect = listRef.current.getBoundingClientRect();
       const buttonRect = activeButton.getBoundingClientRect();
 
-      if (orientation === "horizontal") {
+      if (orientation === 'horizontal') {
         setIndicatorStyle({
           width: `${buttonRect.width}px`,
           height: `${buttonRect.height}px`,
@@ -113,12 +113,12 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
 
     updateIndicator();
 
-    window.addEventListener("resize", updateIndicator);
+    window.addEventListener('resize', updateIndicator);
 
     const timer = setTimeout(updateIndicator, 50);
 
     return () => {
-      window.removeEventListener("resize", updateIndicator);
+      window.removeEventListener('resize', updateIndicator);
       clearTimeout(timer);
     };
   }, [value, orientation, isInitialized]);
@@ -129,17 +129,17 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
       role="tablist"
       aria-orientation={orientation}
       className={cn(
-        "relative rounded-lg bg-gray-100 p-1",
-        orientation === "horizontal"
-          ? "inline-flex items-center justify-start gap-1"
-          : "inline-flex flex-col items-stretch gap-1",
-        className,
+        'relative rounded-lg bg-gray-100 p-1',
+        orientation === 'horizontal'
+          ? 'inline-flex items-center justify-start gap-1'
+          : 'inline-flex flex-col items-stretch gap-1',
+        className
       )}
     >
       <div
         className={cn(
-          "bg-primary-1000 pointer-events-none absolute z-0 rounded-md shadow-sm",
-          isInitialized ? "transition-all duration-300 ease-out" : "opacity-0",
+          'bg-primary-1000 pointer-events-none absolute z-0 rounded-md shadow-sm',
+          isInitialized ? 'transition-all duration-300 ease-out' : 'opacity-0'
         )}
         style={indicatorStyle}
         aria-hidden="true"
@@ -147,10 +147,10 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
 
       <div
         className={cn(
-          "relative z-10",
-          orientation === "horizontal"
-            ? "flex items-center gap-1"
-            : "flex w-full flex-col gap-1",
+          'relative z-10',
+          orientation === 'horizontal'
+            ? 'flex items-center gap-1'
+            : 'flex w-full flex-col gap-1'
         )}
       >
         {children}
@@ -190,12 +190,12 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
       disabled={disabled}
       onClick={() => onValueChange(triggerValue)}
       className={cn(
-        "inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 whitespace-nowrap",
-        "text-sm font-semibold transition-colors duration-200",
-        "focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:outline-none",
-        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        isSelected ? "text-white" : "text-gray-700 hover:text-gray-900",
-        className,
+        'inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 whitespace-nowrap',
+        'text-sm font-semibold transition-colors duration-200',
+        'focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:outline-none',
+        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        isSelected ? 'text-white' : 'text-gray-700 hover:text-gray-900',
+        className
       )}
     >
       {children}
@@ -205,7 +205,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
 
 export const TabsContent: React.FC<TabsContentProps> = ({
   value: contentValue,
-  className = "",
+  className = '',
   children,
 }) => {
   const { value } = useTabsContext();
@@ -220,9 +220,9 @@ export const TabsContent: React.FC<TabsContentProps> = ({
       aria-labelledby={`tab-${contentValue}`}
       tabIndex={0}
       className={cn(
-        "mt-4 rounded-md focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none",
-        "animate-in fade-in-50 duration-300",
-        className,
+        'mt-4 rounded-md focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none',
+        'animate-in fade-in-50 duration-300',
+        className
       )}
     >
       {children}
@@ -230,7 +230,7 @@ export const TabsContent: React.FC<TabsContentProps> = ({
   );
 };
 
-Tabs.displayName = "Tabs";
-TabsList.displayName = "TabsList";
-TabsTrigger.displayName = "TabsTrigger";
-TabsContent.displayName = "TabsContent";
+Tabs.displayName = 'Tabs';
+TabsList.displayName = 'TabsList';
+TabsTrigger.displayName = 'TabsTrigger';
+TabsContent.displayName = 'TabsContent';

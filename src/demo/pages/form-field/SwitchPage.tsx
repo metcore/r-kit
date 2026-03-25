@@ -1,11 +1,11 @@
-import dedent from "dedent";
-import { Switch } from "../../components/switch";
-import illust from "../assets/images/forms.png";
-import GridWrapper from "../components/GridWrapper";
-import HeroSection from "../components/HeroSection";
-import MainSection from "../components/MainSection";
-import DashboardLayout from "../layouts/DashboardLayout";
-import Footer from "../components/Footer";
+import dedent from 'dedent';
+import { Switch } from '../../../components/switch';
+import illust from '../../assets/images/forms.png';
+import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import Footer from '../../components/Footer';
 
 export const SwitchPage = () => {
   // const [checked, setChecked] = useState(false);
@@ -205,8 +205,8 @@ export const SwitchPage = () => {
           {/* validation & size */}
           <MainSection title="Switches Validasi" code={validasiExample}>
             <div className="flex flex-row gap-8">
-              <Switch label="Default" errorMessages={"Error Message"} />
-              <Switch checked label="Active" errorMessages={"Error Message"} />
+              <Switch label="Default" errorMessages={'Error Message'} />
+              <Switch checked label="Active" errorMessages={'Error Message'} />
             </div>
           </MainSection>
           <MainSection title="Switches Size" code={sizeExample}>

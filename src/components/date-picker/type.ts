@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
-import type { Calendar } from "../calendar";
+import type { ReactNode } from 'react';
+import type { Calendar } from '../calendar';
 
-export type DatePickerMode = "single" | "range";
+export type DatePickerMode = 'single' | 'range';
 
 export interface DateRange {
   start: Date | null;
@@ -11,22 +11,22 @@ export interface DateRange {
 export type CalendarBaseProps = React.ComponentProps<typeof Calendar>;
 export type CalendarOverrideProps = Omit<
   CalendarBaseProps,
-  | "wrapperClassname"
-  | "weekWrapperClassname"
-  | "dayWrapperClassname"
-  | "onChange"
-  | "mode"
+  | 'wrapperClassname'
+  | 'weekWrapperClassname'
+  | 'dayWrapperClassname'
+  | 'onChange'
+  | 'mode'
 >;
 
 export type CalendarRangeOverrideProps = Omit<
   CalendarBaseProps,
-  | "wrapperClassname"
-  | "weekWrapperClassname"
-  | "dayWrapperClassname"
-  | "onChange"
-  | "value"
-  | "rangeValue"
-  | "mode"
+  | 'wrapperClassname'
+  | 'weekWrapperClassname'
+  | 'dayWrapperClassname'
+  | 'onChange'
+  | 'value'
+  | 'rangeValue'
+  | 'mode'
 >;
 
 export interface DatePickerProps {
@@ -44,25 +44,25 @@ export interface DatePickerProps {
   startDateCalendarProps?: CalendarRangeOverrideProps;
   endDateCalendarProps?: CalendarRangeOverrideProps;
   wrapperClassName?: string;
-  size?: "sm" | "lg" | "md";
+  size?: 'sm' | 'lg' | 'md';
   showController?: boolean;
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
 
   containerClassName?: string;
 }
 
 export type DateFormat =
-  | "DD-MM-YYYY"
-  | "DD/MM/YYYY"
-  | "DD MMM YYYY"
-  | "DD MMMM YYYY"
-  | "YYYY-MM-DD"
-  | "MM/DD/YYYY"
-  | "DD-MM-YYYY HH:mm:ss"
-  | "DD/MM/YYYY HH:mm:ss"
-  | "DD MMM YYYY HH:mm:ss"
-  | "DD MMMM YYYY HH:mm:ss"
-  | "YYYY-MM-DD HH:mm:ss"
-  | "MM/DD/YYYY HH:mm:ss"
-  | "DD MMMM YYYY - HH:mm:ss"
-  | "DD MMM YYYY - HH:mm:ss";
+  | 'DD-MM-YYYY'
+  | 'DD/MM/YYYY'
+  | 'DD MMM YYYY'
+  | 'DD MMMM YYYY'
+  | 'YYYY-MM-DD'
+  | 'MM/DD/YYYY'
+  | 'DD-MM-YYYY HH:mm:ss'
+  | 'DD/MM/YYYY HH:mm:ss'
+  | 'DD MMM YYYY HH:mm:ss'
+  | 'DD MMMM YYYY HH:mm:ss'
+  | 'YYYY-MM-DD HH:mm:ss'
+  | 'MM/DD/YYYY HH:mm:ss'
+  | 'DD MMMM YYYY - HH:mm:ss'
+  | 'DD MMM YYYY - HH:mm:ss';

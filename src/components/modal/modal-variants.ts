@@ -1,41 +1,41 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const modalVariants = cva(
-  "relative z-50 w-full rounded-2xl bg-white shadow-xl focus:outline-none",
+  'relative z-50 w-full rounded-2xl bg-white shadow-xl focus:outline-none',
   {
     variants: {
       size: {
-        xs: "max-w-[327px]",
-        sm: "max-w-[480px]",
-        md: "max-w-[700px]",
-        lg: "max-w-[1000px]",
-        full: "mx-4 max-w-full",
+        xs: 'max-w-[327px]',
+        sm: 'max-w-[480px]',
+        md: 'max-w-[700px]',
+        lg: 'max-w-[1000px]',
+        full: 'mx-4 max-w-full',
       },
       state: {
-        open: "animate-modal-scale-in",
-        closed: "animate-modal-scale-out",
+        open: 'animate-modal-scale-in',
+        closed: 'animate-modal-scale-out',
       },
     },
     defaultVariants: {
-      size: "md",
+      size: 'md',
     },
-  },
+  }
 );
 
-export const modalOverlayVariants = cva("fixed inset-0 z-[999] m-0 flex p-4", {
+export const modalOverlayVariants = cva('fixed inset-0 z-[999] m-0 flex p-4', {
   variants: {
     position: {
-      center: "items-center justify-center",
-      top: "items-start justify-center",
-      bottom: "items-end justify-center",
+      center: 'items-center justify-center',
+      top: 'items-start justify-center',
+      bottom: 'items-end justify-center',
     },
     state: {
-      open: "animate-modal-fade-in",
-      closed: "animate-modal-fade-out",
+      open: 'animate-modal-fade-in',
+      closed: 'animate-modal-fade-out',
     },
   },
   defaultVariants: {
-    position: "center",
+    position: 'center',
   },
 });
 

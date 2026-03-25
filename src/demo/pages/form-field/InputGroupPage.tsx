@@ -1,26 +1,26 @@
-import { useState } from "react";
-import { Icon } from "../../../components/icons";
-import { Input } from "../../../components/input";
-import { Text } from "../../../components/text";
-import illust from "../../assets/images/forms.png";
-import GridWrapper from "../../components/GridWrapper";
-import HeroSection from "../../components/HeroSection";
-import MainSection from "../../components/MainSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
+import { useState } from 'react';
+import { Icon } from '../../../components/icons';
+import { Input } from '../../../components/input';
+import { Text } from '../../../components/text';
+import illust from '../../assets/images/forms.png';
+import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 import {
   Dropdown,
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-} from "../../../components/dropdown";
-import afghanistan from "../../assets/images/flag/afghanistan.png";
-import albania from "../../assets/images/flag/albania.png";
-import algeria from "../../assets/images/flag/algeria.png";
-import america from "../../assets/images/flag/america.png";
-import andorra from "../../assets/images/flag/andorra.png";
-import Footer from "../../components/Footer";
-import dedent from "dedent";
+} from '../../../components/dropdown';
+import afghanistan from '../../assets/images/flag/afghanistan.png';
+import albania from '../../assets/images/flag/albania.png';
+import algeria from '../../assets/images/flag/algeria.png';
+import america from '../../assets/images/flag/america.png';
+import andorra from '../../assets/images/flag/andorra.png';
+import Footer from '../../components/Footer';
+import dedent from 'dedent';
 
 interface Countries {
   name: string;
@@ -31,41 +31,41 @@ interface Countries {
 export default function InputGroupPage() {
   const [isTypePassword, setIsTypePassword] = useState(true);
   const [inputPhoneWidth, setInputPhoneWidth] = useState(0);
-  const [countrySearch, setCountrySearch] = useState("");
+  const [countrySearch, setCountrySearch] = useState('');
   const [selectedCountry, setSelectedCountry] = useState<Countries | null>(
-    null,
+    null
   );
 
   const countries: Countries[] = [
     {
-      name: "Afghanistan",
+      name: 'Afghanistan',
       flag: afghanistan,
-      phone: "+93",
+      phone: '+93',
     },
     {
-      name: "Albania",
+      name: 'Albania',
       flag: albania,
-      phone: "+355",
+      phone: '+355',
     },
     {
-      name: "Algeria",
+      name: 'Algeria',
       flag: algeria,
-      phone: "+213",
+      phone: '+213',
     },
     {
-      name: "America",
+      name: 'America',
       flag: america,
-      phone: "+1",
+      phone: '+1',
     },
     {
-      name: "Andorra",
+      name: 'Andorra',
       flag: andorra,
-      phone: "+376",
+      phone: '+376',
     },
   ];
 
   const filteredCountry = countries.filter((country) =>
-    country.name.toLowerCase().includes(countrySearch.toLowerCase()),
+    country.name.toLowerCase().includes(countrySearch.toLowerCase())
   );
 
   const exampleInputGroup = dedent(`
@@ -184,13 +184,13 @@ export default function InputGroupPage() {
               <Input
                 label="Password"
                 placeholder="Password"
-                type={isTypePassword ? "password" : "text"}
+                type={isTypePassword ? 'password' : 'text'}
                 rightAddonClassName="!border-l-0"
                 leftAddon={<Icon name="lock-fill" size={20} />}
                 rightAddon={
                   <button onClick={() => setIsTypePassword(!isTypePassword)}>
                     <Icon
-                      name={isTypePassword ? "eye" : "eye-open"}
+                      name={isTypePassword ? 'eye' : 'eye-open'}
                       size={20}
                     />
                   </button>
@@ -206,8 +206,8 @@ export default function InputGroupPage() {
                   <Dropdown>
                     <DropdownTrigger>
                       <FlagButton
-                        flag={selectedCountry?.flag || afghanistan}
-                        phone={selectedCountry?.phone || "+93"}
+                        flag={selectedCountry?.flag ?? afghanistan}
+                        phone={selectedCountry?.phone ?? '+93'}
                       />
                     </DropdownTrigger>
                     <DropdownContent
@@ -287,12 +287,12 @@ export default function InputGroupPage() {
                 mergedAddon
                 label="Password"
                 placeholder="Password"
-                type={isTypePassword ? "password" : "text"}
+                type={isTypePassword ? 'password' : 'text'}
                 leftAddon={<Icon name="lock-fill" size={20} />}
                 rightAddon={
                   <button onClick={() => setIsTypePassword(!isTypePassword)}>
                     <Icon
-                      name={isTypePassword ? "eye" : "eye-open"}
+                      name={isTypePassword ? 'eye' : 'eye-open'}
                       size={20}
                     />
                   </button>
@@ -309,8 +309,8 @@ export default function InputGroupPage() {
                   <Dropdown>
                     <DropdownTrigger>
                       <FlagButton
-                        flag={selectedCountry?.flag || afghanistan}
-                        phone={selectedCountry?.phone || "+93"}
+                        flag={selectedCountry?.flag ?? afghanistan}
+                        phone={selectedCountry?.phone ?? '+93'}
                       />
                     </DropdownTrigger>
                     <DropdownContent
@@ -346,17 +346,17 @@ export default function InputGroupPage() {
             <div className="flex flex-col gap-6">
               <Input
                 placeholder="Input Small"
-                size={"sm"}
+                size={'sm'}
                 leftAddon={<Icon name="user" size={18} />}
               />
               <Input
                 placeholder="Input Medium"
-                size={"md"}
+                size={'md'}
                 leftAddon={<Icon name="user" size={18} />}
               />
               <Input
                 placeholder="Input Large"
-                size={"lg"}
+                size={'lg'}
                 leftAddon={<Icon name="user" size={18} />}
               />
             </div>
@@ -366,19 +366,19 @@ export default function InputGroupPage() {
               <Input
                 mergedAddon
                 placeholder="Input Small"
-                size={"sm"}
+                size={'sm'}
                 leftAddon={<Icon name="user" size={18} />}
               />
               <Input
                 mergedAddon
                 placeholder="Input Medium"
-                size={"md"}
+                size={'md'}
                 leftAddon={<Icon name="user" size={18} />}
               />
               <Input
                 mergedAddon
                 placeholder="Input Large"
-                size={"lg"}
+                size={'lg'}
                 leftAddon={<Icon name="user" size={18} />}
               />
             </div>

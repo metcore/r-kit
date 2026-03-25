@@ -1,9 +1,9 @@
-import * as React from "react";
-import type { BaseIconProps } from "../type";
+import * as React from 'react';
+import type { BaseIconProps } from '../type';
 
 const LayoutWeb: React.FC<BaseIconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => {
   return (

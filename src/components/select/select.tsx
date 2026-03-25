@@ -4,20 +4,20 @@ import React, {
   useEffect,
   type KeyboardEvent,
   type MouseEvent as RMouseEvent,
-} from "react";
-import type { SelectOption, SelectProps } from "./type";
-import { Icon } from "../icons";
-import { cn, fieldHasError } from "../../lib/utils";
-import { FormField } from "../form";
-import { RoundedSpinner } from "../loading";
-import clsx from "clsx";
+} from 'react';
+import type { SelectOption, SelectProps } from './type';
+import { Icon } from '../icons';
+import { cn, fieldHasError } from '../../lib/utils';
+import { FormField } from '../form';
+import { RoundedSpinner } from '../loading';
+import clsx from 'clsx';
 
 export const Select: React.FC<SelectProps> = ({
   options = [],
   value = null,
   onChange,
   isMulti = false,
-  placeholder = "Select...",
+  placeholder = 'Select...',
   isSearchable = true,
   isClearable = true,
   isDisabled = false,
@@ -33,7 +33,7 @@ export const Select: React.FC<SelectProps> = ({
   treshold = 0,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export const Select: React.FC<SelectProps> = ({
 
   const handleScroll = () => {
     const el = listContainerRef.current;
-    if (!el || isLoadingMore) return;
+    if (!el || Boolean(isLoadingMore)) return;
 
     const isAtBottom =
       el.scrollTop + el.clientHeight >= el.scrollHeight - treshold;
@@ -53,14 +53,15 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const filteredOptions = React.useMemo(() => {
-    return options.filter((option) =>
-      option.label.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredOptions: SelectOption[] = React.useMemo(() => {
+    return options.filter(
+      (option) =>
+        option.label.toLowerCase().includes(searchTerm.toLowerCase()) === true
     );
   }, [options, searchTerm]);
 
   const asArray = (
-    val: SelectOption | SelectOption[] | null,
+    val: SelectOption | SelectOption[] | null
   ): SelectOption[] => (Array.isArray(val) ? val : val ? [val] : []);
 
   const isSelected = (option: SelectOption): boolean => {
@@ -89,12 +90,12 @@ export const Select: React.FC<SelectProps> = ({
 
     onChange(option);
     setIsOpen(false);
-    setSearchTerm("");
+    setSearchTerm('');
   };
 
   const handleRemove = (
     option: SelectOption,
-    e: RMouseEvent<HTMLButtonElement>,
+    e: RMouseEvent<HTMLButtonElement>
   ) => {
     e.stopPropagation();
 
@@ -113,7 +114,7 @@ export const Select: React.FC<SelectProps> = ({
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (!isOpen) {
-      if (["Enter", " ", "ArrowDown"].includes(e.key)) {
+      if (['Enter', ' ', 'ArrowDown'].includes(e.key)) {
         e.preventDefault();
         setIsOpen(true);
       }
@@ -121,24 +122,25 @@ export const Select: React.FC<SelectProps> = ({
     }
 
     switch (e.key) {
-      case "ArrowDown":
+      case 'ArrowDown':
         e.preventDefault();
         setHighlightedIndex((p) =>
-          p < filteredOptions.length - 1 ? p + 1 : 0,
+          p < filteredOptions.length - 1 ? p + 1 : 0
         );
         break;
 
-      case "ArrowUp":
+      case 'ArrowUp':
         e.preventDefault();
         setHighlightedIndex((p) =>
-          p > 0 ? p - 1 : filteredOptions.length - 1,
+          p > 0 ? p - 1 : filteredOptions.length - 1
         );
         break;
 
-      case "Enter":
+      case 'Enter':
         e.preventDefault();
         try {
           const opt = filteredOptions[highlightedIndex];
+
           if (opt) handleSelect(opt);
         } catch (error) {
           console.error(error);
@@ -146,9 +148,9 @@ export const Select: React.FC<SelectProps> = ({
 
         break;
 
-      case "Escape":
+      case 'Escape':
         setIsOpen(false);
-        setSearchTerm("");
+        setSearchTerm('');
         break;
 
       default:
@@ -165,8 +167,8 @@ export const Select: React.FC<SelectProps> = ({
     const el = optionRefs.current[highlightedIndex];
     if (el) {
       el.scrollIntoView({
-        block: "nearest",
-        behavior: "smooth",
+        block: 'nearest',
+        behavior: 'smooth',
       });
     }
   }, [highlightedIndex]);
@@ -182,12 +184,12 @@ export const Select: React.FC<SelectProps> = ({
         !containerRef.current.contains(target)
       ) {
         setIsOpen(false);
-        setSearchTerm("");
+        setSearchTerm('');
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -197,7 +199,11 @@ export const Select: React.FC<SelectProps> = ({
   }, [isOpen, isSearchable]);
 
   const getDisplayValue = () => {
-    if (!value || (isMulti && asArray(value).length === 0)) {
+    if (
+      value !== null ||
+      value !== undefined ||
+      (isMulti && asArray(value).length === 0)
+    ) {
       return <span className="text-gray-500">{placeholder}</span>;
     }
 
@@ -209,7 +215,7 @@ export const Select: React.FC<SelectProps> = ({
               key={item.value}
               className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
             >
-              {renderValue ? renderValue(item) : item.label}
+              {renderValue !== undefined ? renderValue?.(item) : item.label}
               <button
                 onClick={(e) => handleRemove(item, e)}
                 className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
@@ -222,8 +228,8 @@ export const Select: React.FC<SelectProps> = ({
       );
     }
 
-    return renderValue
-      ? renderValue(value as SelectOption)
+    return renderValue !== undefined
+      ? renderValue?.(value as SelectOption)
       : (value as SelectOption).label;
   };
 
@@ -242,7 +248,7 @@ export const Select: React.FC<SelectProps> = ({
     >
       <div
         ref={containerRef}
-        className={cn("relative w-full focus-within:outline-none", className)}
+        className={cn('relative w-full focus-within:outline-none', className)}
         onKeyDown={handleKeyDown}
         tabIndex={-1}
       >
@@ -250,10 +256,10 @@ export const Select: React.FC<SelectProps> = ({
         <div
           aria-selected={isOpen}
           className={cn(
-            "focus:ring-primary-300 flex min-h-10 cursor-pointer items-center justify-between rounded-lg border bg-white px-3 py-2 text-gray-900 transition-all focus-within:outline-none focus:ring",
-            isDisabled && "cursor-not-allowed bg-gray-100",
-            isOpen ? "border-primary-300 ring-0" : "border-gray-200",
-            hasError && "border-danger-500",
+            'focus:ring-primary-300 flex min-h-10 cursor-pointer items-center justify-between rounded-lg border bg-white px-3 py-2 text-gray-900 transition-all focus-within:outline-none focus:ring',
+            isDisabled && 'cursor-not-allowed bg-gray-100',
+            isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
+            hasError && 'border-danger-500'
           )}
           onClick={() => !isDisabled && setIsOpen(!isOpen)}
           tabIndex={isDisabled ? -1 : 0}
@@ -275,7 +281,7 @@ export const Select: React.FC<SelectProps> = ({
 
             <Icon
               className="text-gray-700"
-              name={isOpen ? "angle-up-small" : "angle-down-small"}
+              name={isOpen ? 'angle-up-small' : 'angle-down-small'}
               size={20}
             />
           </div>
@@ -285,8 +291,8 @@ export const Select: React.FC<SelectProps> = ({
         {isOpen && (
           <div
             className={cn(
-              "absolute z-50 mt-1 max-h-80 w-full space-y-2 overflow-hidden rounded-lg border bg-white p-2",
-              "border-gray-200",
+              'absolute z-50 mt-1 max-h-80 w-full space-y-2 overflow-hidden rounded-lg border bg-white p-2',
+              'border-gray-200'
             )}
           >
             {isSearchable && (
@@ -308,7 +314,7 @@ export const Select: React.FC<SelectProps> = ({
             <div
               className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none"
               ref={listContainerRef}
-              onScroll={onLoadMore ? handleScroll : undefined}
+              onScroll={onLoadMore !== undefined ? handleScroll : undefined}
             >
               {filteredOptions.length === 0 ? (
                 <div className="px-3 py-8 text-center text-sm text-gray-500">
@@ -328,18 +334,18 @@ export const Select: React.FC<SelectProps> = ({
                       onMouseEnter={() => setHighlightedIndex(index)}
                       onClick={() => handleSelect(option)}
                       className={cn(
-                        "flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none",
-                        highlighted && "bg-primary-100",
+                        'flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none',
+                        highlighted && 'bg-primary-100',
                         selected
-                          ? "bg-primary-50 border-primary-300"
-                          : "hover:bg-gray-50",
+                          ? 'bg-primary-50 border-primary-300'
+                          : 'hover:bg-gray-50'
                       )}
                     >
                       <div className="flex-1">
-                        {renderOption ? (
-                          renderOption(option, { selected })
+                        {renderOption !== undefined ? (
+                          renderOption?.(option, { selected })
                         ) : (
-                          <div className={cn(selected && "font-medium")}>
+                          <div className={cn(selected && 'font-medium')}>
                             {option.label}
                           </div>
                         )}
@@ -349,13 +355,13 @@ export const Select: React.FC<SelectProps> = ({
                 })
               )}
 
-              {onLoadMore && (
+              {onLoadMore !== undefined && (
                 <div
                   className={clsx(
-                    "flex h-5 items-center justify-center py-2 duration-300",
+                    'flex h-5 items-center justify-center py-2 duration-300'
                   )}
                 >
-                  {isLoadingMore && (
+                  {isLoadingMore === true && (
                     <RoundedSpinner size={20} color="primary" />
                   )}
                 </div>

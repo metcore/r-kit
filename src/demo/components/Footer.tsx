@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/button";
-import { Card, CardBody } from "../../components/card";
-import { Icon } from "../../components/icons";
-import { Text } from "../../components/text";
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/button';
+import { Card, CardBody } from '../../components/card';
+import { Icon } from '../../components/icons';
+import { Text } from '../../components/text';
 
 interface Props {
   backTo?: string;
@@ -26,13 +26,13 @@ export default function Footer({
         <div className="flex items-center gap-2">
           <Button
             color="primary"
-            size={"icon"}
-            onClick={() => navigate(backTo ?? "/")}
-            disabled={!backTo}
+            size={'icon'}
+            onClick={() => navigate(backTo ?? '/')}
+            disabled={backTo === undefined}
           >
             <Icon name="angle-left-small" />
           </Button>
-          {!!backToTitle && (
+          {backToTitle !== undefined && (
             <Text
               variant="t2"
               weight="medium"
@@ -47,7 +47,7 @@ export default function Footer({
           className="absolute left-1/2 -translate-x-1/2 text-gray-600"
         />
         <div className="flex items-center gap-2">
-          {!!nextToTitle && (
+          {nextToTitle !== undefined && (
             <Text
               variant="t2"
               weight="medium"
@@ -57,9 +57,9 @@ export default function Footer({
           )}
           <Button
             color="primary"
-            size={"icon"}
-            onClick={() => navigate(nextTo ?? "/")}
-            disabled={!nextTo}
+            size={'icon'}
+            onClick={() => navigate(nextTo ?? '/')}
+            disabled={nextTo === undefined}
           >
             <Icon name="angle-right-small" />
           </Button>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -9,13 +9,13 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-} from "../../../clients";
-import { Badge } from "../../../components/badge";
-import { Text } from "../../../components/text";
-import illust from "../../assets/images/forms.png";
-import HeroSection from "../../components/HeroSection";
-import MainSection from "../../components/MainSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
+} from '../../../clients';
+import { Badge } from '../../../components/badge';
+import { Text } from '../../../components/text';
+import illust from '../../assets/images/forms.png';
+import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 export default function TablePage() {
   const [page, setPage] = useState(1);
@@ -25,46 +25,46 @@ export default function TablePage() {
 
   const sample_data = [
     {
-      name: "Cody Fisher",
-      username: "codex",
-      status: "active",
-      phone: "62xxxx",
-      divisi: "SuperAdmin",
+      name: 'Cody Fisher',
+      username: 'codex',
+      status: 'active',
+      phone: '62xxxx',
+      divisi: 'SuperAdmin',
     },
     {
-      name: "Esther Howard",
-      username: "estherh",
-      status: "inactive",
-      phone: "6281234567890",
-      divisi: "Finance",
+      name: 'Esther Howard',
+      username: 'estherh',
+      status: 'inactive',
+      phone: '6281234567890',
+      divisi: 'Finance',
     },
     {
-      name: "Wade Warren",
-      username: "wadew",
-      status: "active",
-      phone: "6289876543210",
-      divisi: "Marketing",
+      name: 'Wade Warren',
+      username: 'wadew',
+      status: 'active',
+      phone: '6289876543210',
+      divisi: 'Marketing',
     },
     {
-      name: "Jenny Wilson",
-      username: "jennyw",
-      status: "pending",
-      phone: "6281122334455",
-      divisi: "HR",
+      name: 'Jenny Wilson',
+      username: 'jennyw',
+      status: 'pending',
+      phone: '6281122334455',
+      divisi: 'HR',
     },
     {
-      name: "Robert Fox",
-      username: "robfox",
-      status: "active",
-      phone: "6285566778899",
-      divisi: "IT",
+      name: 'Robert Fox',
+      username: 'robfox',
+      status: 'active',
+      phone: '6285566778899',
+      divisi: 'IT',
     },
   ];
 
   const status_map: any = {
-    active: "success",
-    pending: "warning",
-    inactive: "danger",
+    active: 'success',
+    pending: 'warning',
+    inactive: 'danger',
   };
 
   const getDummyData = async (pageParam = page, perPageParam = perPage) => {
@@ -72,7 +72,7 @@ export default function TablePage() {
 
     try {
       const res = await fetch(
-        `https://dummyjson.com/users?limit=${perPageParam}&skip=${skip}`,
+        `https://dummyjson.com/users?limit=${perPageParam}&skip=${skip}`
       );
 
       const json = await res.json();
@@ -93,7 +93,7 @@ export default function TablePage() {
   };
 
   useEffect(() => {
-    getDummyData();
+    void getDummyData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, perPage]);
 
@@ -111,17 +111,20 @@ export default function TablePage() {
           <Table variant="row-bordered" className="w-full table-auto">
             <TableHead>
               <TableRow>
-                <TableCellHead value={"No"} />
-                <TableCellHead value={"Nama"} />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow isLast={index === sample_data.length - index}>
+                <TableRow
+                  key={index}
+                  isLast={index === sample_data.length - index}
+                >
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
@@ -149,17 +152,20 @@ export default function TablePage() {
           <Table variant="headed" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
-                <TableCellHead value={"No"} />
-                <TableCellHead value={"Nama"} />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow isLast={index === sample_data.length - index}>
+                <TableRow
+                  key={index}
+                  isLast={index === sample_data.length - index}
+                >
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell textClassName="text-gray-800">
                     <a href="#">
@@ -191,17 +197,17 @@ export default function TablePage() {
           <Table variant="bordered" className="w-full table-auto">
             <TableHead>
               <TableRow>
-                <TableCellHead value={"No"} />
-                <TableCellHead value={"Nama"} />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
@@ -229,17 +235,17 @@ export default function TablePage() {
           <Table variant="stripped" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
-                <TableCellHead value={"No"} />
-                <TableCellHead value={"Nama"} />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
@@ -267,17 +273,17 @@ export default function TablePage() {
           <Table variant="hovered" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
-                <TableCellHead value={"No"} />
-                <TableCellHead value={"Nama"} />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
@@ -305,15 +311,15 @@ export default function TablePage() {
           <Table variant="wrapped-row-bordered" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
-                <TableCellHead value={"No"} />
+                <TableCellHead value={'No'} />
                 <TableCellHead
-                  value={"Nama"}
-                  onClick={() => console.log("ok")}
+                  value={'Nama'}
+                  onClick={() => console.log('ok')}
                 />
-                <TableCellHead value={"Username"} />
-                <TableCellHead value={"Status"} />
-                <TableCellHead value={"Phone"} />
-                <TableCellHead value={"Divisi"} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>

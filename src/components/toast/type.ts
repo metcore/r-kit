@@ -1,15 +1,15 @@
-import type { IconNameProps } from "../icons";
+import type { IconNameProps } from '../icons';
 
 export type ColorVariant =
-  | "primary"
-  | "info"
-  | "success"
-  | "warning"
-  | "orange"
-  | "danger"
-  | "purple"
-  | "gray"
-  | "secondary";
+  | 'primary'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'orange'
+  | 'danger'
+  | 'purple'
+  | 'gray'
+  | 'secondary';
 
 export interface ToastProps {
   color?: ColorVariant;
@@ -20,6 +20,6 @@ export interface ToastProps {
   onClickAction?: () => void;
   actionLabel?: string;
   iconSize?: number;
-  variant?: "outline";
+  variant?: 'outline';
   duration?: number;
 }

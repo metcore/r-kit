@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/tabs";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Hero } from "../../components/hero";
-import { Card, CardBody, CardHeader } from "../../components/card";
-import { Input } from "../../components/input";
-import { Checkbox, CheckboxGroup } from "../../components/checkbox/checkbox";
-import { Icon } from "../../components/icons";
+} from '../../components/tabs';
+import DashboardLayout from '../layouts/DashboardLayout';
+import { Hero } from '../../components/hero';
+import { Card, CardBody, CardHeader } from '../../components/card';
+import { Input } from '../../components/input';
+import { Checkbox, CheckboxGroup } from '../../components/checkbox/checkbox';
+import { Icon } from '../../components/icons';
 
 const TabsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("account");
+  const [activeTab, setActiveTab] = useState('account');
 
   return (
     <DashboardLayout>
@@ -44,7 +44,7 @@ const TabsPage: React.FC = () => {
           </TabsList>
 
           <TabsContent value="account">
-            <Card size={"lg"}>
+            <Card size={'lg'}>
               <CardHeader divider>Account Information</CardHeader>
               <CardBody className="space-y-4">
                 <p className="text-gray-700">
@@ -65,7 +65,7 @@ const TabsPage: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="password">
-            <Card size={"lg"}>
+            <Card size={'lg'}>
               <CardHeader divider>Password Settings</CardHeader>
               <CardBody className="space-y-4">
                 <p className="text-gray-700">
@@ -90,7 +90,7 @@ const TabsPage: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="settings">
-            <Card size={"lg"}>
+            <Card size={'lg'}>
               <CardHeader divider>General Settings</CardHeader>
               <CardBody className="space-y-4">
                 <p className="text-gray-700">
@@ -211,7 +211,7 @@ const TabsPage: React.FC = () => {
           Controlled Tabs
         </h2>
         <p className="mb-4 text-sm text-gray-700">
-          Active tab:{" "}
+          Active tab:{' '}
           <span className="font-mono font-semibold text-blue-600">
             {activeTab}
           </span>
@@ -243,19 +243,19 @@ const TabsPage: React.FC = () => {
 
         <div className="mt-4 flex gap-2">
           <button
-            onClick={() => setActiveTab("account")}
+            onClick={() => setActiveTab('account')}
             className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
           >
             External: Account
           </button>
           <button
-            onClick={() => setActiveTab("billing")}
+            onClick={() => setActiveTab('billing')}
             className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
           >
             External: Billing
           </button>
           <button
-            onClick={() => setActiveTab("notifications")}
+            onClick={() => setActiveTab('notifications')}
             className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
           >
             External: Notifications

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { cn } from "../../lib/utils";
-import { FormLabel } from "../form";
-import { Icon } from "../icons";
-import { Input } from "../input/input";
-import { Text } from "../text";
-import { getIconName } from "./helpers";
-import type { PreviewItemProps } from "./type";
-import { ModalPreviewAttachment } from "../modal/modal-preview-attachment";
+import { useState } from 'react';
+import { cn } from '../../lib/utils';
+import { FormLabel } from '../form';
+import { Icon } from '../icons';
+import { Input } from '../input/input';
+import { Text } from '../text';
+import { getIconName } from './helpers';
+import type { PreviewItemProps } from './type';
+import { ModalPreviewAttachment } from '../modal/modal-preview-attachment';
 
 // man... i love using display flex :)
 
@@ -15,9 +15,9 @@ const PreviewItem = ({
   onRemove,
   onReplace,
   disabled = false,
-  labelCustomName = "Attachment File",
+  labelCustomName = 'Attachment File',
   onCustomNameChange,
-  customNamePlaceholder = "Name Attachment",
+  customNamePlaceholder = 'Name Attachment',
   customName,
   audioPlayerProps,
   pdfViewerProps,
@@ -28,10 +28,10 @@ const PreviewItem = ({
     isVisible: false,
   });
 
-  const isImage = data?.file?.type.startsWith("image/");
-  const isMp3 = data?.file?.type.startsWith("audio/");
-  const isVideo = data?.file?.type.startsWith("video/");
-  const isPdf = data?.file?.type === "application/pdf";
+  const isImage = data?.file?.type.startsWith('image/');
+  const isMp3 = data?.file?.type.startsWith('audio/');
+  const isVideo = data?.file?.type.startsWith('video/');
+  const isPdf = data?.file?.type === 'application/pdf';
 
   const isNotViewable = !isImage && !isMp3 && !isVideo && !isPdf;
 
@@ -69,14 +69,14 @@ const PreviewItem = ({
             onChange={onCustomNameChange}
             placeholder={customNamePlaceholder}
             value={customName}
-            className={"truncate"}
+            className={'truncate'}
           />
         </div>
       )}
 
       <div
         className={cn(
-          "flex w-full items-center justify-between rounded-lg border border-gray-200 p-2",
+          'flex w-full items-center justify-between rounded-lg border border-gray-200 p-2'
         )}
       >
         <div className="flex flex-1 items-center gap-2 overflow-hidden">
@@ -85,14 +85,14 @@ const PreviewItem = ({
             onClick={handleOpenPreview}
             disabled={isNotViewable}
           >
-            {data.file.type.startsWith("image/") ? (
+            {data.file.type.startsWith('image/') ? (
               <img
                 src={data.preview}
                 alt={data.file.name}
                 className="size-11 rounded-md object-cover"
               />
             ) : (
-              <Icon name={iconName ?? "doc"} className="size-11" />
+              <Icon name={iconName ?? 'doc'} className="size-11" />
             )}
           </button>
 
@@ -109,23 +109,26 @@ const PreviewItem = ({
                 value={`${(data.file.size / 1024 / 1024).toFixed(2)} MB`}
                 className="truncate text-gray-700!"
               />
-              {(!!data?.hint || !!data?.errorMessage) && (
-                <Text value={"•"} className="truncate text-gray-700!" />
+              {(Boolean(data?.hint) || Boolean(data?.errorMessage)) && (
+                <Text value={'•'} className="truncate text-gray-700!" />
               )}
-              {data?.hint && (
-                <Text value={data?.hint} className="truncate text-gray-700!" />
+              {Boolean(data?.hint) && (
+                <Text
+                  value={data?.hint ?? ''}
+                  className="truncate text-gray-700!"
+                />
               )}
-              {!!data?.hint && !!data?.errorMessage && (
-                <Text value={"•"} className="truncate text-gray-700!" />
+              {Boolean(data?.hint) && Boolean(data?.errorMessage) && (
+                <Text value={'•'} className="truncate text-gray-700!" />
               )}
-              {data?.errorMessage && (
-                <Text value={data?.errorMessage} color="danger" />
+              {Boolean(data?.errorMessage) && (
+                <Text value={data?.errorMessage ?? ''} color="danger" />
               )}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {!!data?.errorMessage && (
+          {Boolean(data?.errorMessage) && (
             <>
               {/* replace button */}
               <button

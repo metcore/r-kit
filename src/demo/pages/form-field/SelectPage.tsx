@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Card, CardBody } from "../../../components/card";
-import { Hero } from "../../../components/hero";
-import { Select } from "../../../components/select";
-import type { SelectOption } from "../../../components/select/type";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import useGetUsers from "../../hooks/useGetUsers";
+import { useState } from 'react';
+import { Card, CardBody } from '../../../components/card';
+import { Hero } from '../../../components/hero';
+import { Select } from '../../../components/select';
+import type { SelectOption } from '../../../components/select/type';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import useGetUsers from '../../hooks/useGetUsers';
 
 // ─────────────────────────────────────────
 // CUSTOM OPTION RENDERERS
@@ -17,7 +17,7 @@ interface UserOption extends SelectOption {
 
 function UserOptionRenderer(
   option: SelectOption,
-  { selected }: { selected: boolean },
+  { selected }: { selected: boolean }
 ) {
   const u = option as UserOption;
   return (
@@ -25,14 +25,14 @@ function UserOptionRenderer(
       {/* Avatar initials */}
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-600">
         {u.label
-          .split(" ")
+          .split(' ')
           .map((n) => n[0])
-          .join("")
+          .join('')
           .slice(0, 2)}
       </div>
       <div className="min-w-0">
         <p
-          className={`truncate text-sm font-medium ${selected ? "text-blue-600" : "text-gray-900"}`}
+          className={`truncate text-sm font-medium ${selected ? 'text-blue-600' : 'text-gray-900'}`}
         >
           {u.label}
         </p>
@@ -51,9 +51,9 @@ function UserValueRenderer(option: SelectOption) {
     <span className="flex items-center gap-2">
       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-600">
         {u.label
-          .split(" ")
+          .split(' ')
           .map((n) => n[0])
-          .join("")
+          .join('')
           .slice(0, 2)}
       </span>
       <span>{u.label}</span>
@@ -77,7 +77,8 @@ function StatusBadge({
   count: number;
 }) {
   if (isLoading) return <p className="mt-2 text-xs text-gray-400">Loading…</p>;
-  if (error) return <p className="mt-2 text-xs text-red-500">{error}</p>;
+  if (error !== null || error !== undefined)
+    return <p className="mt-2 text-xs text-red-500">{error}</p>;
   if (isLoadingMore)
     return <p className="mt-2 text-xs text-gray-400">Loading more…</p>;
   return <p className="mt-2 text-xs text-gray-500">{count} options loaded</p>;
@@ -100,7 +101,7 @@ function SelectPage() {
   const selectedUserId = (selectedUser as UserOption | null)?.value ?? null;
   const posts = usePaginatedFetch(
     (page) => fetchPosts(page, selectedUserId as string),
-    [selectedUserId],
+    [selectedUserId]
   );
 
   return (
@@ -156,7 +157,7 @@ function SelectPage() {
             <StatusBadge {...usersMulti} count={usersMulti.data.length} />
             {selectedUsers.length > 0 && (
               <p className="text-xs text-gray-500">
-                Selected: {selectedUsers.map((u) => u.label).join(", ")}
+                Selected: {selectedUsers.map((u) => u.label).join(', ')}
               </p>
             )}
           </section>
@@ -178,7 +179,7 @@ function SelectPage() {
               placeholder={
                 selectedUser
                   ? `Pilih post dari ${selectedUser.label}…`
-                  : "Pilih user dulu…"
+                  : 'Pilih user dulu…'
               }
               isDisabled={!selectedUser}
               onLoadMore={posts.hasMore ? posts.loadMore : undefined}

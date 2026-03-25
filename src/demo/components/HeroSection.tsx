@@ -1,5 +1,5 @@
-import { Hero } from "../../components/hero";
-import { Text } from "../../components/text";
+import { Hero } from '../../components/hero';
+import { Text } from '../../components/text';
 
 interface Props {
   title: string;
@@ -18,13 +18,13 @@ export default function HeroSection({
     <Hero className="relative mb-4 flex gap-5 overflow-hidden">
       <div className="flex flex-1 flex-col gap-2">
         <Text
-          as={"h5"}
+          as={'h5'}
           value={title}
           weight="medium"
           className="text-gray-800"
         />
         <Text
-          as={"h1"}
+          as={'h1'}
           variant="h1"
           weight="bold"
           className="text-gray-900"

@@ -1,8 +1,8 @@
-import HeroSection from "../../components/HeroSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import illust from "../../assets/images/forms.png";
-import { DatePicker } from "../../../components/date-picker";
-import { useState } from "react";
+import HeroSection from '../../components/HeroSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import illust from '../../assets/images/forms.png';
+import { DatePicker } from '../../../components/date-picker';
+import { useState } from 'react';
 
 export default function DatePickerPage() {
   const [range, setRange] = useState<{

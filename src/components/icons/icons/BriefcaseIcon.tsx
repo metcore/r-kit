@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import type { IconProps } from "../type";
+import type { IconProps } from '../type';
 
 const BriefcaseIcon: React.FC<IconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => (
   <svg

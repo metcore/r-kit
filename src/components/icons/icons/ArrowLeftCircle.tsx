@@ -1,9 +1,9 @@
-import React from "react";
-import type { BaseIconProps } from "../type";
+import React from 'react';
+import type { BaseIconProps } from '../type';
 
 export const ArrowLeftCircle: React.FC<BaseIconProps> = ({
   size = 20,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => {
   return (

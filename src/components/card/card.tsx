@@ -1,22 +1,21 @@
-import * as React from "react";
-import { cn } from "../../lib/utils";
+import * as React from 'react';
+import { cn } from '../../lib/utils';
 
-import { cardVariants, dividerColors, paddingBySize } from "./card-variants";
-import type { CardVariantProps } from "./card-variants";
+import { cardVariants, dividerColors, paddingBySize } from './card-variants';
+import type { CardVariantProps } from './card-variants';
 
 interface CardProps
-  extends React.HtmlHTMLAttributes<HTMLDivElement>,
-    CardVariantProps {
+  extends React.HtmlHTMLAttributes<HTMLDivElement>, CardVariantProps {
   color?:
-    | "primary"
-    | "secondary"
-    | "success"
-    | "danger"
-    | "warning"
-    | "info"
-    | "orange"
-    | "purple"
-    | "gray";
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'danger'
+    | 'warning'
+    | 'info'
+    | 'orange'
+    | 'purple'
+    | 'gray';
 }
 
 export const Card = ({
@@ -47,16 +46,16 @@ export const Card = ({
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   divider?: boolean;
   noPadding?: boolean;
-  size?: "sm" | "md" | "lg";
-  variant?: "outline" | "filled";
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'outline' | 'filled';
 }
 
 export const CardHeader = ({
   divider = false,
   noPadding = false,
-  size = "md",
-  color = "secondary",
-  variant = "outline",
+  size = 'md',
+  color = 'secondary',
+  variant = 'outline',
   className,
   children,
   ...props
@@ -65,10 +64,10 @@ export const CardHeader = ({
     <div
       className={cn(
         !noPadding && paddingBySize[size],
-        divider && "border-b",
-        divider && variant === "outline"
+        divider && 'border-b',
+        divider && variant === 'outline'
           ? dividerColors[color]
-          : "border-gray-200",
+          : 'border-gray-200',
         className
       )}
       {...props}
@@ -79,11 +78,11 @@ export const CardHeader = ({
 };
 
 interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const CardBody = ({
-  size = "md",
+  size = 'md',
   className,
   children,
   ...props
@@ -96,16 +95,16 @@ export const CardBody = ({
 };
 
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   divider?: boolean;
-  variant?: "outline" | "filled";
+  variant?: 'outline' | 'filled';
 }
 
 export const CardFooter = ({
   divider = false,
-  size = "md",
-  color = "secondary",
-  variant = "outline",
+  size = 'md',
+  color = 'secondary',
+  variant = 'outline',
   className,
   children,
   ...props
@@ -114,10 +113,10 @@ export const CardFooter = ({
     <div
       className={cn(
         paddingBySize[size],
-        divider && "border-t",
-        divider && variant === "outline"
+        divider && 'border-t',
+        divider && variant === 'outline'
           ? dividerColors[color]
-          : "border-gray-200",
+          : 'border-gray-200',
         className
       )}
       {...props}

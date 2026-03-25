@@ -1,2 +1,2 @@
-export * from "./kbd";
-export * from "./kbd-variants";
+export * from './kbd';
+export * from './kbd-variants';

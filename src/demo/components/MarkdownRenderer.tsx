@@ -1,8 +1,8 @@
 // components/MarkdownRenderer.tsx
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { type ComponentPropsWithoutRef } from "react";
-import { CodeBlock } from "../../components/code-block";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { type ComponentPropsWithoutRef } from 'react';
+import { CodeBlock } from '../../components/code-block';
 
 interface MarkdownRendererProps {
   content: string;
@@ -22,15 +22,15 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
             className,
             children,
             ...props
-          }: ComponentPropsWithoutRef<"code"> & { inline?: boolean }) {
-            const match = /language-(\w+)/.exec(className || "");
-            const lang = match ? match[1] : "tsx";
-            const codeString = String(children).replace(/\n$/, "");
+          }: ComponentPropsWithoutRef<'code'> & { inline?: boolean }) {
+            const match = /language-(\w+)/.exec(className ?? '');
+            const lang = match ? match[1] : 'tsx';
+            const codeString = String(children).replace(/\n$/, '');
 
             // Kalau bukan inline code, pakai CodeBlock component
-            if (!inline && match) {
+            if ((inline === false || inline === undefined) && match) {
               return (
-                <CodeBlock code={codeString} lang={lang as "tsx" | "md"} />
+                <CodeBlock code={codeString} lang={lang as 'tsx' | 'md'} />
               );
             }
 
@@ -54,8 +54,16 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <a
               href={href}
               className="text-blue-600 hover:underline"
-              target={href?.startsWith("http") ? "_blank" : undefined}
-              rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+              target={
+                href !== undefined && href?.startsWith('http')
+                  ? '_blank'
+                  : undefined
+              }
+              rel={
+                href !== undefined && href?.startsWith('http')
+                  ? 'noopener noreferrer'
+                  : undefined
+              }
             >
               {children}
             </a>

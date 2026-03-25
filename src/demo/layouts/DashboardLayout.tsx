@@ -1,19 +1,19 @@
 // src/docs/layouts/DashboardLayout.tsx
-import React, { type ReactNode } from "react";
-import AppSidebar from "../components/AppSidebar";
+import React, { type ReactNode } from 'react';
+import AppSidebar from '../components/AppSidebar';
 import {
   SidebarProvider,
   SidebarTrigger,
-} from "../../components/sidebar/sidebar";
-import { Input } from "../../components/input";
-import { Icon } from "../../components/icons";
-import { Button } from "../../components/button";
-import { Avatar } from "../../components/avatar";
-import { Text } from "../../components/text";
-import { Indicator } from "../../components/indicator";
-import { useIsMobile } from "../../hooks/use-mobile";
-import { BrandLogo } from "../../components/brand-logo";
-import brandLogo from "../assets/images/brand-logo.png";
+} from '../../components/sidebar/sidebar';
+import { Input } from '../../components/input';
+import { Icon } from '../../components/icons';
+import { Button } from '../../components/button';
+import { Avatar } from '../../components/avatar';
+import { Text } from '../../components/text';
+import { Indicator } from '../../components/indicator';
+import { useIsMobile } from '../../hooks/use-mobile';
+import { BrandLogo } from '../../components/brand-logo';
+import brandLogo from '../assets/images/brand-logo.png';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -23,10 +23,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const isMobile = useIsMobile();
 
   const isMac =
-    typeof navigator !== "undefined" &&
-    navigator.platform.toUpperCase().includes("MAC");
+    typeof navigator !== 'undefined' &&
+    navigator.platform.toUpperCase().includes('MAC');
 
-  const shortcut = isMac ? "⌘ K" : "Ctrl + K";
+  const shortcut = isMac ? '⌘ K' : 'Ctrl + K';
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -51,8 +51,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <div className="flex flex-row gap-3">
             {/* notification button */}
             <Button
-              variant={isMobile ? "tertiary" : "outline"}
-              size={"icon"}
+              variant={isMobile ? 'tertiary' : 'outline'}
+              size={'icon'}
               color="gray"
               className="px-2"
             >

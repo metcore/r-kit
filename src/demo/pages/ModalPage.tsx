@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Modal, ModalBody, ModalFooter } from "../../components/modal";
-import { Button } from "../../components/button";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Hero } from "../../components/hero";
-import { Card, CardBody, CardHeader } from "../../components/card";
-import { Input } from "../../components/input";
+import { useState } from 'react';
+import { Modal, ModalBody, ModalFooter } from '../../components/modal';
+import { Button } from '../../components/button';
+import DashboardLayout from '../layouts/DashboardLayout';
+import { Hero } from '../../components/hero';
+import { Card, CardBody, CardHeader } from '../../components/card';
+import { Input } from '../../components/input';
 
 export default function ModalPage() {
   const [modalCenter, setModalCenter] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export default function ModalPage() {
             <Modal
               isOpen={modalTop}
               onClose={() => setModalTop(false)}
-              position={"top"}
+              position={'top'}
               title="Modal Top Title"
               description="modal top description"
             >
@@ -233,7 +233,7 @@ export default function ModalPage() {
               isOpen={modalBottom}
               onClose={() => setModalBottom(false)}
               size="md"
-              position={"bottom"}
+              position={'bottom'}
               title="Modal Bottom Title"
               description="modal bottom description"
             >

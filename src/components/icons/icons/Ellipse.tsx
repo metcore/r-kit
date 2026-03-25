@@ -1,8 +1,8 @@
-import type { BaseIconProps } from "../type";
+import type { BaseIconProps } from '../type';
 
 export const Ellipse: React.FC<BaseIconProps> = ({
   size = 18,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => (
   <svg

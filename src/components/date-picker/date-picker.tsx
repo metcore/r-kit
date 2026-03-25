@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { cn } from "../../lib/utils";
-import { Calendar, type DateRange } from "../calendar";
-import { Dropdown, DropdownContent, DropdownTrigger } from "../dropdown";
-import { Icon } from "../icons";
-import { Input } from "../input";
-import { formatDateToString, getFormatConfig, parseMonthName } from "./helpers";
-import { Button } from "../button";
-import { ChipGroup, type ChipOptionProps, type ChipValue } from "../chip";
-import type { DatePickerProps } from "./type";
-import clsx from "clsx";
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '../../lib/utils';
+import { Calendar, type DateRange } from '../calendar';
+import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
+import { Icon } from '../icons';
+import { Input } from '../input';
+import { formatDateToString, getFormatConfig, parseMonthName } from './helpers';
+import { Button } from '../button';
+import { ChipGroup, type ChipOptionProps, type ChipValue } from '../chip';
+import type { DatePickerProps } from './type';
+import clsx from 'clsx';
 
 const DatePicker = ({
-  format = "DD-MM-YYYY",
-  mode = "single",
+  format = 'DD-MM-YYYY',
+  mode = 'single',
   value: controlledValue,
   rangeValue: controlledRangeValue,
   onChange: controlledOnChange,
@@ -24,18 +24,18 @@ const DatePicker = ({
   endDateCalendarProps,
   startDateCalendarProps,
   wrapperClassName,
-  size = "md",
+  size = 'md',
   showController = true,
-  align = "start",
+  align = 'start',
   containerClassName,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    controlledValue || null,
+    controlledValue || null
   );
   const [dateRange, setDateRange] = useState<DateRange>(
-    controlledRangeValue || { start: null, end: null },
+    controlledRangeValue || { start: null, end: null }
   );
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>('');
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isCalendarShow, setIsCalendarShow] = useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = useState<ChipValue[]>([]);
@@ -43,34 +43,34 @@ const DatePicker = ({
 
   const filterCalendar: ChipOptionProps[] = [
     {
-      label: "Last Week",
+      label: 'Last Week',
       value: 0,
     },
     {
-      label: "Last 7 Days",
+      label: 'Last 7 Days',
       value: 1,
     },
     {
-      label: "Last 30 Days",
+      label: 'Last 30 Days',
       value: 2,
     },
     {
-      label: "Current Month",
+      label: 'Current Month',
       value: 3,
     },
     {
-      label: "Last Year",
+      label: 'Last Year',
       value: 4,
     },
   ];
 
   // Check if format uses month names
-  const usesMonthName = format.includes("MMM");
+  const usesMonthName = format.includes('MMM');
   const formatConfig = getFormatConfig(format);
 
   // Format date range to string
   const formatRangeToString = (range: DateRange): string => {
-    if (!range.start && !range.end) return "";
+    if (!range.start && !range.end) return '';
     if (range.start && !range.end)
       return formatDateToString(range.start, format);
     if (!range.start && range.end) return formatDateToString(range.end, format);
@@ -85,43 +85,43 @@ const DatePicker = ({
 
     try {
       switch (format) {
-        case "DD-MM-YYYY": {
-          const parts = dateString.split("-");
+        case 'DD-MM-YYYY': {
+          const parts = dateString.split('-');
           if (parts.length !== 3) return null;
           day = parseInt(parts[0], 10);
           month = parseInt(parts[1], 10);
           year = parseInt(parts[2], 10);
           break;
         }
-        case "DD/MM/YYYY": {
-          const parts = dateString.split("/");
+        case 'DD/MM/YYYY': {
+          const parts = dateString.split('/');
           if (parts.length !== 3) return null;
           day = parseInt(parts[0], 10);
           month = parseInt(parts[1], 10);
           year = parseInt(parts[2], 10);
           break;
         }
-        case "DD MMM YYYY":
-        case "DD MMMM YYYY": {
-          const parts = dateString.split(" ");
+        case 'DD MMM YYYY':
+        case 'DD MMMM YYYY': {
+          const parts = dateString.split(' ');
           if (parts.length !== 3) return null;
           day = parseInt(parts[0], 10);
           const monthNum = parseMonthName(parts[1]);
-          if (!monthNum) return null;
+          if (monthNum === null) return null;
           month = monthNum;
           year = parseInt(parts[2], 10);
           break;
         }
-        case "YYYY-MM-DD": {
-          const parts = dateString.split("-");
+        case 'YYYY-MM-DD': {
+          const parts = dateString.split('-');
           if (parts.length !== 3) return null;
           year = parseInt(parts[0], 10);
           month = parseInt(parts[1], 10);
           day = parseInt(parts[2], 10);
           break;
         }
-        case "MM/DD/YYYY": {
-          const parts = dateString.split("/");
+        case 'MM/DD/YYYY': {
+          const parts = dateString.split('/');
           if (parts.length !== 3) return null;
           month = parseInt(parts[0], 10);
           day = parseInt(parts[1], 10);
@@ -170,11 +170,11 @@ const DatePicker = ({
 
     const { separator } = formatConfig;
 
-    const separatorRegex = separator === "/" ? "\\/" : separator;
-    const regex = new RegExp(`[^\\d${separatorRegex}]`, "g");
-    let formatted = value.replace(regex, "");
+    const separatorRegex = separator === '/' ? '\\/' : separator;
+    const regex = new RegExp(`[^\\d${separatorRegex}]`, 'g');
+    let formatted = value.replace(regex, '');
 
-    if (format === "DD-MM-YYYY" || format === "DD/MM/YYYY") {
+    if (format === 'DD-MM-YYYY' || format === 'DD/MM/YYYY') {
       if (formatted.length === 2 && !formatted.includes(separator)) {
         formatted = formatted + separator;
       } else if (
@@ -183,7 +183,7 @@ const DatePicker = ({
       ) {
         formatted = formatted + separator;
       }
-    } else if (format === "YYYY-MM-DD") {
+    } else if (format === 'YYYY-MM-DD') {
       if (formatted.length === 4 && !formatted.includes(separator)) {
         formatted = formatted + separator;
       } else if (
@@ -192,7 +192,7 @@ const DatePicker = ({
       ) {
         formatted = formatted + separator;
       }
-    } else if (format === "MM/DD/YYYY") {
+    } else if (format === 'MM/DD/YYYY') {
       if (formatted.length === 2 && !formatted.includes(separator)) {
         formatted = formatted + separator;
       } else if (
@@ -217,7 +217,7 @@ const DatePicker = ({
 
     setInputValue(formatted);
 
-    if (mode === "single") {
+    if (mode === 'single') {
       if (usesMonthName) {
         const parsedDate = parseStringToDate(formatted);
         if (parsedDate) {
@@ -253,7 +253,7 @@ const DatePicker = ({
   const handleRangeCalendarChange = (date: Date) => {
     let newRange: DateRange;
 
-    if (!dateRange.start || (dateRange.start && dateRange.end)) {
+    if (!dateRange.start || (dateRange.start !== null && dateRange.end)) {
       // Start new range
       newRange = { start: date, end: null };
     } else {
@@ -291,7 +291,7 @@ const DatePicker = ({
 
   // Sync with controlled value
   useEffect(() => {
-    if (mode === "single" && controlledValue) {
+    if (mode === 'single' && controlledValue) {
       setSelectedDate(controlledValue);
       setInputValue(formatDateToString(controlledValue, format));
     }
@@ -300,7 +300,7 @@ const DatePicker = ({
 
   // Sync with controlled range value
   useEffect(() => {
-    if (mode === "range" && controlledRangeValue) {
+    if (mode === 'range' && controlledRangeValue) {
       setDateRange(controlledRangeValue);
       setInputValue(formatRangeToString(controlledRangeValue));
     }
@@ -314,8 +314,8 @@ const DatePicker = ({
     };
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -327,7 +327,7 @@ const DatePicker = ({
   return (
     <div
       ref={containerRef}
-      className={clsx("relative flex max-w-sm flex-col", containerClassName)}
+      className={clsx('relative flex max-w-sm flex-col', containerClassName)}
     >
       <Dropdown
         open={isCalendarShow}
@@ -335,13 +335,13 @@ const DatePicker = ({
           setIsCalendarShow(open);
           onOpenChange?.(open);
 
-          if (mode === "range" && controlledRangeValue) {
+          if (mode === 'range' && controlledRangeValue) {
             setDateRange(controlledRangeValue);
           }
         }}
       >
-        <DropdownTrigger asChild={!!trigger}>
-          {!trigger ? (
+        <DropdownTrigger asChild={Boolean(trigger)}>
+          {Boolean(trigger) === false ? (
             <Input
               type="text"
               mergedAddon
@@ -349,13 +349,13 @@ const DatePicker = ({
               leftAddonClassName="pr-1!"
               leftAddon={<Icon name="calendar" className="text-gray-900" />}
               placeholder={
-                mode === "range"
+                mode === 'range'
                   ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
                   : formatConfig.placeholder
               }
               onChange={handleInputChange}
               value={inputValue}
-              readOnly={mode === "range"}
+              readOnly={mode === 'range'}
             />
           ) : (
             trigger
@@ -365,10 +365,10 @@ const DatePicker = ({
         <DropdownContent
           align={align}
           sideOffset={5}
-          className={clsx("z-10 overflow-hidden p-0", wrapperClassName)}
+          className={clsx('z-10 overflow-hidden p-0', wrapperClassName)}
         >
           <div className="top-full z-10">
-            {mode === "single" ? (
+            {mode === 'single' ? (
               <Calendar
                 size={size}
                 wrapperClassname="w-full border-0"
@@ -403,7 +403,7 @@ const DatePicker = ({
 
                           const startOfLastWeek = new Date(startOfThisWeek);
                           startOfLastWeek.setDate(
-                            startOfThisWeek.getDate() - 7,
+                            startOfThisWeek.getDate() - 7
                           );
 
                           const endOfLastWeek = new Date(startOfThisWeek);
@@ -438,12 +438,12 @@ const DatePicker = ({
                           const start = new Date(
                             now.getFullYear(),
                             now.getMonth(),
-                            1,
+                            1
                           );
                           const end = new Date(
                             now.getFullYear(),
                             now.getMonth() + 1,
-                            0,
+                            0
                           );
 
                           start.setHours(0, 0, 0, 0);
@@ -470,7 +470,7 @@ const DatePicker = ({
                     />
                     <Button
                       color="danger"
-                      variant={"outline"}
+                      variant={'outline'}
                       size={size}
                       onClick={() => {
                         setDateRange({ start: null, end: null });
@@ -484,7 +484,7 @@ const DatePicker = ({
 
                 <div className="flex flex-col">
                   <div
-                    className={cn("flex", isMobile ? "flex-col" : "flex-row")}
+                    className={cn('flex', isMobile ? 'flex-col' : 'flex-row')}
                   >
                     {/* First Calendar */}
                     <Calendar
@@ -524,7 +524,7 @@ const DatePicker = ({
                         placeholder="Start Date"
                         value={formatDateToString(
                           dateRange.start,
-                          "DD MMM YYYY",
+                          'DD MMM YYYY'
                         )}
                       />
                       <Icon name="minus" size={16} />
@@ -533,14 +533,14 @@ const DatePicker = ({
                         readOnly
                         placeholder="End Date"
                         className="w-30 truncate"
-                        value={formatDateToString(dateRange.end, "DD MMM YYYY")}
+                        value={formatDateToString(dateRange.end, 'DD MMM YYYY')}
                       />
                     </div>
 
                     <div className="flex items-center gap-2">
                       <Button
                         onClick={() => setIsCalendarShow(false)}
-                        variant={"tertiary"}
+                        variant={'tertiary'}
                       >
                         Cancel
                       </Button>

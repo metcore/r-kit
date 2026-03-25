@@ -1,26 +1,26 @@
-import { cn } from "../../lib/utils";
-import type { FormLabelProps } from "./type";
+import { cn } from '../../lib/utils';
+import type { FormLabelProps } from './type';
 
 export const FormLabel: React.FC<FormLabelProps> = ({
   htmlFor,
   required = false,
-  size = "md",
+  size = 'md',
   className,
   children,
 }) => {
   const sizeClasses = {
-    sm: "text-xs",
-    md: "text-xs",
-    lg: "text-sm",
+    sm: 'text-xs',
+    md: 'text-xs',
+    lg: 'text-sm',
   };
 
   return (
     <label
       htmlFor={htmlFor}
       className={cn(
-        sizeClasses[size || "md"],
-        "font-metropolis block font-semibold text-gray-900",
-        className,
+        sizeClasses[size || 'md'],
+        'font-metropolis block font-semibold text-gray-900',
+        className
       )}
     >
       {children}

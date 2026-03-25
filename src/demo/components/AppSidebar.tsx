@@ -1,7 +1,7 @@
-import { Link, useLocation } from "react-router-dom";
-import { BrandLogo } from "../../components/brand-logo";
-import { Icon, type IconNameProps } from "../../components/icons";
-import { useSidebar } from "../../components/sidebar";
+import { Link, useLocation } from 'react-router-dom';
+import { BrandLogo } from '../../components/brand-logo';
+import { Icon, type IconNameProps } from '../../components/icons';
+import { useSidebar } from '../../components/sidebar';
 import {
   Sidebar,
   SidebarContent,
@@ -10,9 +10,9 @@ import {
   SidebarMenuGroup,
   SidebarMenuItem,
   SidebarTrigger,
-} from "../../components/sidebar/sidebar";
-import { cn } from "../../lib/utils";
-import brandLogo from "../assets/images/brand-logo.png";
+} from '../../components/sidebar/sidebar';
+import { cn } from '../../lib/utils';
+import brandLogo from '../assets/images/brand-logo.png';
 
 type RouteType = {
   path?: string;
@@ -26,76 +26,75 @@ function AppSidebar() {
   const { state, isHovered } = useSidebar();
 
   const menuItems: RouteType[] = [
-    { path: "/", label: "Overview", icon: "grid-square" },
+    { path: '/', label: 'Overview', icon: 'grid-square' },
     {
-      path: "/foundation",
-      label: "Foundation",
-      icon: "circle-and-square",
+      path: '/foundation',
+      label: 'Foundation',
+      icon: 'circle-and-square',
       children: [
-        { path: "/typography", label: "Typography" },
-        { path: "/colors", label: "Color" },
+        { path: '/typography', label: 'Typography' },
+        { path: '/colors', label: 'Color' },
       ],
     },
     {
-      path: "/form",
-      label: "Form",
-      icon: "clipboard-edit",
+      path: '/form',
+      label: 'Form',
+      icon: 'clipboard-edit',
       children: [
-        { path: "/checkbox", label: "Checkbox" },
-        { path: "/input-field", label: "Input Field" },
-        { path: "/input-group", label: "Input Group" },
-        { path: "/counter", label: "Counter" },
-        { path: "/input-file", label: "Input File" },
-        { path: "/date-picker", label: "Date Picker" },
-        { path: "/radio-button", label: "Radio Button" },
-        { path: "/switch", label: "Switches" },
-        { path: "/file-input", label: "File Input" },
-        { path: "/select", label: "Select" },
+        { path: '/checkbox', label: 'Checkbox' },
+        { path: '/input-field', label: 'Input Field' },
+        { path: '/input-group', label: 'Input Group' },
+        { path: '/counter', label: 'Counter' },
+        { path: '/input-file', label: 'Input File' },
+        { path: '/date-picker', label: 'Date Picker' },
+        { path: '/radio-button', label: 'Radio Button' },
+        { path: '/switch', label: 'Switches' },
+        { path: '/select', label: 'Select' },
       ],
     },
     {
-      label: "Components",
-      icon: "book-open-text",
+      label: 'Components',
+      icon: 'book-open-text',
       children: [
-        { path: "/calendar", label: "Calendar" },
-        { path: "/input", label: "Input" },
-        { path: "/button", label: "Button" },
-        { path: "/card", label: "Card" },
-        { path: "/chip", label: "Chip" },
-        { path: "/avatar", label: "Avatar" },
-        { path: "/modal", label: "Modal" },
+        { path: '/calendar', label: 'Calendar' },
+        { path: '/input', label: 'Input' },
+        { path: '/button', label: 'Button' },
+        { path: '/card', label: 'Card' },
+        { path: '/chip', label: 'Chip' },
+        { path: '/avatar', label: 'Avatar' },
+        { path: '/modal', label: 'Modal' },
       ],
     },
 
     {
-      path: "/navigation",
-      label: "Navigation",
-      icon: "cursor",
-      children: [{ path: "/tabs", label: "Tabs" }],
+      path: '/navigation',
+      label: 'Navigation',
+      icon: 'cursor',
+      children: [{ path: '/tabs', label: 'Tabs' }],
     },
     {
-      path: "/feedback",
-      label: "Feedback",
-      icon: "message-text-notification",
-      children: [{ label: "Snackbar/Toast", path: "/toast" }],
+      path: '/feedback',
+      label: 'Feedback',
+      icon: 'message-text-notification',
+      children: [{ label: 'Snackbar/Toast', path: '/toast' }],
     },
     {
-      label: "Data Display",
-      icon: "desktop",
-      children: [{ path: "/table", label: "Table" }],
+      label: 'Data Display',
+      icon: 'desktop',
+      children: [{ path: '/table', label: 'Table' }],
     },
-    { path: "/pages", label: "Pages", icon: "cpu" },
-    { path: "/auth", label: "Authentication", icon: "lock" },
+    { path: '/pages', label: 'Pages', icon: 'cpu' },
+    { path: '/auth', label: 'Authentication', icon: 'lock' },
   ];
 
   return (
     <Sidebar>
-      <SidebarHeader className="h-[76px] flex-row items-center justify-between pl-5">
+      <SidebarHeader className="h-19 flex-row items-center justify-between pl-5">
         <BrandLogo name="Herca Design" brandLogo={brandLogo} />
         <div
           className={cn(
-            state === "collapsed" && "hidden",
-            isHovered && "block",
+            state === 'collapsed' && 'hidden',
+            Boolean(isHovered) && 'block'
           )}
         >
           <SidebarTrigger />
@@ -106,7 +105,7 @@ function AppSidebar() {
           {menuItems.map((item, index) => {
             if (item.children) {
               const isAnyChildActive = item.children?.some(
-                (child) => child.path === location.pathname,
+                (child) => child.path === location.pathname
               );
               return (
                 <SidebarMenuGroup
@@ -130,7 +129,7 @@ function AppSidebar() {
                       key={index}
                       active={child.path === location.pathname}
                     >
-                      <Link to={child.path || "/"}>{child.label}</Link>
+                      <Link to={child?.path ?? '/'}>{child.label}</Link>
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenuGroup>
@@ -148,7 +147,7 @@ function AppSidebar() {
                 key={index}
                 active={item.path === location.pathname}
               >
-                <Link className="text-nowrap" to={item.path || "/"}>
+                <Link className="text-nowrap" to={item?.path ?? '/'}>
                   {item.label}
                 </Link>
               </SidebarMenuItem>

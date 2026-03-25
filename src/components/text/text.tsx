@@ -1,9 +1,9 @@
-import { cn } from "../../lib/utils";
-import { TextVariants } from "./text-variants";
-import type { TextProps } from "./type";
+import { cn } from '../../lib/utils';
+import { TextVariants } from './text-variants';
+import type { TextProps } from './type';
 
 export function Text({
-  as: TextComponent = "p",
+  as: TextComponent = 'p',
   align,
   color,
   numberOfLines,
@@ -13,7 +13,7 @@ export function Text({
   children,
   className,
 }: TextProps) {
-  const content = value || children;
+  const content = value ?? children;
 
   return (
     <TextComponent
@@ -25,7 +25,7 @@ export function Text({
           align,
           numberOfLines,
         }),
-        className,
+        className
       )}
     >
       {content}

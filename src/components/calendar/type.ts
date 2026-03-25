@@ -6,12 +6,12 @@ export interface GetCalendarDaysProps {
 export interface ButtonDropdownProps {
   onClick?: () => void;
   active?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export interface CalendarDay {
   date: number;
-  month: "prev" | "current" | "next";
+  month: 'prev' | 'current' | 'next';
   fullDate: Date;
 }
 
@@ -59,7 +59,8 @@ export interface CalendarProps {
   weekWrapperClassname?: string;
   showNextNavigator?: boolean;
   showPrevNavigator?: boolean;
-  mode?: "single" | "range";
+  mode?: 'single' | 'range';
   rangeValue?: DateRange;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'big';
 }

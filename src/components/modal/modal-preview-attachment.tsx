@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { cn } from "../../lib/utils";
-import { Button } from "../button";
-import { Icon } from "../icons";
-import { Text } from "../text";
-import { getIconName } from "../input-file/helpers";
+import { useEffect, useState } from 'react';
+import { cn } from '../../lib/utils';
+import { Button } from '../button';
+import { Icon } from '../icons';
+import { Text } from '../text';
+import { getIconName } from '../input-file/helpers';
 
 // pake open dan visible biar bisa mainin transisi smooth
 interface ModalPreviewProps {
@@ -35,10 +35,10 @@ const ModalPreviewAttachment = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const isImage = type.startsWith("image/");
-  const isMp3 = type.startsWith("audio/");
-  const isVideo = type.startsWith("video/");
-  const isPdf = type === "application/pdf";
+  const isImage = type.startsWith('image/');
+  const isMp3 = type.startsWith('audio/');
+  const isVideo = type.startsWith('video/');
+  const isPdf = type === 'application/pdf';
 
   const iconName = getIconName({ fileType: type });
 
@@ -85,7 +85,7 @@ const ModalPreviewAttachment = ({
   };
 
   const handleDownload = () => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = src;
     link.download = name;
     document.body.appendChild(link);
@@ -103,18 +103,18 @@ const ModalPreviewAttachment = ({
   }, [open.isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = open.isOpen ? "hidden" : "unset";
+    document.body.style.overflow = open.isOpen ? 'hidden' : 'unset';
   }, [open.isOpen]);
 
   if (!open.isOpen) return null;
 
   return (
-    <div className={cn("fixed inset-0 z-20")}>
+    <div className={cn('fixed inset-0 z-20')}>
       {/* overlay */}
       <div
         className={cn(
           `fixed inset-0 z-10 size-full bg-black/40 transition-all`,
-          open.isVisible ? "opacity-100" : "opacity-0",
+          open.isVisible ? 'opacity-100' : 'opacity-0'
         )}
         onClick={onClose}
       />
@@ -122,10 +122,10 @@ const ModalPreviewAttachment = ({
 
       <div
         className={cn(
-          "relative z-20 container mx-auto flex h-full flex-col items-center gap-6 py-10 transition-all",
+          'relative z-20 container mx-auto flex h-full flex-col items-center gap-6 py-10 transition-all',
           open.isVisible
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-10 opacity-0",
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-10 opacity-0'
         )}
       >
         {/* Header */}
@@ -169,7 +169,7 @@ const ModalPreviewAttachment = ({
               onMouseLeave={handleMouseUp}
               style={{
                 cursor:
-                  zoom > 1 ? (isDragging ? "grabbing" : "grab") : "default",
+                  zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
               }}
             >
               <img
@@ -179,8 +179,8 @@ const ModalPreviewAttachment = ({
                 className="h-full rounded-xl object-contain select-none"
                 style={{
                   transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`,
-                  transformOrigin: "top left",
-                  transition: isDragging ? "none" : "transform 0.2s ease-out",
+                  transformOrigin: 'top left',
+                  transition: isDragging ? 'none' : 'transform 0.2s ease-out',
                 }}
               />
             </div>
@@ -205,8 +205,8 @@ const ModalPreviewAttachment = ({
               src={src}
               controls
               className={cn(
-                "h-full w-full rounded-xl object-contain",
-                videoProps?.className,
+                'h-full w-full rounded-xl object-contain',
+                videoProps?.className
               )}
               {...videoProps}
             />
@@ -218,7 +218,7 @@ const ModalPreviewAttachment = ({
           <div className="flex size-full overflow-auto">
             <iframe
               src={src}
-              className={cn("h-full w-full", iframeProps?.className)}
+              className={cn('h-full w-full', iframeProps?.className)}
               {...iframeProps}
             />
           </div>
@@ -230,7 +230,7 @@ const ModalPreviewAttachment = ({
             <audio
               src={src}
               controls
-              className={cn("h-full w-full", audioProps?.className)}
+              className={cn('h-full w-full', audioProps?.className)}
               {...audioProps}
             />
           </div>
@@ -257,18 +257,18 @@ const ZoomController = ({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      <Button size={"icon"} onClick={onZoomIn} disabled={zoom >= maxZoom}>
+      <Button size={'icon'} onClick={onZoomIn} disabled={zoom >= maxZoom}>
         <Icon name="search-plus-fill" />
       </Button>
-      <Button size={"icon"} onClick={onZoomOut} disabled={zoom <= minZoom}>
+      <Button size={'icon'} onClick={onZoomOut} disabled={zoom <= minZoom}>
         <Icon name="search-minus-fill" />
       </Button>
 
       <Button color="secondary" onClick={onDownload}>
         <Icon name="download" />
         <Text
-          as={"span"}
-          value={"Download"}
+          as={'span'}
+          value={'Download'}
           weight="medium"
           className="text-primary-1000!"
         />

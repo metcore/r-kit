@@ -1,16 +1,16 @@
-import React from "react";
-import { iconRegistry } from "./icon-registry";
-import type { IconNameProps, IconProps } from "./type";
+import React from 'react';
+import { iconRegistry } from './icon-registry';
+import type { IconNameProps, IconProps } from './type';
 
 const Icon: React.FC<IconProps & { name: IconNameProps }> = ({
   name,
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   className,
 }) => {
   const Component = iconRegistry[name];
 
-  if (!Component) {
+  if (Boolean(Component) === false) {
     return null;
   }
 

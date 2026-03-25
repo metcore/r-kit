@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { cn } from "../../lib/utils";
-import { Button } from "../button";
-import { Icon } from "../icons";
-import { Input } from "../input";
-import { counterVariants } from "./counter-variants";
+import { useState } from 'react';
+import { cn } from '../../lib/utils';
+import { Button } from '../button';
+import { Icon } from '../icons';
+import { Input } from '../input';
+import { counterVariants } from './counter-variants';
 import {
   handleDecrement,
   handleIncrement,
   handleInputChange,
   handleKeyDown,
-} from "./helpers";
-import type { ButtonIconProps, CounterProps } from "./type";
+} from './helpers';
+import type { ButtonIconProps, CounterProps } from './type';
 
 const Counter = ({
   iconLeft,
@@ -19,11 +19,11 @@ const Counter = ({
   canMinus,
   inputWidth,
   disabled,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
 
   value: externalValue,
-  defaultValue = "0",
+  defaultValue = '0',
   onChange,
 }: CounterProps) => {
   const [internalValue, setInternalValue] = useState<string>(defaultValue);
@@ -42,17 +42,17 @@ const Counter = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 overflow-hidden rounded-lg px-1",
+        'flex items-center gap-2 overflow-hidden rounded-lg px-1',
         counterVariants({ variant, size, height: size }),
-        disabled && "cursor-not-allowed",
-        className,
+        disabled === true && 'cursor-not-allowed',
+        className
       )}
     >
       {/* Tombol kiri (custom atau default minus) */}
-      {iconLeft && (
+      {iconLeft !== undefined && (
         <button
           className="cursor-pointer"
-          disabled={(!canMinus && value === "0") || disabled}
+          disabled={(canMinus === false && value === '0') || disabled}
           onClick={() =>
             handleDecrement({ value, valueUpdater: updateValue, canMinus })
           }
@@ -60,11 +60,11 @@ const Counter = ({
           {iconLeft}
         </button>
       )}
-      {!iconLeft && (
+      {iconLeft === undefined && (
         <ButtonIcon
-          icon={"minus"}
+          icon={'minus'}
           iconClassName={cn(counterVariants({ controlIconSize: size }))}
-          disabled={(!canMinus && value === "0") || disabled}
+          disabled={(canMinus === false && value === '0') || disabled}
           onClick={() =>
             handleDecrement({ value, valueUpdater: updateValue, canMinus })
           }
@@ -79,22 +79,22 @@ const Counter = ({
           value={value}
           onChange={(e) => handleInputChange({ e, valueUpdater: updateValue })}
           className={cn(
-            "appearance-none truncate bg-transparent px-1.5 py-0 text-center *:border-0",
+            'appearance-none truncate bg-transparent px-1.5 py-0 text-center *:border-0',
             counterVariants({ size }),
-            disabled && "opacity-50",
+            disabled === true && 'opacity-50'
           )}
           disabled={disabled}
           onKeyDown={(e) =>
             handleKeyDown({ e, value, canMinus, valueUpdater: updateValue })
           }
           style={{
-            width: inputWidth || `${Math.max(value.length, 1) + 1.2}ch`,
+            width: inputWidth ?? `${Math.max(value.length, 1) + 1.2}ch`,
           }}
         />
       </div>
 
       {/* Tombol kanan (custom atau default plus) */}
-      {iconRight && (
+      {Boolean(iconRight) === true && (
         <button
           disabled={disabled}
           className="cursor-pointer"
@@ -103,10 +103,10 @@ const Counter = ({
           {iconRight}
         </button>
       )}
-      {!iconRight && (
+      {Boolean(iconRight) === false && (
         <ButtonIcon
           disabled={disabled}
-          icon={"plus"}
+          icon={'plus'}
           iconClassName={cn(counterVariants({ controlIconSize: size }))}
           onClick={() => handleIncrement({ value, valueUpdater: updateValue })}
           variant={variant}
@@ -125,11 +125,11 @@ const ButtonIcon = ({
 }: ButtonIconProps) => {
   return (
     <Button
-      size={"icon"}
+      size={'icon'}
       className={cn(
-        "w-fit rounded-full",
+        'w-fit rounded-full',
         variant === "secondary" && "bg-tansparent hover:bg-transparent focus:ring-0", //prettier-ignore
-        variant == "primary" && disabled && "bg-gray-400!",
+        variant == 'primary' && disabled === true && 'bg-gray-400!'
       )}
       onClick={onClick}
       disabled={disabled}
@@ -137,9 +137,9 @@ const ButtonIcon = ({
       <Icon
         name={icon}
         className={cn(
-          "size-4",
-          variant === "secondary" && "text-gray-600",
-          iconClassName,
+          'size-4',
+          variant === 'secondary' && 'text-gray-600',
+          iconClassName
         )}
       />
     </Button>

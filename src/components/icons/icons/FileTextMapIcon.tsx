@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import type { IconProps } from "../type";
+import type { IconProps } from '../type';
 
 const FileTextMapIcon: React.FC<IconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
@@ -12,7 +12,7 @@ const FileTextMapIcon: React.FC<IconProps> = ({
       fill={color}
       fillRule="evenodd"
       d="M17 8.25h2.25l-4.5-4.5V6c0 1.58.67 2.25 2.25 2.25Zm3 5.01V9.75h-3c-2.42 0-3.75-1.33-3.75-3.75V3H8C6 3 5 4 5 6v12c0 2 1 3 3 3h7.524l-.15-.158C14.634 20.037 14 18.96 14 17.579 14 15.074 15.997 13 18.5 13c.527 0 1.032.092 1.5.26Zm-7 1.99a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5h4Zm3-4a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5h7Z"
-      clip-rule="evenodd"
+      clipRule="evenodd"
     />
     <path
       fill={color}

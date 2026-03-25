@@ -1,8 +1,8 @@
-import type { BaseIconProps } from "../type";
+import type { BaseIconProps } from '../type';
 
 const RotateSquareFill: React.FC<BaseIconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   className,
 }) => (
   <svg

@@ -1,17 +1,17 @@
-import HeroSection from "../../components/HeroSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import illust from "../../assets/images/forms.png";
-import GridWrapper from "../../components/GridWrapper";
-import MainSection from "../../components/MainSection";
+import HeroSection from '../../components/HeroSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import illust from '../../assets/images/forms.png';
+import GridWrapper from '../../components/GridWrapper';
+import MainSection from '../../components/MainSection';
 import {
   InputFile,
   type FileItem,
   type InputFileRef,
-} from "../../../components/input-file";
-import { useRef, useState } from "react";
-import { createMockFile } from "../../../components/input-file/helpers";
-import Footer from "../../components/Footer";
-import dedent from "dedent";
+} from '../../../components/input-file';
+import { useRef, useState } from 'react';
+import { createMockFile } from '../../../components/input-file/helpers';
+import Footer from '../../components/Footer';
+import dedent from 'dedent';
 
 export default function InputFilePage() {
   const fileRef = useRef<InputFileRef>(null);
@@ -19,8 +19,8 @@ export default function InputFilePage() {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [defaultFiles, setDefaultFiles] = useState<FileItem[]>([
     createMockFile({
-      name: "example-photo.jpg",
-      type: "image/jpeg",
+      name: 'example-photo.jpg',
+      type: 'image/jpeg',
       sizeMb: 1.2,
     }),
   ]);

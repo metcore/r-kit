@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 import type {
   modalOverlayVariantsProps,
   ModalVariantProps,
-} from "./modal-variants";
+} from './modal-variants';
 
 export interface ModalProps
   extends ModalVariantProps, modalOverlayVariantsProps {

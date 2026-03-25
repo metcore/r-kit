@@ -1,19 +1,19 @@
-import { cn } from "../../lib/utils";
-import type { FormErrorMessageProps, FormErrorMessagesProps } from "./type";
+import { cn } from '../../lib/utils';
+import type { FormErrorMessageProps, FormErrorMessagesProps } from './type';
 
 export const FormErrorMessages: React.FC<FormErrorMessagesProps> = ({
   messages,
-  size = "md",
+  size = 'md',
   className,
 }) => {
-  if (!messages) return null;
+  if (messages === undefined) return null;
 
   const errorList = Array.isArray(messages) ? messages : [messages];
 
   if (errorList.length === 0) return null;
 
   return (
-    <div className={cn("space-y-0.5", className)}>
+    <div className={cn('space-y-0.5', className)}>
       {errorList.map((msg, i) => (
         <FormErrorMessage key={i} size={size}>
           {msg}
@@ -27,5 +27,5 @@ export const FormErrorMessage: React.FC<FormErrorMessageProps> = ({
   className,
   children,
 }) => {
-  return <p className={cn("text-danger-500 text-xs", className)}>{children}</p>;
+  return <p className={cn('text-danger-500 text-xs', className)}>{children}</p>;
 };

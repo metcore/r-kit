@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Input } from "../input";
-import { cn } from "../../lib/utils";
-import { FormField } from "../form";
+import * as React from 'react';
+import { Input } from '../input';
+import { cn } from '../../lib/utils';
+import { FormField } from '../form';
 
 export interface InputOTPProps {
   length?: number;
@@ -13,7 +13,7 @@ export interface InputOTPProps {
   errorMessages?: string | string[];
   disabled?: boolean;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const InputOTP = ({
@@ -26,13 +26,13 @@ export const InputOTP = ({
   errorMessages,
   disabled,
   className,
-  size = "md",
+  size = 'md',
 }: InputOTPProps) => {
   const inputsRef = React.useRef<Array<HTMLInputElement | null>>([]);
 
   const values = React.useMemo(() => {
-    const chars = value.split("");
-    return Array.from({ length }, (_, i) => chars[i] ?? "");
+    const chars = value.split('');
+    return Array.from({ length }, (_, i) => chars[i] ?? '');
   }, [value, length]);
 
   const focusInput = (index: number) => {
@@ -44,7 +44,7 @@ export const InputOTP = ({
 
     const next = [...values];
     next[index] = char;
-    onChange(next.join(""));
+    onChange(next.join(''));
 
     if (char && index < length - 1) {
       focusInput(index + 1);
@@ -53,9 +53,9 @@ export const InputOTP = ({
 
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>,
+    e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (e.key === "Backspace" && !values[index] && index > 0) {
+    if (e.key === 'Backspace' && Boolean(values[index]) && index > 0) {
       focusInput(index - 1);
     }
   };
@@ -80,14 +80,14 @@ export const InputOTP = ({
             maxLength={1}
             onChange={(e) => handleChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
-            className={cn("text-center", {
-              "w-9": size === "sm",
-              "w-10": size === "md",
-              "w-11": size === "lg",
+            className={cn('text-center', {
+              'w-9': size === 'sm',
+              'w-10': size === 'md',
+              'w-11': size === 'lg',
             })}
             size={size}
             description={i === 0 ? description : undefined}
-            isError={!!errorMessages}
+            isError={Boolean(errorMessages)}
           />
         ))}
       </div>
@@ -95,4 +95,4 @@ export const InputOTP = ({
   );
 };
 
-InputOTP.displayName = "InputOTP";
+InputOTP.displayName = 'InputOTP';

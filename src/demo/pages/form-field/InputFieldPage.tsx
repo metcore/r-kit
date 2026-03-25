@@ -1,22 +1,22 @@
-import HeroSection from "../../components/HeroSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import illust from "../../assets/images/forms.png";
-import GridWrapper from "../../components/GridWrapper";
-import MainSection from "../../components/MainSection";
-import { Input } from "../../../components/input";
-import { useState } from "react";
-import { Icon } from "../../../components/icons";
-import { InputOTP } from "../../../components/input-otp";
-import Footer from "../../components/Footer";
-import { useMarkdown } from "../../hooks/useMarkdown";
-import { Card, CardBody } from "../../../components/card";
-import MarkdownRenderer from "../../components/MarkdownRenderer";
-import dedent from "dedent";
+import HeroSection from '../../components/HeroSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import illust from '../../assets/images/forms.png';
+import GridWrapper from '../../components/GridWrapper';
+import MainSection from '../../components/MainSection';
+import { Input } from '../../../components/input';
+import { useState } from 'react';
+import { Icon } from '../../../components/icons';
+import { InputOTP } from '../../../components/input-otp';
+import Footer from '../../components/Footer';
+import { useMarkdown } from '../../hooks/useMarkdown';
+import { Card, CardBody } from '../../../components/card';
+import MarkdownRenderer from '../../components/MarkdownRenderer';
+import dedent from 'dedent';
 
 export default function InputFieldPage() {
   const { doc } = useMarkdown(`/docs/input-field.md`);
-  const [filledInput, setFilledInput] = useState("Maman_alkatiri23");
-  const [otp, setOtp] = useState("");
+  const [filledInput, setFilledInput] = useState('Maman_alkatiri23');
+  const [otp, setOtp] = useState('');
 
   const exampleBasic = dedent(`
     <Input />
@@ -98,7 +98,7 @@ export default function InputFieldPage() {
           >
             <div className="grid grid-cols-3 gap-8">
               <Input label="Default Input" placeholder="Username" />
-              <Input label="Input Aktif" autoFocus value={"Maman_"} />
+              <Input label="Input Aktif" autoFocus value={'Maman_'} />
               <Input
                 label="Filled Input"
                 value={filledInput}
@@ -141,8 +141,9 @@ export default function InputFieldPage() {
             code={exampleInvalid}
           >
             <Input
+              mergedAddon
               placeholder="Username"
-              errorMessages={"Username is required"}
+              errorMessages={'Username is required'}
               rightAddon={
                 <Icon name="info-circle-fill" className="text-danger-500" />
               }
@@ -160,7 +161,7 @@ export default function InputFieldPage() {
 
         <Card>
           <CardBody>
-            <MarkdownRenderer content={doc?.content || ""} />
+            <MarkdownRenderer content={doc?.content ?? ''} />
           </CardBody>
         </Card>
 

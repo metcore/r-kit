@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import type { IconProps } from "../type";
+import type { IconProps } from '../type';
 
 const XlsIcon: React.FC<IconProps> = ({ size = 24, ...props }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>

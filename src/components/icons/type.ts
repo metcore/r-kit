@@ -1,4 +1,4 @@
-import type { iconRegistry } from "./icon-registry";
+import type { iconRegistry } from './icon-registry';
 
 export type IconNameProps = keyof typeof iconRegistry;
 
