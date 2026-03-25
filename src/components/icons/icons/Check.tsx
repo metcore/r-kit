@@ -1,9 +1,9 @@
-import type React from "react";
-import type { BaseIconProps } from "../type";
+import type React from 'react';
+import type { BaseIconProps } from '../type';
 
 const Check: React.FC<BaseIconProps> = ({
   size = 16,
-  color = "currentColor",
+  color = 'currentColor',
   className,
 }) => (
   <svg

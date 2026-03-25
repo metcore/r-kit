@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { chipVariants } from "./chip-variants";
-import { ChipContext } from "./context";
-import type { ChipProps } from "./type";
-import { cn } from "../../lib/utils";
+import React, { useContext } from 'react';
+import { chipVariants } from './chip-variants';
+import { ChipContext } from './context';
+import type { ChipProps } from './type';
+import { cn } from '../../lib/utils';
 
 export const Chip: React.FC<ChipProps> = ({
   value,
@@ -18,8 +18,8 @@ export const Chip: React.FC<ChipProps> = ({
   const context = useContext(ChipContext);
 
   // Use context values if available, otherwise use props
-  const color = colorProp ?? context?.color ?? "primary";
-  const size = sizeProp ?? context?.size ?? "md";
+  const color = colorProp ?? context?.color ?? 'primary';
+  const size = sizeProp ?? context?.size ?? 'md';
   const block = blockProp ?? context?.block ?? false;
 
   // Determine if selected from context or prop
@@ -27,7 +27,11 @@ export const Chip: React.FC<ChipProps> = ({
     ? value !== undefined && context.selectedValues.includes(value)
     : (selectedProp ?? false);
 
-  const state = disabled ? "disabled" : isSelected ? "selected" : "default";
+  const state = disabled
+    ? 'disabled'
+    : isSelected === true
+      ? 'selected'
+      : 'default';
 
   const handleClick = () => {
     if (disabled) return;

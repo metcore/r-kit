@@ -1,7 +1,7 @@
-import { Breadcrumbs } from "../../components/breadcrumbs";
-import { Hero } from "../../components/hero";
-import { Kbd } from "../../components/kbd";
-import DashboardLayout from "../layouts/DashboardLayout";
+import { Breadcrumbs } from '../../components/breadcrumbs';
+import { Hero } from '../../components/hero';
+import { Kbd } from '../../components/kbd';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 function HomePage() {
   return (
@@ -55,15 +55,15 @@ function HomePage() {
           </Kbd>
 
           <Breadcrumbs
-            linkComponent={"Link"}
+            linkComponent={'Link'}
             items={[
               {
-                label: "Home",
-                href: "/",
+                label: 'Home',
+                href: '/',
               },
               {
-                label: "Projects",
-                href: "/tickets/projecrs",
+                label: 'Projects',
+                href: '/tickets/projecrs',
               },
             ]}
           />

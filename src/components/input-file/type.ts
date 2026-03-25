@@ -17,7 +17,7 @@ export interface InputFileProps extends PlayerProps {
   maxSize?: number; // dalam bytes
   maxFiles?: number;
   disabled?: boolean;
-  variant?: "primary" | "secondary" | "gray" | "medium" | "large";
+  variant?: 'primary' | 'secondary' | 'gray' | 'medium' | 'large';
   label?: string;
   hint?: string;
   buttonLabel?: string;

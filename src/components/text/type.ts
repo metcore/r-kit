@@ -1,31 +1,31 @@
-import type React from "react";
+import type React from 'react';
 
 export type ColorVariant =
-  | "default"
-  | "muted"
-  | "primary"
-  | "success"
-  | "warning"
-  | "orange"
-  | "danger"
-  | "info"
-  | "purple"
-  | "gray";
+  | 'default'
+  | 'muted'
+  | 'primary'
+  | 'success'
+  | 'warning'
+  | 'orange'
+  | 'danger'
+  | 'info'
+  | 'purple'
+  | 'gray';
 
-export type AlignMent = "start" | "center" | "end" | "justify";
-export type TextWeight = "regular" | "medium" | "semibold" | "bold";
+export type AlignMent = 'start' | 'center' | 'end' | 'justify';
+export type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 export type TextVariant =
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "p1"
-  | "p2"
-  | "p3"
-  | "t1"
-  | "t2"
-  | "t3"
-  | "t4";
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'p1'
+  | 'p2'
+  | 'p3'
+  | 't1'
+  | 't2'
+  | 't3'
+  | 't4';
 
 export interface TextBaseProps {
   as?: React.ElementType;

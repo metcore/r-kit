@@ -1,14 +1,14 @@
-import HeroSection from "../../components/HeroSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import illust from "../../assets/images/forms.png";
-import MainSection from "../../components/MainSection";
-import GridWrapper from "../../components/GridWrapper";
-import { Counter } from "../../../components/counter";
-import { useState } from "react";
-import { Icon } from "../../../components/icons";
-import { Text } from "../../../components/text";
-import Footer from "../../components/Footer";
-import dedent from "dedent";
+import HeroSection from '../../components/HeroSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import illust from '../../assets/images/forms.png';
+import MainSection from '../../components/MainSection';
+import GridWrapper from '../../components/GridWrapper';
+import { Counter } from '../../../components/counter';
+import { useState } from 'react';
+import { Icon } from '../../../components/icons';
+import { Text } from '../../../components/text';
+import Footer from '../../components/Footer';
+import dedent from 'dedent';
 
 export default function CounterPage() {
   const [defaultValue, setDefaultValue] = useState(1);
@@ -180,7 +180,6 @@ export default function CounterPage() {
             <Counter
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
             />
             <Counter
               value={String(defaultValue)}

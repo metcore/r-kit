@@ -1,9 +1,9 @@
-import React from "react";
-import type { BaseIconProps } from "../type";
+import React from 'react';
+import type { BaseIconProps } from '../type';
 
 const InfoCircleOutline: React.FC<BaseIconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   className,
 }) => (
   <svg

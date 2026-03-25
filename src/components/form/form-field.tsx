@@ -1,10 +1,10 @@
-import React from "react";
-import { cn } from "../../lib/utils";
-import type { FormFieldProps } from "./type";
-import { FormLabel } from "./form-label";
-import { FormDescription } from "./form-description";
-import { FormHint } from "./form-hint";
-import { FormErrorMessages } from "./form-error-messages";
+import React from 'react';
+import { cn } from '../../lib/utils';
+import type { FormFieldProps } from './type';
+import { FormLabel } from './form-label';
+import { FormDescription } from './form-description';
+import { FormHint } from './form-hint';
+import { FormErrorMessages } from './form-error-messages';
 
 export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
   function FormField(
@@ -14,33 +14,33 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
       hint,
       errorMessages,
       required = false,
-      size = "md",
+      size = 'md',
       htmlFor,
       className,
       children,
     },
-    ref,
+    ref
   ) {
     return (
-      <div ref={ref} className={cn("flex flex-col gap-1", className)}>
-        {label && (
+      <div ref={ref} className={cn('flex flex-col gap-1', className)}>
+        {label !== undefined && (
           <FormLabel htmlFor={htmlFor} required={required} size={size}>
             {label}
           </FormLabel>
         )}
 
-        {description && (
+        {description !== undefined && (
           <FormDescription size={size}>{description}</FormDescription>
         )}
 
         {children}
 
-        {hint && <FormHint size={size}>{hint}</FormHint>}
+        {hint !== undefined && <FormHint size={size}>{hint}</FormHint>}
 
-        {errorMessages && (
+        {errorMessages !== undefined && (
           <FormErrorMessages messages={errorMessages} size={size} />
         )}
       </div>
     );
-  },
+  }
 );

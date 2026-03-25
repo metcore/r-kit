@@ -1,24 +1,24 @@
-import { useState } from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Hero } from "../../components/hero";
-import { Card, CardBody, CardFooter, CardHeader } from "../../components/card";
+import { useState } from 'react';
+import DashboardLayout from '../layouts/DashboardLayout';
+import { Hero } from '../../components/hero';
+import { Card, CardBody, CardFooter, CardHeader } from '../../components/card';
 import {
   Chip,
   ChipGroup,
   type ChipOptionProps,
   type ChipValue,
-} from "../../components/chip";
+} from '../../components/chip';
 
 export default function ChipPage() {
   const [selected, setSelected] = useState<ChipValue[]>([]);
   const [singleSelected, setSingleSelected] = useState<ChipValue[]>([]);
 
   const chipOptions: ChipOptionProps[] = [
-    { value: "react", label: "React" },
-    { value: "typescript", label: "TypeScript" },
-    { value: "tailwind", label: "Tailwind" },
-    { value: "next js", label: "Next.js" },
-    { value: "node js", label: "Node.js", disabled: true },
+    { value: 'react', label: 'React' },
+    { value: 'typescript', label: 'TypeScript' },
+    { value: 'tailwind', label: 'Tailwind' },
+    { value: 'next js', label: 'Next.js' },
+    { value: 'node js', label: 'Node.js', disabled: true },
   ];
 
   return (
@@ -32,7 +32,7 @@ export default function ChipPage() {
         </p>
       </Hero>
       <div className="grid grid-cols-1 gap-4">
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Chip Group Multiple Select
           </CardHeader>
@@ -47,11 +47,11 @@ export default function ChipPage() {
             />
           </CardBody>
           <CardFooter divider className="text-gray-800">
-            Selected: {selected.length > 0 ? selected.join(", ") : ""}
+            Selected: {selected.length > 0 ? selected.join(', ') : ''}
           </CardFooter>
         </Card>
 
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Chip Group Single Select
           </CardHeader>
@@ -65,12 +65,12 @@ export default function ChipPage() {
             />
           </CardBody>
           <CardFooter divider className="text-gray-800">
-            Selected:{" "}
-            {singleSelected.length > 0 ? singleSelected.join(", ") : ""}
+            Selected:{' '}
+            {singleSelected.length > 0 ? singleSelected.join(', ') : ''}
           </CardFooter>
         </Card>
 
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Button
           </CardHeader>

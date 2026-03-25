@@ -5,14 +5,14 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from "react";
-import { cn } from "../../lib/utils";
-import { Button } from "../button";
-import { Icon } from "../icons";
-import { Text } from "../text";
-import { inputFileVariants } from "./input-file-variants";
-import { PreviewItem } from "./preview-item";
-import type { FileItem, InputFileProps, InputFileRef } from "./type";
+} from 'react';
+import { cn } from '../../lib/utils';
+import { Button } from '../button';
+import { Icon } from '../icons';
+import { Text } from '../text';
+import { inputFileVariants } from './input-file-variants';
+import { PreviewItem } from './preview-item';
+import type { FileItem, InputFileProps, InputFileRef } from './type';
 
 const InputFile = forwardRef<InputFileRef, InputFileProps>(
   (
@@ -24,10 +24,10 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       maxSize,
       maxFiles,
       disabled = false,
-      variant = "primary",
-      buttonLabel = "Choose File",
-      label = "Choose File",
-      hint = "JPG, PNG, dan PDF (Max. 5MB)",
+      variant = 'primary',
+      buttonLabel = 'Choose File',
+      label = 'Choose File',
+      hint = 'JPG, PNG, dan PDF (Max. 5MB)',
       errorMessage,
       maxSizeErrorMessage,
       maxFilesErrorMessage,
@@ -37,7 +37,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       audioPlayerProps,
       videoPlayerProps,
     },
-    ref,
+    ref
   ) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const replaceInputRef = useRef<HTMLInputElement | null>(null);
@@ -52,18 +52,21 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
     const processFiles = (selectedFiles: File[]) => {
       // Validasi maxFiles
-      if (maxFiles && files.length + selectedFiles.length > maxFiles) {
+      if (
+        maxFiles !== undefined &&
+        files.length + selectedFiles.length > maxFiles
+      ) {
         alert(maxFilesErrorMessage ?? `Maksimal ${maxFiles} file`);
         return;
       }
 
       // Validasi maxSize
-      if (maxSize) {
+      if (maxSize !== undefined) {
         const oversized = selectedFiles.filter((file) => file.size > maxSize);
         if (oversized.length > 0) {
           alert(
             maxSizeErrorMessage ??
-              `File ${oversized.map((f) => f.name).join(", ")} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`,
+              `File ${oversized.map((f) => f.name).join(', ')} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
           );
           return;
         }
@@ -84,7 +87,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
       // Reset input
       if (inputRef.current) {
-        inputRef.current.value = "";
+        inputRef.current.value = '';
       }
     };
 
@@ -111,10 +114,10 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       if (!selected) return;
 
       // Validasi maxSize
-      if (maxSize && selected.size > maxSize) {
+      if (maxSize !== undefined && selected.size > maxSize) {
         alert(
           maxSizeErrorMessage ??
-            `File ${selected.name} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`,
+            `File ${selected.name} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
         );
         return;
       }
@@ -136,7 +139,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       // Reset
       setReplaceIndex(null);
       if (replaceInputRef.current) {
-        replaceInputRef.current.value = "";
+        replaceInputRef.current.value = '';
       }
     };
 
@@ -150,7 +153,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       files.forEach((f) => URL.revokeObjectURL(f.preview));
       setFiles([]);
       if (inputRef.current) {
-        inputRef.current.value = "";
+        inputRef.current.value = '';
       }
     };
 
@@ -206,16 +209,16 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
       // Filter by accept type if specified
       let filteredFiles = droppedFiles;
-      if (accept) {
-        const acceptedTypes = accept.split(",").map((type) => type.trim());
+      if (accept !== undefined) {
+        const acceptedTypes = accept.split(',').map((type) => type.trim());
         filteredFiles = droppedFiles.filter((file) => {
           return acceptedTypes.some((acceptedType) => {
-            if (acceptedType.startsWith(".")) {
+            if (acceptedType.startsWith('.')) {
               return file.name.endsWith(acceptedType);
             }
-            if (acceptedType.endsWith("/*")) {
-              const baseType = acceptedType.split("/")[0];
-              return file.type.startsWith(baseType + "/");
+            if (acceptedType.endsWith('/*')) {
+              const baseType = acceptedType.split('/')[0];
+              return file.type.startsWith(baseType + '/');
             }
             return file.type === acceptedType;
           });
@@ -223,7 +226,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
         if (filteredFiles.length !== droppedFiles.length) {
           alert(
-            `Beberapa file tidak sesuai dengan tipe yang diizinkan: ${accept}`,
+            `Beberapa file tidak sesuai dengan tipe yang diizinkan: ${accept}`
           );
         }
       }
@@ -241,7 +244,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         files.map((f, i) => {
           const base = { ...f };
 
-          if (useCustomName) {
+          if (useCustomName !== undefined) {
             base.customName = customNames[i] ?? f.customName ?? f.file.name;
           }
 
@@ -254,7 +257,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
     }, [files]);
 
     const isDefault = variant === "primary" || variant === "secondary" || variant === "gray"; //prettier-ignore
-    const isSized = variant === "medium" || variant === "large";
+    const isSized = variant === 'medium' || variant === 'large';
 
     return (
       <div className="flex flex-col gap-6">
@@ -262,42 +265,44 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
           <label
             className={cn(
               inputFileVariants({ variant }),
-              "group relative flex items-center gap-2 rounded-lg border px-3 py-2 transition-all",
+              'group relative flex items-center gap-2 rounded-lg border px-3 py-2 transition-all',
               isDefault && "w-fit outline-2 outline-offset-1 outline-transparent", //prettier-ignore
               isSized && "w-full border-dashed border-gray-400 bg-gray-50", //prettier-ignore
 
-              variant === "large" && !!errorMessage && "border-danger-500",
-              variant === "large" && "flex-col items-center p-5!",
+              variant === 'large' &&
+                errorMessage !== undefined &&
+                'border-danger-500',
+              variant === 'large' && 'flex-col items-center p-5!',
               variant === "large" && isDragging && "border-primary-500 bg-primary-50", //prettier-ignore
-              disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+              disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
             )}
-            onDragEnter={variant === "large" ? handleDragEnter : undefined}
-            onDragLeave={variant === "large" ? handleDragLeave : undefined}
-            onDragOver={variant === "large" ? handleDragOver : undefined}
-            onDrop={variant === "large" ? handleDrop : undefined}
+            onDragEnter={variant === 'large' ? handleDragEnter : undefined}
+            onDragLeave={variant === 'large' ? handleDragLeave : undefined}
+            onDragOver={variant === 'large' ? handleDragOver : undefined}
+            onDrop={variant === 'large' ? handleDrop : undefined}
           >
             {isDefault && <Icon name="upload" />}
             {isSized && (
-              <Icon name="cloud-upload" size={variant === "large" ? 125 : 40} />
+              <Icon name="cloud-upload" size={variant === 'large' ? 125 : 40} />
             )}
 
             <div
               className={cn(
-                "flex flex-1 flex-col",
-                variant === "large" && "*:text-center",
+                'flex flex-1 flex-col',
+                variant === 'large' && '*:text-center'
               )}
             >
               <Text
                 as="h3"
                 value={label}
                 weight="semibold"
-                className={cn(isSized && "text-gray-800!")}
+                className={cn(isSized && 'text-gray-800!')}
               />
               {isSized && (
                 <Text
                   as="p"
                   value={
-                    variant === "large" && !isDragging && !hint
+                    variant === 'large' && !isDragging && !hint
                       ? `Klik atau drag & drop file disini`
                       : hint
                   }
@@ -306,7 +311,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
               )}
             </div>
 
-            {errorMessage && variant === "large" && (
+            {errorMessage !== undefined && variant === 'large' && (
               <Text
                 value={errorMessage}
                 variant="t3"
@@ -318,7 +323,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             {isSized && (
               <Button onClick={() => inputRef.current?.click()}>
                 <Text
-                  as={"span"}
+                  as={'span'}
                   value={buttonLabel}
                   weight="semibold"
                   className="text-white!"
@@ -337,7 +342,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             />
           </label>
 
-          {errorMessage && variant === "medium" && (
+          {errorMessage !== undefined && variant === 'medium' && (
             <Text
               value={errorMessage}
               variant="t3"
@@ -363,7 +368,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
                 value="Selected Files"
                 variant="t1"
                 weight="semibold"
-                as={"h1"}
+                as={'h1'}
               />
               <button
                 type="button"
@@ -388,7 +393,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
                   labelCustomName={item?.label}
                   customNamePlaceholder={customNamePlaceholder}
                   onCustomNameChange={
-                    useCustomName
+                    useCustomName !== undefined
                       ? (e) => handleChangeCustomName?.({ e, i })
                       : undefined
                   }
@@ -403,9 +408,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-InputFile.displayName = "InputFile";
+InputFile.displayName = 'InputFile';
 
 export { InputFile };

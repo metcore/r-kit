@@ -1,4 +1,4 @@
-export type FormSizeType = "sm" | "md" | "lg" | null;
+export type FormSizeType = 'sm' | 'md' | 'lg' | null;
 
 export interface FormLabelProps {
   htmlFor?: string;

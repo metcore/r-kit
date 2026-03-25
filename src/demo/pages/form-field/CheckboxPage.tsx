@@ -1,14 +1,14 @@
-import { Card, CardBody } from "../../../components/card";
-import { Checkbox, CheckboxGroup } from "../../../components/checkbox/checkbox";
-import illust from "../../assets/images/forms.png";
-import Footer from "../../components/Footer";
-import GridWrapper from "../../components/GridWrapper";
-import HeroSection from "../../components/HeroSection";
-import MainSection from "../../components/MainSection";
-import MarkdownRenderer from "../../components/MarkdownRenderer";
-import useCheckboxes from "../../hooks/useCheckboxes";
-import { useMarkdown } from "../../hooks/useMarkdown";
-import DashboardLayout from "../../layouts/DashboardLayout";
+import { Card, CardBody } from '../../../components/card';
+import { Checkbox, CheckboxGroup } from '../../../components/checkbox/checkbox';
+import illust from '../../assets/images/forms.png';
+import Footer from '../../components/Footer';
+import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
+import MarkdownRenderer from '../../components/MarkdownRenderer';
+import useCheckboxes from '../../hooks/useCheckboxes';
+import { useMarkdown } from '../../hooks/useMarkdown';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 export default function CheckboxPage() {
   const { doc } = useMarkdown(`/docs/checkbox.md`);
@@ -52,7 +52,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
@@ -75,7 +75,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
@@ -101,7 +101,7 @@ export default function CheckboxPage() {
         >
           <CheckboxGroup
             direction="horizontal"
-            defaultValue={["1", "2", "3", "4"]}
+            defaultValue={['1', '2', '3', '4']}
           >
             <div className="flex flex-row items-center gap-8">
               {CHECKBOXES.map((item) => (
@@ -125,12 +125,16 @@ export default function CheckboxPage() {
             code={exampleVerticalActive}
             className="flex-1"
           >
-            <CheckboxGroup direction="horizontal">
+            <CheckboxGroup
+              direction="horizontal"
+              defaultValue={['1', '2', '3', '4']}
+            >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
                   <Checkbox
                     vertical
                     key={item.id}
+                    value={item.id}
                     label={item.label}
                     color={item.color}
                     disabled={item.disabled}
@@ -147,7 +151,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
@@ -174,7 +178,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
@@ -199,7 +203,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {CHECKBOXES.map((item) => (
@@ -227,7 +231,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {SIZE_CHECKBOXES.map((item) => (
@@ -252,7 +256,7 @@ export default function CheckboxPage() {
           >
             <CheckboxGroup
               direction="horizontal"
-              defaultValue={["1", "2", "3", "4"]}
+              defaultValue={['1', '2', '3', '4']}
             >
               <div className="flex flex-row items-center gap-8">
                 {SIZE_CHECKBOXES.map((item) => (
@@ -274,7 +278,7 @@ export default function CheckboxPage() {
 
         <Card>
           <CardBody>
-            <MarkdownRenderer content={doc?.content || ""} />
+            <MarkdownRenderer content={doc?.content ?? ''} />
           </CardBody>
         </Card>
 

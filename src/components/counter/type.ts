@@ -1,6 +1,6 @@
 // Tambahkan props berikut ke interface CounterProps yang sudah ada:
 
-import type { IconNameProps } from "../icons";
+import type { IconNameProps } from '../icons';
 
 export interface CounterProps {
   iconLeft?: React.ReactNode;
@@ -8,9 +8,9 @@ export interface CounterProps {
   className?: string;
   canMinus?: boolean;
   inputWidth?: string;
-  variant?: "primary" | "secondary";
+  variant?: 'primary' | 'secondary';
   disabled?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 
   // Props baru untuk controlled/uncontrolled component
   value?: string; // Untuk mode controlled
@@ -22,7 +22,7 @@ export interface ButtonIconProps {
   icon: IconNameProps;
   disabled?: boolean;
   onClick: () => void;
-  variant?: "primary" | "secondary";
+  variant?: 'primary' | 'secondary';
   iconClassName?: string;
 }
 

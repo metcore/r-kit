@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useId } from "react";
-import type { RadioProps, RadioGroupProps, SizeType, ColorType } from "./type";
-import { RadioVariants, RadioIndicatorVariants } from "./radio-variants";
-import { cn } from "../../lib/utils";
-import { FormDescription, FormField, FormLabel } from "../form";
+import React, { createContext, useContext, useId } from 'react';
+import type { RadioProps, RadioGroupProps, SizeType, ColorType } from './type';
+import { RadioVariants, RadioIndicatorVariants } from './radio-variants';
+import { cn } from '../../lib/utils';
+import { FormDescription, FormField, FormLabel } from '../form';
 
 interface RadioGroupContextValue {
   value?: string;
@@ -14,7 +14,7 @@ interface RadioGroupContextValue {
 }
 
 const RadioGroupContext = createContext<RadioGroupContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 // Radio Group Component
@@ -24,7 +24,7 @@ export const RadioGroup: React.FC<
     hint?: string;
     description?: string;
     errorMessages?: string | string[];
-    direction?: "horizontal" | "vertical";
+    direction?: 'horizontal' | 'vertical';
   }
 > = ({
   value,
@@ -33,18 +33,18 @@ export const RadioGroup: React.FC<
   disabled = false,
   required = false,
   name,
-  size = "md",
-  color = "primary",
+  size = 'md',
+  color = 'primary',
   className,
   label,
   hint,
   description,
   errorMessages,
-  direction = "vertical",
+  direction = 'vertical',
   children,
 }) => {
   const [internalValue, setInternalValue] = React.useState(
-    defaultValue || value || "",
+    defaultValue ?? value ?? ''
   );
 
   const currentValue = value !== undefined ? value : internalValue;
@@ -80,8 +80,8 @@ export const RadioGroup: React.FC<
           role="radiogroup"
           aria-required={required}
           className={cn(
-            "flex gap-4",
-            direction === "vertical" ? "flex-col" : "flex-row flex-wrap",
+            'flex gap-4',
+            direction === 'vertical' ? 'flex-col' : 'flex-row flex-wrap'
           )}
         >
           {children}
@@ -104,14 +104,16 @@ export const BaseRadio: React.FC<RadioProps> = ({
   className,
 }) => {
   const generatedId = useId();
-  const id = providedId || generatedId;
+  const id = providedId ?? generatedId;
   const context = useContext(RadioGroupContext);
 
-  const isChecked = context ? context.value === value : checked || false;
-  const disabled = disabledProp || context?.disabled || false;
+  const isChecked: boolean = context
+    ? context.value === value
+    : (checked ?? false);
+  const disabled = disabledProp ?? context?.disabled ?? false;
   const name = context?.name;
-  const size = sizeProp || context?.size || "md";
-  const color = colorProp || context?.color || "primary";
+  const size = sizeProp ?? context?.size ?? 'md';
+  const color = colorProp ?? context?.color ?? 'primary';
 
   const handleChange = () => {
     if (disabled) return;
@@ -134,15 +136,15 @@ export const BaseRadio: React.FC<RadioProps> = ({
       onClick={handleChange}
       className={cn(
         RadioVariants({ size, color }),
-        !isChecked && "border-gray-300",
-        disabled && "cursor-not-allowed opacity-50",
-        !disabled && "hover:border-opacity-80 cursor-pointer",
-        "bg-white",
-        className,
+        !isChecked && 'border-gray-300',
+        disabled && 'cursor-not-allowed opacity-50',
+        !disabled && 'hover:border-opacity-80 cursor-pointer',
+        'bg-white',
+        className
       )}
     >
       {/* Hidden input for form compatibility */}
-      {name && (
+      {Boolean(name) && (
         <input
           type="radio"
           name={name}
@@ -159,7 +161,7 @@ export const BaseRadio: React.FC<RadioProps> = ({
       <span
         className={cn(
           RadioIndicatorVariants({ size, color }),
-          isChecked ? "scale-100" : "scale-0 bg-transparent",
+          isChecked ? 'scale-100' : 'scale-0 bg-transparent'
         )}
       />
     </button>
@@ -174,28 +176,30 @@ export const Radio: React.FC<
   }
 > = ({ label, description, className, size: sizeProp, ...props }) => {
   const generatedId = useId();
-  const id = props.id || generatedId;
+  const id = props?.id ?? generatedId;
   const context = useContext(RadioGroupContext);
-  const size = sizeProp || context?.size || "md";
+  const size = sizeProp ?? context?.size ?? 'md';
 
   const labelSizeClasses = {
-    sm: "text-xs",
-    md: "text-sm",
-    lg: "text-base",
+    sm: 'text-xs',
+    md: 'text-sm',
+    lg: 'text-base',
   };
 
   return (
-    <div className={cn("inline-flex items-center gap-2", className)}>
+    <div className={cn('inline-flex items-center gap-2', className)}>
       <BaseRadio {...props} id={id} size={size} />
 
       <div className="flex flex-col">
-        {label && (
+        {Boolean(label) && (
           <FormLabel htmlFor={id} className={labelSizeClasses[size]}>
             {label}
           </FormLabel>
         )}
 
-        {description && <FormDescription>{description}</FormDescription>}
+        {Boolean(description) && (
+          <FormDescription>{description}</FormDescription>
+        )}
       </div>
     </div>
   );

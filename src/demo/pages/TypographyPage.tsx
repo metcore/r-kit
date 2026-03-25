@@ -1,13 +1,13 @@
-import dedent from "dedent";
-import { Card, CardBody } from "../../components/card";
-import { Text } from "../../components/text";
-import illust from "../assets/images/typography.png";
-import Footer from "../components/Footer";
-import HeroSection from "../components/HeroSection";
-import MainSection from "../components/MainSection";
-import MarkdownRenderer from "../components/MarkdownRenderer";
-import { useMarkdown } from "../hooks/useMarkdown";
-import DashboardLayout from "../layouts/DashboardLayout";
+import dedent from 'dedent';
+import { Card, CardBody } from '../../components/card';
+import { Text } from '../../components/text';
+import illust from '../assets/images/typography.png';
+import Footer from '../components/Footer';
+import HeroSection from '../components/HeroSection';
+import MainSection from '../components/MainSection';
+import MarkdownRenderer from '../components/MarkdownRenderer';
+import { useMarkdown } from '../hooks/useMarkdown';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 interface FontVariantProps {
   variant: string;
@@ -369,7 +369,7 @@ export default function TypographyPage() {
 
         <Card>
           <CardBody>
-            <MarkdownRenderer content={doc?.content || ""} />
+            <MarkdownRenderer content={doc?.content ?? ''} />
           </CardBody>
         </Card>
 
@@ -387,7 +387,7 @@ const FontVariants = ({
 }: FontVariantProps) => {
   return (
     <div className="flex flex-1 flex-row flex-nowrap items-center">
-      <div className="flex min-w-[700px] flex-1 flex-row items-center gap-6">
+      <div className="flex min-w-175 flex-1 flex-row items-center gap-6">
         <Text value={variant} className="text-gray-700" />
         <div className="flex flex-row items-center gap-8">{children}</div>
       </div>

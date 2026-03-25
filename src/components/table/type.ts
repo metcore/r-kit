@@ -1,17 +1,17 @@
-import type { ReactNode } from "react";
-import type { TextVariant } from "../text";
+import type { ReactNode } from 'react';
+import type { TextVariant } from '../text';
 
 export interface TableRootProps {
   className?: string;
   children: ReactNode;
   variant?:
-    | "basic"
-    | "bordered"
-    | "stripped"
-    | "hovered"
-    | "row-bordered"
-    | "wrapped-row-bordered"
-    | "headed";
+    | 'basic'
+    | 'bordered'
+    | 'stripped'
+    | 'hovered'
+    | 'row-bordered'
+    | 'wrapped-row-bordered'
+    | 'headed';
 }
 
 export interface TableHeadProps {

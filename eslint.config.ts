@@ -1,12 +1,11 @@
-import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
-import tseslint from 'typescript-eslint';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
+import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import prettier from 'eslint-plugin-prettier';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   {
@@ -23,14 +22,13 @@ export default defineConfig([
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.eslint.json'
-      }
+        project: './tsconfig.eslint.json',
+      },
     },
   },
 
   {
     plugins: {
-      '@typescript-eslint': tsPlugin,
       'react-hooks': reactHooks,
       prettier,
     },
@@ -56,6 +54,8 @@ export default defineConfig([
       'react/jsx-key': 'error',
       'react/no-unknown-property': 'error',
 
+      'react/prop-types': 'off',
+
       'prettier/prettier': [
         'error',
         {
@@ -67,7 +67,14 @@ export default defineConfig([
         },
       ],
     },
-  },{
-  ignores: ['node_modules/', 'dist/', 'eslint.config.ts'],
-}
+  },
+  {
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'eslint.config.ts',
+      'commitlint.config.js',
+      'tsup.config.ts',
+    ],
+  },
 ]);

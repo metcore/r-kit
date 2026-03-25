@@ -1,1 +1,1 @@
-export * from "./rounded-spinner";
+export * from './rounded-spinner';

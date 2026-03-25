@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import type { IconProps } from "../type";
+import type { IconProps } from '../type';
 
 const ClockFastForwardIcon: React.FC<IconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
   ...props
 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>

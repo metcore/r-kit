@@ -2,21 +2,8 @@
 // TYPES
 // ─────────────────────────────────────────
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { SelectOption } from "../../components/select/type";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  company: { name: string };
-}
-
-interface Post {
-  id: number;
-  title: string;
-  userId: number;
-}
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { SelectOption } from '../../components/select/type';
 
 interface FetchState<T> {
   data: T[];
@@ -50,7 +37,7 @@ export default function useGetUsers() {
    */
   function usePaginatedFetch<T>(
     fetchPage: (page: number) => Promise<T[]>,
-    deps: unknown[] = [],
+    deps: unknown[] = []
   ) {
     const [state, setState] = useState<FetchState<T>>(INITIAL_FETCH_STATE<T>);
     // Prevent stale closures from updating state after unmount / dep change
@@ -79,7 +66,7 @@ export default function useGetUsers() {
             isLoadingMore: false,
           }));
         } catch (err) {
-          if ((err as Error).name === "AbortError") return;
+          if ((err as Error).name === 'AbortError') return;
           setState((prev) => ({
             ...prev,
             isLoading: false,
@@ -89,20 +76,20 @@ export default function useGetUsers() {
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      deps,
+      deps
     );
 
     // Initial load
     useEffect(() => {
       setState(INITIAL_FETCH_STATE<T>());
-      load(1, true);
+      void load(1, true);
       return () => abortRef.current?.abort();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps);
 
     const loadMore = useCallback(() => {
       if (state.hasMore && !state.isLoading && !state.isLoadingMore) {
-        load(state.page + 1, false);
+        void load(state.page + 1, false);
       }
     }, [state.hasMore, state.isLoading, state.isLoadingMore, state.page, load]);
 
@@ -115,38 +102,47 @@ export default function useGetUsers() {
 
   async function fetchUsers(page: number): Promise<SelectOption[]> {
     const res = await fetch(
-      `https://dummyjson.com/users?limit=${PAGE_SIZE}&skip=${(page - 1) * PAGE_SIZE}`,
+      `https://dummyjson.com/users?limit=${PAGE_SIZE}&skip=${(page - 1) * PAGE_SIZE}`
     );
 
-    if (!res.ok) throw new Error("Failed to fetch users");
+    if (!res.ok) throw new Error('Failed to fetch users');
 
     const json = await res.json();
 
-    return json.users.map((u: any) => ({
-      value: String(u.id),
-      label: `${u.firstName} ${u.lastName}`,
-      email: u.email,
-      company: u.company?.name,
-    }));
+    return json.users.map(
+      (u: {
+        id: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        company: { name: string };
+      }) => ({
+        value: String(u.id),
+        label: `${u.firstName} ${u.lastName}`,
+        email: u.email,
+        company: u.company?.name,
+      })
+    );
   }
 
   async function fetchPosts(
     page: number,
-    userId: string | null,
+    userId: string | null
   ): Promise<SelectOption[]> {
-    const baseUrl = userId
-      ? `https://dummyjson.com/posts/user/${userId}`
-      : `https://dummyjson.com/posts`;
+    const baseUrl =
+      userId !== undefined
+        ? `https://dummyjson.com/posts/user/${userId}`
+        : `https://dummyjson.com/posts`;
 
     const res = await fetch(
-      `${baseUrl}?limit=${PAGE_SIZE}&skip=${(page - 1) * PAGE_SIZE}`,
+      `${baseUrl}?limit=${PAGE_SIZE}&skip=${(page - 1) * PAGE_SIZE}`
     );
 
-    if (!res.ok) throw new Error("Failed to fetch posts");
+    if (!res.ok) throw new Error('Failed to fetch posts');
 
     const json = await res.json();
 
-    return json.posts.map((p: any) => ({
+    return json.posts.map((p: { title: string; id: number }) => ({
       value: String(p.id),
       label: p.title,
     }));

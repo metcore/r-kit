@@ -1,8 +1,8 @@
-import { RadioGroup, Radio } from "../../components/radio";
-import DashboardLayout from "../layouts/DashboardLayout";
-import { Checkbox, CheckboxGroup } from "../../components/checkbox/checkbox";
-import { Input } from "../../components/input";
-import React from "react";
+import { RadioGroup, Radio } from '../../components/radio';
+import DashboardLayout from '../layouts/DashboardLayout';
+import { Checkbox, CheckboxGroup } from '../../components/checkbox/checkbox';
+import { Input } from '../../components/input';
+import React from 'react';
 
 export const RadioButtonPage = () => {
   return (
@@ -14,10 +14,10 @@ export const RadioButtonPage = () => {
 
 function RadioExample() {
   const [checked, setChecked] = React.useState(false);
-  const [value, setValue] = React.useState("credit");
-  const [value1, setValue1] = React.useState("option1");
-  const [value2, setValue2] = React.useState("option1");
-  const [value3, setValue3] = React.useState("option1");
+  const [value, setValue] = React.useState('credit');
+  const [value1, setValue1] = React.useState('option1');
+  const [value2, setValue2] = React.useState('option1');
+  const [value3, setValue3] = React.useState('option1');
 
   return (
     <DashboardLayout>
@@ -145,16 +145,16 @@ function RadioExample() {
           <div className="space-y-4">
             <Input
               label="email"
-              size={"sm"}
+              size={'sm'}
               hint="email is required"
-              errorMessages={"email is required"}
+              errorMessages={'email is required'}
             />
 
             <Input
               label="email"
-              size={"md"}
+              size={'md'}
               hint="email is required"
-              errorMessages={"email is required"}
+              errorMessages={'email is required'}
             />
           </div>
         </div>

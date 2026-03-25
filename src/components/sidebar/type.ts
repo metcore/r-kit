@@ -1,5 +1,5 @@
 export type SidebarContextProps = {
-  state: "expanded" | "collapsed";
+  state: 'expanded' | 'collapsed';
   open: boolean;
   setOpen: (open: boolean) => void;
   openMobile: boolean;

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import Toast from "./toast-card";
-import type { ToastProps } from "./type";
+import { useEffect, useState } from 'react';
+import Toast from './toast-card';
+import type { ToastProps } from './type';
 
 export default function ToastItem({
   onRemove,
@@ -27,7 +27,7 @@ export default function ToastItem({
   return (
     <div
       className={`transition-all duration-200 ${
-        open ? "translate-y-0 opacity-100" : "translate-y-2 scale-95 opacity-0"
+        open ? 'translate-y-0 opacity-100' : 'translate-y-2 scale-95 opacity-0'
       }`}
     >
       <Toast {...props} onClose={close} />

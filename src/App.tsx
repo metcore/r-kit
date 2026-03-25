@@ -1,5 +1,5 @@
-import { ToastProvider } from "./components/toast";
-import DocsRouter from "./demo/router";
+import { ToastProvider } from './components/toast';
+import DocsRouter from './demo/router';
 
 function App() {
   return (

@@ -1,21 +1,21 @@
-import React, { createContext, useContext, useId } from "react";
+import React, { createContext, useContext, useId } from 'react';
 import type {
   CheckboxProps,
   CheckboxGroupProps,
   CheckboxGroupContextValue,
-} from "./type";
+} from './type';
 import {
   CheckboxVariants,
   CheckboxIndicatorVariants,
-} from "./checkbox-variants";
-import { cn } from "../../lib/utils";
+} from './checkbox-variants';
+import { cn } from '../../lib/utils';
 import {
   FormDescription,
   FormErrorMessages,
   FormField,
   FormHint,
   FormLabel,
-} from "../form";
+} from '../form';
 
 const CheckboxGroupContext = createContext<
   CheckboxGroupContextValue | undefined
@@ -27,7 +27,7 @@ export const CheckboxGroup: React.FC<
     hint?: string;
     description?: string;
     errorMessages?: string | string[];
-    direction?: "horizontal" | "vertical";
+    direction?: 'horizontal' | 'vertical';
   }
 > = ({
   value,
@@ -36,19 +36,19 @@ export const CheckboxGroup: React.FC<
   disabled = false,
   required = false,
   name,
-  size = "md",
-  color = "primary",
-  icon = "check",
+  size = 'md',
+  color = 'primary',
+  icon = 'check',
   className,
   label,
   hint,
   description,
   errorMessages,
-  direction = "vertical",
+  direction = 'vertical',
   children,
 }) => {
   const [internalValue, setInternalValue] = React.useState<string[]>(
-    defaultValue || value || [],
+    defaultValue ?? value ?? []
   );
 
   const currentValue = value !== undefined ? value : internalValue;
@@ -85,8 +85,8 @@ export const CheckboxGroup: React.FC<
           role="group"
           aria-required={required}
           className={cn(
-            "flex gap-4",
-            direction === "vertical" ? "flex-col" : "flex-row flex-wrap",
+            'flex gap-4',
+            direction === 'vertical' ? 'flex-col' : 'flex-row flex-wrap'
           )}
         >
           {children}
@@ -109,41 +109,43 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
   className,
 }) => {
   const generatedId = useId();
-  const id = providedId || generatedId;
+  const id = providedId ?? generatedId;
   const context = useContext(CheckboxGroupContext);
 
   const isChecked = context
-    ? context.value?.includes(value || "")
-    : checked || false;
-  const disabled = disabledProp || context?.disabled || false;
+    ? context.value?.includes(value ?? '')
+    : (checked ?? false);
+
+  const disabled = disabledProp ?? context?.disabled ?? false;
   const name = context?.name;
-  const size = sizeProp || context?.size || "md";
-  const color = colorProp || context?.color || "primary";
-  const icon = iconProp || context?.icon || "check";
+  const size = sizeProp ?? context?.size ?? 'md';
+  const color = colorProp ?? context?.color ?? 'primary';
+  const icon = iconProp ?? context?.icon ?? 'check';
 
   const handleChange = () => {
     if (disabled) return;
 
-    if (context && value) {
+    if (context && value !== undefined) {
       const currentValues = context.value || [];
-      const newValues = isChecked
-        ? currentValues.filter((v) => v !== value)
-        : [...currentValues, value];
+      const newValues =
+        isChecked === true
+          ? currentValues.filter((v) => v !== value)
+          : [...currentValues, value];
       context.onValueChange?.(newValues);
     } else {
-      onCheckedChange?.(!isChecked);
+      onCheckedChange?.(isChecked === false ? true : false);
     }
   };
 
   const disabledColorClass: Record<string, string> = {
-    primary: "bg-primary-100 border-primary-200",
-    success: "bg-success-100 border-success-200",
-    danger: "bg-danger-100 border-danger-200",
-    info: "bg-info-100 border-info-200",
-    warning: "bg-warning-100 border-warning-200",
-    orange: "bg-orange-100 border-orange-200",
-    purple: "bg-purple-100 border-purple-200",
-    gray: "bg-gray-100 border-gray-200",
+    primary: 'bg-primary-100 border-primary-200',
+    success: 'bg-success-100 border-success-200',
+    danger: 'bg-danger-100 border-danger-200',
+    info: 'bg-info-100 border-info-200',
+    warning: 'bg-warning-100 border-warning-200',
+    orange: 'bg-orange-100 border-orange-200',
+    purple: 'bg-purple-100 border-purple-200',
+    gray: 'bg-gray-100 border-gray-200',
   };
 
   return (
@@ -157,13 +159,13 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
       onClick={handleChange}
       className={cn(
         CheckboxVariants({ size, color, checked: isChecked }),
-        disabled && "cursor-not-allowed",
+        disabled && 'cursor-not-allowed',
         disabled && disabledColorClass[color],
-        !disabled && "hover:border-opacity-80 cursor-pointer",
-        className,
+        !disabled && 'hover:border-opacity-80 cursor-pointer',
+        className
       )}
     >
-      {name && (
+      {Boolean(name) && (
         <input
           type="checkbox"
           name={name}
@@ -177,9 +179,9 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
       )}
 
       {/* Checkbox indicator */}
-      {isChecked && (
+      {Boolean(isChecked) && (
         <>
-          {icon === "check" ? (
+          {icon === 'check' ? (
             <svg
               className={CheckboxIndicatorVariants({ size, color, icon })}
               viewBox="0 0 16 16"
@@ -237,10 +239,10 @@ export const Checkbox: React.FC<
   ...props
 }) => {
   const generatedId = useId();
-  const id = props.id || generatedId;
+  const id = props.id ?? generatedId;
   const context = useContext(CheckboxGroupContext);
-  const size = sizeProp || context?.size || "md";
-  const icon = iconProp || context?.icon || "check";
+  const size = sizeProp ?? context?.size ?? 'md';
+  const icon = iconProp ?? context?.icon ?? 'check';
 
   // Jika dalam group, tidak perlu hint dan error di level individual
   const isInGroup = !!context;
@@ -248,27 +250,31 @@ export const Checkbox: React.FC<
 
   const hasError = Boolean(errorMessages) && showHintAndError;
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn('flex flex-col', className)}>
       <div
         className={cn(
-          "inline-flex items-center gap-2",
-          vertical && "flex-col justify-center",
+          'inline-flex items-center gap-2',
+          vertical !== undefined && 'flex-col justify-center'
         )}
       >
         <BaseCheckbox {...props} id={id} size={size} icon={icon} />
 
-        <div className={cn("flex flex-col", vertical && "items-center")}>
-          {label && (
-            <FormLabel htmlFor={id} className={cn("cursor-pointer")}>
+        <div
+          className={cn('flex flex-col', vertical === true && 'items-center')}
+        >
+          {label !== undefined && (
+            <FormLabel htmlFor={id} className={cn('cursor-pointer')}>
               {label}
             </FormLabel>
           )}
 
-          {description && <FormDescription>{description}</FormDescription>}
+          {description !== undefined && (
+            <FormDescription>{description}</FormDescription>
+          )}
         </div>
       </div>
 
-      {showHintAndError && hint && (
+      {showHintAndError && hint !== undefined && (
         <FormHint className="mt-1 ml-6">{hint}</FormHint>
       )}
 

@@ -1,5 +1,5 @@
 // hooks/useMarkdown.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export interface DocFrontmatter {
   title: string;
@@ -22,7 +22,7 @@ function parseFrontmatter(markdown: string): {
 
   if (!match) {
     return {
-      data: { title: "Untitled" },
+      data: { title: 'Untitled' },
       content: markdown,
     };
   }
@@ -32,11 +32,11 @@ function parseFrontmatter(markdown: string): {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = {};
-  frontmatterText.split("\n").forEach((line) => {
-    const [key, ...valueParts] = line.split(":");
-    if (key && valueParts.length > 0) {
-      const value = valueParts.join(":").trim();
-      data[key.trim()] = value.replace(/^["']|["']$/g, ""); // Remove quotes
+  frontmatterText.split('\n').forEach((line) => {
+    const [key, ...valueParts] = line.split(':');
+    if (Boolean(key) && valueParts.length > 0) {
+      const value = valueParts.join(':').trim();
+      data[key.trim()] = value.replace(/^["']|["']$/g, ''); // Remove quotes
     }
   });
 
@@ -51,7 +51,7 @@ export function useMarkdown(path: string) {
   useEffect(() => {
     fetch(path)
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to load markdown");
+        if (!res.ok) throw new Error('Failed to load markdown');
         return res.text();
       })
       .then((text) => {

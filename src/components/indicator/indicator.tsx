@@ -1,16 +1,16 @@
-import { cn } from "../../lib/utils";
-import { colorMap, positionMap, sizeMap } from "./indicator-variants";
-import type { ColorVariant } from "./type";
+import { cn } from '../../lib/utils';
+import { colorMap, positionMap, sizeMap } from './indicator-variants';
+import type { ColorVariant } from './type';
 
 type IndicatorPosition =
-  | "top-right"
-  | "top-left"
-  | "bottom-right"
-  | "bottom-left";
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-right'
+  | 'bottom-left';
 
 interface Props {
   color: ColorVariant;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   value?: number;
   position?: IndicatorPosition;
   pulse?: boolean;
@@ -19,9 +19,9 @@ interface Props {
 
 export function Indicator({
   color,
-  size = "md",
+  size = 'md',
   value,
-  position = "top-right",
+  position = 'top-right',
   pulse = false,
   children,
 }: Props) {
@@ -33,13 +33,13 @@ export function Indicator({
 
       <span
         className={cn(
-          "absolute z-10 flex items-center justify-center rounded-sm font-medium",
+          'absolute z-10 flex items-center justify-center rounded-sm font-medium',
           sizeMap[size],
           positionMap[position],
           colorMap[color].bg,
           colorMap[color].text,
-          pulse && "animate-pulse",
-          isDot && "h-2 w-2 min-w-0 p-0",
+          pulse && 'animate-pulse',
+          isDot && 'h-2 w-2 min-w-0 p-0'
         )}
       >
         {!isDot && value}

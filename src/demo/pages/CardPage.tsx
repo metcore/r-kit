@@ -1,5 +1,5 @@
-import React from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
+import React from 'react';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 function CardPage() {
   return (

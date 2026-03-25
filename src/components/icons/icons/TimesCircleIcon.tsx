@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import type { IconProps } from "../type";
+import type { IconProps } from '../type';
 
 const TimesCircleIcon: React.FC<IconProps> = ({
   size = 24,
-  color = "currentColor",
+  color = 'currentColor',
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

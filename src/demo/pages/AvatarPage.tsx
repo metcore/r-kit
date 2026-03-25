@@ -1,7 +1,7 @@
-import { Avatar } from "../../components/avatar";
-import { Card, CardBody, CardHeader } from "../../components/card";
-import { Hero } from "../../components/hero";
-import DashboardLayout from "../layouts/DashboardLayout";
+import { Avatar } from '../../components/avatar';
+import { Card, CardBody, CardHeader } from '../../components/card';
+import { Hero } from '../../components/hero';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 function AvatarPage() {
   return (
@@ -11,45 +11,45 @@ function AvatarPage() {
         <h1 className="text-3xl font-semibold text-gray-900">Avatar</h1>
       </Hero>
       <div className="grid grid-cols-1 gap-4">
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Circular Avatar
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
-            <div className="flex gap-2 items-end">
+            <div className="flex items-end gap-2">
               <Avatar
                 variant="circle"
-                size={"xs"}
+                size={'xs'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="circle"
-                size={"sm"}
+                size={'sm'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="circle"
-                size={"md"}
+                size={'md'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="circle"
-                size={"lg"}
+                size={'lg'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="circle"
-                size={"xl"}
+                size={'xl'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="circle"
-                size={"xxl"}
+                size={'xxl'}
                 color="danger"
                 name="John Doe"
               />
@@ -62,45 +62,45 @@ function AvatarPage() {
           </CardBody>
         </Card>
 
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Rounded Avatar
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
-            <div className="flex gap-2 items-end">
+            <div className="flex items-end gap-2">
               <Avatar
                 variant="rounded"
-                size={"xs"}
+                size={'xs'}
                 color="gray"
                 name="John Doe"
               />
               <Avatar
                 variant="rounded"
-                size={"sm"}
+                size={'sm'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="rounded"
-                size={"md"}
+                size={'md'}
                 color="success"
                 name="John Doe"
               />
               <Avatar
                 variant="rounded"
-                size={"lg"}
+                size={'lg'}
                 color="info"
                 name="John Doe"
               />
               <Avatar
                 variant="rounded"
-                size={"xl"}
+                size={'xl'}
                 color="danger"
                 name="John Doe"
               />
               <Avatar
                 variant="rounded"
-                size={"xxl"}
+                size={'xxl'}
                 color="warning"
                 name="John Doe"
               />
@@ -113,45 +113,45 @@ function AvatarPage() {
           </CardBody>
         </Card>
 
-        <Card size={"lg"}>
+        <Card size={'lg'}>
           <CardHeader divider className="font-semibold text-gray-900">
             Square Avatar
           </CardHeader>
           <CardBody className="flex flex-wrap gap-8">
-            <div className="flex gap-2 items-end">
+            <div className="flex items-end gap-2">
               <Avatar
                 variant="square"
-                size={"xs"}
+                size={'xs'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="square"
-                size={"sm"}
+                size={'sm'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="square"
-                size={"md"}
+                size={'md'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="square"
-                size={"lg"}
+                size={'lg'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="square"
-                size={"xl"}
+                size={'xl'}
                 color="primary"
                 name="John Doe"
               />
               <Avatar
                 variant="square"
-                size={"xxl"}
+                size={'xxl'}
                 color="primary"
                 name="John Doe"
               />

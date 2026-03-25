@@ -1,11 +1,11 @@
-import HeroSection from "../components/HeroSection";
-import DashboardLayout from "../layouts/DashboardLayout";
-import illust from "../assets/images/typography.png";
-import MainSection from "../components/MainSection";
-import { Text } from "../../components/text";
-import { cn } from "../../lib/utils";
-import useColors from "../hooks/useColors";
-import Footer from "../components/Footer";
+import HeroSection from '../components/HeroSection';
+import DashboardLayout from '../layouts/DashboardLayout';
+import illust from '../assets/images/typography.png';
+import MainSection from '../components/MainSection';
+import { Text } from '../../components/text';
+import { cn } from '../../lib/utils';
+import useColors from '../hooks/useColors';
+import Footer from '../components/Footer';
 
 export default function ColorsPage() {
   const {
@@ -142,7 +142,7 @@ export default function ColorsPage() {
         </MainSection>
         <div className="flex flex-row items-stretch gap-4">
           {dividerColors.map((color, index) => (
-            <MainSection title={color.title} className="flex-1">
+            <MainSection key={index} title={color.title} className="flex-1">
               <div className="flex flex-row flex-wrap items-center gap-8">
                 <CardColor
                   key={index}
@@ -150,9 +150,9 @@ export default function ColorsPage() {
                   name={color.name}
                   percentage={color.percentage}
                   className={cn(
-                    "border border-gray-500",
-                    index === 0 && "opacity-13",
-                    index === 1 && "opacity-38",
+                    'border border-gray-500',
+                    index === 0 && 'opacity-13',
+                    index === 1 && 'opacity-38'
                   )}
                 />
               </div>
@@ -180,7 +180,7 @@ const CardColor = ({
   return (
     <div className="items-tart flex flex-col gap-4">
       <div
-        className={cn("h-28 w-28 rounded-sm border", className)}
+        className={cn('h-28 w-28 rounded-sm border', className)}
         style={{ backgroundColor: color }}
       />
       <div className="flex flex-col">
@@ -192,7 +192,7 @@ const CardColor = ({
             variant="t3"
             className="text-gray-700"
           />
-          {percentage && (
+          {percentage !== undefined && (
             <Text
               value={percentage}
               weight="medium"

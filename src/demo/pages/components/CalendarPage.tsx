@@ -1,16 +1,16 @@
-import HeroSection from "../../components/HeroSection";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import illust from "../../assets/images/forms.png";
-import { Calendar } from "../../../components/calendar";
-import { useState } from "react";
+import HeroSection from '../../components/HeroSection';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import illust from '../../assets/images/forms.png';
+import { Calendar } from '../../../components/calendar';
+import { useState } from 'react';
 import type {
   CalendarDayConfig,
   CalendarStyleConfig,
-} from "../../../components/calendar";
+} from '../../../components/calendar';
 
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    new Date("2003-12-18"),
+    new Date('2003-12-18')
   );
 
   // Disable weekend dates
@@ -25,14 +25,14 @@ export default function CalendarPage() {
     {
       date: new Date(2026, 1, 10),
       dots: [
-        { color: "#3b82f6" }, // blue
-        { color: "#ef4444" }, // red
+        { color: '#3b82f6' }, // blue
+        { color: '#ef4444' }, // red
       ],
     },
     {
       date: new Date(2026, 1, 12),
       dots: [
-        { color: "#10b981" }, // green
+        { color: '#10b981' }, // green
       ],
     },
   ];
@@ -40,8 +40,8 @@ export default function CalendarPage() {
   // Custom styling
   const styleConfig: CalendarStyleConfig = {
     disabled: {
-      background: "#fee4e2", // red-500/30
-      text: "#f04438", // red-500
+      background: '#fee4e2', // red-500/30
+      text: '#f04438', // red-500
     },
   };
 
@@ -66,7 +66,7 @@ export default function CalendarPage() {
         />
         {selectedDate && (
           <div className="mt-4 text-center">
-            <p>Selected: {selectedDate.toLocaleDateString("id-ID")}</p>
+            <p>Selected: {selectedDate.toLocaleDateString('id-ID')}</p>
           </div>
         )}
       </div>

@@ -1,14 +1,14 @@
-export type SizeType = "sm" | "md" | "lg";
+export type SizeType = 'sm' | 'md' | 'lg';
 export type ColorType =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "danger"
-  | "warning"
-  | "info"
-  | "orange"
-  | "purple"
-  | "gray";
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'orange'
+  | 'purple'
+  | 'gray';
 
 export interface RadioProps {
   id?: string;

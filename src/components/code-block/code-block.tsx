@@ -1,39 +1,41 @@
-import { useEffect, useState } from "react";
-import { getHighlighter } from "../../lib/codeHighlighter";
+import { useEffect, useState } from 'react';
+import { getHighlighter } from '../../lib/codeHighlighter';
 
 interface Props {
   code: string;
-  lang?: "tsx" | "md" | "ts" | "js" | "jsx" | "json" | "css" | "html" | "toml";
-  theme?: "dark-plus" | "light-plus";
+  lang?: 'tsx' | 'md' | 'ts' | 'js' | 'jsx' | 'json' | 'css' | 'html' | 'toml';
+  theme?: 'dark-plus' | 'light-plus';
 }
 
-export function CodeBlock({ code, lang = "tsx", theme = "dark-plus" }: Props) {
+export function CodeBlock({ code, lang = 'tsx', theme = 'dark-plus' }: Props) {
   const highlighter = getHighlighter();
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState<string>('');
 
   useEffect(() => {
     let mounted = true;
 
-    highlighter.then((highlighter) => {
-      if (!mounted) return;
+    highlighter
+      .then((highlighter) => {
+        if (!mounted) return;
 
-      const result = highlighter.codeToHtml(code, {
-        lang,
-        theme,
-        transformers: [
-          {
-            pre(node) {
-              node.properties["data-line-numbers"] = "";
+        const result = highlighter.codeToHtml(code, {
+          lang,
+          theme,
+          transformers: [
+            {
+              pre(node) {
+                node.properties['data-line-numbers'] = '';
+              },
+              line(node, line) {
+                node.properties['data-line'] = line;
+              },
             },
-            line(node, line) {
-              node.properties["data-line"] = line;
-            },
-          },
-        ],
-      });
+          ],
+        });
 
-      setHtml(result);
-    });
+        setHtml(result);
+      })
+      .catch((err) => console.error(err));
 
     return () => {
       mounted = false;
