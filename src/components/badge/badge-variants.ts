@@ -5,9 +5,9 @@ export const badgeVariants = cva(
   {
     variants: {
       size: {
-        sm: `rounded·px-1·py-0.5·text-[8px]`,
-        md: `rounded·px-1·py-0.5·text-[10px]`,
-        lg: `rounded-lg·px-2.5·py-1·text-sm`,
+        sm: `rounded px-1 py-0.5 text-[8px]`,
+        md: `rounded px-1 py-0.5 text-[10px]`,
+        lg: `rounded-lg px-2.5 py-1 text-sm`,
       },
       color: {
         primary: '',
@@ -32,7 +32,7 @@ export const badgeVariants = cva(
       /* SECONDARY */
       {
         color: 'secondary',
-        className: 'text-primary-1000·bg-white',
+        className: 'text-primary-1000 bg-white',
       },
 
       /* SUCCESS */

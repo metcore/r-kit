@@ -32,6 +32,8 @@ export default function DatePickerPage() {
         rangeValue={range}
         onRangeChange={setRange}
       />
+
+      <DatePicker showController={false} format="DD-MM-YYYY" />
     </DashboardLayout>
   );
 }

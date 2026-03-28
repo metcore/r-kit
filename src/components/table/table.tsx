@@ -229,6 +229,10 @@ export function TablePagination({
   prevOnClick,
 
   wrapperClassName,
+
+  dropdownContentClassName,
+  dropdownTriggerClassName,
+  dropdownItemClassName,
 }: TablePaginationProps) {
   const isControlled = selectedPerpage !== undefined;
 
@@ -262,7 +266,9 @@ export function TablePagination({
           />
 
           <Dropdown>
-            <DropdownTrigger className="outline-none">
+            <DropdownTrigger
+              className={clsx('outline-none', dropdownTriggerClassName)}
+            >
               <Input
                 readOnly
                 mergedAddon
@@ -280,7 +286,10 @@ export function TablePagination({
             </DropdownTrigger>
 
             <DropdownContent
-              className="w-19 gap-0 rounded-lg p-1 shadow-sm"
+              className={clsx(
+                'w-19 gap-0 rounded-lg p-1 shadow-sm',
+                dropdownContentClassName
+              )}
               sideOffset={8}
             >
               {perPages.map((item) => (
@@ -288,7 +297,8 @@ export function TablePagination({
                   key={item}
                   className={clsx(
                     value === item && 'bg-primary-50 border-primary-300',
-                    'justify-center rounded-sm! border-0'
+                    'justify-center rounded-sm! border-0',
+                    dropdownItemClassName
                   )}
                   onClick={() => handleChange(item)}
                 >

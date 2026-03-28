@@ -73,4 +73,7 @@ export type TablePaginationProps = {
   prevOnClick?: () => void;
 
   wrapperClassName?: string;
+  dropdownTriggerClassName?: string;
+  dropdownContentClassName?: string;
+  dropdownItemClassName?: string;
 };
