@@ -24,7 +24,12 @@ export function CalendarGrid({
   );
 
   return (
-    <div className="relative">
+    <div
+      className={clsx(
+        'relative',
+        variant === 'compact' && size === 'sm' && 'space-y-1'
+      )}
+    >
       {weeks.map((week, weekIndex) => {
         const segments = getWeekEventSegments({
           week,
@@ -56,7 +61,8 @@ export function CalendarGrid({
             <div
               className={clsx(
                 'grid w-full grid-cols-7',
-                variant === 'default' && '*:border-r *:border-gray-300 [&>*:nth-last-child(1)]:border-r-0' //prettier-ignore
+                variant === 'default' && '*:border-r *:border-gray-300 [&>*:nth-last-child(1)]:border-r-0', //prettier-ignore
+                variant === 'compact' && 'place-items-center'
               )}
             >
               {week.map((day, dayIndex) => (
