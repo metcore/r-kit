@@ -110,6 +110,13 @@ const formatDateToString = (date: Date | null, format: DateFormat): string => {
   }
 };
 
+function formatDateLocal(date: Date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 const parseMonthName = (monthStr: string): number | null => {
   const monthLower = monthStr.toLowerCase();
 
@@ -130,4 +137,5 @@ export {
   monthsFull,
   monthsShort,
   parseMonthName,
+  formatDateLocal,
 };

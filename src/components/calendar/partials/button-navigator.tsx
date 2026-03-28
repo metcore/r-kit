@@ -1,6 +1,6 @@
-import { cn } from '../../lib/utils';
-import { Button } from '../button';
-import { Icon, type IconNameProps } from '../icons';
+import { cn } from '../../../lib/utils';
+import { Button } from '../../button';
+import { Icon, type IconNameProps } from '../../icons';
 
 const ButtonNavigator = ({
   onClick,

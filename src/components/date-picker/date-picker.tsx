@@ -370,6 +370,7 @@ const DatePicker = ({
           <div className="top-full z-10">
             {mode === 'single' ? (
               <Calendar
+                variant="compact"
                 size={size}
                 wrapperClassname="w-full border-0"
                 weekWrapperClassname="w-full justify-between"
@@ -488,6 +489,7 @@ const DatePicker = ({
                   >
                     {/* First Calendar */}
                     <Calendar
+                      variant="compact"
                       size={size}
                       wrapperClassname="w-full rounded-none! border-0"
                       weekWrapperClassname="w-full justify-between"
@@ -501,6 +503,7 @@ const DatePicker = ({
                     {/* Second Calendar (desktop only) */}
                     {!isMobile && (
                       <Calendar
+                        variant="compact"
                         size={size}
                         wrapperClassname="w-full rounded-none border-0 border-l"
                         weekWrapperClassname="w-full justify-between"
@@ -544,7 +547,15 @@ const DatePicker = ({
                       >
                         Cancel
                       </Button>
-                      <Button onClick={handleApplyDateRange}>Apply</Button>
+                      <Button
+                        onClick={handleApplyDateRange}
+                        disabled={
+                          Boolean(dateRange.start) &&
+                          Boolean(dateRange.end) === false
+                        }
+                      >
+                        Apply
+                      </Button>
                     </div>
                   </div>
                 </div>
