@@ -6,7 +6,7 @@ import type { CalendarDayItemProps } from '../type';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../tooltip';
 
 const date_size_map: Record<string, string> = {
-  md: 'size-9',
+  md: 'size-7.5',
   sm: 'size-6',
   lg: 'size-9',
 };

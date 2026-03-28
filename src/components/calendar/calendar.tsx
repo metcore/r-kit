@@ -18,6 +18,7 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from '../dropdown';
+import { typeOptions } from './constants';
 
 const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 const month = [
@@ -125,34 +126,12 @@ const Calendar = ({
     setCurrentYear(newYear);
   };
 
-  const typeOptions: { label: string; value: CalendarTypes }[] = [
-    {
-      label: 'Year',
-      value: 'year',
-    },
-    {
-      label: 'Month',
-      value: 'month',
-    },
-    {
-      label: 'Week',
-      value: 'week',
-    },
-    {
-      label: 'Day',
-      value: 'day',
-    },
-    {
-      label: 'Agenda',
-      value: 'agenda',
-    },
-  ];
-
   useEffect(() => {
     if (value !== undefined) {
       setCurrentMonth(
         value?.getMonth() ?? defaultMonth ?? currentDate?.getMonth()
       );
+
       setCurrentYear(
         value?.getFullYear() ?? defaultYear ?? currentDate?.getFullYear()
       );
@@ -172,20 +151,8 @@ const Calendar = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="*:cursor-pointer">
-              <button onClick={() => changeMonth(-1)}>
-                <Icon
-                  name="angle-left-small"
-                  size={30}
-                  className="text-gray-900"
-                />
-              </button>
-              <button onClick={() => changeMonth(1)}>
-                <Icon
-                  name="angle-right-small"
-                  size={30}
-                  className="text-gray-900"
-                />
-              </button>
+              <ButtonNavigation onClick={() => changeMonth(-1)} type="prev" />
+              <ButtonNavigation onClick={() => changeMonth(1)} type="next" />
             </div>
             <Text
               variant="h4"
@@ -246,6 +213,7 @@ const Calendar = ({
           {/* select type end */}
         </div>
       )}
+
       <div
         className={cn(
           'border bg-white',
@@ -254,6 +222,19 @@ const Calendar = ({
           wrapperClassname
         )}
       >
+        {/* type week */}
+        {selectedType === 'week' && (
+          <div>
+            <DaysOfWeek
+              type="week"
+              size={size}
+              variant={variant}
+              daysOfWeek={daysOfWeek}
+              wrapperClassName={weekWrapperClassname}
+            />
+          </div>
+        )}
+
         {/* type year */}
         {type === 'year' && (
           <div className="grid w-full grid-cols-3">
@@ -315,6 +296,24 @@ const Calendar = ({
         )}
       </div>
     </div>
+  );
+};
+
+const ButtonNavigation = ({
+  onClick,
+  type,
+}: {
+  onClick: () => void;
+  type?: 'prev' | 'next';
+}) => {
+  return (
+    <button onClick={onClick}>
+      <Icon
+        name={type === 'next' ? 'angle-right-small' : 'angle-left-small'}
+        size={30}
+        className="text-gray-900"
+      />
+    </button>
   );
 };
 

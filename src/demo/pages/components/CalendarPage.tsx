@@ -132,6 +132,7 @@ export default function CalendarPage() {
 
       <div className="flex flex-col gap-2">
         <Calendar
+          size="sm"
           variant="compact"
           mode="range"
           value={rangeValue.start}
