@@ -1,16 +1,39 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Text, type TextVariant } from '../text';
-import { ButtonNavigator } from './button-navigator';
-import { ButtonDropdown, ItemDropdown } from './dropdown';
+import { createCalendarHelpers } from './helpers/create-calendar-helpers';
+import { getCalendarDays } from './helpers/helpers';
+import { ButtonNavigator } from './partials/button-navigator';
+import { CalendarGrid } from './partials/calendar-grid';
+import { CalendarHeader } from './partials/calendar-header';
+import DaysOfWeek from './partials/days-of-week';
+import { ButtonDropdown, ItemDropdown } from './partials/dropdown';
+import type { CalendarDay, CalendarProps, CalendarTypes } from './type';
+import clsx from 'clsx';
+import { Icon } from '../icons';
+import { Text } from '../text';
+import { Button } from '../button';
 import {
-  getBackgroundClass,
-  getCalendarDays,
-  getCursorClass,
-  getDayStyle,
-  getTextColorClass,
-} from './helpers';
-import type { CalendarDay, CalendarDayConfig, CalendarProps } from './type';
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+} from '../dropdown';
+
+const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+const month = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
 
 const Calendar = ({
   showNavigator = true,
@@ -25,159 +48,105 @@ const Calendar = ({
   wrapperClassname,
   weekWrapperClassname,
   dayWrapperClassname,
-  daysOfWeek = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-  months = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
-  ],
+  daysOfWeek = days,
+  months = month,
   showNextNavigator = true,
   showPrevNavigator = true,
   mode = 'single',
   rangeValue,
   size = 'md',
+  variant = 'default',
+  events,
+  showCalendarTooltip = true,
+  type = 'month',
+  onTypeChange,
 }: CalendarProps) => {
   const currentDate = new Date();
 
-  const [currentMonth, setCurrentMonth] = useState(
-    defaultMonth ?? currentDate.getMonth()
-  );
-  const [currentYear, setCurrentYear] = useState(
-    defaultYear ?? currentDate.getFullYear()
-  );
+  const [currentMonth, setCurrentMonth] = useState(defaultMonth ?? currentDate.getMonth()); //prettier-ignore
+  const [currentYear, setCurrentYear] = useState(defaultYear ?? currentDate.getFullYear()); //prettier-ignore
 
   const [isDropdownYearShow, setIsDropdownYearShow] = useState(false);
   const [isDropdownMonthShow, setIsDropdownMonthShow] = useState(false);
 
-  // Generate array of years (current year ± 10 years)
-  const years = useMemo(() => {
-    const yearRange = [];
-    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
-      yearRange.push(i);
-    }
-    return yearRange;
-  }, [currentYear]);
-
-  const handlePrevMonth = () => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
-  };
-
-  const handleNextMonth = () => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
-  };
+  const [selectedType, setSelectedType] = useState<CalendarTypes>(type);
+  const [selectedTypeIndex, setSelectedTypeIndex] = useState<number | null>(
+    null
+  );
 
   const calendarDays = getCalendarDays({ currentMonth, currentYear });
 
-  // Helper to check if date is disabled
-  const isDateDisabled = (day: CalendarDay): boolean => {
-    return disabledDates.some(
-      (disabledDate) =>
-        disabledDate.getDate() === day.fullDate.getDate() &&
-        disabledDate.getMonth() === day.fullDate.getMonth() &&
-        disabledDate.getFullYear() === day.fullDate.getFullYear()
-    );
+  const calendarHelpers = createCalendarHelpers({
+    disabledDates,
+    dayConfigs,
+    rangeValue,
+    mode,
+    value,
+  });
+
+  const calendarState = {
+    currentMonth,
+    currentYear,
+    setCurrentMonth,
+    setCurrentYear,
   };
 
-  // Helper to get day config
-  const getDayConfig = (day: CalendarDay): CalendarDayConfig | undefined => {
-    return dayConfigs.find(
-      (config) =>
-        config.date.getDate() === day.fullDate.getDate() &&
-        config.date.getMonth() === day.fullDate.getMonth() &&
-        config.date.getFullYear() === day.fullDate.getFullYear()
-    );
-  };
-
-  // Helper to check if date is selected (single mode)
-  const isDateSelected = (day: CalendarDay): boolean => {
-    if (mode === 'range') return false;
-    if (!value) return false;
-    return (
-      value.getDate() === day.fullDate.getDate() &&
-      value.getMonth() === day.fullDate.getMonth() &&
-      value.getFullYear() === day.fullDate.getFullYear()
-    );
-  };
-
-  // Helper to check if date is in range
-  const isDateInRange = (day: CalendarDay): boolean => {
-    if (mode !== 'range' || !rangeValue?.start || !rangeValue?.end)
-      return false;
-
-    const dayTime = day.fullDate.getTime();
-    const startTime = rangeValue.start.getTime();
-    const endTime = rangeValue.end.getTime();
-
-    return dayTime > startTime && dayTime < endTime;
-  };
-
-  // Helper to check if date is range start
-  const isRangeStart = (day: CalendarDay): boolean => {
-    if (mode !== 'range' || !rangeValue?.start) return false;
-    return (
-      day.fullDate.getDate() === rangeValue.start.getDate() &&
-      day.fullDate.getMonth() === rangeValue.start.getMonth() &&
-      day.fullDate.getFullYear() === rangeValue.start.getFullYear()
-    );
-  };
-
-  // Helper to check if date is range end
-  const isRangeEnd = (day: CalendarDay): boolean => {
-    if (mode !== 'range' || !rangeValue?.end) return false;
-    return (
-      day.fullDate.getDate() === rangeValue.end.getDate() &&
-      day.fullDate.getMonth() === rangeValue.end.getMonth() &&
-      day.fullDate.getFullYear() === rangeValue.end.getFullYear()
-    );
+  const dropdownState = {
+    isMonthOpen: isDropdownMonthShow,
+    setMonthOpen: setIsDropdownMonthShow,
+    isYearOpen: isDropdownYearShow,
+    setYearOpen: setIsDropdownYearShow,
   };
 
   const handleDateClick = (day: CalendarDay) => {
-    if (day.month !== 'current') return;
+    const dayConfig = calendarHelpers.getDayConfig(day);
+    const disabled = (dayConfig?.disabled ?? false) || calendarHelpers.isDateDisabled(day); //prettier-ignore
 
-    const dayConfig = getDayConfig(day);
-    const disabled = (dayConfig?.disabled ?? false) || isDateDisabled(day);
-    if (disabled) return;
+    if (disabled) {
+      return;
+    }
 
     onChange?.(day.fullDate);
   };
 
-  // Get range background class
-  const getRangeBackgroundClass = (day: CalendarDay): string => {
-    if (mode !== 'range') return '';
+  const changeMonth = (delta: number) => {
+    let newMonth = currentMonth + delta;
+    let newYear = currentYear;
 
-    const inRange = isDateInRange(day);
-    const rangeStart = isRangeStart(day);
-    const rangeEnd = isRangeEnd(day);
-
-    if (rangeStart || rangeEnd) {
-      return 'bg-primary-1000 text-white!';
+    if (newMonth < 0) {
+      newMonth = 11;
+      newYear -= 1;
+    } else if (newMonth > 11) {
+      newMonth = 0;
+      newYear += 1;
     }
 
-    if (inRange) {
-      return 'bg-primary-100';
-    }
-
-    return '';
+    setCurrentMonth(newMonth);
+    setCurrentYear(newYear);
   };
+
+  const typeOptions: { label: string; value: CalendarTypes }[] = [
+    {
+      label: 'Year',
+      value: 'year',
+    },
+    {
+      label: 'Month',
+      value: 'month',
+    },
+    {
+      label: 'Week',
+      value: 'week',
+    },
+    {
+      label: 'Day',
+      value: 'day',
+    },
+    {
+      label: 'Agenda',
+      value: 'agenda',
+    },
+  ];
 
   useEffect(() => {
     if (value !== undefined) {
@@ -191,221 +160,159 @@ const Calendar = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  const header_size_map: Record<string, TextVariant> = {
-    sm: 't2',
-    md: 't1',
-    lg: 'p3',
-  };
-
-  const day_of_week_size: Record<string, TextVariant> = {
-    sm: 't3',
-    md: 't2',
-    lg: 't1',
-  };
-
-  const date_size_map: Record<string, string> = {
-    md: 'size-9',
-    sm: 'size-6',
-    lg: 'size-9',
-  };
+  useEffect(() => {
+    if (type !== undefined) {
+      setSelectedType(type);
+    }
+  }, [type]);
 
   return (
-    <div
-      className={cn(
-        'mx-auto w-fit rounded-2xl border border-gray-200 bg-white p-6',
-        wrapperClassname
-      )}
-    >
-      {/* Header with navigation */}
-      {showHeader && (
-        <div className="mb-6 flex items-center justify-between">
-          {showNavigator && (
-            <ButtonNavigator
-              size={size}
-              onClick={handlePrevMonth}
-              icon="angle-left-small"
-              className={showPrevNavigator ? '' : 'opacity-0'}
-            />
-          )}
-
-          {/* Month - Year Dropdown */}
-          <div
-            className={cn(
-              'flex items-center gap-2',
-              !showNavigator && 'w-full justify-center'
-            )}
-          >
-            {/* month */}
-            {showNavigator && (
-              <div>
-                <ButtonDropdown
-                  size={size}
-                  onClick={() => setIsDropdownMonthShow(!isDropdownMonthShow)}
-                  active={isDropdownMonthShow}
+    <div className={clsx(variant === 'default' && 'flex flex-col gap-2')}>
+      {variant === 'default' && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className="*:cursor-pointer">
+              <button onClick={() => changeMonth(-1)}>
+                <Icon
+                  name="angle-left-small"
+                  size={30}
+                  className="text-gray-900"
                 />
-                {isDropdownMonthShow && (
-                  <div
-                    className="relative"
-                    onClick={() => setIsDropdownMonthShow(false)}
-                  >
-                    <div className="absolute top-5 left-1/2 z-20 max-h-48 -translate-x-1/2 space-y-1 overflow-y-auto rounded-lg bg-white px-2 py-1 shadow-md">
-                      {months.map((month, index) => (
-                        <ItemDropdown
-                          onClick={() => setCurrentMonth(index)}
-                          key={index}
-                          active={currentMonth === index}
-                          value={month}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* current month - year */}
+              </button>
+              <button onClick={() => changeMonth(1)}>
+                <Icon
+                  name="angle-right-small"
+                  size={30}
+                  className="text-gray-900"
+                />
+              </button>
+            </div>
             <Text
-              as={'span'}
-              variant={header_size_map[size]}
+              variant="h4"
               weight="semibold"
-              value={`${months[currentMonth]} - ${currentYear}`}
-              align="center"
-            />
-
-            {/* year */}
-            {showNavigator && (
-              <div>
-                <ButtonDropdown
-                  onClick={() => setIsDropdownYearShow(!isDropdownYearShow)}
-                  active={isDropdownYearShow}
-                />
-                {isDropdownYearShow && (
-                  <div
-                    className="relative"
-                    onClick={() => setIsDropdownYearShow(false)}
-                  >
-                    <div className="absolute top-5 left-1/2 z-20 max-h-48 -translate-x-1/2 space-y-1 overflow-y-auto rounded-lg bg-white px-2 py-1 shadow-md">
-                      {years.map((year) => (
-                        <ItemDropdown
-                          key={year}
-                          onClick={() => setCurrentYear(year)}
-                          active={currentYear === year}
-                          value={year.toString()}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+              className="-translate-y-0.5 text-gray-900"
+            >
+              {months[currentMonth]} {currentYear}
+            </Text>
           </div>
 
-          {/* Next Month Button */}
-          {showNavigator && (
-            <ButtonNavigator
-              size={size}
-              onClick={handleNextMonth}
-              icon="angle-right-small"
-              className={showNextNavigator ? '' : 'opacity-0'}
-            />
-          )}
+          {/* Select Type */}
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              color="gray"
+              variant={'outline'}
+              className="capitalize"
+            >
+              Today
+            </Button>
+
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  size="sm"
+                  color="gray"
+                  variant={'outline'}
+                  className="flex items-center capitalize"
+                >
+                  {selectedType} <Icon name="angle-down-small" size={20} />
+                </Button>
+              </DropdownTrigger>
+
+              <DropdownContent
+                align="end"
+                className="w-36 *:rounded-md *:border-0"
+              >
+                {typeOptions.map((option, index) => (
+                  <DropdownItem
+                    key={option.value}
+                    onFocus={() => setSelectedTypeIndex(index)}
+                    onClick={() => {
+                      setSelectedType(option.value);
+                      onTypeChange?.(option.value);
+                    }}
+                    className={clsx(
+                      (selectedType === option.value ||
+                        index === selectedTypeIndex) &&
+                        'bg-primary-50!'
+                    )}
+                  >
+                    <Text className="text-gray-900">{option.label}</Text>
+                  </DropdownItem>
+                ))}
+              </DropdownContent>
+            </Dropdown>
+          </div>
+          {/* select type end */}
         </div>
       )}
-
-      {/* Days of week */}
       <div
         className={cn(
-          'calendar-cols mb-3 grid justify-items-center gap-x-1',
-          weekWrapperClassname
+          'border bg-white',
+          variant === 'compact' && 'mx-auto w-fit rounded-2xl border-gray-200 p-6 ', //prettier-ignore
+          variant === 'default' && 'overflow-hidden rounded-xl border-gray-300', //prettier-ignore
+          wrapperClassname
         )}
       >
-        {daysOfWeek.map((day) => (
-          <Text
-            key={day}
-            as="h5"
-            weight="medium"
-            value={day}
-            className="text-gray-600!"
-            align="center"
-            variant={day_of_week_size[size]}
-          />
-        ))}
-      </div>
-
-      {/* Calendar grid */}
-      <div
-        className={cn(
-          'calendar-cols grid justify-items-center gap-x-1 gap-y-1',
-          dayWrapperClassname
+        {/* type year */}
+        {type === 'year' && (
+          <div className="grid w-full grid-cols-3">
+            <CalendarGrid
+              className={dayWrapperClassname}
+              days={calendarDays as CalendarDay[]}
+              helpers={calendarHelpers}
+              size={size}
+              mode={mode}
+              styleConfig={styleConfig}
+              onClick={handleDateClick}
+              variant={variant}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+            />
+          </div>
         )}
-      >
-        {calendarDays.map((day, index) => {
-          const dayConfig = getDayConfig(day as CalendarDay);
-          const isDisabled =
-            (dayConfig?.disabled ?? false) ||
-            isDateDisabled(day as CalendarDay);
-          const isSelected = isDateSelected(day as CalendarDay);
-          const dots = dayConfig?.dots || [];
-          const isCurrentMonth = day.month === 'current';
-          // const inRange = isDateInRange(day as CalendarDay);
-          const rangeStart = isRangeStart(day as CalendarDay);
-          const rangeEnd = isRangeEnd(day as CalendarDay);
 
-          return (
-            <button
-              key={index}
-              onClick={() => handleDateClick(day as CalendarDay)}
-              disabled={isDisabled && day.month === 'current'}
-              style={getDayStyle({
-                selected: isSelected || rangeStart || rangeEnd,
-                day: day as CalendarDay,
-                disabled: isDisabled,
-                styleConfig,
-              })}
-              className={cn(
-                'flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200',
-                date_size_map[size],
-                getCursorClass({ isDisabled, isCurrentMonth }),
-                getTextColorClass({
-                  isCurrentMonth,
-                  isSelected: isSelected || rangeStart || rangeEnd,
-                  isDisabled,
-                  styleConfig,
-                  day: day as CalendarDay,
-                }),
-                mode === 'single' &&
-                  getBackgroundClass({
-                    isSelected,
-                    isDisabled,
-                    isCurrentMonth,
-                    styleConfig,
-                  }),
-                mode === 'range' &&
-                  !isDisabled &&
-                  getRangeBackgroundClass(day as CalendarDay)
-              )}
-            >
-              <h5 className="font-metropolis text-xs font-medium">
-                {day.date}
-              </h5>
+        {/* type month */}
+        {selectedType === 'month' && (
+          <>
+            {/* Header with navigation */}
+            {showHeader && variant === 'compact' && (
+              <CalendarHeader
+                size={size}
+                calendar={calendarState}
+                dropdown={dropdownState}
+                handleNextMonth={() => changeMonth(1)}
+                handlePrevMonth={() => changeMonth(-1)}
+                showNavigator={showNavigator}
+                months={months}
+                showNextNavigator={showNextNavigator}
+                showPrevNavigator={showPrevNavigator}
+              />
+            )}
 
-              {/* dots */}
-              {dots.length > 0 && (
-                <div className="-mb-1 flex gap-0.5">
-                  {dots.map((dot, dotIndex) => (
-                    <div
-                      key={dotIndex}
-                      className="size-1 rounded-full"
-                      style={{
-                        backgroundColor: dot.color ?? '#d1d5db',
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </button>
-          );
-        })}
+            {/* Days of week */}
+            <DaysOfWeek
+              size={size}
+              variant={variant}
+              daysOfWeek={daysOfWeek}
+              wrapperClassName={weekWrapperClassname}
+            />
+
+            {/* Calendar grid */}
+            <CalendarGrid
+              className={dayWrapperClassname}
+              days={calendarDays as CalendarDay[]}
+              helpers={calendarHelpers}
+              size={size}
+              mode={mode}
+              styleConfig={styleConfig}
+              onClick={handleDateClick}
+              variant={variant}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+            />
+          </>
+        )}
       </div>
     </div>
   );

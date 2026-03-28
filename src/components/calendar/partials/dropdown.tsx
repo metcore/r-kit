@@ -1,8 +1,9 @@
-import { cn } from '../../lib/utils';
-import { Button } from '../button';
-import { Icon } from '../icons';
-import { Text } from '../text';
-import type { ButtonDropdownProps } from './type';
+import type { ReactNode } from 'react';
+import { cn } from '../../../lib/utils';
+import { Button } from '../../button';
+import { Icon } from '../../icons';
+import { Text } from '../../text';
+import type { ButtonDropdownProps } from '../type';
 
 const ButtonDropdown = ({
   onClick,
@@ -59,4 +60,20 @@ const ItemDropdown = ({
   );
 };
 
-export { ButtonDropdown, ItemDropdown };
+const DropdownWrapper = ({
+  children,
+  onClose,
+}: {
+  onClose: (open: boolean) => void;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="relative" onClick={() => onClose(false)}>
+      <div className="absolute top-5 left-1/2 z-20 max-h-48 -translate-x-1/2 space-y-1 overflow-y-auto rounded-lg bg-white px-2 py-1 shadow-md">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export { ButtonDropdown, ItemDropdown, DropdownWrapper };

@@ -1,3 +1,5 @@
+import type { createCalendarHelpers } from './helpers/create-calendar-helpers';
+
 export interface GetCalendarDaysProps {
   currentYear: number;
   currentMonth: number;
@@ -62,5 +64,68 @@ export interface CalendarProps {
   mode?: 'single' | 'range';
   rangeValue?: DateRange;
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'big';
+  variant?: 'compact' | 'default';
+  events?: CalendarEvent[];
+  showCalendarTooltip?: boolean;
+  type?: CalendarTypes;
+  onTypeChange?: (type: CalendarTypes) => void;
 }
+
+export type CalendarState = {
+  currentMonth: number;
+  currentYear: number;
+  setCurrentMonth: (month: number) => void;
+  setCurrentYear: (year: number) => void;
+};
+
+export type DropdownState = {
+  isMonthOpen: boolean;
+  setMonthOpen: (val: boolean) => void;
+  isYearOpen: boolean;
+  setYearOpen: (val: boolean) => void;
+};
+
+export interface CalendarGridProps {
+  days: CalendarDay[];
+  helpers: ReturnType<typeof createCalendarHelpers>;
+  size: CalendarProps['size'];
+  mode: CalendarProps['mode'];
+  styleConfig?: CalendarStyleConfig;
+  onClick: (day: CalendarDay) => void;
+  className?: string;
+  variant?: CalendarProps['variant'];
+  events?: CalendarEvent[];
+  showCalendarTooltip?: boolean;
+}
+
+export interface CalendarDayItemProps {
+  day: CalendarDay;
+  helpers: ReturnType<typeof createCalendarHelpers>;
+  size: CalendarProps['size'];
+  mode: CalendarProps['mode'];
+  styleConfig?: CalendarStyleConfig;
+  onClick: (day: CalendarDay) => void;
+  variant?: CalendarProps['variant'];
+  events?: CalendarEvent[];
+  backdropOnClick?: () => void;
+}
+
+export interface CalendarEvent {
+  title: string;
+  subtitle?: string;
+  label?: string;
+  startTime?: string;
+  endTime?: string;
+  color?:
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'primary'
+    | 'orange'
+    | 'purple';
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+}
+
+export type CalendarTypes = 'week' | 'month' | 'year' | 'day' | 'agenda';
