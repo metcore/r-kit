@@ -1,10 +1,10 @@
 import type { CalendarTypes } from './type';
 
 export const typeOptions: { label: string; value: CalendarTypes }[] = [
-  {
-    label: 'Year',
-    value: 'year',
-  },
+  // {
+  //   label: 'Year',
+  //   value: 'year',
+  // },
   {
     label: 'Month',
     value: 'month',
@@ -13,12 +13,12 @@ export const typeOptions: { label: string; value: CalendarTypes }[] = [
     label: 'Week',
     value: 'week',
   },
-  {
-    label: 'Day',
-    value: 'day',
-  },
-  {
-    label: 'Agenda',
-    value: 'agenda',
-  },
+  // {
+  //   label: 'Day',
+  //   value: 'day',
+  // },
+  // {
+  //   label: 'Agenda',
+  //   value: 'agenda',
+  // },
 ];

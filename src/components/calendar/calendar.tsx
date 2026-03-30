@@ -61,6 +61,9 @@ const Calendar = ({
   showCalendarTooltip = true,
   type = 'month',
   onTypeChange,
+  onEventClick,
+  backdropOnClick,
+  showDefaultController = false,
 }: CalendarProps) => {
   const currentDate = new Date();
 
@@ -133,6 +136,7 @@ const Calendar = ({
     setCurrentWeekStart((prev) => {
       const next = new Date(prev);
       next.setDate(prev.getDate() + delta * 7);
+
       // sync currentMonth & currentYear ke minggu aktif
       setCurrentMonth(next.getMonth());
       setCurrentYear(next.getFullYear());
@@ -161,7 +165,7 @@ const Calendar = ({
     action: 'next' | 'prev'
   ) => {
     if (type === 'month') {
-      if (action === 'next') {
+      if (action === 'prev') {
         return changeMonth(-1);
       } else {
         return changeMonth(1);
@@ -169,7 +173,7 @@ const Calendar = ({
     }
 
     if (type === 'week') {
-      if (action === 'next') {
+      if (action === 'prev') {
         return changeWeek(1);
       } else {
         return changeWeek(-1);
@@ -197,163 +201,147 @@ const Calendar = ({
   }, [type]);
 
   return (
-    <div className={clsx(variant === 'default' && 'flex flex-col gap-2')}>
-      {variant === 'default' && (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="*:cursor-pointer">
-              <ButtonNavigation
-                onClick={() => handleNavigationDefault(selectedType, 'prev')}
-                type="prev"
-              />
-              <ButtonNavigation
-                onClick={() => handleNavigationDefault(selectedType, 'next')}
-                type="next"
-              />
+    <>
+      <div className={clsx(variant === 'default' && 'flex flex-col gap-2')}>
+        {variant === 'default' && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="*:cursor-pointer">
+                <ButtonNavigation
+                  onClick={() => handleNavigationDefault(selectedType, 'prev')}
+                  type="prev"
+                />
+                <ButtonNavigation
+                  onClick={() => handleNavigationDefault(selectedType, 'next')}
+                  type="next"
+                />
+              </div>
+              <Text
+                variant="h4"
+                weight="semibold"
+                className="-translate-y-0.5 text-gray-900"
+              >
+                {months[currentMonth]} {currentYear}
+              </Text>
             </div>
-            <Text
-              variant="h4"
-              weight="semibold"
-              className="-translate-y-0.5 text-gray-900"
-            >
-              {months[currentMonth]} {currentYear}
-            </Text>
-          </div>
 
-          {/* Select Type */}
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              color="gray"
-              variant={'outline'}
-              className="capitalize"
-              onClick={() => setCurrentMonth(new Date().getMonth())}
-            >
-              Today
-            </Button>
-
-            <Dropdown>
-              <DropdownTrigger>
+            {/* Select Type */}
+            {showDefaultController && (
+              <div className="flex items-center gap-2">
                 <Button
                   size="sm"
                   color="gray"
                   variant={'outline'}
-                  className="flex items-center capitalize"
+                  className="capitalize"
+                  onClick={() => setCurrentMonth(new Date().getMonth())}
                 >
-                  {selectedType} <Icon name="angle-down-small" size={20} />
+                  Today
                 </Button>
-              </DropdownTrigger>
-
-              <DropdownContent
-                align="end"
-                className="w-36 *:rounded-md *:border-0"
-              >
-                {typeOptions.map((option, index) => (
-                  <DropdownItem
-                    key={option.value}
-                    onFocus={() => setSelectedTypeIndex(index)}
-                    onClick={() => {
-                      setSelectedType(option.value);
-                      onTypeChange?.(option.value);
-                    }}
-                    className={clsx(
-                      (selectedType === option.value ||
-                        index === selectedTypeIndex) &&
-                        'bg-primary-50!'
-                    )}
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button
+                      size="sm"
+                      color="gray"
+                      variant={'outline'}
+                      className="flex items-center capitalize"
+                    >
+                      {selectedType} <Icon name="angle-down-small" size={20} />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownContent
+                    align="end"
+                    className="w-36 *:rounded-md *:border-0"
                   >
-                    <Text className="text-gray-900">{option.label}</Text>
-                  </DropdownItem>
-                ))}
-              </DropdownContent>
-            </Dropdown>
-          </div>
-          {/* select type end */}
-        </div>
-      )}
-
-      <div
-        className={cn(
-          'border bg-white',
-          variant === 'compact' && 'mx-auto w-fit rounded-2xl border-gray-200 p-6 ', //prettier-ignore
-          variant === 'default' && 'overflow-hidden rounded-xl border-gray-300', //prettier-ignore
-          wrapperClassname
-        )}
-      >
-        {/* type week */}
-        {selectedType === 'week' && (
-          <div>
-            <DaysOfWeek
-              type="week"
-              size={size}
-              variant={variant}
-              daysOfWeek={getWeekDaysLabel(currentWeekStart)}
-              wrapperClassName={weekWrapperClassname}
-            />
-          </div>
-        )}
-
-        {/* type year */}
-        {type === 'year' && (
-          <div className="grid w-full grid-cols-3">
-            <CalendarGrid
-              className={dayWrapperClassname}
-              days={calendarDays as CalendarDay[]}
-              helpers={calendarHelpers}
-              size={size}
-              mode={mode}
-              styleConfig={styleConfig}
-              onClick={handleDateClick}
-              variant={variant}
-              events={events}
-              showCalendarTooltip={showCalendarTooltip}
-            />
-          </div>
-        )}
-
-        {/* type month */}
-        {selectedType === 'month' && (
-          <>
-            {/* Header with navigation */}
-            {showHeader && variant === 'compact' && (
-              <CalendarHeader
-                size={size}
-                calendar={calendarState}
-                dropdown={dropdownState}
-                handleNextMonth={() => changeMonth(1)}
-                handlePrevMonth={() => changeMonth(-1)}
-                showNavigator={showNavigator}
-                months={months}
-                showNextNavigator={showNextNavigator}
-                showPrevNavigator={showPrevNavigator}
-              />
+                    {typeOptions.map((option, index) => (
+                      <DropdownItem
+                        key={option.value}
+                        onFocus={() => setSelectedTypeIndex(index)}
+                        onClick={() => {
+                          setSelectedType(option.value);
+                          onTypeChange?.(option.value);
+                        }}
+                        className={clsx(
+                          (selectedType === option.value ||
+                            index === selectedTypeIndex) &&
+                            'bg-primary-50!'
+                        )}
+                      >
+                        <Text className="text-gray-900">{option.label}</Text>
+                      </DropdownItem>
+                    ))}
+                  </DropdownContent>
+                </Dropdown>
+              </div>
             )}
-
-            {/* Days of week */}
-            <DaysOfWeek
-              size={size}
-              variant={variant}
-              daysOfWeek={daysOfWeek}
-              wrapperClassName={weekWrapperClassname}
-            />
-
-            {/* Calendar grid */}
-            <CalendarGrid
-              className={dayWrapperClassname}
-              days={calendarDays as CalendarDay[]}
-              helpers={calendarHelpers}
-              size={size}
-              mode={mode}
-              styleConfig={styleConfig}
-              onClick={handleDateClick}
-              variant={variant}
-              events={events}
-              showCalendarTooltip={showCalendarTooltip}
-            />
-          </>
+            {/* select type end */}
+          </div>
         )}
+        <div
+          className={cn(
+            'border bg-white',
+            variant === 'compact' && 'mx-auto w-fit rounded-2xl border-gray-200 p-6 ', //prettier-ignore
+            variant === 'default' && 'overflow-hidden rounded-xl border-gray-300', //prettier-ignore
+            wrapperClassname
+          )}
+        >
+          {/* type week */}
+          {selectedType === 'week' && (
+            <div>
+              <DaysOfWeek
+                type="week"
+                size={size}
+                variant={variant}
+                daysOfWeek={getWeekDaysLabel(currentWeekStart)}
+                wrapperClassName={weekWrapperClassname}
+              />
+            </div>
+          )}
+          {/* type month */}
+          {selectedType === 'month' && (
+            <>
+              {/* Header with navigation */}
+              {showHeader && variant === 'compact' && (
+                <CalendarHeader
+                  size={size}
+                  calendar={calendarState}
+                  dropdown={dropdownState}
+                  handleNextMonth={() => changeMonth(1)}
+                  handlePrevMonth={() => changeMonth(-1)}
+                  showNavigator={showNavigator}
+                  months={months}
+                  showNextNavigator={showNextNavigator}
+                  showPrevNavigator={showPrevNavigator}
+                />
+              )}
+
+              {/* Days of week */}
+              <DaysOfWeek
+                size={size}
+                variant={variant}
+                daysOfWeek={daysOfWeek}
+                wrapperClassName={weekWrapperClassname}
+              />
+
+              {/* Calendar grid */}
+              <CalendarGrid
+                className={dayWrapperClassname}
+                days={calendarDays as CalendarDay[]}
+                helpers={calendarHelpers}
+                size={size}
+                mode={mode}
+                styleConfig={styleConfig}
+                onClick={handleDateClick}
+                variant={variant}
+                events={events}
+                showCalendarTooltip={showCalendarTooltip}
+                onEventClick={onEventClick}
+                backdropOnClick={backdropOnClick}
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

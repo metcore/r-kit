@@ -17,6 +17,8 @@ export function CalendarGrid({
   variant,
   events = [],
   showCalendarTooltip = true,
+  backdropOnClick,
+  onEventClick,
 }: CalendarGridProps) {
   const isMobile = useIsMobile();
   const weeks = Array.from({ length: Math.ceil(days.length / 7) }, (_, i) =>
@@ -76,6 +78,11 @@ export function CalendarGrid({
                   onClick={onClick}
                   variant={variant}
                   events={events}
+                  backdropOnClick={
+                    variant === 'default' && backdropOnClick
+                      ? (day) => backdropOnClick?.(day)
+                      : undefined
+                  }
                 />
               ))}
             </div>
@@ -88,6 +95,7 @@ export function CalendarGrid({
                     key={index}
                     segment={seg}
                     showTooltip={showCalendarTooltip}
+                    onClick={() => onEventClick?.(seg.event)}
                   />
                 ))}
 

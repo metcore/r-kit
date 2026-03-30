@@ -34,7 +34,10 @@ export default function CalendarDayItem({
   const currentDate = formatDateLocal(day.fullDate);
 
   const hasEvent = events?.find((event) => {
-    return currentDate >= event.startDate && currentDate <= event.endDate;
+    const start = new Date(event.startDate);
+    const end = new Date(event.endDate);
+
+    return new Date(currentDate) >= start && new Date(currentDate) <= end;
   })?.title;
 
   const styleHelpers = createDateStyleHelpers({
@@ -62,7 +65,7 @@ export default function CalendarDayItem({
     >
       <div
         className="absolute inset-0 size-full cursor-pointer"
-        onClick={backdropOnClick}
+        onClick={() => backdropOnClick?.(day)}
       />
 
       <h5
@@ -75,20 +78,22 @@ export default function CalendarDayItem({
         {day.date}
       </h5>
 
-      {variant === 'default' && Boolean(hasEvent) === false && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <Tooltip>
-            <TooltipTrigger className="cursor-pointer">
-              <Icon
-                name="plus"
-                className="text-gray-700! opacity-0 transition-opacity group-hover:opacity-100"
-                size={20}
-              />
-            </TooltipTrigger>
-            <TooltipContent side="bottom">Add Schedule</TooltipContent>
-          </Tooltip>
-        </div>
-      )}
+      {variant === 'default' &&
+        Boolean(hasEvent) === false &&
+        backdropOnClick && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Tooltip>
+              <TooltipTrigger className="cursor-pointer">
+                <Icon
+                  name="plus"
+                  className="text-gray-700! opacity-0 transition-opacity group-hover:opacity-100"
+                  size={20}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Add Schedule</TooltipContent>
+            </Tooltip>
+          </div>
+        )}
 
       {variant === 'compact' && dots.length > 0 && (
         <div className="-mb-1 flex gap-0.5">
