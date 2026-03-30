@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { Text, type TextVariant } from '../../text';
 import type { CalendarProps } from '../type';
+import type { ReactNode } from 'react';
 
 interface Props {
   wrapperClassName?: string;
@@ -8,6 +9,7 @@ interface Props {
   size: CalendarProps['size'];
   variant?: CalendarProps['variant'];
   type?: CalendarProps['type'];
+  renderItem?: (value: { day: string; label: string }) => ReactNode;
 }
 
 const day_of_week_size: Record<string, TextVariant> = {
@@ -22,6 +24,7 @@ export default function DaysOfWeek({
   wrapperClassName,
   variant = 'default',
   type = 'month',
+  renderItem,
 }: Props) {
   return (
     <div
@@ -34,7 +37,7 @@ export default function DaysOfWeek({
         wrapperClassName
       )}
     >
-      {type === 'week' && variant === 'default' && (
+      {type === 'week' && variant === 'default' && renderItem === undefined && (
         <>
           <div></div>
           {daysOfWeek.map((day) => (
@@ -44,6 +47,7 @@ export default function DaysOfWeek({
       )}
 
       {type === 'month' &&
+        renderItem === undefined &&
         daysOfWeek.map((day) => (
           <Text
             key={day}
