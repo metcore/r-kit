@@ -199,11 +199,9 @@ export const Select: React.FC<SelectProps> = ({
   }, [isOpen, isSearchable]);
 
   const getDisplayValue = () => {
-    if (
-      value !== null ||
-      value !== undefined ||
-      (isMulti && asArray(value).length === 0)
-    ) {
+    const isEmpty = value == null || (isMulti && asArray(value).length === 0);
+
+    if (isEmpty) {
       return <span className="text-gray-500">{placeholder}</span>;
     }
 
@@ -215,7 +213,9 @@ export const Select: React.FC<SelectProps> = ({
               key={item.value}
               className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
             >
-              {renderValue !== undefined ? renderValue?.(item) : item.label}
+              {renderValue !== undefined && renderValue !== null
+                ? renderValue?.(item)
+                : item.label}
               <button
                 onClick={(e) => handleRemove(item, e)}
                 className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
@@ -228,7 +228,7 @@ export const Select: React.FC<SelectProps> = ({
       );
     }
 
-    return renderValue !== undefined
+    return renderValue !== undefined && renderValue !== null
       ? renderValue?.(value as SelectOption)
       : (value as SelectOption).label;
   };
@@ -342,7 +342,7 @@ export const Select: React.FC<SelectProps> = ({
                       )}
                     >
                       <div className="flex-1">
-                        {renderOption !== undefined ? (
+                        {renderOption !== undefined && renderOption !== null ? (
                           renderOption?.(option, { selected })
                         ) : (
                           <div className={cn(selected && 'font-medium')}>

@@ -75,6 +75,15 @@ const Calendar = ({
     null
   );
 
+  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(() => {
+    const today = new Date();
+    const day = today.getDay(); // 0 = Minggu
+    const start = new Date(today);
+    start.setDate(today.getDate() - day); // mundur ke hari Minggu
+    start.setHours(0, 0, 0, 0);
+    return start;
+  });
+
   const calendarDays = getCalendarDays({ currentMonth, currentYear });
 
   const calendarHelpers = createCalendarHelpers({
@@ -110,6 +119,27 @@ const Calendar = ({
     onChange?.(day.fullDate);
   };
 
+  const getWeekDaysLabel = (weekStart: Date): string[] => {
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      const dayName = daysOfWeek[d.getDay()]; // "Min", "Sen", dll
+      const date = d.getDate();
+      return `${dayName} ${date}`; // e.g. "Sen 23"
+    });
+  };
+
+  const changeWeek = (delta: number) => {
+    setCurrentWeekStart((prev) => {
+      const next = new Date(prev);
+      next.setDate(prev.getDate() + delta * 7);
+      // sync currentMonth & currentYear ke minggu aktif
+      setCurrentMonth(next.getMonth());
+      setCurrentYear(next.getFullYear());
+      return next;
+    });
+  };
+
   const changeMonth = (delta: number) => {
     let newMonth = currentMonth + delta;
     let newYear = currentYear;
@@ -124,6 +154,27 @@ const Calendar = ({
 
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);
+  };
+
+  const handleNavigationDefault = (
+    type: CalendarTypes,
+    action: 'next' | 'prev'
+  ) => {
+    if (type === 'month') {
+      if (action === 'next') {
+        return changeMonth(-1);
+      } else {
+        return changeMonth(1);
+      }
+    }
+
+    if (type === 'week') {
+      if (action === 'next') {
+        return changeWeek(1);
+      } else {
+        return changeWeek(-1);
+      }
+    }
   };
 
   useEffect(() => {
@@ -151,8 +202,14 @@ const Calendar = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="*:cursor-pointer">
-              <ButtonNavigation onClick={() => changeMonth(-1)} type="prev" />
-              <ButtonNavigation onClick={() => changeMonth(1)} type="next" />
+              <ButtonNavigation
+                onClick={() => handleNavigationDefault(selectedType, 'prev')}
+                type="prev"
+              />
+              <ButtonNavigation
+                onClick={() => handleNavigationDefault(selectedType, 'next')}
+                type="next"
+              />
             </div>
             <Text
               variant="h4"
@@ -170,6 +227,7 @@ const Calendar = ({
               color="gray"
               variant={'outline'}
               className="capitalize"
+              onClick={() => setCurrentMonth(new Date().getMonth())}
             >
               Today
             </Button>
@@ -229,7 +287,7 @@ const Calendar = ({
               type="week"
               size={size}
               variant={variant}
-              daysOfWeek={daysOfWeek}
+              daysOfWeek={getWeekDaysLabel(currentWeekStart)}
               wrapperClassName={weekWrapperClassname}
             />
           </div>
