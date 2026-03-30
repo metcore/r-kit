@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
-import ButtonPage from './pages/ButtonPage';
+import ButtonPage from './pages/components/ButtonPage';
 import InputPage from './pages/InputPage';
 import CardPage from './pages/CardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -24,6 +24,7 @@ import TablePage from './pages/data-display/TablePage';
 import ToastPage from './pages/feedback/ToastPage';
 import SelectPage from './pages/form-field/SelectPage';
 import { SwitchPage } from './pages/form-field/SwitchPage';
+import ButtonGroupPage from './pages/components/ButtonGroupPage';
 
 const DocsRouter: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/avatar" element={<AvatarPage />} />
         <Route path="/button" element={<ButtonPage />} />
+        <Route path="/button-group" element={<ButtonGroupPage />} />
         <Route path="/card" element={<CardPage />} />
         <Route path="/chip" element={<ChipPage />} />
         <Route path="/input" element={<InputPage />} />

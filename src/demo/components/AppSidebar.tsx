@@ -59,6 +59,7 @@ function AppSidebar() {
         { path: '/calendar', label: 'Calendar' },
         { path: '/input', label: 'Input' },
         { path: '/button', label: 'Button' },
+        { path: '/button-group', label: 'Button Group' },
         { path: '/card', label: 'Card' },
         { path: '/chip', label: 'Chip' },
         { path: '/avatar', label: 'Avatar' },

@@ -81,6 +81,7 @@ const PreviewItem = ({
       >
         <div className="flex flex-1 items-center gap-2 overflow-hidden">
           <button
+            type="button"
             className="cursor-pointer disabled:cursor-not-allowed"
             onClick={handleOpenPreview}
             disabled={isNotViewable}
