@@ -69,6 +69,9 @@ export interface CalendarProps {
   showCalendarTooltip?: boolean;
   type?: CalendarTypes;
   onTypeChange?: (type: CalendarTypes) => void;
+  onEventClick?: (event?: CalendarEvent) => void;
+  backdropOnClick?: (day?: CalendarDay) => void;
+  showDefaultController?: boolean;
 }
 
 export type CalendarState = {
@@ -96,6 +99,8 @@ export interface CalendarGridProps {
   variant?: CalendarProps['variant'];
   events?: CalendarEvent[];
   showCalendarTooltip?: boolean;
+  backdropOnClick?: (day?: CalendarDay) => void;
+  onEventClick?: (event?: CalendarEvent) => void;
 }
 
 export interface CalendarDayItemProps {
@@ -107,7 +112,7 @@ export interface CalendarDayItemProps {
   onClick: (day: CalendarDay) => void;
   variant?: CalendarProps['variant'];
   events?: CalendarEvent[];
-  backdropOnClick?: () => void;
+  backdropOnClick?: (day?: CalendarDay) => void;
 }
 
 export interface CalendarEvent {

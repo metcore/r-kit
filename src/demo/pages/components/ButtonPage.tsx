@@ -1,9 +1,9 @@
-import DashboardLayout from '../layouts/DashboardLayout';
-import { Card, CardBody, CardHeader } from '../../components/card';
-import { Button } from '../../components/button';
-import { Icon } from '../../components/icons';
-import { Hero } from '../../components/hero';
-import { RoundedSpinner } from '../../components/loading';
+import DashboardLayout from '../../layouts/DashboardLayout';
+import { Card, CardBody, CardHeader } from '../../../components/card';
+import { Button } from '../../../components/button';
+import { Icon } from '../../../components/icons';
+import { Hero } from '../../../components/hero';
+import { RoundedSpinner } from '../../../components/loading';
 
 function ButtonPage() {
   return (

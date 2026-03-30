@@ -321,7 +321,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             )}
 
             {isSized && (
-              <Button onClick={() => inputRef.current?.click()}>
+              <Button onClick={() => inputRef.current?.click()} type="button">
                 <Text
                   as={'span'}
                   value={buttonLabel}

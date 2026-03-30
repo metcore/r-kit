@@ -6,7 +6,11 @@ import clsx from 'clsx';
 interface Props {
   segment: { event: CalendarEvent; startCol: number; span: number };
   showTooltip?: boolean;
-  onClick?: () => void;
+  onClick?: (segment: {
+    event: CalendarEvent;
+    startCol: number;
+    span: number;
+  }) => void;
 }
 
 export default function EventBar({
@@ -48,11 +52,14 @@ export default function EventBar({
     <>
       <button
         type="button"
-        onClick={onClick}
+        onClick={() => onClick?.(segment)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onMouseMove={handleMouseMove}
-        className="relative mx-0.5 mt-1 flex items-center justify-between overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5"
+        className={clsx(
+          'relative mx-0.5 mt-1 flex items-center justify-between overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5',
+          onClick && 'cursor-pointer'
+        )}
         style={{
           gridColumn: `${segment.startCol + 1} / span ${segment.span}`,
           backgroundColor:

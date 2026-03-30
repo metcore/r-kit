@@ -132,7 +132,6 @@ export default function CalendarPage() {
 
       <div className="flex flex-col gap-2">
         <Calendar
-          size="sm"
           variant="compact"
           mode="range"
           value={rangeValue.start}
@@ -164,6 +163,7 @@ export default function CalendarPage() {
           showNavigator={true}
           showHeader={true}
           events={dummyEvents}
+          onEventClick={(event?: CalendarEvent) => console.log(event)}
         />
         {selectedDate && (
           <div className="mt-4 text-center">
