@@ -63,6 +63,8 @@ const Calendar = ({
   onTypeChange,
   onEventClick,
   backdropOnClick,
+  onMonthChange,
+  onYearChange,
   showDefaultController = false,
 }: CalendarProps) => {
   const currentDate = new Date();
@@ -155,6 +157,9 @@ const Calendar = ({
       newMonth = 0;
       newYear += 1;
     }
+
+    onMonthChange?.(newMonth);
+    onYearChange?.(newYear);
 
     setCurrentMonth(newMonth);
     setCurrentYear(newYear);

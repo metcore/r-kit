@@ -29,7 +29,7 @@ function Textarea({
       description={description}
       errorMessages={errorMessages}
       className={className}
-      required={props.required}
+      required={false}
     >
       <textarea
         id={props?.id ?? generatedId}

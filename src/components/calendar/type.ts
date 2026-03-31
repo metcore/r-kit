@@ -72,6 +72,8 @@ export interface CalendarProps {
   onEventClick?: (event?: CalendarEvent) => void;
   backdropOnClick?: (day?: CalendarDay) => void;
   showDefaultController?: boolean;
+  onMonthChange?: (month: number) => void;
+  onYearChange?: (year: number) => void;
 }
 
 export type CalendarState = {
