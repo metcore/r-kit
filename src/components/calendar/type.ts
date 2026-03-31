@@ -1,3 +1,4 @@
+import type { DateRange } from '../date-picker';
 import type { createCalendarHelpers } from './helpers/create-calendar-helpers';
 
 export interface GetCalendarDaysProps {
@@ -39,11 +40,6 @@ export interface CalendarStyleConfig {
   };
 }
 
-export interface DateRange {
-  start: Date | null;
-  end: Date | null;
-}
-
 export interface CalendarProps {
   showNavigator?: boolean;
   showHeader?: boolean;
@@ -72,6 +68,8 @@ export interface CalendarProps {
   onEventClick?: (event?: CalendarEvent) => void;
   backdropOnClick?: (day?: CalendarDay) => void;
   showDefaultController?: boolean;
+  onMonthChange?: (month: number) => void;
+  onYearChange?: (year: number) => void;
 }
 
 export type CalendarState = {

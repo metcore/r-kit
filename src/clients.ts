@@ -21,3 +21,4 @@ export * from './components/form';
 export * from './components/select';
 export * from './components/tabs';
 export * from './components/button-group';
+export * from './components/calendar';

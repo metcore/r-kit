@@ -131,7 +131,7 @@ const ModalPreviewAttachment = ({
         {/* Header */}
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-3">
-            <button onClick={onClose} className="cursor-pointer">
+            <button onClick={onClose} className="cursor-pointer" type="button">
               <Icon name="times" color="white" />
             </button>
 
@@ -257,10 +257,20 @@ const ZoomController = ({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      <Button size={'icon'} onClick={onZoomIn} disabled={zoom >= maxZoom}>
+      <Button
+        size={'icon'}
+        onClick={onZoomIn}
+        disabled={zoom >= maxZoom}
+        type="button"
+      >
         <Icon name="search-plus-fill" />
       </Button>
-      <Button size={'icon'} onClick={onZoomOut} disabled={zoom <= minZoom}>
+      <Button
+        size={'icon'}
+        onClick={onZoomOut}
+        disabled={zoom <= minZoom}
+        type="button"
+      >
         <Icon name="search-minus-fill" />
       </Button>
 

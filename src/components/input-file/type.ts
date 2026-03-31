@@ -1,4 +1,5 @@
 export interface FileItem {
+  id?: string;
   file: File;
 
   label?: string;

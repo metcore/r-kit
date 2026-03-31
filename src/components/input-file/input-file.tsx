@@ -73,6 +73,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       }
 
       const mapped = selectedFiles.map((file) => ({
+        id: crypto.randomUUID(),
         file,
         customName: file.name,
         preview: URL.createObjectURL(file),
@@ -383,7 +384,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             <div className="flex flex-col gap-3">
               {files.map((item, i) => (
                 <PreviewItem
-                  key={i}
+                  key={item?.id}
                   data={item}
                   audioPlayerProps={audioPlayerProps}
                   pdfViewerProps={pdfViewerProps}
