@@ -1,6 +1,6 @@
 {
   "name": "@herca/r-kit",
-  "version": "0.0.18",
+  "version": "0.0.24",
   "description": "UI Kit untuk pengembangan adplikasi internal HerCa.",
   "keywords": [
     "React",
@@ -21,14 +21,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "source": "./src/index.ts"
-    },
-    "./clients": {
-      "types": "./dist/clients.d.ts",
-      "require": "./dist/clients.cjs",
-      "import": "./dist/clients.js",
-      "source": "./src/clients.ts"
+      "import": "./dist/index.js"
     },
     "./style": "./dist/index.css"
   },

@@ -6,11 +6,11 @@ import { FormField } from '../form';
 export interface InputOTPProps {
   length?: number;
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   label?: string;
   hint?: string;
-  description?: string;
-  errorMessages?: string | string[];
+  description?: string | undefined;
+  errorMessages?: string | string[] | undefined;
   disabled?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';

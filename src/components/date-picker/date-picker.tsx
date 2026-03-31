@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Calendar, type DateRange } from '../calendar';
+import { Calendar, type DateRangeProps } from '../calendar';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
 import { Icon } from '../icons';
 import { Input } from '../input';
@@ -32,7 +32,7 @@ const DatePicker = ({
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null
   );
-  const [dateRange, setDateRange] = useState<DateRange>(
+  const [dateRange, setDateRange] = useState<DateRangeProps>(
     controlledRangeValue || { start: null, end: null }
   );
   const [inputValue, setInputValue] = useState<string>('');
@@ -69,7 +69,7 @@ const DatePicker = ({
   const formatConfig = getFormatConfig(format);
 
   // Format date range to string
-  const formatRangeToString = (range: DateRange): string => {
+  const formatRangeToString = (range: DateRangeProps): string => {
     if (!range.start && !range.end) return '';
     if (range.start && !range.end)
       return formatDateToString(range.start, format);
@@ -251,7 +251,7 @@ const DatePicker = ({
 
   // Handle calendar selection for range mode
   const handleRangeCalendarChange = (date: Date) => {
-    let newRange: DateRange;
+    let newRange: DateRangeProps;
 
     if (!dateRange.start || (dateRange.start !== null && dateRange.end)) {
       // Start new range

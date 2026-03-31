@@ -43,7 +43,7 @@ export interface TextWithChildren extends TextBaseProps {
 }
 
 export interface TextWithValue extends TextBaseProps {
-  value: string;
+  value?: string | null | undefined;
   children?: never;
 }
 
