@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Calendar, type DateRange } from '../calendar';
+import { Calendar } from '../calendar';
+import type { DateRange } from './type';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
 import { Icon } from '../icons';
 import { Input } from '../input';
