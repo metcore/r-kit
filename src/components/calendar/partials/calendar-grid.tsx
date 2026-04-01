@@ -10,6 +10,7 @@ import type { CalendarGridProps } from '../type';
 import ButtonMore from './button-more';
 import CalendarDayItem from './calendar-day-item';
 import EventBar from './event-bar';
+import { Text } from '../../text';
 
 export function CalendarGrid({
   days,
@@ -203,7 +204,19 @@ export function CalendarGrid({
                           <ButtonMore key={colIndex} count={count} />
                         </div>
                       </DropdownTrigger>
-                      <DropdownContent sideOffset={-100}>
+                      <DropdownContent sideOffset={-130} className="min-w-45">
+                        <Text
+                          variant="t2"
+                          weight="semibold"
+                          className="text-gray-800"
+                        >
+                          {week[colIndex] &&
+                            new Intl.DateTimeFormat('id-ID', {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                            }).format(week[colIndex].fullDate)}
+                        </Text>
                         {columnHiddenSegments[colIndex].map((seg, index) => (
                           <EventBar
                             key={index}
