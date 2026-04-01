@@ -91,8 +91,8 @@ function getWeekEventSegments({
     end: parseLocalDate(event.endDate),
   }));
 
-  const weekStartTs = toDateOnly(week[0].fullDate); // ← ganti ini
-  const weekEndTs = toDateOnly(week[6].fullDate); // ← dan ini
+  const weekStartTs = toDateOnly(week[0].fullDate);
+  const weekEndTs = toDateOnly(week[6].fullDate);
 
   const segments = [];
 
