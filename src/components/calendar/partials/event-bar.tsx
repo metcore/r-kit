@@ -57,7 +57,7 @@ export default function EventBar({
         onMouseLeave={() => setHovered(false)}
         onMouseMove={handleMouseMove}
         className={clsx(
-          'relative mx-0.5 mt-1 flex items-center justify-between overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5',
+          'relative mx-0.5 mt-1 flex items-center justify-between gap-3 overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5',
           onClick && 'cursor-pointer'
         )}
         style={{
