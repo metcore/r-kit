@@ -68,6 +68,14 @@ function parseLocalDate(dateStr: string) {
   return new Date(y, m - 1, d);
 }
 
+function toDateOnly(date: Date): number {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+}
+
 function getWeekEventSegments({
   events,
   week,
@@ -83,31 +91,36 @@ function getWeekEventSegments({
     end: parseLocalDate(event.endDate),
   }));
 
-  const weekStartTs = week[0].fullDate.getTime();
-  const weekEndTs = week[6].fullDate.getTime();
+  const weekStartTs = toDateOnly(week[0].fullDate);
+  const weekEndTs = toDateOnly(week[6].fullDate);
 
   const segments = [];
 
   for (const event of normalizedEvents) {
-    const eventStartTs = event.start.getTime();
-    const eventEndTs = event.end.getTime();
+    const eventStartTs = toDateOnly(event.start);
+    const eventEndTs = toDateOnly(event.end);
 
-    // skip kalau gak overlap
     if (eventStartTs > weekEndTs || eventEndTs < weekStartTs) continue;
 
-    const startIdx = week.findIndex(
-      (d) => d.fullDate.getTime() === eventStartTs
+    const clampedStartTs = Math.max(eventStartTs, weekStartTs);
+    const clampedEndTs = Math.min(eventEndTs, weekEndTs);
+
+    if (clampedStartTs > clampedEndTs) continue;
+
+    const startCol = week.findIndex(
+      (d) => toDateOnly(d.fullDate) === clampedStartTs
+    );
+    const endCol = week.findIndex(
+      (d) => toDateOnly(d.fullDate) === clampedEndTs
     );
 
-    const endIdx = week.findIndex((d) => d.fullDate.getTime() === eventEndTs);
-
-    const startCol = startIdx === -1 ? 0 : startIdx;
-    const endCol = endIdx === -1 ? 6 : endIdx;
+    const resolvedStartCol = startCol === -1 ? 0 : startCol;
+    const resolvedEndCol = endCol === -1 ? 6 : endCol;
 
     segments.push({
       event,
-      startCol,
-      span: endCol - startCol + 1,
+      startCol: resolvedStartCol,
+      span: resolvedEndCol - resolvedStartCol + 1,
     });
   }
 
@@ -120,4 +133,5 @@ export {
   isToday,
   getWeekEventSegments,
   parseLocalDate,
+  toDateOnly,
 };
