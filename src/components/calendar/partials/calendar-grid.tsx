@@ -93,7 +93,6 @@ export function CalendarGrid({
 
         const hasOverflow = segments.length > threshold;
 
-        // visible segments (tetap sama)
         const visibleSegments = segments.filter((seg) => {
           const level = segmentLevels.get(seg) ?? 0;
 
@@ -109,7 +108,6 @@ export function CalendarGrid({
           () => [] as typeof segments
         );
 
-        // isi hidden
         segments.forEach((seg) => {
           const isVisible = visibleSegments.includes(seg);
 
@@ -122,9 +120,7 @@ export function CalendarGrid({
             }
           }
         });
-        // ===== FIX START =====
 
-        // total event per column
         const columnTotalCount = Array(7).fill(0);
 
         segments.forEach((seg) => {
@@ -136,7 +132,6 @@ export function CalendarGrid({
           }
         });
 
-        // visible event per column
         const columnVisibleCount = Array(7).fill(0);
 
         visibleSegments.forEach((seg) => {
@@ -148,7 +143,6 @@ export function CalendarGrid({
           }
         });
 
-        // more = total - visible
         const columnMoreCount = columnTotalCount.map((total, i) =>
           Math.max(0, total - columnVisibleCount[i])
         );
@@ -205,12 +199,8 @@ export function CalendarGrid({
                   count > 0 ? (
                     <Dropdown key={colIndex}>
                       <DropdownTrigger className="w-full" asChild>
-                        <div>
-                          <ButtonMore
-                            key={colIndex}
-                            colIndex={colIndex}
-                            count={count}
-                          />
+                        <div style={{ gridColumnStart: colIndex + 1 }}>
+                          <ButtonMore key={colIndex} count={count} />
                         </div>
                       </DropdownTrigger>
                       <DropdownContent sideOffset={-100}>
