@@ -221,7 +221,7 @@ export function CalendarGrid({
                           <EventBar
                             key={index}
                             segment={seg}
-                            showTooltip={showCalendarTooltip}
+                            showTooltip={false}
                             onClick={() => onEventClick?.(seg.event)}
                           />
                         ))}
