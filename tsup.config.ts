@@ -1,26 +1,28 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
-    "src/index.ts",
-    "src/index.css",
+    'src/index.ts',
+    'src/clients.ts',
+    'src/components/**/index.tsx',
+    'src/index.css',
   ],
-  format: ["esm", "cjs"],
+  loader: {
+    '.css': 'css',
+  },
+  format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,
   clean: true,
-  splitting: true, 
-  treeshake: true, 
+  splitting: false,
   minify: false,
-  loader: {
-    ".css": "css",
-  },
-  tsconfig: "./tsconfig.build.json",
+  treeshake: false,
+  tsconfig: './tsconfig.build.json',
   external: [
-    "react",
-    "react-dom",
-    "clsx",
-    "class-variance-authority",
-    "tailwind-merge",
+    'react',
+    'react-dom',
+    'clsx',
+    'class-variance-authority',
+    'tailwind-merge',
   ],
 });

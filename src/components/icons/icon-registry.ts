@@ -279,6 +279,8 @@ import DeliveryCartArrowDownIcon from './icons/DeliveryCartArrowDownIcon';
 import CreditCardIcon from './icons/CreditCardIcon';
 import UserBriefcaseIcon from './icons/UserBriefcaseIcon';
 import UserCheckIcon from './icons/UserCheckIcon';
+import CalendarClockIcon from './icons/CalendarClockIcon';
+import LinkIcon from './icons/LinkIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -562,4 +564,6 @@ export const iconRegistry = {
   'credit-card': CreditCardIcon,
   'user-briefcase': UserBriefcaseIcon,
   'user-check': UserCheckIcon,
+  'calendar-clock': CalendarClockIcon,
+  'link': LinkIcon,
 };
