@@ -1,4 +1,3 @@
-import type { DateRange } from '../date-picker';
 import type { createCalendarHelpers } from './helpers/create-calendar-helpers';
 
 export interface GetCalendarDaysProps {
@@ -40,6 +39,11 @@ export interface CalendarStyleConfig {
   };
 }
 
+export interface DateRangeProps {
+  start: Date | null;
+  end: Date | null;
+}
+
 export interface CalendarProps {
   showNavigator?: boolean;
   showHeader?: boolean;
@@ -58,7 +62,7 @@ export interface CalendarProps {
   showNextNavigator?: boolean;
   showPrevNavigator?: boolean;
   mode?: 'single' | 'range';
-  rangeValue?: DateRange;
+  rangeValue?: DateRangeProps;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'compact' | 'default';
   events?: CalendarEvent[];
