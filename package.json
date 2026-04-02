@@ -21,7 +21,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "source": "./src/index.ts"
+    },
+    "./clients": {
+      "types": "./dist/clients.d.ts",
+      "require": "./dist/clients.cjs",
+      "import": "./dist/clients.js",
+      "source": "./src/clients.ts"
     },
     "./style": "./dist/index.css"
   },

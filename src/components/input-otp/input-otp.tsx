@@ -44,7 +44,7 @@ export const InputOTP = ({
 
     const next = [...values];
     next[index] = char;
-    onChange(next.join(''));
+    onChange?.(next.join(''));
 
     if (char && index < length - 1) {
       focusInput(index + 1);
