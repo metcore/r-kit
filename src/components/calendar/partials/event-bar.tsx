@@ -13,6 +13,7 @@ interface Props {
     span: number;
   }) => void;
   isMouseEventOnChildren?: boolean;
+  level?: number;
 }
 
 export default function EventBar({
@@ -20,6 +21,7 @@ export default function EventBar({
   showTooltip = true,
   onClick,
   isMouseEventOnChildren = false,
+  level = 0,
 }: Props) {
   const [hovered, setHovered] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -72,6 +74,7 @@ export default function EventBar({
           onClick && 'cursor-pointer'
         )}
         style={{
+          gridRowStart: level + 1,
           gridColumn: `${segment.startCol + 1} / span ${segment.span}`,
           backgroundColor:
             bg_color_map[segment?.event?.color ?? 'info'] ?? '#F1FDFF',
@@ -114,13 +117,17 @@ export default function EventBar({
                 {segment?.event?.tooltip?.title ?? segment.event.title}
               </Text>
 
-              {Boolean(segment.event.subtitle) && (
+              {Boolean(
+                segment?.event?.tooltip?.subtitle ?? segment.event.subtitle
+              ) && (
                 <Text variant="t3" className="text-nowrap text-gray-700">
                   {segment?.event?.tooltip?.subtitle ?? segment.event.subtitle}
                 </Text>
               )}
 
-              {Boolean(segment.event.label) && (
+              {Boolean(
+                segment?.event?.tooltip?.label ?? segment.event.label
+              ) && (
                 <div className="mt-1 flex items-center gap-1">
                   <div
                     className="size-1 rounded-full"

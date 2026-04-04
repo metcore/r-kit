@@ -5,12 +5,12 @@ import {
   DropdownTrigger,
   useIsMobile,
 } from '../../../clients';
+import { Text } from '../../text';
 import { getWeekEventSegments } from '../helpers/helpers';
 import type { CalendarGridProps } from '../type';
 import ButtonMore from './button-more';
 import CalendarDayItem from './calendar-day-item';
 import EventBar from './event-bar';
-import { Text } from '../../text';
 
 export function CalendarGrid({
   days,
@@ -194,6 +194,7 @@ export function CalendarGrid({
                     <EventBar
                       key={index}
                       segment={seg}
+                      level={segmentLevels.get(seg) ?? 0}
                       showTooltip={showCalendarTooltip}
                       onClick={() => onEventClick?.(seg.event)}
                     />
@@ -228,6 +229,7 @@ export function CalendarGrid({
                             <EventBar
                               key={index}
                               segment={seg}
+                              level={segmentLevels.get(seg) ?? 0}
                               isMouseEventOnChildren={true}
                               showTooltip={showCalendarTooltip}
                               onClick={() => onEventClick?.(seg.event)}
