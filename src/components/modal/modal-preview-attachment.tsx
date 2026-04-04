@@ -274,7 +274,7 @@ const ZoomController = ({
         <Icon name="search-minus-fill" />
       </Button>
 
-      <Button color="secondary" onClick={onDownload}>
+      <Button color="secondary" onClick={onDownload} type="button">
         <Icon name="download" />
         <Text
           as={'span'}

@@ -128,7 +128,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
       // Create new file item
       const newFileItem: FileItem = {
+        id: crypto.randomUUID(),
         file: selected,
+        customName: selected.name,
         preview: URL.createObjectURL(selected),
       };
 
@@ -254,8 +256,11 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
     }));
 
     useEffect(() => {
-      return () => files.forEach((f) => URL.revokeObjectURL(f.preview));
-    }, [files]);
+      return () => {
+        files.forEach((f) => URL.revokeObjectURL(f.preview));
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const isDefault = variant === "primary" || variant === "secondary" || variant === "gray"; //prettier-ignore
     const isSized = variant === 'medium' || variant === 'large';

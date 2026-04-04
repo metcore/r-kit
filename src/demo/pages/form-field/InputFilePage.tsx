@@ -52,81 +52,83 @@ export default function InputFilePage() {
         description="Field yang memungkinkan user mengunggah file dari perangkat mereka."
       />
 
-      <GridWrapper>
-        <MainSection
-          title="Basic Input File"
-          contentClassName="grid grid-cols-3 gap-5"
-          code={basicInput}
-        >
-          <InputFile value={files} onChange={setFiles} accept="image/*,.pdf" />
-          <InputFile
-            variant="secondary"
-            value={files}
-            onChange={setFiles}
-            accept="image/*,.pdf"
-          />
-          <InputFile
-            variant="gray"
-            value={files}
-            onChange={setFiles}
-            accept="image/*,.pdf"
-          />
-        </MainSection>
-
-        <MainSection title="Multiple Select" code={multipleSelect}>
-          <InputFile multiple value={files} onChange={setFiles} />
-        </MainSection>
-
-        <MainSection title="Input File Medium">
-          <InputFile
-            variant="medium"
-            value={files}
-            onChange={setFiles}
-            accept="*"
-          />
-        </MainSection>
-
-        <MainSection title="Input File Medium Validasi">
-          <InputFile
-            variant="medium"
-            value={files}
-            onChange={setFiles}
-            accept="*"
-            errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
-          />
-        </MainSection>
-        <MainSection title="Input File Large">
-          <InputFile variant="large" value={files} onChange={setFiles} />
-        </MainSection>
-        <MainSection title="Input File Large With Validasi">
-          <InputFile
-            variant="large"
-            value={files}
-            onChange={setDefaultFiles}
-            errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
-          />
-        </MainSection>
-
-        <MainSection title="Input File Medium With Input Field">
-          <InputFile
-            ref={fileRef}
-            useCustomName
-            variant="medium"
-            value={defaultFiles}
-            onChange={setFiles}
-            accept="*"
-          />
-        </MainSection>
-        <MainSection title="Input File Large With Input Field">
-          <InputFile
-            ref={fileRef}
-            useCustomName
-            variant="large"
-            value={defaultFiles}
-            onChange={setDefaultFiles}
-          />
-        </MainSection>
-      </GridWrapper>
+      <form onSubmit={() => console.log('jir')}>
+        <GridWrapper>
+          <MainSection
+            title="Basic Input File"
+            contentClassName="grid grid-cols-3 gap-5"
+            code={basicInput}
+          >
+            <InputFile
+              value={files}
+              onChange={setFiles}
+              accept="image/*,.pdf"
+            />
+            <InputFile
+              variant="secondary"
+              value={files}
+              onChange={setFiles}
+              accept="image/*,.pdf"
+            />
+            <InputFile
+              variant="gray"
+              value={files}
+              onChange={setFiles}
+              accept="image/*,.pdf"
+            />
+          </MainSection>
+          <MainSection title="Multiple Select" code={multipleSelect}>
+            <InputFile multiple value={files} onChange={setFiles} />
+          </MainSection>
+          <MainSection title="Input File Medium">
+            <InputFile
+              variant="medium"
+              value={files}
+              onChange={setFiles}
+              accept="*"
+            />
+          </MainSection>
+          <MainSection title="Input File Medium Validasi">
+            <InputFile
+              variant="medium"
+              value={files}
+              onChange={setFiles}
+              accept="*"
+              errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
+            />
+          </MainSection>
+          <MainSection title="Input File Large">
+            <InputFile variant="large" value={files} onChange={setFiles} />
+          </MainSection>
+          <MainSection title="Input File Large With Validasi">
+            <InputFile
+              variant="large"
+              value={files}
+              onChange={setDefaultFiles}
+              errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
+            />
+          </MainSection>
+          <MainSection title="Input File Medium With Input Field">
+            <InputFile
+              ref={fileRef}
+              useCustomName
+              variant="medium"
+              value={defaultFiles}
+              onChange={setFiles}
+              accept="*"
+            />
+          </MainSection>
+          <MainSection title="Input File Large With Input Field">
+            <InputFile
+              ref={fileRef}
+              useCustomName
+              variant="large"
+              value={defaultFiles}
+              onChange={setDefaultFiles}
+            />
+          </MainSection>
+        </GridWrapper>
+      </form>
 
       <Footer
         nextTo="/date-picker"
