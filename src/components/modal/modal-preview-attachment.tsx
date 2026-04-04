@@ -14,6 +14,7 @@ interface ModalPreviewProps {
   iframeProps?: React.IframeHTMLAttributes<HTMLIFrameElement>;
   audioProps?: React.AudioHTMLAttributes<HTMLAudioElement>;
   videoProps?: React.VideoHTMLAttributes<HTMLVideoElement>;
+  onDownload?: (data: { src?: string; name?: string }) => void;
   open: {
     isOpen: boolean;
     isVisible: boolean;
@@ -29,6 +30,7 @@ const ModalPreviewAttachment = ({
   iframeProps,
   audioProps,
   videoProps,
+  onDownload,
 }: ModalPreviewProps) => {
   const [zoom, setZoom] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
@@ -84,13 +86,26 @@ const ModalPreviewAttachment = ({
     setIsDragging(false);
   };
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = src;
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = name || 'download';
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Failed to download file:', error);
+
+      window.open(src, '_blank');
+    }
   };
 
   // Reset zoom and position when modal closes
@@ -148,7 +163,11 @@ const ModalPreviewAttachment = ({
 
           {isImage && (
             <ZoomController
-              onDownload={handleDownload}
+              onDownload={
+                onDownload
+                  ? () => onDownload?.({ src, name })
+                  : () => handleDownload()
+              }
               onZoomIn={handleZoomIn}
               onZoomOut={handleZoomOut}
               maxZoom={MAX_ZOOM}

@@ -22,6 +22,7 @@ const PreviewItem = ({
   audioPlayerProps,
   pdfViewerProps,
   videoPlayerProps,
+  onDownload,
 }: PreviewItemProps) => {
   const [previewShow, setPreviewShow] = useState({
     isOpen: false,
@@ -163,6 +164,12 @@ const PreviewItem = ({
         name={data?.customName ?? data?.file?.name}
         src={data?.preview}
         open={previewShow}
+        onDownload={() =>
+          onDownload?.({
+            src: data?.preview,
+            name: data?.file?.name,
+          })
+        }
         onClose={() => handleClosePreview()}
         audioProps={audioPlayerProps}
         videoProps={videoPlayerProps}
