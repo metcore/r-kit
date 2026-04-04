@@ -77,6 +77,10 @@ export default function CalendarPage() {
       color: 'primary',
       startDate: '2026-03-30',
       endDate: '2026-04-11',
+      tooltip: {
+        title: 'In',
+        subtitle: 'jir',
+      },
     },
     {
       title: 'Sprint Planning',
@@ -154,6 +158,7 @@ export default function CalendarPage() {
           showNavigator={true}
           showHeader={true}
           events={dummyEvents}
+          useLimitEvent={false}
           onEventClick={(event?: CalendarEvent) => console.log(event)}
         />
         {selectedDate && (

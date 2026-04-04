@@ -74,6 +74,7 @@ export interface CalendarProps {
   showDefaultController?: boolean;
   onMonthChange?: (month: number) => void;
   onYearChange?: (year: number) => void;
+  useLimitEvent?: boolean;
 }
 
 export type CalendarState = {
@@ -103,6 +104,7 @@ export interface CalendarGridProps {
   showCalendarTooltip?: boolean;
   backdropOnClick?: (day?: CalendarDay) => void;
   onEventClick?: (event?: CalendarEvent) => void;
+  useLimitEvent?: boolean;
 }
 
 export interface CalendarDayItemProps {
@@ -133,6 +135,21 @@ export interface CalendarEvent {
     | 'purple';
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
+  tooltip?: {
+    title?: string;
+    subtitle?: string;
+    label?: string;
+    startTime?: string;
+    endTime?: string;
+    color?:
+      | 'info'
+      | 'success'
+      | 'warning'
+      | 'danger'
+      | 'primary'
+      | 'orange'
+      | 'purple';
+  };
 }
 
 export type CalendarTypes = 'week' | 'month' | 'year' | 'day' | 'agenda';

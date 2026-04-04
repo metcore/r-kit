@@ -66,6 +66,7 @@ const Calendar = ({
   onMonthChange,
   onYearChange,
   showDefaultController = false,
+  useLimitEvent = true,
 }: CalendarProps) => {
   const currentDate = new Date();
 
@@ -339,6 +340,7 @@ const Calendar = ({
                 variant={variant}
                 events={events}
                 showCalendarTooltip={showCalendarTooltip}
+                useLimitEvent={useLimitEvent}
                 onEventClick={onEventClick}
                 backdropOnClick={backdropOnClick}
               />
