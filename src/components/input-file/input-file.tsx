@@ -36,6 +36,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       pdfViewerProps,
       audioPlayerProps,
       videoPlayerProps,
+      onDownload,
     },
     ref
   ) => {
@@ -391,6 +392,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
                 <PreviewItem
                   key={item?.id}
                   data={item}
+                  onDownload={(data) =>
+                    onDownload?.({ src: data?.src, name: data?.name })
+                  }
                   audioPlayerProps={audioPlayerProps}
                   pdfViewerProps={pdfViewerProps}
                   videoPlayerProps={videoPlayerProps}

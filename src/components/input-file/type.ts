@@ -27,6 +27,7 @@ export interface InputFileProps extends PlayerProps {
   customNamePlaceholder?: string;
   maxFilesErrorMessage?: string;
   useCustomName?: boolean;
+  onDownload?: (data: { src?: string; name?: string }) => void;
 }
 
 export interface PreviewItemProps extends PlayerProps {
@@ -38,6 +39,7 @@ export interface PreviewItemProps extends PlayerProps {
   labelCustomName?: string;
   customNamePlaceholder?: string;
   customName?: string;
+  onDownload?: (data?: { src?: string; name?: string }) => void;
 }
 
 export interface PlayerProps {
