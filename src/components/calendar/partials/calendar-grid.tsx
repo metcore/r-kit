@@ -25,6 +25,7 @@ export function CalendarGrid({
   showCalendarTooltip = true,
   backdropOnClick,
   onEventClick,
+  useLimitEvent = true,
 }: CalendarGridProps) {
   const isMobile = useIsMobile();
   const weeks = Array.from({ length: Math.ceil(days.length / 7) }, (_, i) =>
@@ -188,47 +189,54 @@ export function CalendarGrid({
             {/* Event bars */}
             {segments.length > 0 && (
               <div className="absolute inset-x-0 bottom-2 grid grid-cols-7 gap-0.5">
-                {visibleSegments.map((seg, index) => (
-                  <EventBar
-                    key={index}
-                    segment={seg}
-                    showTooltip={showCalendarTooltip}
-                    onClick={() => onEventClick?.(seg.event)}
-                  />
-                ))}
-                {columnMoreCount.map((count, colIndex) =>
-                  count > 0 ? (
-                    <Dropdown key={colIndex}>
-                      <DropdownTrigger className="w-full" asChild>
-                        <div style={{ gridColumnStart: colIndex + 1 }}>
-                          <ButtonMore key={colIndex} count={count} />
-                        </div>
-                      </DropdownTrigger>
-                      <DropdownContent sideOffset={-130} className="min-w-45">
-                        <Text
-                          variant="t2"
-                          weight="semibold"
-                          className="text-gray-800"
-                        >
-                          {week[colIndex] &&
-                            new Intl.DateTimeFormat('id-ID', {
-                              day: 'numeric',
-                              month: 'long',
-                              year: 'numeric',
-                            }).format(week[colIndex].fullDate)}
-                        </Text>
-                        {columnHiddenSegments[colIndex].map((seg, index) => (
-                          <EventBar
-                            key={index}
-                            segment={seg}
-                            showTooltip={false}
-                            onClick={() => onEventClick?.(seg.event)}
-                          />
-                        ))}
-                      </DropdownContent>
-                    </Dropdown>
-                  ) : null
+                {(useLimitEvent ? visibleSegments : segments).map(
+                  (seg, index) => (
+                    <EventBar
+                      key={index}
+                      segment={seg}
+                      showTooltip={showCalendarTooltip}
+                      onClick={() => onEventClick?.(seg.event)}
+                    />
+                  )
                 )}
+                {useLimitEvent &&
+                  columnMoreCount.map((count, colIndex) =>
+                    count > 0 ? (
+                      <Dropdown key={colIndex}>
+                        <DropdownTrigger className="w-full" asChild>
+                          <div style={{ gridColumnStart: colIndex + 1 }}>
+                            <ButtonMore key={colIndex} count={count} />
+                          </div>
+                        </DropdownTrigger>
+                        <DropdownContent
+                          sideOffset={-130}
+                          className="min-w-45 transform"
+                        >
+                          <Text
+                            variant="t2"
+                            weight="semibold"
+                            className="text-gray-800"
+                          >
+                            {week[colIndex] &&
+                              new Intl.DateTimeFormat('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                              }).format(week[colIndex].fullDate)}
+                          </Text>
+                          {columnHiddenSegments[colIndex].map((seg, index) => (
+                            <EventBar
+                              key={index}
+                              segment={seg}
+                              isMouseEventOnChildren={true}
+                              showTooltip={showCalendarTooltip}
+                              onClick={() => onEventClick?.(seg.event)}
+                            />
+                          ))}
+                        </DropdownContent>
+                      </Dropdown>
+                    ) : null
+                  )}
               </div>
             )}
           </div>
