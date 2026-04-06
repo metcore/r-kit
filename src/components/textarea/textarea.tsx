@@ -16,6 +16,7 @@ function Textarea({
   description,
   errorMessages,
   className,
+  required = false,
   ...props
 }: TextareaProps) {
   const hasError = fieldHasError(errorMessages);
@@ -29,9 +30,10 @@ function Textarea({
       description={description}
       errorMessages={errorMessages}
       className={className}
-      required={false}
+      required={required}
     >
       <textarea
+        required={false}
         id={props?.id ?? generatedId}
         className={cn(
           'aria-invalid:ring-danger-500 aria-invalid:border-danger-500 focus-visible:ring-primary-300 flex field-sizing-content min-h-30 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-medium text-gray-800 shadow-xs transition-[color,box-shadow] outline-none placeholder:text-gray-500 focus-visible:border-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:border-gray-400 disabled:bg-gray-300 md:text-sm',

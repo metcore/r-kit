@@ -18,7 +18,7 @@ function InputPage() {
                 errorMessages={['email is required']}
                 hint="email nya jangan lupa diisi ya :)"
               />
-              <Textarea disabled label="Email" id="email" maxLength={30} />
+              <Textarea label="Email" id="email" maxLength={30} />
               <Button size={'md'}>Submit</Button>
             </div>
           </CardBody>
