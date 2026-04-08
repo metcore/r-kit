@@ -31,6 +31,8 @@ export const Select: React.FC<SelectProps> = ({
   isLoadingMore,
   onLoadMore,
   treshold = 0,
+  trigger,
+  triggerClassName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -253,39 +255,51 @@ export const Select: React.FC<SelectProps> = ({
         tabIndex={-1}
       >
         {/* Input Field */}
-        <div
-          aria-selected={isOpen}
-          className={cn(
-            'focus:ring-primary-300 flex min-h-10 cursor-pointer items-center justify-between rounded-lg border bg-white px-3 py-2 text-gray-900 transition-all focus-within:outline-none focus:ring',
-            isDisabled && 'cursor-not-allowed bg-gray-100',
-            isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
-            hasError && 'border-danger-500'
-          )}
-          onClick={() => !isDisabled && setIsOpen(!isOpen)}
-          tabIndex={isDisabled ? -1 : 0}
-        >
-          <div className="flex-1 overflow-hidden text-xs font-medium text-gray-900">
-            {getDisplayValue()}
+        {trigger !== undefined && (
+          <div
+            aria-selected={isOpen}
+            onClick={() => !isDisabled && setIsOpen(!isOpen)}
+            tabIndex={isDisabled ? -1 : 0}
+            className={triggerClassName}
+          >
+            {trigger}
           </div>
-
-          <div className="ml-2 flex items-center gap-1">
-            {showClearButton && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="cursor-pointer rounded text-center text-gray-700"
-              >
-                <Icon name="times-circle" size={20} />
-              </button>
+        )}
+        {trigger === undefined && (
+          <div
+            aria-selected={isOpen}
+            className={cn(
+              'focus:ring-primary-300 flex min-h-10 cursor-pointer items-center justify-between rounded-lg border bg-white px-3 py-2 text-gray-900 transition-all focus-within:outline-none focus:ring',
+              isDisabled && 'cursor-not-allowed bg-gray-100',
+              isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
+              hasError && 'border-danger-500'
             )}
+            onClick={() => !isDisabled && setIsOpen(!isOpen)}
+            tabIndex={isDisabled ? -1 : 0}
+          >
+            <div className="flex-1 overflow-hidden text-xs font-medium text-gray-900">
+              {getDisplayValue()}
+            </div>
 
-            <Icon
-              className="text-gray-700"
-              name={isOpen ? 'angle-up-small' : 'angle-down-small'}
-              size={20}
-            />
+            <div className="ml-2 flex items-center gap-1">
+              {showClearButton && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="cursor-pointer rounded text-center text-gray-700"
+                >
+                  <Icon name="times-circle" size={20} />
+                </button>
+              )}
+
+              <Icon
+                className="text-gray-700"
+                name={isOpen ? 'angle-up-small' : 'angle-down-small'}
+                size={20}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Dropdown */}
         {isOpen && (

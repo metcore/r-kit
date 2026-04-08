@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface BaseOption {
   value: string | number;
   label: string;
@@ -52,4 +54,6 @@ export interface SelectProps {
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
   treshold?: number;
+  trigger?: ReactNode;
+  triggerClassName?: string;
 }
