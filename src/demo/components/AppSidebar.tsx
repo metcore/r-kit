@@ -50,6 +50,7 @@ function AppSidebar() {
         { path: '/radio-button', label: 'Radio Button' },
         { path: '/switch', label: 'Switches' },
         { path: '/select', label: 'Select' },
+        { path: '/text-editor', label: 'Text Editor' },
       ],
     },
     {
