@@ -281,6 +281,31 @@ import UserBriefcaseIcon from './icons/UserBriefcaseIcon';
 import UserCheckIcon from './icons/UserCheckIcon';
 import CalendarClockIcon from './icons/CalendarClockIcon';
 import LinkIcon from './icons/LinkIcon';
+import AlignCenterIcon from './icons/AlignCenterIcon';
+import AlignJustifyIcon from './icons/AlignJustifyIcon';
+import AlignLeftIcon from './icons/AlignLeftIcon';
+import AlignRightIcon from './icons/AlignRightIcon';
+import DotNumberIcon from './icons/DotNumberIcon';
+import DotPointsIcon from './icons/DotPointsIcon';
+import HeadingIcon from './icons/HeadingIcon';
+import LeftIndentIcon from './icons/LeftIndentIcon';
+import LineHeightIcon from './icons/LineHeightIcon';
+import RightIndentIcon from './icons/RightIndentIcon';
+import StrikethroughIcon from './icons/StrikethroughIcon';
+import SubscriptIcon from './icons/SubscriptIcon';
+import TableAddColumnIcon from './icons/TableAddColumnIcon';
+import TableAddRowIcon from './icons/TableAddRowIcon';
+import TableDeleteIcon from './icons/TableDeleteIcon';
+import TableDeleteRowIcon from './icons/TableDeleteRowIcon';
+import TableIcon from './icons/TableIcon';
+import TableDeleteColumnIcon from './icons/TableDeleteColumnIcon';
+import ChatTextIcon from './icons/ChatTextIcon';
+import DataIcon from './icons/DataIcon';
+import DesktopMobileIcon from './icons/DesktopMobileIcon';
+import Grid2Icon from './icons/Grid2Icon';
+import InboxDownloadIcon from './icons/InboxDownloadIcon';
+import InboxIcon from './icons/InboxIcon';
+import UserTagIcon from './icons/UserTagIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -566,4 +591,29 @@ export const iconRegistry = {
   'user-check': UserCheckIcon,
   'calendar-clock': CalendarClockIcon,
   'link': LinkIcon,
+  'align-center': AlignCenterIcon,
+  'align-justify': AlignJustifyIcon,
+  'align-left': AlignLeftIcon,
+  'align-right': AlignRightIcon,
+  'dot-number': DotNumberIcon,
+  'dot-points': DotPointsIcon,
+  'heading': HeadingIcon,
+  'left-indent': LeftIndentIcon,
+  'line-height': LineHeightIcon,
+  'right-indent': RightIndentIcon,
+  'strike-through': StrikethroughIcon,
+  'subscript': SubscriptIcon,
+  'table-add-column': TableAddColumnIcon,
+  'table-add-row': TableAddRowIcon,
+  'table-delete': TableDeleteIcon,
+  'table-delete-row': TableDeleteRowIcon,
+  'table': TableIcon,
+  'table-delete-column': TableDeleteColumnIcon,
+  'chat-text': ChatTextIcon,
+  'data': DataIcon,
+  'desktop-mobile': DesktopMobileIcon,
+  'grid-2': Grid2Icon,
+  'inbox-download': InboxDownloadIcon,
+  'inbox': InboxIcon,
+  'user-tag': UserTagIcon,
 };

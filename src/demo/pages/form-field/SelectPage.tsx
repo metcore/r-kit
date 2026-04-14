@@ -187,6 +187,32 @@ function SelectPage() {
             />
             <StatusBadge {...posts} count={posts.data.length} />
           </section>
+
+          {/* ── 3. Dependent select: Posts filtered by User ── */}
+          <section className="space-y-2">
+            <h2 className="text-sm font-semibold text-gray-700">
+              4. Custom Trigger
+            </h2>
+            <p className="text-xs text-gray-400">
+              Pilih user di atas terlebih dahulu, lalu pilih post milik user
+              tersebut.
+            </p>
+            <Select
+              label="Post"
+              trigger={<span>JIIR</span>}
+              options={posts.data}
+              value={selectedPost}
+              onChange={(v) => setSelectedPost(v as SelectOption | null)}
+              placeholder={
+                selectedUser
+                  ? `Pilih post dari ${selectedUser.label}…`
+                  : 'Pilih user dulu…'
+              }
+              onLoadMore={posts.hasMore ? posts.loadMore : undefined}
+              isLoadingMore={posts.isLoadingMore}
+            />
+            <StatusBadge {...posts} count={posts.data.length} />
+          </section>
         </CardBody>
       </Card>
     </DashboardLayout>
