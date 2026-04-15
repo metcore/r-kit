@@ -23,3 +23,4 @@ export * from './components/tabs';
 export * from './components/button-group';
 export * from './components/calendar';
 export * from './components/text-editor';
+export * from './components/progress-bar';

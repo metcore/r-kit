@@ -26,6 +26,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { RadioButtonPage } from './pages/RadioButtonPage';
 import TabsPage from './pages/TabsPage';
 import TypographyPage from './pages/TypographyPage';
+import ProgressBarPage from './pages/components/ProgressBarPage';
 
 const DocsRouter: React.FC = () => {
   return (
@@ -55,6 +56,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/table" element={<TablePage />} />
         <Route path="/toast" element={<ToastPage />} />
         <Route path="/text-editor" element={<TextEditorPage />} />
+        <Route path="/progress-bar" element={<ProgressBarPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
