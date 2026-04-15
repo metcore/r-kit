@@ -27,7 +27,7 @@ export default function ProgresssContent({
       <TooltipTrigger asChild>
         <div
           className={clsx(
-            'h-full rounded-full duration-300',
+            'h-full rounded-full duration-700 ease-in-out',
             color_map[color],
             classsName
           )}

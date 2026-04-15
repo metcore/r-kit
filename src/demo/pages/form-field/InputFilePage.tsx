@@ -21,6 +21,7 @@ export default function InputFilePage() {
     createMockFile({
       name: 'example-photo.jpg',
       type: 'image/jpeg',
+      hint: 'Uploading...',
       sizeMb: 1.2,
     }),
   ]);
@@ -125,6 +126,17 @@ export default function InputFilePage() {
               variant="large"
               value={defaultFiles}
               onChange={setDefaultFiles}
+            />
+          </MainSection>
+          <MainSection title="Input File Mode Server">
+            <InputFile
+              maxSize={51200}
+              variant="medium"
+              uploadConfig={{
+                url: 'https://httpbin.org/post',
+                fieldName: 'file',
+              }}
+              onUploadSuccess={(results) => console.log(results)}
             />
           </MainSection>
         </GridWrapper>
