@@ -23,11 +23,13 @@ const useTabsContext = () => {
   }
   return context;
 };
+
 export const Tabs: React.FC<TabsProps> = ({
   defaultValue,
   value: controlledValue,
   onValueChange,
   orientation = 'horizontal',
+  unmountOnHide = true,
   className,
   children,
 }) => {
@@ -60,6 +62,7 @@ export const Tabs: React.FC<TabsProps> = ({
         value,
         onValueChange: handleValueChange,
         orientation,
+        unmountOnHide,
         registerTrigger,
         unregisterTrigger,
       }}
@@ -208,10 +211,10 @@ export const TabsContent: React.FC<TabsContentProps> = ({
   className = '',
   children,
 }) => {
-  const { value } = useTabsContext();
+  const { value, unmountOnHide } = useTabsContext();
   const isSelected = value === contentValue;
 
-  if (!isSelected) return null;
+  if (unmountOnHide && !isSelected) return null;
 
   return (
     <div
@@ -219,9 +222,11 @@ export const TabsContent: React.FC<TabsContentProps> = ({
       id={`panel-${contentValue}`}
       aria-labelledby={`tab-${contentValue}`}
       tabIndex={0}
+      hidden={!isSelected}
       className={cn(
         'mt-4 rounded-md focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none',
-        'animate-in fade-in-50 duration-300',
+        !unmountOnHide && !isSelected ? 'hidden' : '',
+        isSelected ? 'animate-in fade-in-50 duration-300' : '',
         className
       )}
     >
