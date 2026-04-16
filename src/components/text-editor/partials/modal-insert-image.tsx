@@ -8,9 +8,9 @@ import { Select } from '../../select';
 import type { BaseOption } from '../../select/type';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../tabs';
 import { Text } from '../../text/text';
-import type { AttachmentField, ImageForm } from '../type';
 import objectfitOptions from '../constants/object-fit-options';
 import targetOptions from '../constants/target-link-options';
+import type { AttachmentField, ImageForm } from '../type';
 
 interface Props {
   isOpen: boolean;
@@ -89,10 +89,10 @@ export default function ModalInsertImage({
   };
 
   useEffect(() => {
-    if (initialValues) {
+    if (isOpen && initialValues !== undefined) {
       setImageForm(initialValues);
     }
-  }, [initialValues]);
+  }, [isOpen, initialValues]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} closable={false}>
@@ -237,24 +237,26 @@ export default function ModalInsertImage({
                 />
               </div>
 
-              {imageForm?.image?.source !== '' && (
-                <div className="grid size-full min-h-50 place-items-center rounded-lg border border-gray-300 p-5">
-                  <img
-                    src={imageForm?.image?.source}
-                    alt={imageForm?.image?.altText}
-                    style={{
-                      width: `${imageForm?.image?.width}px`,
-                      height: `${imageForm?.image?.height}px`,
-                      objectFit:
-                        imageForm?.image?.objectFit?.value === 'fill'
-                          ? 'fill'
-                          : imageForm?.image?.objectFit?.value === 'cover'
-                            ? 'cover'
-                            : 'contain',
-                    }}
-                  />
-                </div>
-              )}
+              {imageForm?.image &&
+                imageForm?.image?.source !== '' &&
+                imageForm?.image?.source !== null && (
+                  <div className="grid size-full min-h-50 place-items-center rounded-lg border border-gray-300 p-5">
+                    <img
+                      src={imageForm?.image?.source}
+                      alt={imageForm?.image?.altText}
+                      style={{
+                        width: `${imageForm?.image?.width}px`,
+                        height: `${imageForm?.image?.height}px`,
+                        objectFit:
+                          imageForm?.image?.objectFit?.value === 'fill'
+                            ? 'fill'
+                            : imageForm?.image?.objectFit?.value === 'cover'
+                              ? 'cover'
+                              : 'contain',
+                      }}
+                    />
+                  </div>
+                )}
             </TabsContent>
             <TabsContent value="1" className="space-y-3">
               <Input
@@ -302,7 +304,11 @@ export default function ModalInsertImage({
                 maxSize={(attachmentField?.maxSize ?? 0) * 1024 * 1024}
                 variant={attachmentField?.variant ?? 'medium'}
                 uploadConfig={attachmentField?.uploadConfig}
-                onChange={(files) => attachmentField?.onChange?.(files)}
+                onChange={
+                  attachmentField?.onChange
+                    ? (files) => attachmentField?.onChange?.(files)
+                    : undefined
+                }
                 value={attachmentField?.value}
                 onUploadSuccess={(results) => {
                   const { url, altText } =
@@ -332,7 +338,10 @@ export default function ModalInsertImage({
             variant={'outline'}
             color="danger"
             type="button"
-            onClick={() => onClose(false)}
+            onClick={() => {
+              onClose(false);
+              setImageForm(null);
+            }}
           >
             Cancel
           </Button>

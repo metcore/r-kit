@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Card, CardBody, CardHeader } from '../../../components/card';
-import TextEditor from '../../../components/text-editor/text-editor';
 import illust from '../../assets/images/forms.png';
 import HeroSection from '../../components/HeroSection';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import type { FileItem } from '../../../clients';
+import { TextEditor, type FileItem } from '../../../clients';
 
 type UploadedImage = {
   data: {
@@ -14,8 +13,9 @@ type UploadedImage = {
 };
 
 export default function TextEditorPage() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('jir ini value nih');
   const [files, setFiles] = useState<FileItem[]>([]);
+
   console.log(value);
   return (
     <DashboardLayout>
@@ -38,6 +38,7 @@ export default function TextEditorPage() {
               required: true,
             }}
             editor={{
+              value,
               onChange: (v) => setValue(v.getHTML()),
               attachmentField: {
                 accept: 'image/*',
