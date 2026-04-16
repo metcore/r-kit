@@ -13,8 +13,9 @@ type UploadedImage = {
 };
 
 export default function TextEditorPage() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('jir ini value nih');
   const [files, setFiles] = useState<FileItem[]>([]);
+
   console.log(value);
   return (
     <DashboardLayout>
@@ -37,6 +38,7 @@ export default function TextEditorPage() {
               required: true,
             }}
             editor={{
+              value,
               onChange: (v) => setValue(v.getHTML()),
               attachmentField: {
                 accept: 'image/*',

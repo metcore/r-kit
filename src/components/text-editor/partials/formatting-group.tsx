@@ -78,22 +78,19 @@ export default function FormattingGroup({
     <>
       <ToolbarGroup>
         <Dropdown>
-          <DropdownTrigger
-            className="outline-none"
-            disabled={
-              disabled || activeState.isInYoutube || activeState.isInImage
-            }
-          >
-            <ToolbarButton
-              disabled={
-                disabled || activeState.isInYoutube || activeState.isInImage
-              }
-              title="Heading"
-              className="flex items-center gap-1 *:text-gray-900"
-            >
-              <Text weight="medium">{displayFontSize}</Text>
-              <Icon name="sort-vertical" size={17} />
-            </ToolbarButton>
+          <DropdownTrigger asChild className="outline-none">
+            <div>
+              <ToolbarButton
+                disabled={
+                  disabled || activeState.isInYoutube || activeState.isInImage
+                }
+                title="Heading"
+                className="flex items-center gap-1 *:text-gray-900"
+              >
+                <Text weight="medium">{displayFontSize}</Text>
+                <Icon name="sort-vertical" size={17} />
+              </ToolbarButton>
+            </div>
           </DropdownTrigger>
           <DropdownContent
             sideOffset={3}

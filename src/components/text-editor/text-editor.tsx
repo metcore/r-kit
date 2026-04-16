@@ -2,7 +2,6 @@ import { html } from '@codemirror/lang-html';
 import { DragHandle as DragHandleComponent } from '@tiptap/extension-drag-handle-react';
 import { Highlight } from '@tiptap/extension-highlight';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Subscript from '@tiptap/extension-subscript';
 import TableCell from '@tiptap/extension-table-cell';
@@ -16,7 +15,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import CodeMirror from '@uiw/react-codemirror';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormField } from '../form';
 import ButtonNode from './extension/button-node';
 import { FontSize } from './extension/font-size';
@@ -70,13 +69,16 @@ export function TextEditor({
 
   // main editor
   const editor = useEditor({
-    content: value,
+    content: undefined,
     editable: !disabled,
-    immediatelyRender: false,
+    immediatelyRender: true,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        underline: false,
+        link: false,
+        horizontalRule: false,
+      }),
       Underline,
-      Image,
       TableRow,
       TableCell,
       TableHeader,
@@ -141,6 +143,14 @@ export function TextEditor({
 
     setIsHtmlMode(false);
   };
+
+  useEffect(() => {
+    if (editor === null) return;
+    if (value === undefined) return;
+    if (editor.getHTML() === value) return;
+
+    editor.commands.setContent(value);
+  }, [editor, value]);
 
   if (editor === undefined || editor === null) return null;
 

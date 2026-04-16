@@ -50,13 +50,15 @@ export function InsertGroup({
     <ToolbarGroup>
       {/* link insert */}
       <Dropdown onOpenChange={handleOpen} open={isLinkOpen}>
-        <DropdownTrigger>
-          <ToolbarButton
-            title="Insert Link"
-            icon="link"
-            active={isLink}
-            disabled={disabled}
-          />
+        <DropdownTrigger asChild>
+          <div>
+            <ToolbarButton
+              title="Insert Link"
+              icon="link"
+              active={isLink}
+              disabled={disabled}
+            />
+          </div>
         </DropdownTrigger>
         <DropdownContent sideOffset={2} className="z-20">
           <div className="flex items-center gap-2">
