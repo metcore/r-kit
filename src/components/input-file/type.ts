@@ -34,7 +34,7 @@ export interface InputFileProps extends PlayerProps {
   useCustomName?: boolean;
   onDownload?: (data: { src?: string; name?: string }) => void;
   uploadConfig?: UploadConfig;
-  onUploadSuccess?: (results: UploadedFile[]) => void;
+  onUploadSuccess?: (results: UploadedFile<unknown>[]) => void;
   onRemoveFile?: (id: string) => void;
 }
 
@@ -73,9 +73,9 @@ export interface UploadConfig {
   errorMessage?: string;
 }
 
-export interface UploadedFile {
+export interface UploadedFile<UploadedData> {
   id: string;
   originalName: string;
   customName?: string;
-  url: string;
+  uploadedData: UploadedData | null;
 }

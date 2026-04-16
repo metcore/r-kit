@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function IndentGroup({ disabled = false, editor }: Props) {
-  const { canIndent, canOutdent, isInTable } = useEditorState({
+  const activeState = useEditorState({
     editor: editor!,
     selector: ({ editor }) => {
       const { selection, doc } = editor.state;
@@ -20,12 +20,40 @@ export default function IndentGroup({ disabled = false, editor }: Props) {
       let minIndent = Infinity;
       let maxIndent = -Infinity;
 
-      doc.nodesBetween(from, to, (node) => {
-        if (!['paragraph', 'heading'].includes(node.type.name)) return;
-        const indent = (node.attrs['indent'] as number) || 0;
-        if (indent < minIndent) minIndent = indent;
-        if (indent > maxIndent) maxIndent = indent;
+      const listTypes = ['bulletList', 'orderedList'];
+
+      doc.nodesBetween(from, to, (node, _pos, parent) => {
+        // Cek paragraph/heading yang bukan di dalam list
+        if (
+          ['paragraph', 'heading'].includes(node.type.name) &&
+          parent?.type.name !== 'listItem'
+        ) {
+          const indent = (node.attrs['indent'] as number) || 0;
+          if (indent < minIndent) minIndent = indent;
+          if (indent > maxIndent) maxIndent = indent;
+        }
+
+        // Cek bulletList/orderedList
+        if (listTypes.includes(node.type.name)) {
+          const indent = (node.attrs['indent'] as number) || 0;
+          if (indent < minIndent) minIndent = indent;
+          if (indent > maxIndent) maxIndent = indent;
+        }
       });
+
+      // Fallback: kalau cursor di dalam list tapi nodesBetween tidak menemukan list node-nya
+      if (minIndent === Infinity) {
+        const $from = doc.resolve(from);
+        for (let depth = $from.depth; depth >= 0; depth--) {
+          const node = $from.node(depth);
+          if (listTypes.includes(node.type.name)) {
+            const indent = (node.attrs['indent'] as number) || 0;
+            minIndent = indent;
+            maxIndent = indent;
+            break;
+          }
+        }
+      }
 
       if (minIndent === Infinity) {
         minIndent = 0;
@@ -36,6 +64,8 @@ export default function IndentGroup({ disabled = false, editor }: Props) {
         canIndent: maxIndent < maxLevel,
         canOutdent: minIndent > 0,
         isInTable: editor.isActive('table'),
+        isInImage: editor.isActive('image'),
+        isInYoutube: editor.isActive('youtubeNode'),
       };
     },
   });
@@ -43,15 +73,27 @@ export default function IndentGroup({ disabled = false, editor }: Props) {
   return (
     <ToolbarGroup>
       <ToolbarButton
-        title="Indent"
+        title="Increase Indent"
         icon="left-indent"
-        disabled={disabled || !canIndent || isInTable}
+        disabled={
+          disabled ||
+          !activeState.canIndent ||
+          activeState.isInTable ||
+          activeState.isInImage ||
+          activeState.isInYoutube
+        }
         onClick={() => editor?.chain().focus().indent().run()}
       />
       <ToolbarButton
-        title="Outdent"
+        title="Decrease Indent"
         icon="right-indent"
-        disabled={disabled || !canOutdent || isInTable}
+        disabled={
+          disabled ||
+          !activeState.canOutdent ||
+          activeState.isInTable ||
+          activeState.isInImage ||
+          activeState.isInYoutube
+        }
         onClick={() => editor?.chain().focus().outdent().run()}
       />
     </ToolbarGroup>

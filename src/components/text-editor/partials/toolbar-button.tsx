@@ -22,7 +22,13 @@ export default function ToolbarButton({
       onClick={onClick}
       className={className}
     >
-      {children ?? <Icon name={icon as IconNameProps} size={iconSize} />}
+      {children ?? (
+        <Icon
+          name={icon as IconNameProps}
+          size={iconSize}
+          className={!active ? 'text-gray-900' : 'text-white'}
+        />
+      )}
     </Button>
   );
 }

@@ -62,7 +62,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
   ) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const replaceInputRef = useRef<HTMLInputElement | null>(null);
-    const uploadedFilesRef = useRef<UploadedFile[]>([]);
+    const uploadedFilesRef = useRef<UploadedFile<unknown>[]>([]);
 
     const [internalFiles, setInternalFiles] = useState<FileItem[]>([]);
     const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
@@ -328,7 +328,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         if (xhr.status >= 200 && xhr.status < 300) {
           setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: 1 }));
 
-          let parsed: unknown = null;
+          let parsed: unknown | null = null;
           try {
             parsed = JSON.parse(xhr.responseText);
           } catch (err) {
@@ -351,16 +351,23 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             )
           );
 
-          const result: UploadedFile = {
+          setTimeout(() => {
+            setUploadProgress((prev) => {
+              const next = { ...prev };
+              delete next[fileItem.id!];
+              return next;
+            });
+          }, 800);
+
+          const result: UploadedFile<unknown> = {
+            ...fileItem,
             id: fileItem.id!,
             originalName: fileItem.file.name,
             customName: fileItem.customName,
-            url: uploadedUrl,
-            ...fileItem,
+            uploadedData: parsed,
           };
 
           uploadedFilesRef.current = [...uploadedFilesRef.current, result];
-
           onUploadSuccess?.(uploadedFilesRef.current);
         } else {
           handleUploadError(fileItem, `Server error: ${xhr.status}`);
@@ -407,7 +414,12 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       updateFiles((prev) =>
         prev.map((f) =>
           f.id === fileItem.id
-            ? { ...f, uploadStatus: 'error', errorMessage: message }
+            ? {
+                ...f,
+                uploadStatus: 'error',
+                errorMessage: message,
+                hint: undefined,
+              }
             : f
         )
       );

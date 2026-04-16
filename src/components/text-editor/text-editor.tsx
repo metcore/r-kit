@@ -20,10 +20,12 @@ import { useState } from 'react';
 import { FormField } from '../form';
 import ButtonNode from './extension/button-node';
 import { FontSize } from './extension/font-size';
+import ImageNode from './extension/image-node';
 import { Indent } from './extension/indent';
 import LineHeight from './extension/line-height';
 import { PreserveAttributes } from './extension/preserve-attributes';
 import TableNode from './extension/table-node';
+import YoutubeNode from './extension/youtube-node';
 import formatHtml from './helpers/format-html';
 import handleResizeTable from './helpers/handle-resize-table';
 import AdvanceGroup from './partials/advance-group';
@@ -31,11 +33,8 @@ import AlignmentGroup from './partials/alignment-group';
 import FormattingGroup from './partials/formatting-group';
 import IndentGroup from './partials/indent-group';
 import { InsertGroup } from './partials/insert-group';
-import { ListGroup } from './partials/list-group';
 import TableGroup from './partials/table-group';
 import type { TextEditorProps } from './type';
-import YoutubeNode from './extension/youtube-node';
-import ImageNode from './extension/image-node';
 
 export default function TextEditor({
   ui,
@@ -52,7 +51,8 @@ export default function TextEditor({
     dragHandleClassName,
     textEditorClassName,
   } = ui ?? {};
-  const { value, onChange, placeholder, dragHandleProps } = editorProps ?? {};
+  const { value, onChange, placeholder, dragHandleProps, attachmentField } =
+    editorProps ?? {};
   const { description, errorMessages, required, hint, label } = field ?? {};
   const {
     formatting = true,
@@ -96,9 +96,21 @@ export default function TextEditor({
         types: ['heading', 'paragraph', 'youtubeNode', 'table', 'image'],
       }),
       Indent.configure({
-        types: ['paragraph', 'heading'],
+        types: ['paragraph', 'heading', 'bulletList', 'orderedList'],
       }),
     ],
+    editorProps: {
+      handleClick(_view, _pos, event) {
+        const target = event.target as HTMLElement;
+
+        if (target.closest('a')) {
+          event.preventDefault();
+          return true; // stop handling
+        }
+
+        return false;
+      },
+    },
     onUpdate: ({ editor }) => {
       handleResizeTable(editor);
       setHtmlValue(editor.getHTML());
@@ -149,16 +161,24 @@ export default function TextEditor({
             toolbarClassName
           )}
         >
-          <div className="scrollbar-hide flex divide-x divide-gray-300 overflow-x-auto border-b border-gray-300 *:p-2">
+          <div className="scrollbar-hide flex flex-wrap divide-x divide-gray-300 overflow-x-auto border-b border-gray-300 *:p-2">
             {formatting && (
               <FormattingGroup disabled={isHtmlMode} editor={editor} />
             )}
-            {alignment && (
-              <AlignmentGroup disabled={isHtmlMode} editor={editor} />
-            )}
-            {list && <ListGroup disabled={isHtmlMode} editor={editor} />}
+            <AlignmentGroup
+              disabled={isHtmlMode}
+              editor={editor}
+              isAlignmentActive={alignment}
+              isListActive={list}
+            />
             {indent && <IndentGroup disabled={isHtmlMode} editor={editor} />}
-            {insert && <InsertGroup disabled={isHtmlMode} editor={editor} />}
+            {insert && (
+              <InsertGroup
+                disabled={isHtmlMode}
+                editor={editor}
+                attachmentField={attachmentField}
+              />
+            )}
             {table && <TableGroup disabled={isHtmlMode} editor={editor} />}
             {advance && (
               <AdvanceGroup

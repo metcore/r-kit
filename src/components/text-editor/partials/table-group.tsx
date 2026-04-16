@@ -1,7 +1,15 @@
 import { Editor, useEditorState } from '@tiptap/react';
-import type { IconNameProps } from '../../icons';
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+} from '../../dropdown';
+import { Icon } from '../../icons';
 import ToolbarGroup from './toolbar-group';
-import ToolbarButton from './toolbar-button';
+import type { TableAction } from '../type';
+import clsx from 'clsx';
+import { Text } from '../../text/text';
 
 export default function TableGroup({
   editor,
@@ -10,116 +18,210 @@ export default function TableGroup({
   editor: Editor;
   disabled?: boolean;
 }) {
-  const { isInTable, isBordered, isInHeader } = useEditorState({
+  const activeState = useEditorState({
     editor,
     selector: ({ editor }) => ({
+      isInYoutube: editor.isActive('youtubeNode'),
       isInTable: editor.isActive('table'),
       isInHeader: editor.isActive('tableHeader'),
       isBordered: editor.isActive('table') && editor.getAttributes('table')['bordered'] !== 'false', //prettier-ignore
+      isInImage: editor.isActive('image'),
+      isMerged: (() => {
+        const { selection } = editor.state;
+        const cell = selection.$anchor.node(-1);
+        return (
+          (cell?.attrs?.colspan ?? 1) > 1 || (cell?.attrs?.rowspan ?? 1) > 1
+        );
+      })(),
     }),
   });
 
-  const tableButtons: {
-    icon: IconNameProps;
-    onClick: () => void;
-    title: string;
-    disabled?: boolean;
-    requiresTable: boolean;
-    active?: boolean;
-    disabledByMap?: boolean;
-  }[] = [
+  const mainActions: TableAction[] = [
     {
       title: 'Add Table',
       icon: 'table',
-      active: isInTable,
       onClick: () =>
         editor
           .chain()
           .focus()
           .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
           .run(),
-      disabled,
       requiresTable: false,
+      disabled,
     },
     {
-      title: 'Toggle Border',
-      icon: 'table-delete',
+      title: 'Header Cell',
+      icon: 'table-header-cell',
+      active: activeState.isInHeader,
+      onClick: () => editor.chain().focus().toggleHeaderCell().run(),
+      requiresTable: true,
+      disabled,
+    },
+    {
+      title: 'Merge Cell',
+      icon: 'table-merge-cell',
+      active: activeState.isMerged,
+      onClick: () => editor.chain().focus().mergeOrSplit().run(),
+      requiresTable: true,
+      disabled,
+    },
+    {
+      title: 'No Border',
+      icon: 'table-no-border',
+      active: !activeState.isBordered && activeState.isInTable,
       onClick: () => editor.chain().focus().toggleTableBorder().run(),
       requiresTable: true,
-      active: !isBordered && isInTable,
+      disabled,
     },
     {
-      icon: 'table-add-row',
-      onClick: () => editor.chain().focus().toggleHeaderCell().run(),
-      title: 'Toggle header row',
+      title: 'Delete Table',
+      icon: 'table-delete',
+      active: false,
+      onClick: () => editor.chain().focus().deleteTable().run(),
       requiresTable: true,
-      active: isInTable && isInHeader && isBordered,
-      disabledByMap: !isBordered,
+      disabled,
     },
+  ];
+
+  const rowActions: TableAction[] = [
     {
-      icon: 'table-add-column',
-      onClick: () => editor.chain().focus().addColumnAfter().run(),
-      title: 'Add Column',
-      requiresTable: true,
-    },
-    {
-      icon: 'table-add-column',
-      onClick: () => editor.chain().focus().mergeOrSplit().run(),
-      title: 'Merge Cells',
-      requiresTable: true,
-    },
-    {
-      icon: 'table-delete-column',
-      onClick: () => editor.chain().focus().deleteColumn().run(),
-      title: 'Delete Column',
-      requiresTable: true,
-    },
-    {
+      title: 'Insert row',
       icon: 'table-add-row',
       onClick: () => editor.chain().focus().addRowAfter().run(),
-      title: 'Add Row',
-      requiresTable: true,
+      requiresTable: false,
+      disabled,
     },
     {
-      icon: 'table-delete-row',
-      onClick: () => editor.chain().focus().deleteRow().run(),
       title: 'Delete Row',
-      requiresTable: true,
+      icon: 'table-delete-row',
+      onClick: () => editor.chain().focus().addRowAfter().run(),
+      requiresTable: false,
+      disabled,
+    },
+  ];
+
+  const columnActions: TableAction[] = [
+    {
+      title: 'Insert Column',
+      icon: 'table-add-column',
+      onClick: () => editor.chain().focus().addColumnAfter().run(),
+      requiresTable: false,
+      disabled,
     },
     {
-      icon: 'table-delete',
-      onClick: () => editor.chain().focus().deleteTable().run(),
-      title: 'Delete Table',
-      requiresTable: true,
+      title: 'Delete Column',
+      icon: 'table-delete-column',
+      onClick: () => editor.chain().focus().addColumnBefore().run(),
+      requiresTable: false,
+      disabled,
     },
   ];
 
   return (
     <ToolbarGroup>
-      {tableButtons.map(
-        (
-          {
-            icon,
-            onClick,
-            title,
-            requiresTable,
-            active,
-            disabledByMap = false,
-          },
-          index
-        ) => (
-          <ToolbarButton
-            key={index}
-            title={title}
-            icon={icon}
-            onClick={onClick}
-            active={active}
-            disabled={
-              disabled || disabledByMap || (requiresTable && !isInTable)
-            }
-          />
-        )
-      )}
+      <Dropdown>
+        <DropdownTrigger
+          className="outline-none"
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
+        >
+          <div
+            title="Heading"
+            className={clsx(
+              'flex items-center gap-1 rounded-lg border border-gray-300 p-2',
+              activeState.isInTable && 'bg-primary-1000',
+              (disabled || activeState.isInYoutube || activeState.isInImage) &&
+                'opacity-50'
+            )}
+          >
+            <Icon
+              name="table"
+              size={18}
+              className={clsx(
+                activeState.isInTable ? 'text-white' : 'text-gray-900'
+              )}
+            />
+
+            <Icon
+              name="angle-down-small"
+              size={17}
+              className={clsx(
+                activeState.isInTable ? 'text-white' : 'text-gray-900'
+              )}
+            />
+          </div>
+        </DropdownTrigger>
+        <DropdownContent
+          sideOffset={3}
+          className="z-30 rounded-lg p-1"
+          align="start"
+        >
+          {mainActions.map((action, index) => (
+            <DropdownItem
+              key={index}
+              onClick={() => action.onClick()}
+              disabled={
+                Boolean(action.disabled) ||
+                (action.requiresTable && !activeState.isInTable)
+              }
+              className={clsx(
+                'rounded-md border-transparent py-1 disabled:opacity-50',
+                Boolean(action.active) && 'bg-primary-50 border-primary-300'
+              )}
+            >
+              <Icon name={action.icon} size={20} className="text-gray-900" />
+              <Text weight="medium" className="text-gray-900">
+                {action.title}
+              </Text>
+            </DropdownItem>
+          ))}
+
+          <div className="h-px w-full bg-gray-200" />
+
+          {rowActions.map((action, index) => (
+            <DropdownItem
+              key={index}
+              onClick={() => action.onClick()}
+              disabled={
+                Boolean(action.disabled) ||
+                (action.requiresTable && !activeState.isInTable)
+              }
+              className={clsx(
+                'rounded-md border-transparent py-1 disabled:opacity-50',
+                Boolean(action.active) && 'bg-primary-50 border-primary-300'
+              )}
+            >
+              <Icon name={action.icon} size={20} className="text-gray-900" />
+              <Text weight="medium" className="text-gray-900">
+                {action.title}
+              </Text>
+            </DropdownItem>
+          ))}
+
+          <div className="h-px w-full bg-gray-200" />
+
+          {columnActions.map((action, index) => (
+            <DropdownItem
+              key={index}
+              onClick={() => action.onClick()}
+              disabled={
+                Boolean(action.disabled) ||
+                (action.requiresTable && !activeState.isInTable)
+              }
+              className={clsx(
+                'rounded-md border-transparent py-1 disabled:opacity-50',
+                Boolean(action.active) && 'bg-primary-50 border-primary-300'
+              )}
+            >
+              <Icon name={action.icon} size={20} className="text-gray-900" />
+              <Text weight="medium" className="text-gray-900">
+                {action.title}
+              </Text>
+            </DropdownItem>
+          ))}
+        </DropdownContent>
+      </Dropdown>
     </ToolbarGroup>
   );
 }

@@ -2,51 +2,46 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../button';
 import { Icon } from '../../icons';
 import { Input } from '../../input';
+import { InputFile, type UploadedFile } from '../../input-file';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Select } from '../../select';
+import type { BaseOption } from '../../select/type';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../tabs';
 import { Text } from '../../text/text';
-import type { ImageForm } from '../type';
-import type { BaseOption, SelectOption } from '../../select/type';
+import type { AttachmentField, ImageForm } from '../type';
+import objectfitOptions from '../constants/object-fit-options';
+import targetOptions from '../constants/target-link-options';
 
 interface Props {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   onSubmit: (form: ImageForm | null) => void;
   initialValues?: ImageForm | null;
+  attachmentField?: AttachmentField;
 }
-
-const targetOptions: SelectOption[] = [
-  {
-    label: 'New Tab',
-    value: '_blank',
-  },
-  {
-    label: 'Current Tab',
-    value: '_self',
-  },
-];
-
-const objectfitOptions: SelectOption[] = [
-  {
-    label: 'Contain',
-    value: 'contain',
-  },
-  {
-    label: 'Cover',
-    value: 'cover',
-  },
-  {
-    label: 'Fill',
-    value: 'fill',
-  },
-];
 
 export default function ModalInsertImage({
   isOpen,
   onClose,
   onSubmit,
   initialValues,
+  attachmentField = {
+    label: 'Send File To Server',
+    accept: 'jpg, png, webp, jpeg',
+    hint: 'JPG, PNG, WEBP dan JPEG',
+    maxSize: 5,
+    variant: 'medium',
+    extractUploadResult: (results) => {
+      const data = results as UploadedFile<{
+        data: { url: string; name: string };
+      }>[];
+
+      return {
+        url: data[0].uploadedData?.data.url ?? '',
+        altText: data[0].uploadedData?.data.name ?? '',
+      };
+    },
+  },
 }: Props) {
   const [currentTabImage, setCurrentTabImage] = useState('0');
 
@@ -128,6 +123,7 @@ export default function ModalInsertImage({
       >
         <ModalBody>
           <Tabs
+            unmountOnHide={false}
             defaultValue="0"
             value={currentTabImage}
             onValueChange={setCurrentTabImage}
@@ -141,7 +137,7 @@ export default function ModalInsertImage({
               <Input
                 required
                 label="URI"
-                placeholder="https://cdn.herca.id/xxxx"
+                placeholder="e.g https://www.herca.id/xxxx"
                 className="w-full"
                 errorMessages={errors.source}
                 value={imageForm?.image?.source}
@@ -299,7 +295,35 @@ export default function ModalInsertImage({
               />
             </TabsContent>
             <TabsContent value="2">
-              <div className="flex flex-col">UPLOAD</div>
+              <InputFile
+                label={attachmentField?.label}
+                accept={attachmentField?.accept}
+                hint={attachmentField?.hint}
+                maxSize={(attachmentField?.maxSize ?? 0) * 1024 * 1024}
+                variant={attachmentField?.variant ?? 'medium'}
+                uploadConfig={attachmentField?.uploadConfig}
+                onChange={(files) => attachmentField?.onChange?.(files)}
+                value={attachmentField?.value}
+                onUploadSuccess={(results) => {
+                  const { url, altText } =
+                    attachmentField.extractUploadResult(results);
+
+                  setCurrentTabImage('0');
+                  setImageForm((prev) => {
+                    if (!prev) return prev;
+                    return {
+                      ...prev,
+                      image: {
+                        ...prev.image,
+                        source: url,
+                        altText: altText ?? 'Image',
+                      },
+                    };
+                  });
+
+                  attachmentField?.onUploadSuccess?.(results);
+                }}
+              />
             </TabsContent>
           </Tabs>
         </ModalBody>

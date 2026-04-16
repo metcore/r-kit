@@ -6,6 +6,8 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Text } from '../../text/text';
 import toEmbedUrl from '../helpers/yt-url-to-embed';
 import isValidYoutubeUrl from '../helpers/is-valid-youtube-url';
+import { Kbd } from '../../kbd';
+import { useKeyboardShortcut } from '../hooks/use-keyboard-shortcut';
 
 interface YoutubeForm {
   size: {
@@ -30,8 +32,8 @@ export default function ModalInsertYoutube({
 }: Props) {
   const defaultValue = {
     size: {
-      width: 650,
-      height: 350,
+      width: 600,
+      height: 300,
     },
     url: '',
   };
@@ -46,6 +48,13 @@ export default function ModalInsertYoutube({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialValues]);
 
+  useKeyboardShortcut({
+    key: 'Escape',
+    callback: () => {
+      onClose(false);
+    },
+  });
+
   return (
     <Modal isOpen={isOpen} onClose={() => onClose(false)} closable={false}>
       <form
@@ -58,24 +67,27 @@ export default function ModalInsertYoutube({
       >
         <ModalHeader className="flex-row! items-center justify-between border-b border-gray-200">
           <Text variant="t1" weight="medium" className="mb-0! text-gray-900">
-            Image Properties
+            Insert Youtube
           </Text>
-          <Button
-            size={'icon'}
-            onClick={() => onClose(false)}
-            variant={'tertiary'}
-            type="button"
-          >
-            <Icon name="times" size={17} />
-          </Button>
+          <div className="flex items-center">
+            <Kbd>ESC</Kbd>
+            <Button
+              size={'icon'}
+              onClick={() => onClose(false)}
+              variant={'tertiary'}
+              type="button"
+            >
+              <Icon name="times" size={17} />
+            </Button>
+          </div>
         </ModalHeader>
 
         <ModalBody className="space-y-4 pb-5">
           <Input
             required
-            label="Link URL"
+            label="URL"
             type="url"
-            placeholder="https://www.youtube.com/watch?v=xxxx"
+            placeholder="e.g https://www.youtube.com/watch?v=xxxx"
             errorMessages={!isValid ? 'Youtube URL is invalid' : undefined}
             value={youtubeForm?.url ?? ''}
             onChange={(e) => {
@@ -88,10 +100,15 @@ export default function ModalInsertYoutube({
 
           <div className="flex items-center gap-2 *:flex-1">
             <Input
+              type="number"
               label="Width"
               placeholder="100"
-              rightAddon={<Text>px</Text>}
-              value={youtubeForm.size.width}
+              rightAddon={
+                <Text weight="medium" className="text-gray-900">
+                  px
+                </Text>
+              }
+              value={youtubeForm.size.width ?? 0}
               onChange={(e) =>
                 setYoutubeForm({
                   ...youtubeForm,
@@ -100,10 +117,15 @@ export default function ModalInsertYoutube({
               }
             />
             <Input
+              type="number"
               label="Height"
               placeholder="100"
-              rightAddon={<Text>px</Text>}
-              value={youtubeForm.size.height}
+              rightAddon={
+                <Text weight="medium" className="text-gray-900">
+                  px
+                </Text>
+              }
+              value={youtubeForm.size.height ?? 0}
               onChange={(e) =>
                 setYoutubeForm({
                   ...youtubeForm,
@@ -113,8 +135,11 @@ export default function ModalInsertYoutube({
             />
           </div>
 
-          <div className="flex-w-full">
-            {youtubeForm.url && isValid && (
+          {youtubeForm.url && isValid && (
+            <div className="flex w-full flex-col gap-2">
+              <Text variant="t2" weight="semibold" className="text-gray-900">
+                Preview Video Youtube
+              </Text>
               <div className="aspect-video w-full">
                 <iframe
                   width={youtubeForm.size.width}
@@ -126,20 +151,20 @@ export default function ModalInsertYoutube({
                   referrerPolicy="strict-origin-when-cross-origin"
                 ></iframe>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </ModalBody>
 
-        <ModalFooter>
+        <ModalFooter className="flex items-center justify-between">
           <Button
             variant={'outline'}
-            color="danger"
+            color="gray"
             type="button"
             onClick={() => onClose(false)}
           >
             Cancel
           </Button>
-          <Button color="primary">Submit</Button>
+          <Button color="primary">Save</Button>
         </ModalFooter>
       </form>
     </Modal>

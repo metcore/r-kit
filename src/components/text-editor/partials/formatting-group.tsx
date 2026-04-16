@@ -13,14 +13,15 @@ import ToolbarButton from './toolbar-button';
 import ToolbarGroup from './toolbar-group';
 import { useEffect, useState } from 'react';
 import { Input } from '../../input';
+import ColorPickerButton from './color-picker-button';
 
-const headings: { level: HeadingLevel; title: string }[] = [
-  { level: 1, title: 'H1' },
-  { level: 2, title: 'H2' },
-  { level: 3, title: 'H3' },
-  { level: 4, title: 'H4' },
-  { level: 5, title: 'H5' },
-  { level: 6, title: 'H6' },
+const headings: { level: HeadingLevel; title: string; fontSize: number }[] = [
+  { level: 1, title: 'H1', fontSize: 24 },
+  { level: 2, title: 'H2', fontSize: 20 },
+  { level: 3, title: 'H3', fontSize: 18 },
+  { level: 4, title: 'H4', fontSize: 16 },
+  { level: 5, title: 'H5', fontSize: 14 },
+  { level: 6, title: 'H6', fontSize: 12 },
 ];
 
 const fontSizes: number[] = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 30, 36];
@@ -40,6 +41,7 @@ export default function FormattingGroup({
     editor,
     selector: ({ editor }) => ({
       isInYoutube: editor.isActive('youtubeNode'),
+      isInImage: editor.isActive('image'),
       bold: editor.isActive('bold'),
       italic: editor.isActive('italic'),
       underline: editor.isActive('underline'),
@@ -52,6 +54,7 @@ export default function FormattingGroup({
       activeColor: editor.getAttributes('textStyle').color as string,
       activeHighlight: editor.getAttributes('highlight').color as string,
       activeHeading: headings.find(({ level }) => editor.isActive('heading', { level }))?.level ?? null, //prettier-ignore
+      activeParagraph: editor.isActive('paragraph'),
     }),
   });
 
@@ -77,10 +80,14 @@ export default function FormattingGroup({
         <Dropdown>
           <DropdownTrigger
             className="outline-none"
-            disabled={disabled || activeState.isInYoutube}
+            disabled={
+              disabled || activeState.isInYoutube || activeState.isInImage
+            }
           >
             <ToolbarButton
-              disabled={disabled || activeState.isInYoutube}
+              disabled={
+                disabled || activeState.isInYoutube || activeState.isInImage
+              }
               title="Heading"
               className="flex items-center gap-1 *:text-gray-900"
             >
@@ -121,14 +128,14 @@ export default function FormattingGroup({
                   setCustomFontSize(val);
                 }
               }}
-              className="w-10 px-1 text-center"
+              className="w-12"
               size="sm"
             />
             {fontSizes.map((size, index) => (
               <DropdownItem
                 key={index}
                 className={clsx(
-                  'flex justify-center rounded-md border-transparent py-1',
+                  'flex justify-start rounded-md border-transparent py-1',
                   displayFontSize === size && 'bg-primary-50 border-primary-300'
                 )}
                 onClick={() => {
@@ -152,23 +159,53 @@ export default function FormattingGroup({
         <Dropdown>
           <DropdownTrigger
             className="outline-none"
-            disabled={disabled || activeState.isInYoutube}
+            disabled={
+              disabled || activeState.isInYoutube || activeState.isInImage
+            }
           >
-            <ToolbarButton
+            <div
               title="Heading"
-              disabled={disabled || activeState.isInYoutube}
-              active={activeState.activeHeading !== null}
-              className="flex items-end"
+              className={clsx(
+                'flex items-center gap-1 rounded-lg border border-gray-300 p-2',
+                (disabled ||
+                  activeState.isInYoutube ||
+                  activeState.isInImage) &&
+                  'opacity-50'
+              )}
             >
-              <Icon name="heading" size={20} />
+              <Icon
+                name={activeState.activeHeading ? 'heading' : 'paragraph'}
+                size={20}
+                className="text-gray-900"
+              />
+
               {activeState.activeHeading && (
-                <Text variant="t3" className="translate-y-px">
+                <Text variant="t2" weight="semibold" className="translate-y-px">
                   {activeState.activeHeading}
                 </Text>
               )}
-            </ToolbarButton>
+              <Icon
+                name="angle-down-small"
+                size={18}
+                className={clsx(activeState.activeHeading && 'ml-1')}
+              />
+            </div>
           </DropdownTrigger>
           <DropdownContent sideOffset={3} className="z-30 p-1">
+            <DropdownItem
+              className={clsx(
+                'rounded-md border-transparent py-1',
+                activeState.activeParagraph &&
+                  'bg-primary-50 border-primary-300'
+              )}
+              onClick={() => {
+                editor.chain().focus().setParagraph().run();
+              }}
+            >
+              <Text weight="medium" className="text-gray-900">
+                Paragraph
+              </Text>
+            </DropdownItem>
             {headings.map((head, index) => (
               <DropdownItem
                 key={index}
@@ -181,7 +218,8 @@ export default function FormattingGroup({
                   editor
                     .chain()
                     .focus()
-                    .toggleHeading({ level: head.level })
+                    .setHeading({ level: head.level })
+                    .setFontSize(head.fontSize + 'px')
                     .run();
                 }}
               >
@@ -197,7 +235,9 @@ export default function FormattingGroup({
           title="Bold"
           icon="bold"
           iconSize={18}
-          disabled={disabled || activeState.isInYoutube}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
           active={activeState.bold}
           onClick={() => editor.chain().focus().toggleBold().run()}
         />
@@ -205,7 +245,9 @@ export default function FormattingGroup({
           title="Italic"
           icon="italic"
           iconSize={18}
-          disabled={disabled || activeState.isInYoutube}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
           active={activeState.italic}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         />
@@ -213,7 +255,9 @@ export default function FormattingGroup({
           title="Underline"
           icon="underline"
           iconSize={18}
-          disabled={disabled || activeState.isInYoutube}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
           active={activeState.underline}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
         />
@@ -221,15 +265,31 @@ export default function FormattingGroup({
         <Dropdown>
           <DropdownTrigger
             className="outline-none"
-            disabled={disabled || activeState.isInYoutube}
+            disabled={
+              disabled || activeState.isInYoutube || activeState.isInImage
+            }
           >
-            <ToolbarButton
+            <div
               title="Line Height"
-              disabled={disabled || activeState.isInYoutube}
-              className="flex items-end"
+              className={clsx(
+                'flex items-center gap-1 rounded-lg border border-gray-300 p-2',
+                (disabled ||
+                  activeState.isInYoutube ||
+                  activeState.isInImage) &&
+                  'opacity-50'
+              )}
             >
-              <Icon name="line-height" size={20} />
-            </ToolbarButton>
+              <Icon
+                name="paragraph-spacing"
+                size={20}
+                className="text-gray-900"
+              />
+
+              <Text variant="t2" weight="semibold">
+                {activeState.activeLineHeight ?? '1.5'}
+              </Text>
+              <Icon name="angle-down-small" size={18} className="ml-1" />
+            </div>
           </DropdownTrigger>
           <DropdownContent
             sideOffset={3}
@@ -291,62 +351,71 @@ export default function FormattingGroup({
           title="Strike"
           icon="strike-through"
           iconSize={20}
-          disabled={disabled || activeState.isInYoutube}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
           active={activeState.strike}
           onClick={() => editor.chain().focus().toggleStrike().run()}
+        />
+
+        <ToolbarButton
+          title="Horizontal Line"
+          icon="horizontal-line"
+          iconSize={20}
+          disabled={
+            disabled ||
+            activeState.isInYoutube ||
+            activeState.activeHorizontal ||
+            activeState.isInImage
+          }
+          active={activeState.activeHorizontal}
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        />
+
+        <ToolbarButton
+          title="BlockQuote"
+          icon="quote"
+          iconSize={23}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
+          active={activeState.activeBlockQuote}
+          onClick={() => editor.commands.toggleBlockquote()}
         />
 
         <ToolbarButton
           title="Subscript"
           icon="subscript"
           iconSize={23}
-          disabled={disabled || activeState.isInYoutube}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
           active={activeState.subscript}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
         />
 
-        <ToolbarButton
-          title="Horizontal Rule"
-          icon="location-pin-search"
-          iconSize={23}
-          disabled={disabled || activeState.isInYoutube}
-          active={activeState.activeHorizontal}
-          onClick={() => editor.commands.setHorizontalRule()}
+        <ColorPickerButton
+          id="text-highlight"
+          icon="stabilo"
+          color={activeState.activeHighlight ?? '#ffffff'}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
+          onChange={(color: string) =>
+            editor.chain().focus().setHighlight({ color }).run()
+          }
         />
 
-        <ToolbarButton
-          title="BlockQuote"
-          icon="address-book"
-          iconSize={23}
-          disabled={disabled || activeState.isInYoutube}
-          active={activeState.activeBlockQuote}
-          onClick={() => editor.commands.toggleBlockquote()}
-        />
-
-        <input
-          type="color"
-          className="size-5 cursor-pointer rounded-lg disabled:opacity-50"
-          title="Text Color"
-          value={activeState.activeColor ?? '#000000'}
-          disabled={disabled || activeState.isInYoutube}
-          onChange={(e) => {
-            editor.chain().focus().setColor(e.target.value).run();
-          }}
-        />
-
-        <input
-          type="color"
-          className="size-5 cursor-pointer rounded-lg disabled:opacity-50"
-          title="Stabilo"
-          value={activeState.activeHighlight ?? '#ffffff'}
-          disabled={disabled || activeState.isInYoutube}
-          onChange={(e) => {
-            editor
-              .chain()
-              .focus()
-              .setHighlight({ color: e.target.value })
-              .run();
-          }}
+        <ColorPickerButton
+          id="text-color"
+          icon="letter-a"
+          color={activeState.activeColor ?? '#000000'}
+          disabled={
+            disabled || activeState.isInYoutube || activeState.isInImage
+          }
+          onChange={(color: string) =>
+            editor.chain().focus().setColor(color).run()
+          }
         />
       </ToolbarGroup>
     </>

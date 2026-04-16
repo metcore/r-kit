@@ -11,13 +11,17 @@ import ModalInsertImage from './modal-insert-image';
 import ModalInsertYoutube from './modal-insert-youtube';
 import ToolbarButton from './toolbar-button';
 import ToolbarGroup from './toolbar-group';
+import type { AttachmentField } from '../type';
+import objectfitOptions from '../constants/object-fit-options';
 
 export function InsertGroup({
   editor,
   disabled = false,
+  attachmentField,
 }: {
   editor: Editor;
   disabled?: boolean;
+  attachmentField?: AttachmentField;
 }) {
   const [isModalImageOpen, setIsModalImageOpen] = useState(false);
   const [isModalYoutubeOpen, setIsModalYoutubeOpen] = useState(false);
@@ -48,7 +52,7 @@ export function InsertGroup({
       <Dropdown onOpenChange={handleOpen} open={isLinkOpen}>
         <DropdownTrigger>
           <ToolbarButton
-            title="Link"
+            title="Insert Link"
             icon="link"
             active={isLink}
             disabled={disabled}
@@ -61,7 +65,7 @@ export function InsertGroup({
               rightAddonClassName="pl-0!"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="Paste a link..."
+              placeholder="Paste URL here..."
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
@@ -93,7 +97,7 @@ export function InsertGroup({
               className="rounded-lg"
               onClick={openLink}
             >
-              <Icon name="arrows-expand" size={17} />
+              <Icon name="arrow-export" size={17} />
             </Button>
           </div>
         </DropdownContent>
@@ -112,7 +116,7 @@ export function InsertGroup({
       <ToolbarButton
         disabled={disabled}
         title="Insert youtube"
-        icon="image"
+        icon="youtube"
         active={isInYoutube}
         onClick={() => setIsModalYoutubeOpen(true)}
       />
@@ -153,6 +157,7 @@ export function InsertGroup({
       <ModalInsertImage
         isOpen={isModalImageOpen}
         onClose={setIsModalImageOpen}
+        attachmentField={attachmentField}
         initialValues={
           isInImage
             ? {
@@ -162,7 +167,12 @@ export function InsertGroup({
                   width: editor.getAttributes('image')['width'] as string,
                   height: editor.getAttributes('image')['height'] as string,
                   objectFit: {
-                    label: editor.getAttributes('image')['objectFit'] as string,
+                    label:
+                      objectfitOptions.find(
+                        (objectFit) =>
+                          objectFit.value ===
+                          editor.getAttributes('image')['objectFit']
+                      )?.label ?? 'Contain (No Cropping)',
                     value: editor.getAttributes('image')['objectFit'] as string,
                   },
                 },

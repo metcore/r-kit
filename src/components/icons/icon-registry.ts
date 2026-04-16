@@ -315,6 +315,7 @@ import QuoteIcon from './icons/QuoteIcon';
 import TableMergeCellIcon from './icons/TableMergeCellIcon';
 import TableNoBorderIcon from './icons/TableNoBorderIcon';
 import TableHeaderCellIcon from './icons/TableHeaderCellIcon';
+import ParagraphIcon from './icons/ParagraphIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -634,4 +635,5 @@ export const iconRegistry = {
   'table-merge-cell': TableMergeCellIcon,
   'table-no-border': TableNoBorderIcon,
   'table-header-cell': TableHeaderCellIcon,
+  'paragraph': ParagraphIcon,
 };
