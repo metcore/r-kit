@@ -36,7 +36,7 @@ import { InsertGroup } from './partials/insert-group';
 import TableGroup from './partials/table-group';
 import type { TextEditorProps } from './type';
 
-export default function TextEditor({
+export function TextEditor({
   ui,
   field,
   toolbar,
@@ -72,6 +72,7 @@ export default function TextEditor({
   const editor = useEditor({
     content: value,
     editable: !disabled,
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Underline,
@@ -122,22 +123,26 @@ export default function TextEditor({
   });
 
   const enterHtmlMode = async () => {
-    const formatted = await formatHtml(editor.getHTML());
+    if (editor === null) return;
+
+    const formatted = await formatHtml(editor?.getHTML());
     setHtmlValue(formatted);
     setIsHtmlMode(true);
   };
 
   const exitHtmlMode = () => {
-    editor.commands.setContent(htmlValue);
+    if (editor === null) return;
+    editor?.commands.setContent(htmlValue);
 
     requestAnimationFrame(() => {
       handleResizeTable(editor);
-      setHtmlValue(editor.getHTML());
+      setHtmlValue(editor?.getHTML());
     });
 
     setIsHtmlMode(false);
   };
-  if (editor === undefined) return null;
+
+  if (editor === undefined || editor === null) return null;
 
   return (
     <FormField

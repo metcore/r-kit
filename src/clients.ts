@@ -24,4 +24,3 @@ export * from './components/button-group';
 export * from './components/calendar';
 export * from './components/text-editor';
 export * from './components/progress-bar';
-export * from './components/text-editor';
