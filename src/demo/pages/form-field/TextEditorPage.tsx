@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Card, CardBody, CardHeader } from '../../../components/card';
-import TextEditor from '../../../components/text-editor/text-editor';
 import illust from '../../assets/images/forms.png';
 import HeroSection from '../../components/HeroSection';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import type { FileItem } from '../../../clients';
+import { TextEditor, type FileItem } from '../../../clients';
 
 type UploadedImage = {
   data: {

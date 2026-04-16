@@ -302,7 +302,11 @@ export default function ModalInsertImage({
                 maxSize={(attachmentField?.maxSize ?? 0) * 1024 * 1024}
                 variant={attachmentField?.variant ?? 'medium'}
                 uploadConfig={attachmentField?.uploadConfig}
-                onChange={(files) => attachmentField?.onChange?.(files)}
+                onChange={
+                  attachmentField?.onChange
+                    ? (files) => attachmentField?.onChange?.(files)
+                    : undefined
+                }
                 value={attachmentField?.value}
                 onUploadSuccess={(results) => {
                   const { url, altText } =
