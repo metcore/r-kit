@@ -4,6 +4,7 @@ export interface TabsContextValue {
   orientation: 'horizontal' | 'vertical';
   registerTrigger: (value: string, ref: HTMLButtonElement) => void;
   unregisterTrigger: (value: string) => void;
+  unmountOnHide: boolean;
 }
 
 export interface TabsProps {
@@ -13,6 +14,7 @@ export interface TabsProps {
   orientation?: 'horizontal' | 'vertical';
   className?: string;
   children: React.ReactNode;
+  unmountOnHide?: boolean;
 }
 
 export interface TabsListProps {

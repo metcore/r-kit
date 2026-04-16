@@ -1,30 +1,32 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import HomePage from './pages/HomePage';
-import ButtonPage from './pages/components/ButtonPage';
-import InputPage from './pages/InputPage';
-import CardPage from './pages/CardPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import ChipPage from './pages/ChipPage';
 import AvatarPage from './pages/AvatarPage';
-import { RadioButtonPage } from './pages/RadioButtonPage';
-import TabsPage from './pages/TabsPage';
-import ModalPage from './pages/ModalPage';
-import TypographyPage from './pages/TypographyPage';
+import CardPage from './pages/CardPage';
+import ChipPage from './pages/ChipPage';
 import ColorsPage from './pages/ColorsPage';
-import InputGroupPage from './pages/form-field/InputGroupPage';
-import CheckboxPage from './pages/form-field/CheckboxPage';
-import InputFieldPage from './pages/form-field/InputFieldPage';
-import CounterPage from './pages/form-field/CounterPage';
-import InputFilePage from './pages/form-field/InputFilePage';
+import ButtonGroupPage from './pages/components/ButtonGroupPage';
+import ButtonPage from './pages/components/ButtonPage';
 import CalendarPage from './pages/components/CalendarPage';
-import DatePickerPage from './pages/form-field/DatePickerPage';
 import TablePage from './pages/data-display/TablePage';
 import ToastPage from './pages/feedback/ToastPage';
+import CheckboxPage from './pages/form-field/CheckboxPage';
+import CounterPage from './pages/form-field/CounterPage';
+import DatePickerPage from './pages/form-field/DatePickerPage';
+import InputFieldPage from './pages/form-field/InputFieldPage';
+import InputFilePage from './pages/form-field/InputFilePage';
+import InputGroupPage from './pages/form-field/InputGroupPage';
 import SelectPage from './pages/form-field/SelectPage';
 import { SwitchPage } from './pages/form-field/SwitchPage';
-import ButtonGroupPage from './pages/components/ButtonGroupPage';
+import TextEditorPage from './pages/form-field/TextEditorPage';
+import HomePage from './pages/HomePage';
+import InputPage from './pages/InputPage';
+import ModalPage from './pages/ModalPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { RadioButtonPage } from './pages/RadioButtonPage';
+import TabsPage from './pages/TabsPage';
+import TypographyPage from './pages/TypographyPage';
+import ProgressBarPage from './pages/components/ProgressBarPage';
 
 const DocsRouter: React.FC = () => {
   return (
@@ -53,6 +55,8 @@ const DocsRouter: React.FC = () => {
         <Route path="/date-picker" element={<DatePickerPage />} />
         <Route path="/table" element={<TablePage />} />
         <Route path="/toast" element={<ToastPage />} />
+        <Route path="/text-editor" element={<TextEditorPage />} />
+        <Route path="/progress-bar" element={<ProgressBarPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

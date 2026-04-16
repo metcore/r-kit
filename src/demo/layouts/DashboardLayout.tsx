@@ -31,7 +31,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <SidebarProvider>
       <AppSidebar />
       <div className="min-w-0 flex-1">
-        <nav className="relative flex h-[76px] w-full -translate-y-0.5 flex-row items-center justify-between bg-white px-5">
+        <nav className="relative flex h-19 w-full -translate-y-0.5 flex-row items-center justify-between bg-white px-5">
           {/* sidebar trigger & search bar */}
           <div className="flex flex-1 flex-row items-center gap-2">
             <SidebarTrigger className="md:hidden" />
@@ -41,7 +41,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               </button>
             )}
             <Input
-              className="hidden shadow-none md:flex lg:min-w-[300px]"
+              className="hidden shadow-none md:flex lg:min-w-75"
               leftAddon={<Icon name="search" size={16} />}
               leftAddonClassName="border-r-0"
               placeholder={`Search (${shortcut})`}

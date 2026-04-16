@@ -1,0 +1,44 @@
+/* code block */
+.shiki.dark-plus {
+  border-radius: 8px;
+  margin: 0;
+  padding-bottom: 21px;
+}
+
+pre[data-line-numbers] {
+  counter-reset: line;
+  padding: 15px 0;
+}
+
+pre[data-line-numbers] code > span {
+  display: block;
+  padding-left: 3rem;
+  position: relative;
+  font-size: 12px;
+  line-height: 0.5;
+  height: 0;
+}
+
+pre[data-line-numbers] code > span::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  width: 2rem;
+  text-align: right;
+  color: #6b7280;
+}
+
+/* input number */
+/* Chrome, Edge, Safari */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

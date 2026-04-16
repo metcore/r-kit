@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { cn } from '../../lib/utils';
 import { FormLabel } from '../form';
 import { Icon } from '../icons';
 import { Input } from '../input/input';
+import { ModalPreviewAttachment } from '../modal/modal-preview-attachment';
+import ProgressBar from '../progress-bar/progress-bar';
 import { Text } from '../text';
 import { getIconName } from './helpers';
 import type { PreviewItemProps } from './type';
-import { ModalPreviewAttachment } from '../modal/modal-preview-attachment';
+import clsx from 'clsx';
 
 // man... i love using display flex :)
 
@@ -23,6 +24,7 @@ const PreviewItem = ({
   pdfViewerProps,
   videoPlayerProps,
   onDownload,
+  progress,
 }: PreviewItemProps) => {
   const [previewShow, setPreviewShow] = useState({
     isOpen: false,
@@ -53,11 +55,11 @@ const PreviewItem = ({
   };
 
   const handleClosePreview = () => {
-    setPreviewShow((s) => ({ ...s, isVisible: false })); // animasi keluar
+    setPreviewShow((s) => ({ ...s, isVisible: false }));
 
     setTimeout(() => {
-      setPreviewShow({ isOpen: false, isVisible: false }); // baru unmount
-    }, 200); // samakan dengan duration CSS
+      setPreviewShow({ isOpen: false, isVisible: false });
+    }, 200);
   };
 
   return (
@@ -75,88 +77,105 @@ const PreviewItem = ({
         </div>
       )}
 
-      <div
-        className={cn(
-          'flex w-full items-center justify-between rounded-lg border border-gray-200 p-2'
-        )}
-      >
-        <div className="flex flex-1 items-center gap-2 overflow-hidden">
-          <button
-            type="button"
-            className="cursor-pointer disabled:cursor-not-allowed"
-            onClick={handleOpenPreview}
-            disabled={isNotViewable}
-          >
-            {data.file.type.startsWith('image/') ? (
-              <img
-                src={data.preview}
-                alt={data.file.name}
-                className="size-11 rounded-md object-cover"
-              />
-            ) : (
-              <Icon name={iconName ?? 'doc'} className="size-11" />
-            )}
-          </button>
-
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <Text
-              as="h3"
-              value={data.file.name}
-              variant="t1"
-              weight="semibold"
-              className="truncate"
-            />
-            <div className="flex flex-wrap items-center gap-1">
-              <Text
-                value={`${(data.file.size / 1024 / 1024).toFixed(2)} MB`}
-                className="truncate text-gray-700!"
-              />
-              {(Boolean(data?.hint) || Boolean(data?.errorMessage)) && (
-                <Text value={'•'} className="truncate text-gray-700!" />
+      <div className="flex w-full flex-col gap-2 rounded-lg border border-gray-200 p-2">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-1 items-center gap-2 overflow-hidden">
+            <button
+              type="button"
+              className="cursor-pointer disabled:cursor-not-allowed"
+              onClick={handleOpenPreview}
+              disabled={isNotViewable}
+            >
+              {data.file.type.startsWith('image/') ? (
+                <img
+                  src={data.preview}
+                  alt={data.file.name}
+                  className="size-11 rounded-md object-cover"
+                />
+              ) : (
+                <Icon name={iconName ?? 'doc'} className="size-11" />
               )}
-              {Boolean(data?.hint) && (
+            </button>
+            <div className="flex flex-1 flex-col overflow-hidden">
+              <Text
+                as="h3"
+                value={data.file.name}
+                variant="t1"
+                weight="semibold"
+                className="truncate"
+              />
+              <div className="flex flex-wrap items-center gap-1">
                 <Text
-                  value={data?.hint ?? ''}
+                  value={`${(data.file.size / 1024 / 1024).toFixed(2)} MB`}
                   className="truncate text-gray-700!"
                 />
-              )}
-              {Boolean(data?.hint) && Boolean(data?.errorMessage) && (
-                <Text value={'•'} className="truncate text-gray-700!" />
-              )}
-              {Boolean(data?.errorMessage) && (
-                <Text value={data?.errorMessage ?? ''} color="danger" />
-              )}
+                {(Boolean(data?.hint) || Boolean(data?.errorMessage)) && (
+                  <Text value={'•'} className="truncate text-gray-700!" />
+                )}
+                {Boolean(data?.hint) && (
+                  <Text
+                    value={data?.hint ?? ''}
+                    className={clsx(
+                      'truncate text-gray-700 transition-colors',
+                      data?.uploadStatus === 'success' && 'text-success-500!',
+                      data?.uploadStatus === 'error' && 'text-danger-500!'
+                    )}
+                  />
+                )}
+                {Boolean(data?.hint) && Boolean(data?.errorMessage) && (
+                  <Text value={'•'} className="truncate text-gray-700!" />
+                )}
+                {Boolean(data?.errorMessage) && (
+                  <Text value={data?.errorMessage ?? ''} color="danger" />
+                )}
+              </div>
             </div>
           </div>
+          <div className="flex items-center gap-2">
+            {Boolean(data?.errorMessage) && (
+              <>
+                {/* replace button */}
+                <button
+                  type="button"
+                  onClick={onReplace}
+                  disabled={disabled}
+                  className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                  title="Replace file"
+                >
+                  <Icon name="rotate-right" className="size-4 text-gray-700" />
+                </button>
+                <Icon
+                  name="exclamation-triangle"
+                  className="text-danger-500 size-4"
+                />
+              </>
+            )}
+            <button
+              type="button"
+              onClick={onRemove}
+              disabled={disabled}
+              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Icon name="times" className="size-4 text-gray-700" />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          {Boolean(data?.errorMessage) && (
-            <>
-              {/* replace button */}
-              <button
-                type="button"
-                onClick={onReplace}
-                disabled={disabled}
-                className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-                title="Replace file"
-              >
-                <Icon name="rotate-right" className="size-4 text-gray-700" />
-              </button>
-              <Icon
-                name="exclamation-triangle"
-                className="text-danger-500 size-4"
-              />
-            </>
-          )}
-          <button
-            type="button"
-            onClick={onRemove}
-            disabled={disabled}
-            className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Icon name="times" className="size-4 text-gray-700" />
-          </button>
-        </div>
+
+        {progress !== undefined && (
+          <div className="flex flex-1 items-center gap-2">
+            <ProgressBar
+              color="success"
+              value={Number((progress * 100).toFixed(0))}
+              className="flex-1"
+            />
+            <Text
+              value={`${(progress * 100).toFixed(0)}%`}
+              variant="t3"
+              weight="medium"
+              className="text-gray-900"
+            />
+          </div>
+        )}
       </div>
 
       <ModalPreviewAttachment

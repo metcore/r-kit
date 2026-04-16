@@ -12,7 +12,24 @@ import { Icon } from '../icons';
 import { Text } from '../text';
 import { inputFileVariants } from './input-file-variants';
 import { PreviewItem } from './preview-item';
-import type { FileItem, InputFileProps, InputFileRef } from './type';
+import type {
+  FileItem,
+  InputFileProps,
+  InputFileRef,
+  UploadedFile,
+} from './type';
+
+const defaultExtractUrl = (res: unknown): string => {
+  if (
+    res !== null &&
+    typeof res === 'object' &&
+    'url' in res &&
+    typeof (res as Record<string, unknown>).url === 'string'
+  ) {
+    return (res as Record<string, unknown>).url as string;
+  }
+  return '';
+};
 
 const InputFile = forwardRef<InputFileRef, InputFileProps>(
   (
@@ -37,19 +54,41 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       audioPlayerProps,
       videoPlayerProps,
       onDownload,
+      uploadConfig,
+      onUploadSuccess,
+      onRemoveFile,
     },
     ref
   ) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const replaceInputRef = useRef<HTMLInputElement | null>(null);
+    const uploadedFilesRef = useRef<UploadedFile<unknown>[]>([]);
 
     const [internalFiles, setInternalFiles] = useState<FileItem[]>([]);
     const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
     const [customNames, setCustomNames] = useState<Record<number, string>>({});
     const [isDragging, setIsDragging] = useState(false);
+    const [internalErrorMessage, setInternalErrorMessage] = useState<string | undefined>(undefined); //prettier-ignore
+
+    const [uploadProgress, setUploadProgress] = useState<
+      Record<string, number>
+    >({});
 
     const files = value ?? internalFiles;
-    const setFiles = onChange ?? setInternalFiles;
+    const filesRef = useRef<FileItem[]>(files);
+    filesRef.current = files;
+
+    const updateFiles = (
+      updater: FileItem[] | ((prev: FileItem[]) => FileItem[])
+    ) => {
+      const next = typeof updater === 'function' ? updater(filesRef.current) : updater; //prettier-ignore
+      filesRef.current = next;
+      if (onChange) {
+        onChange(next);
+      } else {
+        setInternalFiles(next);
+      }
+    };
 
     const processFiles = (selectedFiles: File[]) => {
       // Validasi maxFiles
@@ -57,7 +96,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         maxFiles !== undefined &&
         files.length + selectedFiles.length > maxFiles
       ) {
-        alert(maxFilesErrorMessage ?? `Maksimal ${maxFiles} file`);
+        setInternalErrorMessage(
+          maxFilesErrorMessage ?? `Maksimal ${maxFiles} file`
+        );
         return;
       }
 
@@ -65,14 +106,14 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       if (maxSize !== undefined) {
         const oversized = selectedFiles.filter((file) => file.size > maxSize);
         if (oversized.length > 0) {
-          alert(
+          setInternalErrorMessage(
             maxSizeErrorMessage ??
               `File ${oversized.map((f) => f.name).join(', ')} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
           );
           return;
         }
       }
-
+      setInternalErrorMessage(undefined);
       const mapped = selectedFiles.map((file) => ({
         id: crypto.randomUUID(),
         file,
@@ -80,7 +121,11 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         preview: URL.createObjectURL(file),
       }));
 
-      setFiles([...files, ...mapped]);
+      updateFiles([...files, ...mapped]);
+
+      if (uploadConfig) {
+        mapped.forEach((fileItem) => uploadFile(fileItem));
+      }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +162,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
       // Validasi maxSize
       if (maxSize !== undefined && selected.size > maxSize) {
-        alert(
+        setInternalErrorMessage(
           maxSizeErrorMessage ??
             `File ${selected.name} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
         );
@@ -138,7 +183,10 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       // Replace file at index
       const newFiles = [...files];
       newFiles[replaceIndex] = newFileItem;
-      setFiles(newFiles);
+      updateFiles(newFiles);
+      if (uploadConfig) {
+        uploadFile(newFileItem);
+      }
 
       // Reset
       setReplaceIndex(null);
@@ -147,18 +195,28 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       }
     };
 
-    const removeFile = (index: number) => {
-      const newFiles = files.filter((_, i) => i !== index);
-      URL.revokeObjectURL(files[index].preview);
-      setFiles(newFiles);
-    };
-
     const clearAll = () => {
       files.forEach((f) => URL.revokeObjectURL(f.preview));
-      setFiles([]);
-      if (inputRef.current) {
-        inputRef.current.value = '';
-      }
+      updateFiles([]);
+      uploadedFilesRef.current = [];
+      if (inputRef.current) inputRef.current.value = '';
+    };
+
+    const removeFile = (index: number) => {
+      const removed = files[index];
+      URL.revokeObjectURL(removed.preview);
+      updateFiles(files.filter((_, i) => i !== index));
+      uploadedFilesRef.current = uploadedFilesRef.current.filter(
+        (f) => f.id !== removed.id
+      );
+
+      onRemoveFile?.(removed.id!);
+
+      setUploadProgress((prev) => {
+        const next = { ...prev };
+        delete next[removed.id!];
+        return next;
+      });
     };
 
     const triggerReplace = (index: number) => {
@@ -229,8 +287,8 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         });
 
         if (filteredFiles.length !== droppedFiles.length) {
-          alert(
-            `Beberapa file tidak sesuai dengan tipe yang diizinkan: ${accept}`
+          setInternalErrorMessage(
+            `Some files do not match the allowed types: ${accept}`
           );
         }
       }
@@ -238,6 +296,133 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       if (filteredFiles.length > 0) {
         processFiles(filteredFiles);
       }
+    };
+
+    const uploadFile = (fileItem: FileItem) => {
+      if (!uploadConfig) return;
+
+      const {
+        url,
+        method = 'POST',
+        fieldName = 'file',
+        headers = {},
+      } = uploadConfig;
+
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData();
+      formData.append(fieldName, fileItem.file);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = event.loaded / event.total; // 0–1
+          updateFiles((prev) =>
+            prev.map((f) =>
+              f.id === fileItem.id ? { ...f, hint: 'Uploading...' } : f
+            )
+          );
+          setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: percent }));
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: 1 }));
+
+          let parsed: unknown | null = null;
+          try {
+            parsed = JSON.parse(xhr.responseText);
+          } catch (err) {
+            console.error(err);
+          }
+
+          const extractUrl = uploadConfig.extractUrl ?? defaultExtractUrl;
+          const uploadedUrl = extractUrl(parsed);
+
+          updateFiles((prev) =>
+            prev.map((f) =>
+              f.id === fileItem.id
+                ? {
+                    ...f,
+                    uploadStatus: 'success',
+                    hint: 'Completed',
+                    uploadedUrl,
+                  }
+                : f
+            )
+          );
+
+          setTimeout(() => {
+            setUploadProgress((prev) => {
+              const next = { ...prev };
+              delete next[fileItem.id!];
+              return next;
+            });
+          }, 800);
+
+          const result: UploadedFile<unknown> = {
+            ...fileItem,
+            id: fileItem.id!,
+            originalName: fileItem.file.name,
+            customName: fileItem.customName,
+            uploadedData: parsed,
+          };
+
+          uploadedFilesRef.current = [...uploadedFilesRef.current, result];
+          onUploadSuccess?.(uploadedFilesRef.current);
+        } else {
+          handleUploadError(fileItem, `Server error: ${xhr.status}`);
+          uploadConfig.onError?.(fileItem, `Server error: ${xhr.status}`);
+        }
+      };
+
+      xhr.onerror = () => {
+        handleUploadError(
+          fileItem,
+          uploadConfig?.errorMessage ?? 'Failed Try Again'
+        );
+
+        uploadConfig.onError?.(
+          fileItem,
+          uploadConfig?.errorMessage ?? 'Failed Try Again'
+        );
+
+        setTimeout(() => {
+          setUploadProgress((prev) => {
+            const next = { ...prev };
+            delete next[fileItem.id!];
+            return next;
+          });
+        }, 800);
+      };
+
+      updateFiles((prev) =>
+        prev.map((f) =>
+          f.id === fileItem.id ? { ...f, uploadStatus: 'uploading' } : f
+        )
+      );
+
+      setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: 0 }));
+
+      xhr.open(method, url);
+      Object.entries(headers).forEach(([key, val]) =>
+        xhr.setRequestHeader(key, val)
+      );
+      xhr.send(formData);
+    };
+
+    const handleUploadError = (fileItem: FileItem, message: string) => {
+      updateFiles((prev) =>
+        prev.map((f) =>
+          f.id === fileItem.id
+            ? {
+                ...f,
+                uploadStatus: 'error',
+                errorMessage: message,
+                hint: undefined,
+              }
+            : f
+        )
+      );
     };
 
     // Expose methods to parent via ref
@@ -263,6 +448,12 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+      if (errorMessage !== undefined) {
+        setInternalErrorMessage(errorMessage);
+      }
+    }, [errorMessage]);
+
     const isDefault = variant === "primary" || variant === "secondary" || variant === "gray"; //prettier-ignore
     const isSized = variant === 'medium' || variant === 'large';
 
@@ -270,23 +461,21 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
           <label
+            onDragEnter={variant === 'large' ? handleDragEnter : undefined}
+            onDragLeave={variant === 'large' ? handleDragLeave : undefined}
+            onDragOver={variant === 'large' ? handleDragOver : undefined}
+            onDrop={variant === 'large' ? handleDrop : undefined}
             className={cn(
               inputFileVariants({ variant }),
               'group relative flex items-center gap-2 rounded-lg border px-3 py-2 transition-all',
               isDefault && "w-fit outline-2 outline-offset-1 outline-transparent", //prettier-ignore
               isSized && "w-full border-dashed border-gray-400 bg-gray-50", //prettier-ignore
 
-              variant === 'large' &&
-                errorMessage !== undefined &&
-                'border-danger-500',
+              variant === 'large' && internalErrorMessage !== undefined && 'border-danger-500', //prettier-ignore
               variant === 'large' && 'flex-col items-center p-5!',
               variant === "large" && isDragging && "border-primary-500 bg-primary-50", //prettier-ignore
               disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
             )}
-            onDragEnter={variant === 'large' ? handleDragEnter : undefined}
-            onDragLeave={variant === 'large' ? handleDragLeave : undefined}
-            onDragOver={variant === 'large' ? handleDragOver : undefined}
-            onDrop={variant === 'large' ? handleDrop : undefined}
           >
             {isDefault && <Icon name="upload" />}
             {isSized && (
@@ -318,9 +507,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
               )}
             </div>
 
-            {errorMessage !== undefined && variant === 'large' && (
+            {internalErrorMessage !== undefined && variant === 'large' && (
               <Text
-                value={errorMessage}
+                value={internalErrorMessage}
                 variant="t3"
                 className="text-left"
                 color="danger"
@@ -349,9 +538,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             />
           </label>
 
-          {errorMessage !== undefined && variant === 'medium' && (
+          {internalErrorMessage !== undefined && variant === 'medium' && (
             <Text
-              value={errorMessage}
+              value={internalErrorMessage}
               variant="t3"
               className="text-left"
               color="danger"
@@ -390,11 +579,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             <div className="flex flex-col gap-3">
               {files.map((item, i) => (
                 <PreviewItem
-                  key={item?.id}
                   data={item}
-                  onDownload={(data) =>
-                    onDownload?.({ src: data?.src, name: data?.name })
-                  }
+                  disabled={disabled}
+                  key={item?.id}
                   audioPlayerProps={audioPlayerProps}
                   pdfViewerProps={pdfViewerProps}
                   videoPlayerProps={videoPlayerProps}
@@ -402,15 +589,18 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
                   onReplace={() => triggerReplace(i)}
                   labelCustomName={item?.label}
                   customNamePlaceholder={customNamePlaceholder}
+                  progress={uploadConfig ? uploadProgress[item.id!] : undefined}
+                  customName={
+                    customNames[i] ?? item.customName ?? item.file.name
+                  }
+                  onDownload={(data) =>
+                    onDownload?.({ src: data?.src, name: data?.name })
+                  }
                   onCustomNameChange={
                     useCustomName !== undefined
                       ? (e) => handleChangeCustomName?.({ e, i })
                       : undefined
                   }
-                  customName={
-                    customNames[i] ?? item.customName ?? item.file.name
-                  }
-                  disabled={disabled}
                 />
               ))}
             </div>

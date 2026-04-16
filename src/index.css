@@ -1,6 +1,11 @@
-@import url("./fonts/fonts.css");
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
+@import url('./fonts/fonts.css');
+@import url('./css/text-editor.css');
+@import url('./css/code-block.css');
+@import url('./css/modal-animation.css');
+@import url('./css/scrollbar.css');
+
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @theme {
   --color-*: initial;
@@ -106,30 +111,10 @@
   --color-purple-950: #261c4a;
 
   /* font family */
-  --font-metropolis: "Metropolis", sans-serif, system-ui, -apple-system;
+  --font-metropolis: 'Metropolis', sans-serif, system-ui, -apple-system;
 
   /* shadow */
-  --shadow-dropdown: "0 4px 30px 0 rgba(46,45,116,0.05)";
-}
-
-@utility scrollbar-hide {
-  /* Firefox */
-  scrollbar-width: none;
-
-  /* Safari and Chrome */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@utility scrollbar-default {
-  /* Firefox */
-  scrollbar-width: auto;
-
-  /* Safari and Chrome */
-  &::-webkit-scrollbar {
-    display: block;
-  }
+  --shadow-dropdown: '0 4px 30px 0 rgba(46,45,116,0.05)';
 }
 
 @keyframes dash {
@@ -145,108 +130,6 @@
   stroke-dasharray: 30 70;
 }
 
-/* modal animation */
-
-@keyframes modal-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modal-scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes modal-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes modal-scale-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-}
-
 .calendar-cols {
   @apply grid-cols-[36px_36px_36px_36px_36px_36px_36px];
-}
-
-.animate-modal-fade-out {
-  animation: modal-fade-out 0.2s ease-in forwards;
-}
-
-.animate-modal-scale-out {
-  animation: modal-scale-out 0.2s ease-in forwards;
-}
-
-.animate-modal-fade-in {
-  animation: modal-fade-in 0.2s ease-out;
-}
-
-.animate-modal-scale-in {
-  animation: modal-scale-in 0.2s ease-out;
-}
-
-/* code block */
-.shiki.dark-plus {
-  border-radius: 8px;
-  margin: 0;
-  padding-bottom: 21px;
-}
-
-pre[data-line-numbers] {
-  counter-reset: line;
-  padding: 15px 0;
-}
-
-pre[data-line-numbers] code > span {
-  display: block;
-  padding-left: 3rem;
-  position: relative;
-  font-size: 12px;
-  line-height: 0.5;
-  height: 0;
-}
-
-pre[data-line-numbers] code > span::before {
-  counter-increment: line;
-  content: counter(line);
-  position: absolute;
-  left: 0;
-  width: 2rem;
-  text-align: right;
-  color: #6b7280;
-}
-
-/* input number */
-/* Chrome, Edge, Safari */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
 }

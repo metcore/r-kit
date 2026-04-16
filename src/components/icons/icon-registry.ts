@@ -306,6 +306,16 @@ import Grid2Icon from './icons/Grid2Icon';
 import InboxDownloadIcon from './icons/InboxDownloadIcon';
 import InboxIcon from './icons/InboxIcon';
 import UserTagIcon from './icons/UserTagIcon';
+import HorizontalLineIcon from './icons/HorizontalLineIcon';
+import LetterAIcon from './icons/LetterAIcon';
+import ParagraphSpacingIcon from './icons/ParagraphSpacingIcon';
+import StabiloIcon from './icons/StabiloIcon';
+import YoutubeIcon from './icons/YoutubeIcon';
+import QuoteIcon from './icons/QuoteIcon';
+import TableMergeCellIcon from './icons/TableMergeCellIcon';
+import TableNoBorderIcon from './icons/TableNoBorderIcon';
+import TableHeaderCellIcon from './icons/TableHeaderCellIcon';
+import ParagraphIcon from './icons/ParagraphIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -616,4 +626,14 @@ export const iconRegistry = {
   'inbox-download': InboxDownloadIcon,
   'inbox': InboxIcon,
   'user-tag': UserTagIcon,
+  'horizontal-line': HorizontalLineIcon,
+  'letter-a': LetterAIcon,
+  'paragraph-spacing': ParagraphSpacingIcon,
+  'stabilo': StabiloIcon,
+  'youtube': YoutubeIcon,
+  'quote': QuoteIcon,
+  'table-merge-cell': TableMergeCellIcon,
+  'table-no-border': TableNoBorderIcon,
+  'table-header-cell': TableHeaderCellIcon,
+  'paragraph': ParagraphIcon,
 };

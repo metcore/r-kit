@@ -1,3 +1,5 @@
+export type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+
 export interface FileItem {
   id?: string;
   file: File;
@@ -8,6 +10,9 @@ export interface FileItem {
   errorMessage?: string;
 
   preview: string;
+
+  uploadStatus?: UploadStatus;
+  uploadedUrl?: string;
 }
 
 export interface InputFileProps extends PlayerProps {
@@ -28,6 +33,9 @@ export interface InputFileProps extends PlayerProps {
   maxFilesErrorMessage?: string;
   useCustomName?: boolean;
   onDownload?: (data: { src?: string; name?: string }) => void;
+  uploadConfig?: UploadConfig;
+  onUploadSuccess?: (results: UploadedFile<unknown>[]) => void;
+  onRemoveFile?: (id: string) => void;
 }
 
 export interface PreviewItemProps extends PlayerProps {
@@ -40,6 +48,7 @@ export interface PreviewItemProps extends PlayerProps {
   customNamePlaceholder?: string;
   customName?: string;
   onDownload?: (data?: { src?: string; name?: string }) => void;
+  progress?: number;
 }
 
 export interface PlayerProps {
@@ -52,4 +61,21 @@ export interface InputFileRef {
   clearAll: () => void;
   getFiles: () => FileItem[];
   openFilePicker: () => void;
+}
+
+export interface UploadConfig {
+  url: string;
+  method?: 'POST' | 'PUT' | 'PATCH';
+  fieldName?: string;
+  headers?: Record<string, string>;
+  extractUrl?: (response: unknown) => string; // default: (res) => res.url
+  onError?: (fileItem: FileItem, error: string) => void;
+  errorMessage?: string;
+}
+
+export interface UploadedFile<UploadedData> {
+  id: string;
+  originalName: string;
+  customName?: string;
+  uploadedData: UploadedData | null;
 }
