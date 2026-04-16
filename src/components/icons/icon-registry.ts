@@ -316,6 +316,8 @@ import TableMergeCellIcon from './icons/TableMergeCellIcon';
 import TableNoBorderIcon from './icons/TableNoBorderIcon';
 import TableHeaderCellIcon from './icons/TableHeaderCellIcon';
 import ParagraphIcon from './icons/ParagraphIcon';
+import TextFillIcon from './icons/TextFillIcon';
+import TargetElipseIcon from './icons/TargetElipseIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -636,4 +638,6 @@ export const iconRegistry = {
   'table-no-border': TableNoBorderIcon,
   'table-header-cell': TableHeaderCellIcon,
   'paragraph': ParagraphIcon,
+  'text-fill': TextFillIcon,
+  'target-elipse': TargetElipseIcon,
 };
