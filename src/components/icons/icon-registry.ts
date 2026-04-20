@@ -318,6 +318,13 @@ import TableHeaderCellIcon from './icons/TableHeaderCellIcon';
 import ParagraphIcon from './icons/ParagraphIcon';
 import TextFillIcon from './icons/TextFillIcon';
 import TargetElipseIcon from './icons/TargetElipseIcon';
+import BookIcon from './icons/BookIcon';
+import CashReceiptIcon from './icons/CashReceiptIcon';
+import FileWarningLetterIcon from './icons/FileWarningLetterIcon';
+import ReimburseIcon from './icons/ReimburseIcon';
+import UserAirplaneIcon from './icons/UserAirplaneIcon';
+import UserClockSquareIcon from './icons/UserClockSquareIcon';
+import UserCheckIcon2 from './icons/UserCheckIcon2';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -640,4 +647,11 @@ export const iconRegistry = {
   'paragraph': ParagraphIcon,
   'text-fill': TextFillIcon,
   'target-elipse': TargetElipseIcon,
+  'book': BookIcon,
+  'cash-receipt': CashReceiptIcon,
+  'file-warning-letter': FileWarningLetterIcon,
+  'card-reimburse': ReimburseIcon,
+  'user-airplane': UserAirplaneIcon,
+  'user-check-2': UserCheckIcon2,
+  'user-clock-square': UserClockSquareIcon,
 };

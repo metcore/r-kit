@@ -57,6 +57,7 @@ function AppSidebar() {
       label: 'Components',
       icon: 'book-open-text',
       children: [
+        { path: '/icons', label: 'Icon' },
         { path: '/calendar', label: 'Calendar' },
         { path: '/progress-bar', label: 'Progress Bar' },
         { path: '/input', label: 'Input' },
