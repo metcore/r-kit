@@ -318,6 +318,36 @@ import TableHeaderCellIcon from './icons/TableHeaderCellIcon';
 import ParagraphIcon from './icons/ParagraphIcon';
 import TextFillIcon from './icons/TextFillIcon';
 import TargetElipseIcon from './icons/TargetElipseIcon';
+import BookIcon from './icons/BookIcon';
+import CashReceiptIcon from './icons/CashReceiptIcon';
+import FileWarningLetterIcon from './icons/FileWarningLetterIcon';
+import ReimburseIcon from './icons/ReimburseIcon';
+import UserAirplaneIcon from './icons/UserAirplaneIcon';
+import UserClockSquareIcon from './icons/UserClockSquareIcon';
+import UserCheckIcon2 from './icons/UserCheckIcon2';
+import AirPlaneServerIcon from './icons/AirplaneServerIcon';
+import BookCoaIcon from './icons/BookCoaIcon';
+import BoxServerIcon from './icons/BoxServerIcon';
+import BriefcaseServerIcon from './icons/BriefcaseServerIcon';
+import BuildingsServerIcon from './icons/BuildingsServerIcon';
+import CarServerIcon from './icons/CarServerIcon';
+import ClockSquareServerIcon from './icons/ClockSquareServerIcon';
+import CreditCardServerIcon from './icons/CreditCardServerIcon';
+import FlagServerIcon from './icons/FlagServerIcon';
+import LocationPinServerIcon from './icons/LocationPinServerIcon';
+import UnlockServerIcon from './icons/UnlockServerIcon';
+import UserTagServerIcon from './icons/UserTagServerIcon';
+import UserServerIcon from './icons/UserServerIcon';
+import WalletServerIcon from './icons/WalletServerIcon';
+import PercentCircleServerIcon from './icons/PercentCircleServerIcon';
+import CubeScanIcon from './icons/CubeScanIcon';
+import GlobalIcon from './icons/GlobalIcon';
+import UserSquareOutlineIcon from './icons/UserSquareOutlineIcon';
+import UserSquareOutlinePlusIcon from './icons/UserSquareOutlinePlusIcon';
+import GlobalPlusIcon from './icons/GlobalPlusIcon';
+import BoxSearchOutlineIcon from './icons/BoxSearchOutlineIcon';
+import BarcodeIcon from './icons/BarcodeIcon';
+import DevicesIcon from './icons/DevicesIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -640,4 +670,34 @@ export const iconRegistry = {
   'paragraph': ParagraphIcon,
   'text-fill': TextFillIcon,
   'target-elipse': TargetElipseIcon,
+  'book': BookIcon,
+  'cash-receipt': CashReceiptIcon,
+  'file-warning-letter': FileWarningLetterIcon,
+  'card-reimburse': ReimburseIcon,
+  'user-airplane': UserAirplaneIcon,
+  'user-check-2': UserCheckIcon2,
+  'user-clock-square': UserClockSquareIcon,
+  'air-plane-server': AirPlaneServerIcon,
+  'book-coa-icon': BookCoaIcon,
+  'box-server': BoxServerIcon,
+  'briefcase-server': BriefcaseServerIcon,
+  'buildings-server': BuildingsServerIcon,
+  'car-server': CarServerIcon,
+  'clock-square-server': ClockSquareServerIcon,
+  'credit-card-server': CreditCardServerIcon,
+  'flag-server': FlagServerIcon,
+  'location-pin-server': LocationPinServerIcon,
+  'percent-circle-server': PercentCircleServerIcon,
+  'unlock-server': UnlockServerIcon,
+  'user-server': UserServerIcon,
+  'user-tag-server': UserTagServerIcon,
+  'wallet-server': WalletServerIcon,
+  'cube-scan': CubeScanIcon,
+  'global': GlobalIcon,
+  'user-square-outline': UserSquareOutlineIcon,
+  'user-square-outline-plus': UserSquareOutlinePlusIcon,
+  'global-plus': GlobalPlusIcon,
+  'box-search-outline': BoxSearchOutlineIcon,
+  'barcode': BarcodeIcon,
+  'devices': DevicesIcon,
 };

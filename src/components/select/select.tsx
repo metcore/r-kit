@@ -12,7 +12,7 @@ import { FormField } from '../form';
 import { RoundedSpinner } from '../loading';
 import clsx from 'clsx';
 
-export const Select: React.FC<SelectProps> = ({
+export function Select<Extra extends object = object>({
   options = [],
   value = null,
   onChange,
@@ -33,7 +33,14 @@ export const Select: React.FC<SelectProps> = ({
   treshold = 0,
   trigger,
   triggerClassName,
-}) => {
+  renderOptions,
+  onSearchOptions,
+  onOptionsChange,
+  required,
+  isSelectOpen,
+  onOpenChange,
+  searchPlaceholder = 'Search...',
+}: SelectProps<Extra>) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -55,7 +62,7 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const filteredOptions: SelectOption[] = React.useMemo(() => {
+  const filteredOptions: SelectOption<Extra>[] = React.useMemo(() => {
     return options.filter(
       (option) =>
         option.label.toLowerCase().includes(searchTerm.toLowerCase()) === true
@@ -63,17 +70,17 @@ export const Select: React.FC<SelectProps> = ({
   }, [options, searchTerm]);
 
   const asArray = (
-    val: SelectOption | SelectOption[] | null
-  ): SelectOption[] => (Array.isArray(val) ? val : val ? [val] : []);
+    val: SelectOption<Extra> | SelectOption<Extra>[] | null
+  ): SelectOption<Extra>[] => (Array.isArray(val) ? val : val ? [val] : []);
 
-  const isSelected = (option: SelectOption): boolean => {
+  const isSelected = (option: SelectOption<Extra>): boolean => {
     if (isMulti) {
       return asArray(value).some((v) => v.value === option.value);
     }
     return (value as SelectOption | null)?.value === option.value;
   };
 
-  const handleSelect = (option: SelectOption) => {
+  const handleSelect = (option: SelectOption<Extra>) => {
     if (isMulti) {
       const arr = asArray(value);
       const exists = arr.some((v) => v.value === option.value);
@@ -82,7 +89,7 @@ export const Select: React.FC<SelectProps> = ({
         ? arr.filter((v) => v.value !== option.value)
         : [...arr, option];
 
-      onChange(newValue);
+      onChange?.(newValue);
 
       const idx = filteredOptions.findIndex((o) => o.value === option.value);
       setHighlightedIndex(idx);
@@ -90,28 +97,28 @@ export const Select: React.FC<SelectProps> = ({
       return;
     }
 
-    onChange(option);
+    onChange?.(option);
     setIsOpen(false);
     setSearchTerm('');
   };
 
   const handleRemove = (
-    option: SelectOption,
+    option: SelectOption<Extra>,
     e: RMouseEvent<HTMLButtonElement>
   ) => {
     e.stopPropagation();
 
     if (isMulti) {
       const arr = asArray(value);
-      onChange(arr.filter((v) => v.value !== option.value));
+      onChange?.(arr.filter((v) => v.value !== option.value));
     } else {
-      onChange(null);
+      onChange?.(null);
     }
   };
 
   const handleClear = (e: RMouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    onChange(isMulti ? [] : null);
+    onChange?.(isMulti ? [] : null);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -200,6 +207,22 @@ export const Select: React.FC<SelectProps> = ({
     }
   }, [isOpen, isSearchable]);
 
+  useEffect(() => {
+    onOptionsChange?.(filteredOptions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredOptions]);
+
+  useEffect(() => {
+    if (isSelectOpen !== undefined) {
+      setIsOpen(isSelectOpen);
+    }
+  }, [isSelectOpen]);
+
+  useEffect(() => {
+    onOpenChange?.(isOpen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   const getDisplayValue = () => {
     const isEmpty = value == null || (isMulti && asArray(value).length === 0);
 
@@ -231,8 +254,8 @@ export const Select: React.FC<SelectProps> = ({
     }
 
     return renderValue !== undefined && renderValue !== null
-      ? renderValue?.(value as SelectOption)
-      : (value as SelectOption).label;
+      ? renderValue?.(value as SelectOption<Extra>)
+      : (value as SelectOption<Extra>).label;
   };
 
   const showClearButton =
@@ -247,6 +270,7 @@ export const Select: React.FC<SelectProps> = ({
       errorMessages={errorMessages}
       description={description}
       hint={hint}
+      required={required}
     >
       <div
         ref={containerRef}
@@ -280,7 +304,6 @@ export const Select: React.FC<SelectProps> = ({
             <div className="flex-1 overflow-hidden text-xs font-medium text-gray-900">
               {getDisplayValue()}
             </div>
-
             <div className="ml-2 flex items-center gap-1">
               {showClearButton && (
                 <button
@@ -316,8 +339,11 @@ export const Select: React.FC<SelectProps> = ({
                   ref={searchInputRef}
                   type="text"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search..."
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    onSearchOptions?.(e.target.value);
+                  }}
+                  placeholder={searchPlaceholder}
                   className="flex-1 bg-transparent text-sm outline-none"
                   onClick={(e) => e.stopPropagation()}
                 />
@@ -330,60 +356,70 @@ export const Select: React.FC<SelectProps> = ({
               ref={listContainerRef}
               onScroll={onLoadMore !== undefined ? handleScroll : undefined}
             >
-              {filteredOptions.length === 0 ? (
-                <div className="px-3 py-8 text-center text-sm text-gray-500">
-                  No options found
-                </div>
-              ) : (
-                filteredOptions.map((option, index) => {
-                  const selected = isSelected(option);
-                  const highlighted = index === highlightedIndex;
+              {renderOptions === undefined && (
+                <>
+                  {filteredOptions.length === 0 ? (
+                    <div className="px-3 py-8 text-center text-sm text-gray-500">
+                      No options found
+                    </div>
+                  ) : (
+                    filteredOptions.map((option, index) => {
+                      const selected = isSelected(option);
+                      const highlighted = index === highlightedIndex;
 
-                  return (
+                      return (
+                        <div
+                          key={option.value}
+                          ref={(el) => {
+                            optionRefs.current[index] = el;
+                          }}
+                          onMouseEnter={() => setHighlightedIndex(index)}
+                          onClick={() => handleSelect(option)}
+                          className={cn(
+                            'flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none',
+                            highlighted && 'bg-primary-100',
+                            selected
+                              ? 'bg-primary-50 border-primary-300'
+                              : 'hover:bg-gray-50'
+                          )}
+                        >
+                          <div className="flex-1">
+                            {renderOption !== undefined &&
+                            renderOption !== null ? (
+                              renderOption?.(option, { selected })
+                            ) : (
+                              <div className={cn(selected && 'font-medium')}>
+                                {option.label}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                  {onLoadMore !== undefined && (
                     <div
-                      key={option.value}
-                      ref={(el) => {
-                        optionRefs.current[index] = el;
-                      }}
-                      onMouseEnter={() => setHighlightedIndex(index)}
-                      onClick={() => handleSelect(option)}
-                      className={cn(
-                        'flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none',
-                        highlighted && 'bg-primary-100',
-                        selected
-                          ? 'bg-primary-50 border-primary-300'
-                          : 'hover:bg-gray-50'
+                      className={clsx(
+                        'flex h-5 items-center justify-center py-2 duration-300'
                       )}
                     >
-                      <div className="flex-1">
-                        {renderOption !== undefined && renderOption !== null ? (
-                          renderOption?.(option, { selected })
-                        ) : (
-                          <div className={cn(selected && 'font-medium')}>
-                            {option.label}
-                          </div>
-                        )}
-                      </div>
+                      {isLoadingMore === true && (
+                        <RoundedSpinner size={20} color="primary" />
+                      )}
                     </div>
-                  );
-                })
+                  )}
+                </>
               )}
 
-              {onLoadMore !== undefined && (
-                <div
-                  className={clsx(
-                    'flex h-5 items-center justify-center py-2 duration-300'
-                  )}
-                >
-                  {isLoadingMore === true && (
-                    <RoundedSpinner size={20} color="primary" />
-                  )}
-                </div>
-              )}
+              {renderOptions !== undefined &&
+                renderOptions?.({
+                  options: filteredOptions,
+                  isLoadingMore,
+                })}
             </div>
           </div>
         )}
       </div>
     </FormField>
   );
-};
+}

@@ -5,55 +5,76 @@ export interface BaseOption {
   label: string;
 }
 
-export type SelectOption<T = unknown> = BaseOption & T;
+type EmptyObject = Record<string, never>;
+
+export type SelectOption<Extra extends object = object> = BaseOption & Extra;
 
 interface RenderOptionState {
   selected: boolean;
 }
 
-export interface SelectProps {
-  /** Array of options to display in the select */
-  options?: SelectOption[];
+type BaseSelectProps<Extra extends object = object> = {
+  options?: SelectOption<Extra>[];
+  value?: SelectOption<Extra> | SelectOption<Extra>[] | null;
 
-  /** Current selected value(s) - single option for normal select, array for multi */
-  value?: SelectOption | SelectOption[] | null;
-
-  /** Callback function when selection changes */
-  onChange: (value: SelectOption | SelectOption[] | null) => void;
-
-  /** Enable multiple selection mode */
   isMulti?: boolean;
-
-  /** Placeholder text when no value is selected */
   placeholder?: string;
-
-  /** Enable search/filter functionality */
   isSearchable?: boolean;
-
-  /** Show clear button to reset selection */
   isClearable?: boolean;
-
-  /** Disable the entire select component */
   isDisabled?: boolean;
+  searchPlaceholder?: string;
 
-  /** Custom render function for option items in dropdown */
   renderOption?:
-    | ((option: SelectOption, state: RenderOptionState) => React.ReactNode)
+    | ((
+        option: SelectOption<Extra>,
+        state: RenderOptionState
+      ) => React.ReactNode)
     | null;
 
-  /** Custom render function for selected value display */
-  renderValue?: ((option: SelectOption) => React.ReactNode) | null;
+  renderValue?: ((option: SelectOption<Extra>) => React.ReactNode) | null;
 
-  /** Additional CSS classes for the container */
   className?: string;
-
   label?: string;
   description?: string;
   hint?: string;
   errorMessages?: string | string[];
+
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
   treshold?: number;
+
   trigger?: ReactNode;
   triggerClassName?: string;
-}
+
+  required?: boolean;
+  isSelectOpen?: boolean;
+
+  onSearchOptions?: (value: string) => void;
+  onOptionsChange?: (value: SelectOption<Extra>[]) => void;
+  onOpenChange?: (value: boolean) => void;
+};
+
+type SelectPropsWithCustomRender<Extra extends object = EmptyObject> = {
+  renderOptions: ({
+    options,
+    isLoadingMore,
+  }: {
+    options: SelectOption<Extra>[];
+    isLoadingMore?: boolean;
+  }) => React.ReactNode;
+
+  onChange?: never;
+};
+
+type SelectPropsWithDefaultBehavior<Extra extends object = EmptyObject> = {
+  renderOptions?: undefined;
+
+  onChange: (value: SelectOption<Extra> | SelectOption<Extra>[] | null) => void;
+};
+
+export type SelectProps<Extra extends object = object> =
+  BaseSelectProps<Extra> &
+    (
+      | SelectPropsWithCustomRender<Extra>
+      | SelectPropsWithDefaultBehavior<Extra>
+    );

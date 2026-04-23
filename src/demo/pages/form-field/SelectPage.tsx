@@ -15,6 +15,11 @@ interface UserOption extends SelectOption {
   company?: string;
 }
 
+interface ExtraUser {
+  email: string;
+  company?: string;
+}
+
 function UserOptionRenderer(
   option: SelectOption,
   { selected }: { selected: boolean }
@@ -87,7 +92,8 @@ function StatusBadge({
 function SelectPage() {
   const { fetchPosts, fetchUsers, usePaginatedFetch } = useGetUsers();
 
-  const [selectedUser, setSelectedUser] = useState<SelectOption | null>(null);
+  const [selectedUser, setSelectedUser] =
+    useState<SelectOption<ExtraUser> | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<SelectOption[]>([]);
   const [selectedPost, setSelectedPost] = useState<SelectOption | null>(null);
 
@@ -128,7 +134,9 @@ function SelectPage() {
               label="User"
               options={users.data}
               value={selectedUser}
-              onChange={(v) => setSelectedUser(v as SelectOption | null)}
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
               placeholder="Cari & pilih user…"
               renderOption={UserOptionRenderer}
               renderValue={UserValueRenderer}
@@ -136,7 +144,53 @@ function SelectPage() {
               onLoadMore={posts.hasMore ? users.loadMore : undefined}
               isLoadingMore={users.isLoadingMore}
             />
+
+            <Select
+              label="User"
+              options={users.data}
+              value={selectedUser}
+              placeholder="Cari & pilih user…"
+              renderOption={UserOptionRenderer}
+              renderOptions={({ options }) => {
+                return (
+                  <div>
+                    {options.map((option, index) => (
+                      <button key={index}>{option.label}</button>
+                    ))}
+                  </div>
+                );
+              }}
+              renderValue={UserValueRenderer}
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
             <StatusBadge {...users} count={users.data.length} />
+
+            <Select<ExtraUser>
+              label="User"
+              options={[
+                {
+                  value: 1,
+                  label: 'John Doe',
+                  email: 'john@mail.com',
+                  company: 'Google',
+                },
+              ]}
+              value={selectedUser}
+              onChange={(v) => {
+                if (v && !Array.isArray(v)) {
+                  console.log(v.email);
+                  console.log(v.company);
+                }
+                setSelectedUser(v as SelectOption<ExtraUser> | null);
+              }}
+              renderOption={(option) => (
+                <div>
+                  <div>{option.label}</div>
+                  <div>{option.email}</div>
+                </div>
+              )}
+            />
           </section>
 
           {/* ── 2. Multi select ── */}
