@@ -340,6 +340,14 @@ import UserTagServerIcon from './icons/UserTagServerIcon';
 import UserServerIcon from './icons/UserServerIcon';
 import WalletServerIcon from './icons/WalletServerIcon';
 import PercentCircleServerIcon from './icons/PercentCircleServerIcon';
+import CubeScanIcon from './icons/CubeScanIcon';
+import GlobalIcon from './icons/GlobalIcon';
+import UserSquareOutlineIcon from './icons/UserSquareOutlineIcon';
+import UserSquareOutlinePlusIcon from './icons/UserSquareOutlinePlusIcon';
+import GlobalPlusIcon from './icons/GlobalPlusIcon';
+import BoxSearchOutlineIcon from './icons/BoxSearchOutlineIcon';
+import BarcodeIcon from './icons/BarcodeIcon';
+import DevicesIcon from './icons/DevicesIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -684,4 +692,12 @@ export const iconRegistry = {
   'user-server': UserServerIcon,
   'user-tag-server': UserTagServerIcon,
   'wallet-server': WalletServerIcon,
+  'cube-scan': CubeScanIcon,
+  'global': GlobalIcon,
+  'user-square-outline': UserSquareOutlineIcon,
+  'user-square-outline-plus': UserSquareOutlinePlusIcon,
+  'global-plus': GlobalPlusIcon,
+  'box-search-outline': BoxSearchOutlineIcon,
+  'barcode': BarcodeIcon,
+  'devices': DevicesIcon,
 };
