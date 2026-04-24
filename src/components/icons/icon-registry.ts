@@ -348,6 +348,8 @@ import GlobalPlusIcon from './icons/GlobalPlusIcon';
 import BoxSearchOutlineIcon from './icons/BoxSearchOutlineIcon';
 import BarcodeIcon from './icons/BarcodeIcon';
 import DevicesIcon from './icons/DevicesIcon';
+import HierarchyIcon from './icons/HierarchyIcon';
+import FileDownloadIcon from './icons/FileDownloadIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -700,4 +702,6 @@ export const iconRegistry = {
   'box-search-outline': BoxSearchOutlineIcon,
   'barcode': BarcodeIcon,
   'devices': DevicesIcon,
+  'hierarchy': HierarchyIcon,
+  'file-download': FileDownloadIcon,
 };
