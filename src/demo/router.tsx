@@ -28,6 +28,7 @@ import TabsPage from './pages/TabsPage';
 import TypographyPage from './pages/TypographyPage';
 import ProgressBarPage from './pages/components/ProgressBarPage';
 import IconPage from './pages/components/IconPage';
+import TimelinePage from './pages/components/TimelinePage';
 
 const DocsRouter: React.FC = () => {
   return (
@@ -58,6 +59,7 @@ const DocsRouter: React.FC = () => {
         <Route path="/toast" element={<ToastPage />} />
         <Route path="/text-editor" element={<TextEditorPage />} />
         <Route path="/progress-bar" element={<ProgressBarPage />} />
+        <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/icons" element={<IconPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
