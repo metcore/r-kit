@@ -350,6 +350,7 @@ import BarcodeIcon from './icons/BarcodeIcon';
 import DevicesIcon from './icons/DevicesIcon';
 import HierarchyIcon from './icons/HierarchyIcon';
 import FileDownloadIcon from './icons/FileDownloadIcon';
+import HierarchySquareIcon from './icons/HierarchySquareIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -704,4 +705,5 @@ export const iconRegistry = {
   'devices': DevicesIcon,
   'hierarchy': HierarchyIcon,
   'file-download': FileDownloadIcon,
+  'hierarchy-square': HierarchySquareIcon,
 };
