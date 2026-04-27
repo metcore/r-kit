@@ -37,12 +37,12 @@ export const ChipGroup: React.FC<ChipArrayProps> = ({
   const toggleSelection = (value: ChipValue) => {
     let newSelected: ChipValue[];
 
-    if (multiple || (!multiple && internalSelected.length === 0)) {
+    if (multiple) {
       newSelected = internalSelected.includes(value)
         ? internalSelected.filter((v) => v !== value)
         : [...internalSelected, value];
     } else {
-      newSelected = [value];
+      newSelected = internalSelected.includes(value) ? [] : [value];
     }
 
     setInternalSelected(newSelected);
