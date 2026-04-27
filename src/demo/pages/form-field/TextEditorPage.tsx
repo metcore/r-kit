@@ -13,7 +13,7 @@ type UploadedImage = {
 };
 
 export default function TextEditorPage() {
-  const [value, setValue] = useState('jir ini value nih');
+  const [value, setValue] = useState('');
   const [files, setFiles] = useState<FileItem[]>([]);
 
   console.log(value);
@@ -56,11 +56,10 @@ export default function TextEditorPage() {
                   };
                 },
                 uploadConfig: {
-                  url: 'https://stg.media.herca.id/api/upload',
+                  url: import.meta.env.VITE_UPLOAD_URL,
                   headers: {
                     'accept': 'application/json',
-                    'X-API-KEY':
-                      '19ee5d65cf71b64e5ed168dbf4817e89bc9024b90c499557',
+                    'X-API-KEY': import.meta.env.VITE_UPLOAD_SECRET_KEY,
                   },
                 },
               },

@@ -40,6 +40,7 @@ export function TextEditor({
   field,
   toolbar,
   editor: editorProps,
+  onDownload,
 }: TextEditorProps) {
   // props
   const {
@@ -192,6 +193,7 @@ export function TextEditor({
                 disabled={isHtmlMode}
                 editor={editor}
                 attachmentField={attachmentField}
+                onDownload={onDownload}
               />
             )}
             {table && <TableGroup disabled={isHtmlMode} editor={editor} />}
