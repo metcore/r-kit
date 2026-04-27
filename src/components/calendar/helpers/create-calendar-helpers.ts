@@ -9,6 +9,7 @@ export type UseCalendarHelpersParams = {
   };
   disabledDates: Date[];
   dayConfigs: CalendarDayConfig[];
+  disabled?: (date: Date) => boolean;
 };
 
 export const createCalendarHelpers = ({
@@ -17,6 +18,7 @@ export const createCalendarHelpers = ({
   rangeValue,
   disabledDates,
   dayConfigs,
+  disabled,
 }: UseCalendarHelpersParams) => {
   /**
    * Check if a given date is disabled.
@@ -24,7 +26,13 @@ export const createCalendarHelpers = ({
    * @returns {boolean} true if the date is disabled, false otherwise
    */
   const isDateDisabled = (day: CalendarDay): boolean => {
-    return disabledDates.some((d) => d.getTime() === day.fullDate.getTime());
+    if (disabledDates.some((d) => d.getTime() === day.fullDate.getTime())) {
+      return true;
+    }
+    if (disabled?.(day.fullDate) === true) {
+      return true;
+    }
+    return false;
   };
 
   /**

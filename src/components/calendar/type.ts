@@ -75,6 +75,8 @@ export interface CalendarProps {
   onMonthChange?: (month: number) => void;
   onYearChange?: (year: number) => void;
   useLimitEvent?: boolean;
+  disabled?: (date: Date) => boolean;
+  disabledDateClassName?: string;
 }
 
 export type CalendarState = {
@@ -105,6 +107,7 @@ export interface CalendarGridProps {
   backdropOnClick?: (day?: CalendarDay) => void;
   onEventClick?: (event?: CalendarEvent) => void;
   useLimitEvent?: boolean;
+  disabledDateClassName?: string;
 }
 
 export interface CalendarDayItemProps {
@@ -117,6 +120,7 @@ export interface CalendarDayItemProps {
   variant?: CalendarProps['variant'];
   events?: CalendarEvent[];
   backdropOnClick?: (day?: CalendarDay) => void;
+  disabledDateClassName?: string;
 }
 
 export interface CalendarEvent {

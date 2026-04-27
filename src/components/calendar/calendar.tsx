@@ -67,6 +67,8 @@ const Calendar = ({
   onYearChange,
   showDefaultController = false,
   useLimitEvent = true,
+  disabled,
+  disabledDateClassName,
 }: CalendarProps) => {
   const currentDate = new Date();
 
@@ -98,6 +100,7 @@ const Calendar = ({
     rangeValue,
     mode,
     value,
+    disabled,
   });
 
   const calendarState = {
@@ -343,6 +346,7 @@ const Calendar = ({
                 useLimitEvent={useLimitEvent}
                 onEventClick={onEventClick}
                 backdropOnClick={backdropOnClick}
+                disabledDateClassName={disabledDateClassName}
               />
             </>
           )}

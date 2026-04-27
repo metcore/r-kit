@@ -40,6 +40,9 @@ export interface DatePickerProps {
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
 
+  minDate?: Date;
+  maxDate?: Date;
+  disabledDateClassName?: string;
   calendarProps?: CalendarOverrideProps;
   startDateCalendarProps?: CalendarRangeOverrideProps;
   endDateCalendarProps?: CalendarRangeOverrideProps;
