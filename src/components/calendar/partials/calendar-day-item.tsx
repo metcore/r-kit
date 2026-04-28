@@ -21,6 +21,7 @@ export default function CalendarDayItem({
   variant,
   events,
   backdropOnClick,
+  disabledDateClassName,
 }: CalendarDayItemProps) {
   const dayConfig = helpers.getDayConfig(day);
   const isSelected = helpers.isDateSelected(day);
@@ -60,7 +61,8 @@ export default function CalendarDayItem({
         'group relative flex flex-col items-center justify-center rounded-full text-sm font-medium transition-all duration-200',
         mode === 'single' && variant === 'compact' && styleHelpers.getBackgroundClass(), //prettier-ignore
         mode === 'range' && !isDisabled && helpers.getRangeBackgroundClass(day),
-        variant === 'default' && 'h-28 md:h-36 w-full rounded-none flex items-start justify-start group p-1 md:p-3 border-r border-gray-300' //prettier-ignore
+        variant === 'default' && 'h-28 md:h-36 w-full rounded-none flex items-start justify-start group p-1 md:p-3 border-r border-gray-300', //prettier-ignore
+        isDisabled && disabledDateClassName
       )}
     >
       <div

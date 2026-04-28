@@ -39,6 +39,8 @@ export interface TextEditorProps {
     indent?: boolean;
     advance?: boolean;
   };
+
+  onDownload?: (data: { src?: string; name?: string }) => void;
 }
 
 export interface ToolbarButtonProps {

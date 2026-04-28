@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../button';
 import { Icon } from '../../icons';
 import { Input } from '../../input';
-import { InputFile, type UploadedFile } from '../../input-file';
+import { InputFile, type FileItem, type UploadedFile } from '../../input-file';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Select } from '../../select';
 import type { BaseOption } from '../../select/type';
@@ -18,7 +18,19 @@ interface Props {
   onSubmit: (form: ImageForm | null) => void;
   initialValues?: ImageForm | null;
   attachmentField?: AttachmentField;
+  onDownload?: (data: { src?: string; name?: string }) => void;
 }
+
+const createDefaultImageForm = (): ImageForm => ({
+  url: null,
+  image: {
+    objectFit: objectfitOptions[0],
+    source: '',
+    altText: '',
+    width: '200',
+    height: '200',
+  },
+});
 
 export default function ModalInsertImage({
   isOpen,
@@ -42,22 +54,26 @@ export default function ModalInsertImage({
       };
     },
   },
+  onDownload,
 }: Props) {
   const [currentTabImage, setCurrentTabImage] = useState('0');
+  const [uploadInputKey, setUploadInputKey] = useState(0);
+  const [uploadFiles, setUploadFiles] = useState<FileItem[]>([]);
 
   const [errors, setErrors] = useState<{ source?: string; altText?: string }>(
     {}
   );
-  const [imageForm, setImageForm] = useState<ImageForm | null>({
-    url: null,
-    image: {
-      objectFit: objectfitOptions[0],
-      source: '',
-      altText: '',
-      width: '200',
-      height: '200',
-    },
-  });
+  const [imageForm, setImageForm] = useState<ImageForm | null>(
+    createDefaultImageForm()
+  );
+
+  const resetFormState = () => {
+    setCurrentTabImage('0');
+    setErrors({});
+    setImageForm(createDefaultImageForm());
+    setUploadFiles([]);
+    setUploadInputKey((prev) => prev + 1);
+  };
 
   const validate = () => {
     const newErrors: { source?: string; altText?: string } = {};
@@ -89,9 +105,19 @@ export default function ModalInsertImage({
   };
 
   useEffect(() => {
-    if (isOpen && initialValues !== undefined) {
+    if (!isOpen) return;
+
+    setErrors({});
+    setCurrentTabImage('0');
+    setUploadFiles([]);
+    setUploadInputKey((prev) => prev + 1);
+
+    if (initialValues !== undefined) {
       setImageForm(initialValues);
+      return;
     }
+
+    setImageForm(createDefaultImageForm());
   }, [isOpen, initialValues]);
 
   return (
@@ -117,7 +143,7 @@ export default function ModalInsertImage({
 
           onSubmit(imageForm);
           onClose(false);
-          setImageForm(null);
+          resetFormState();
         }}
         className="overflow-auto"
       >
@@ -298,18 +324,18 @@ export default function ModalInsertImage({
             </TabsContent>
             <TabsContent value="2">
               <InputFile
+                key={uploadInputKey}
                 label={attachmentField?.label}
                 accept={attachmentField?.accept}
                 hint={attachmentField?.hint}
                 maxSize={(attachmentField?.maxSize ?? 0) * 1024 * 1024}
                 variant={attachmentField?.variant ?? 'medium'}
                 uploadConfig={attachmentField?.uploadConfig}
-                onChange={
-                  attachmentField?.onChange
-                    ? (files) => attachmentField?.onChange?.(files)
-                    : undefined
-                }
-                value={attachmentField?.value}
+                onChange={(files) => {
+                  setUploadFiles(files);
+                  attachmentField?.onChange?.(files);
+                }}
+                value={uploadFiles}
                 onUploadSuccess={(results) => {
                   const { url, altText } =
                     attachmentField.extractUploadResult(results);
@@ -329,6 +355,7 @@ export default function ModalInsertImage({
 
                   attachmentField?.onUploadSuccess?.(results);
                 }}
+                onDownload={onDownload}
               />
             </TabsContent>
           </Tabs>
@@ -340,7 +367,7 @@ export default function ModalInsertImage({
             type="button"
             onClick={() => {
               onClose(false);
-              setImageForm(null);
+              resetFormState();
             }}
           >
             Cancel

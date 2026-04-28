@@ -18,10 +18,12 @@ export function InsertGroup({
   editor,
   disabled = false,
   attachmentField,
+  onDownload,
 }: {
   editor: Editor;
   disabled?: boolean;
   attachmentField?: AttachmentField;
+  onDownload?: (data: { src?: string; name?: string }) => void;
 }) {
   const [isModalImageOpen, setIsModalImageOpen] = useState(false);
   const [isModalYoutubeOpen, setIsModalYoutubeOpen] = useState(false);
@@ -207,6 +209,7 @@ export function InsertGroup({
             })
             .run();
         }}
+        onDownload={onDownload}
       />
     </ToolbarGroup>
   );

@@ -13,6 +13,12 @@ interface ImageInsertAttributes {
   textAlign?: string;
 }
 
+const getJustify = (align: string) => {
+  if (align === 'right') return 'flex-end';
+  if (align === 'center') return 'center';
+  return 'flex-start';
+};
+
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     imageNode: {
@@ -65,9 +71,12 @@ const ImageNode = Image.extend({
       textAlign: {
         default: 'left',
         parseHTML: (el) =>
+          el.getAttribute('data-text-align') ??
           el.closest('[data-image-wrapper]')?.getAttribute('data-align') ??
           'left',
-        renderHTML: () => ({}), // dihandle di nodeView
+        renderHTML: (attrs) => ({
+          'data-text-align': attrs['textAlign'] as string,
+        }),
       },
       url: {
         default: null,
@@ -92,19 +101,19 @@ const ImageNode = Image.extend({
 
   renderHTML({ HTMLAttributes }) {
     const {
-      textAlign,
       objectFit,
       url,
       urlTarget,
-      'data-url': dataUrl, // ← ambil dari sini
+      'data-text-align': dataTextAlign,
+      'data-url': dataUrl,
       'data-url-target': dataUrlTarget,
       ...rest
     } = HTMLAttributes as ImageInsertAttributes & Record<string, unknown>;
 
-    const align = textAlign ?? 'left';
-    const getJustify = (a: string) =>
-      a === 'right' ? 'flex-end' : a === 'center' ? 'center' : 'flex-start';
-
+    const align =
+      typeof dataTextAlign === 'string' && dataTextAlign.length > 0
+        ? dataTextAlign
+        : 'left';
     const resolvedUrl = url ?? dataUrl ?? null;
     const resolvedTarget = urlTarget ?? dataUrlTarget ?? '_self';
 
@@ -112,9 +121,10 @@ const ImageNode = Image.extend({
       'img',
       mergeAttributes(rest, {
         style: `object-fit: ${objectFit ?? 'contain'}`,
-        // ← tambahkan data-* ke <img> supaya parseHTML bisa baca saat load HTML
-        ...(url !== null ? { 'data-url': url } : {}),
-        ...(urlTarget == null ? { 'data-url-target': urlTarget } : {}),
+        ...(resolvedUrl !== null ? { 'data-url': resolvedUrl } : {}),
+        ...(resolvedTarget != null
+          ? { 'data-url-target': resolvedTarget }
+          : {}),
       }),
     ];
 
@@ -149,9 +159,6 @@ const ImageNode = Image.extend({
         const url = n.attrs['url'] as string | null;
         const urlTarget = (n.attrs['urlTarget'] as string) ?? '_self';
 
-        const getJustify = (a: string) =>
-          a === 'right' ? 'flex-end' : a === 'center' ? 'center' : 'flex-start';
-
         wrapper.style.cssText = `display: flex; justify-content: ${getJustify(align)};`;
         wrapper.setAttribute('data-align', align);
 
@@ -163,6 +170,17 @@ const ImageNode = Image.extend({
           img.setAttribute('width', String(n.attrs['width']));
         if (n.attrs['height'] as string)
           img.setAttribute('height', String(n.attrs['height']));
+        img.setAttribute('data-text-align', align);
+        if (url !== null) {
+          img.setAttribute('data-url', url);
+        } else {
+          img.removeAttribute('data-url');
+        }
+        if (urlTarget !== null) {
+          img.setAttribute('data-url-target', urlTarget);
+        } else {
+          img.removeAttribute('data-url-target');
+        }
         img.style.objectFit = (n.attrs['objectFit'] as string) ?? 'contain';
 
         wrapper.innerHTML = '';

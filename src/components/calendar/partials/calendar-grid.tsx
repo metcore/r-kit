@@ -26,6 +26,7 @@ export function CalendarGrid({
   backdropOnClick,
   onEventClick,
   useLimitEvent = true,
+  disabledDateClassName,
 }: CalendarGridProps) {
   const isMobile = useIsMobile();
   const weeks = Array.from({ length: Math.ceil(days.length / 7) }, (_, i) =>
@@ -182,6 +183,7 @@ export function CalendarGrid({
                       ? (day) => backdropOnClick?.(day)
                       : undefined
                   }
+                  disabledDateClassName={disabledDateClassName}
                 />
               ))}
             </div>

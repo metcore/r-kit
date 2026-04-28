@@ -20,6 +20,9 @@ const DatePicker = ({
   trigger,
   open,
   onOpenChange,
+  minDate,
+  maxDate,
+  disabledDateClassName,
   calendarProps,
   endDateCalendarProps,
   startDateCalendarProps,
@@ -377,6 +380,12 @@ const DatePicker = ({
                 dayWrapperClassname="justify-between"
                 onChange={handleCalendarChange}
                 value={selectedDate}
+                disabled={(date) => {
+                  if (minDate !== undefined && date < minDate) return true;
+                  if (maxDate !== undefined && date > maxDate) return true;
+                  return false;
+                }}
+                disabledDateClassName={disabledDateClassName}
                 {...calendarProps}
               />
             ) : (
@@ -498,6 +507,16 @@ const DatePicker = ({
                       value={dateRange.start}
                       rangeValue={dateRange}
                       mode="range"
+                      disabled={(date) => {
+                        if (minDate !== undefined && date < minDate) {
+                          return true;
+                        }
+                        if (maxDate !== undefined && date > maxDate) {
+                          return true;
+                        }
+                        return false;
+                      }}
+                      disabledDateClassName={disabledDateClassName}
                       {...startDateCalendarProps}
                     />
                     {/* Second Calendar (desktop only) */}
@@ -514,6 +533,16 @@ const DatePicker = ({
                         mode="range"
                         defaultMonth={nextMonthData.month}
                         defaultYear={nextMonthData.year}
+                        disabled={(date) => {
+                          if (minDate !== undefined && date < minDate) {
+                            return true;
+                          }
+                          if (maxDate !== undefined && date > maxDate) {
+                            return true;
+                          }
+                          return false;
+                        }}
+                        disabledDateClassName={disabledDateClassName}
                         {...endDateCalendarProps}
                       />
                     )}
