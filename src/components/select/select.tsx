@@ -39,6 +39,7 @@ export function Select<Extra extends object = object>({
   required,
   isSelectOpen,
   onOpenChange,
+  searchOptions,
   searchPlaceholder = 'Search...',
 }: SelectProps<Extra>) {
   const [isOpen, setIsOpen] = useState(false);
@@ -222,6 +223,12 @@ export function Select<Extra extends object = object>({
     onOpenChange?.(isOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
+
+  useEffect(() => {
+    if (searchOptions !== undefined) {
+      setSearchTerm(searchOptions);
+    }
+  }, [searchOptions]);
 
   const getDisplayValue = () => {
     const isEmpty = value == null || (isMulti && asArray(value).length === 0);

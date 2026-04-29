@@ -94,7 +94,7 @@ export default function TableGroup({
     {
       title: 'Delete Row',
       icon: 'table-delete-row',
-      onClick: () => editor.chain().focus().addRowAfter().run(),
+      onClick: () => editor.chain().focus().deleteRow().run(),
       requiresTable: false,
       disabled,
     },
@@ -111,7 +111,7 @@ export default function TableGroup({
     {
       title: 'Delete Column',
       icon: 'table-delete-column',
-      onClick: () => editor.chain().focus().addColumnBefore().run(),
+      onClick: () => editor.chain().focus().deleteColumn().run(),
       requiresTable: false,
       disabled,
     },

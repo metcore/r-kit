@@ -461,10 +461,26 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
           <label
-            onDragEnter={variant === 'large' ? handleDragEnter : undefined}
-            onDragLeave={variant === 'large' ? handleDragLeave : undefined}
-            onDragOver={variant === 'large' ? handleDragOver : undefined}
-            onDrop={variant === 'large' ? handleDrop : undefined}
+            onDragEnter={
+              variant === 'large' || variant === 'medium'
+                ? handleDragEnter
+                : undefined
+            }
+            onDragLeave={
+              variant === 'large' || variant === 'medium'
+                ? handleDragLeave
+                : undefined
+            }
+            onDragOver={
+              variant === 'large' || variant === 'medium'
+                ? handleDragOver
+                : undefined
+            }
+            onDrop={
+              variant === 'large' || variant === 'medium'
+                ? handleDrop
+                : undefined
+            }
             className={cn(
               inputFileVariants({ variant }),
               'group relative flex items-center gap-2 rounded-lg border px-3 py-2 transition-all',
@@ -473,7 +489,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
               variant === 'large' && internalErrorMessage !== undefined && 'border-danger-500', //prettier-ignore
               variant === 'large' && 'flex-col items-center p-5!',
-              variant === "large" && isDragging && "border-primary-500 bg-primary-50", //prettier-ignore
+              (variant === 'large' || variant === 'medium') && isDragging && "border-primary-500 bg-primary-50", //prettier-ignore
               disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
             )}
           >
@@ -498,7 +514,9 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
                 <Text
                   as="p"
                   value={
-                    variant === 'large' && !isDragging && !hint
+                    (variant === 'large' || variant === 'medium') &&
+                    !isDragging &&
+                    !hint
                       ? `Klik atau drag & drop file disini`
                       : hint
                   }

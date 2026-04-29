@@ -48,6 +48,7 @@ type BaseSelectProps<Extra extends object = object> = {
 
   required?: boolean;
   isSelectOpen?: boolean;
+  searchOptions?: string;
 
   onSearchOptions?: (value: string) => void;
   onOptionsChange?: (value: SelectOption<Extra>[]) => void;
