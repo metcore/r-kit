@@ -71,6 +71,7 @@ export type TablePaginationProps = {
   numberOnClick?: (page: number) => void;
   nextOnClick?: () => void;
   prevOnClick?: () => void;
+  setNumberLink?: (url?: string, item?: number) => string;
 
   wrapperClassName?: string;
   dropdownTriggerClassName?: string;
