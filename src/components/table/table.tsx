@@ -229,6 +229,7 @@ export function TablePagination({
   prevOnClick,
 
   wrapperClassName,
+  setNumberLink,
 
   dropdownContentClassName,
   dropdownTriggerClassName,
@@ -346,11 +347,19 @@ export function TablePagination({
               const active = currentPage === item;
 
               return (
-                <button
+                <a
                   key={item}
-                  onClick={() => numberOnClick?.(item)}
+                  href={
+                    setNumberLink !== undefined
+                      ? setNumberLink?.(`?page=${item}`, item)
+                      : `?page=${item}`
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    numberOnClick?.(item);
+                  }}
                   className={clsx(
-                    'size-9 cursor-pointer rounded-lg',
+                    'grid size-9 cursor-pointer place-items-center rounded-lg',
                     active
                       ? 'bg-primary-1000 hover:bg-primary-1000 *:text-white'
                       : 'hover:bg-primary-50 *:text-gray-700'
@@ -362,7 +371,7 @@ export function TablePagination({
                     variant="t1"
                     weight="medium"
                   />
-                </button>
+                </a>
               );
             })}
           </div>
