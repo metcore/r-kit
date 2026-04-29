@@ -130,7 +130,6 @@ export default function InputFilePage() {
           </MainSection>
           <MainSection title="Input File Mode Server">
             <InputFile
-              maxSize={51200}
               variant="medium"
               uploadConfig={{
                 url: 'https://httpbin.org/post',
