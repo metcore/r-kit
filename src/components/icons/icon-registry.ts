@@ -351,6 +351,15 @@ import DevicesIcon from './icons/DevicesIcon';
 import HierarchyIcon from './icons/HierarchyIcon';
 import FileDownloadIcon from './icons/FileDownloadIcon';
 import HierarchySquareIcon from './icons/HierarchySquareIcon';
+import StickyNoteTextSquareIcon from './icons/StickyNoteTextSquareIcon';
+import CoinCardTransferIcon from './icons/CoinCardTransferIcon';
+import GridSquareCircleIcon from './icons/GridSquareCircleIcon';
+import LogInFillIcon from './icons/LogInFillIcon';
+import LogOutFillIcon from './icons/LogOutFillIcon';
+import ReceiptListIcon from './icons/ReceiptListIcon';
+import SendFillIcon from './icons/SendFillIcon';
+import StopwatchFillIcon from './icons/StopwatchFillIcon';
+import UserClockOutlineIcon from './icons/UserClockOutlineIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -474,6 +483,7 @@ export const iconRegistry = {
   'closed-captioning': ClosedCaptioningIcon,
   'coin': CoinIcon,
   'coins': CoinsIcon,
+  'coin-card-transfer': CoinCardTransferIcon,
   'comment-notification': CommentNotificationIcon,
   'comment-text': CommentTextIcon,
   'cpu': CpuIcon,
@@ -510,6 +520,7 @@ export const iconRegistry = {
   'folder-open': FolderOpenIcon,
   'forward': ForwardIcon,
   'graduation-cap': GraduationCapIcon,
+  'grid-square-circle': GridSquareCircleIcon,
   'grid-square-reg': GridSquareRegIcon,
   'grid-square': GridSquareIcon,
   'hand-holding-dollar-circle': HandHoldingDollarCircleIcon,
@@ -528,6 +539,8 @@ export const iconRegistry = {
   'location-pin-user': LocationPinUserIcon,
   'location-pin-users': LocationPinUsersIcon,
   'lock': LockIcon,
+  'log-in-fill': LogInFillIcon,
+  'log-out-fill': LogOutFillIcon,
   'log-out': LogOutIcon,
   'map-location': MapLocationIcon,
   'menu-left': MenuLeftIcon,
@@ -561,12 +574,14 @@ export const iconRegistry = {
   'print': PrintIcon,
   'puzzle': PuzzleIcon,
   'rar': RarIcon,
+  'receipt-list': ReceiptListIcon,
   'receipt-text': ReceiptTextIcon,
   'refresh-ccw': RefreshCcwIcon,
   'road': RoadIcon,
   'rotate-square': RotateSquareIcon,
   'sack-dollar': SackDollarIcon,
   'scan-qr': ScanQrIcon,
+  'send-fill': SendFillIcon,
   'server': ServerIcon,
   'settings': SettingsIcon,
   'shopping-basket-times': ShoppingBasketTimesIcon,
@@ -580,7 +595,9 @@ export const iconRegistry = {
   'sort-descending-circle': SortDescendingCircleIcon,
   'sort-vertical': SortVerticalIcon,
   'standings': StandingsIcon,
+  'sticky-note-text-square': StickyNoteTextSquareIcon,
   'stop': StopIcon,
+  'stopwatch-fill': StopwatchFillIcon,
   'store': StoreIcon,
   'subtract': SubtractIcon,
   'tag': TagIcon,
@@ -600,6 +617,7 @@ export const iconRegistry = {
   'user-change': UserChangeIcon,
   'user-dollar': UserDollarIcon,
   'user-eye': UserEyeIcon,
+  'user-clock-outline': UserClockOutlineIcon,
   'user-settings': UserSettingsIcon,
   'user-square': UserSquareIcon,
   'user-star': UserStarIcon,
