@@ -57,6 +57,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       uploadConfig,
       onUploadSuccess,
       onRemoveFile,
+      onClear,
     },
     ref
   ) => {
@@ -198,6 +199,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
     const clearAll = () => {
       files.forEach((f) => URL.revokeObjectURL(f.preview));
       updateFiles([]);
+      onClear?.();
       uploadedFilesRef.current = [];
       if (inputRef.current) inputRef.current.value = '';
     };
