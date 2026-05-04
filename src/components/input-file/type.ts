@@ -36,6 +36,7 @@ export interface InputFileProps extends PlayerProps {
   uploadConfig?: UploadConfig;
   onUploadSuccess?: (results: UploadedFile<unknown>[]) => void;
   onRemoveFile?: (id: string) => void;
+  onClear?: () => void;
 }
 
 export interface PreviewItemProps extends PlayerProps {

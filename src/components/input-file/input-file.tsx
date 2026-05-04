@@ -57,6 +57,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       uploadConfig,
       onUploadSuccess,
       onRemoveFile,
+      onClear,
     },
     ref
   ) => {
@@ -198,6 +199,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
     const clearAll = () => {
       files.forEach((f) => URL.revokeObjectURL(f.preview));
       updateFiles([]);
+      onClear?.();
       uploadedFilesRef.current = [];
       if (inputRef.current) inputRef.current.value = '';
     };
@@ -269,20 +271,21 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
 
       const droppedFiles = Array.from(e.dataTransfer.files);
 
-      // Filter by accept type if specified
       let filteredFiles = droppedFiles;
       if (accept !== undefined) {
-        const acceptedTypes = accept.split(',').map((type) => type.trim());
+        const acceptedTypes = accept
+          .split(',')
+          .map((type) => type.trim().toLowerCase());
         filteredFiles = droppedFiles.filter((file) => {
           return acceptedTypes.some((acceptedType) => {
             if (acceptedType.startsWith('.')) {
-              return file.name.endsWith(acceptedType);
+              return file.name.toLowerCase().endsWith(acceptedType);
             }
             if (acceptedType.endsWith('/*')) {
               const baseType = acceptedType.split('/')[0];
-              return file.type.startsWith(baseType + '/');
+              return file.type.toLowerCase().startsWith(baseType + '/');
             }
-            return file.type === acceptedType;
+            return file.type.toLowerCase() === acceptedType;
           });
         });
 
@@ -290,12 +293,11 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
           setInternalErrorMessage(
             `Some files do not match the allowed types: ${accept}`
           );
+          if (filteredFiles.length === 0) return;
         }
       }
 
-      if (filteredFiles.length > 0) {
-        processFiles(filteredFiles);
-      }
+      processFiles(filteredFiles);
     };
 
     const uploadFile = (fileItem: FileItem) => {
@@ -483,7 +485,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
             }
             className={cn(
               inputFileVariants({ variant }),
-              'group relative flex items-center gap-2 rounded-lg border px-3 py-2 transition-all',
+              'group relative flex flex-wrap items-center gap-2 rounded-lg border px-3 py-2 transition-all',
               isDefault && "w-fit outline-2 outline-offset-1 outline-transparent", //prettier-ignore
               isSized && "w-full border-dashed border-gray-400 bg-gray-50", //prettier-ignore
 
@@ -529,7 +531,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
               <Text
                 value={internalErrorMessage}
                 variant="t3"
-                className="text-left"
+                className="text-center"
                 color="danger"
               />
             )}
