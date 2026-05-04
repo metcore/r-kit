@@ -130,6 +130,7 @@ export default function InputFilePage() {
           </MainSection>
           <MainSection title="Input File Mode Server">
             <InputFile
+              accept=".png"
               variant="medium"
               uploadConfig={{
                 url: 'https://httpbin.org/post',
