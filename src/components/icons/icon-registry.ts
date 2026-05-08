@@ -360,6 +360,29 @@ import ReceiptListIcon from './icons/ReceiptListIcon';
 import SendFillIcon from './icons/SendFillIcon';
 import StopwatchFillIcon from './icons/StopwatchFillIcon';
 import UserClockOutlineIcon from './icons/UserClockOutlineIcon';
+import BuildingIcon from './icons/BuildingIcon';
+import BanIcon from './icons/BanIcon';
+import SettingsOutlineIcon from './icons/SettingsOutlineIcon';
+import PackageToolIcon from './icons/PackageToolIcon';
+import BellOnIcon from './icons/BellOnIcon';
+import BpjsKetenagakerjaanIcon from './icons/BpjsKetenagakerjaanIcon';
+import CakeIcon from './icons/CakeIcon';
+import CalendarCheckIcon from './icons/CalendarCheckIcon';
+import CalendarTimesAltIcon from './icons/CalendarTimesAltIcon';
+import ExclamationSquareIcon from './icons/ExclamationSquareIcon';
+import ExclamationTriangleTimeIcon from './icons/ExclamationTriangleTimeIcon';
+import FileIcon from './icons/FileIcon';
+import FilePdfIcon from './icons/FilePdfIcon';
+import FileTextPlusOutlineIcon from './icons/FileTextPlusOutlineIcon';
+import FileUploadIcon from './icons/FileUploadIcon';
+import FingerprintIcon from './icons/FingerprintIcon';
+import MoreVerticalIcon from './icons/MoreVerticalIcon';
+import NpwpIcon from './icons/NpwpIcon';
+import SendRightIcon from './icons/SendRightIcon';
+import ShareIcon from './icons/ShareIcon';
+import StopwatchCheckAltIcon from './icons/StopwatchCheckAltIcon';
+import UserViewfinderIcon from './icons/UserViewfinderIcon';
+import WalletOutlineIcon from './icons/WalletOutlineIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -388,6 +411,7 @@ export const iconRegistry = {
   'times': Times,
   'plus': Plus,
   'bell': Bell,
+  'bell-on': BellOnIcon,
   'file-list-check': FileListCheck,
   'file-text': FileText,
   'bookmark-user': BookmarkUser,
@@ -455,6 +479,7 @@ export const iconRegistry = {
   'arrow-up-small': ArrowUpSmallIcon,
   'arrows-expand': ArrowsExpandIcon,
   'backward': BackwardIcon,
+  'ban': BanIcon,
   'book-open-text': BookOpenTextIcon,
   'book-text': BookTextIcon,
   'box-check': BoxCheckIcon,
@@ -462,10 +487,15 @@ export const iconRegistry = {
   'box-return': BoxReturnIcon,
   'box-search': BoxSearchIcon,
   'boxes': BoxesIcon,
+  'bpjs-ketenagakerjaan': BpjsKetenagakerjaanIcon,
   'briefcase-money': BriefcaseMoneyIcon,
   'buildings-alt': BuildingsAltIcon,
+  'building': BuildingIcon,
+  'cake': CakeIcon,
   'calendar-check-alt': CalendarCheckAltIcon,
+  'calendar-check': CalendarCheckIcon,
   'calendar-star': CalendarStarIcon,
+  'calendar-times-alt': CalendarTimesAltIcon,
   'caret-down': CaretDownIcon,
   'caret-left': CaretLeftIcon,
   'caret-right': CaretRightIcon,
@@ -501,8 +531,12 @@ export const iconRegistry = {
   'download': DownloadIcon,
   'envelope-check': EnvelopeCheckIcon,
   'excel': ExcelIcon,
+  'exclamation-square': ExclamationSquareIcon,
+  'exclamation-triangle-time': ExclamationTriangleTimeIcon,
   'expand': ExpandIcon,
   'export-file': ExportFileIcon,
+  'fingerprint': FingerprintIcon,
+  'file': FileIcon,
   'file-ban': FileBanIcon,
   'file-check': FileCheckIcon,
   'file-list-edit': FileListEditIcon,
@@ -510,12 +544,15 @@ export const iconRegistry = {
   'file-list-shield': FileListShieldIcon,
   'file-list': FileListIcon,
   'file-lock': FileLockIcon,
+  'file-pdf': FilePdfIcon,
   'file-settings': FileSettingsIcon,
   'file-text-check': FileTextCheckIcon,
   'file-text-edit': FileTextEditIcon,
   'file-text-map': FileTextMapIcon,
   'file-text-plus': FileTextPlusIcon,
+  'file-text-plus-outline': FileTextPlusOutlineIcon,
   'file-text-search': FileTextSearchIcon,
+  'file-upload': FileUploadIcon,
   'file-user': FileUserIcon,
   'folder-open': FolderOpenIcon,
   'forward': ForwardIcon,
@@ -559,7 +596,9 @@ export const iconRegistry = {
   'mp3': Mp3Icon,
   'mp4': Mp4Icon,
   'music': MusicIcon,
+  'npwp': NpwpIcon,
   'package-check': PackageCheckIcon,
+  'package-tool': PackageToolIcon,
   'package': PackageIcon,
   'paperclip': PaperclipIcon,
   'pause': PauseIcon,
@@ -582,8 +621,11 @@ export const iconRegistry = {
   'sack-dollar': SackDollarIcon,
   'scan-qr': ScanQrIcon,
   'send-fill': SendFillIcon,
+  'send-right': SendRightIcon,
   'server': ServerIcon,
+  'setting-outline': SettingsOutlineIcon,
   'settings': SettingsIcon,
+  'share': ShareIcon,
   'shopping-basket-times': ShoppingBasketTimesIcon,
   'shopping-basket-user': ShoppingBasketUserIcon,
   'shopping-basket': ShoppingBasketIcon,
@@ -598,6 +640,7 @@ export const iconRegistry = {
   'sticky-note-text-square': StickyNoteTextSquareIcon,
   'stop': StopIcon,
   'stopwatch-fill': StopwatchFillIcon,
+  'stopwatch-check-alt': StopwatchCheckAltIcon,
   'store': StoreIcon,
   'subtract': SubtractIcon,
   'tag': TagIcon,
@@ -621,6 +664,7 @@ export const iconRegistry = {
   'user-settings': UserSettingsIcon,
   'user-square': UserSquareIcon,
   'user-star': UserStarIcon,
+  'user-viewfinder': UserViewfinderIcon,
   'vector': VectorIcon,
   'video-play': VideoPlayIcon,
   'volume-high': VolumeHighIcon,
@@ -639,6 +683,7 @@ export const iconRegistry = {
   'people': People,
   'sort-descending': SortDescending,
   'more-horizontal': MoreHorizontalIcon,
+  'more-vertical': MoreVerticalIcon,
   'trash-fill': TrashFillIcon,
   'envelope': EnvelopeIcon,
   'phone': PhoneIcon,
@@ -724,4 +769,5 @@ export const iconRegistry = {
   'hierarchy': HierarchyIcon,
   'file-download': FileDownloadIcon,
   'hierarchy-square': HierarchySquareIcon,
+  'wallet-outline': WalletOutlineIcon,
 };
