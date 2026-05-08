@@ -383,6 +383,10 @@ import ShareIcon from './icons/ShareIcon';
 import StopwatchCheckAltIcon from './icons/StopwatchCheckAltIcon';
 import UserViewfinderIcon from './icons/UserViewfinderIcon';
 import WalletOutlineIcon from './icons/WalletOutlineIcon';
+import CalendarClockTriangleExclamationIcon from './icons/CalendarClockTriangleExclamationIcon';
+import BuildingsIcon from './icons/BuildingsIcon';
+import ArchiveIcon from './icons/ArchiveIcon';
+import UserEditTriangleExclamationIcon from './icons/UserEditTriangleExclamationIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -770,4 +774,8 @@ export const iconRegistry = {
   'file-download': FileDownloadIcon,
   'hierarchy-square': HierarchySquareIcon,
   'wallet-outline': WalletOutlineIcon,
+  'archive': ArchiveIcon,
+  'buildings': BuildingsIcon,
+  'calendar-clock-triangle-exclamation': CalendarClockTriangleExclamationIcon,
+  'user-edit-triangle-exclamation': UserEditTriangleExclamationIcon,
 };
