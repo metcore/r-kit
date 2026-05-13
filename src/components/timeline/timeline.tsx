@@ -11,6 +11,7 @@ export function Timeline({
   value,
   classNames,
   className,
+  isFirst = false,
 }: TimeLineProps) {
   const mapped_text_color: Record<TimeLineColor, string> = {
     primary: 'text-primary-1000',
@@ -26,7 +27,8 @@ export function Timeline({
   return (
     <div
       className={clsx(
-        'relative w-80 border-l border-dashed border-gray-500 px-4.5',
+        'relative w-80 px-4.5',
+        isFirst ? '' : 'border-l border-dashed border-gray-500',
         className
       )}
     >

@@ -104,6 +104,7 @@ export default function TimelinePage() {
             description:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nec dictum viverra consequat vitae urna',
           }}
+          isFirst
         />
       </MainSection>
     </DashboardLayout>

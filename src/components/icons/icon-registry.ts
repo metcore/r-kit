@@ -387,6 +387,8 @@ import CalendarClockTriangleExclamationIcon from './icons/CalendarClockTriangleE
 import BuildingsIcon from './icons/BuildingsIcon';
 import ArchiveIcon from './icons/ArchiveIcon';
 import UserEditTriangleExclamationIcon from './icons/UserEditTriangleExclamationIcon';
+import ArrowUpCircleIcon from './icons/ArrowUpCircleIcon';
+import Share01Icon from './icons/Share01Icon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -778,4 +780,6 @@ export const iconRegistry = {
   'buildings': BuildingsIcon,
   'calendar-clock-triangle-exclamation': CalendarClockTriangleExclamationIcon,
   'user-edit-triangle-exclamation': UserEditTriangleExclamationIcon,
+  'arrow-up-circle': ArrowUpCircleIcon,
+  'share-01': Share01Icon,
 };
