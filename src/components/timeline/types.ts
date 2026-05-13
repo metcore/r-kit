@@ -36,6 +36,7 @@ export interface TimeLineProps {
     size?: BadgeVariantProps['size'];
   };
 
+  isFirst?: boolean;
   color?: TimeLineColor;
   children?: React.ReactNode;
 }
