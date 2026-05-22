@@ -34,7 +34,7 @@ export const chipVariants = cva(
       {
         color: 'gray',
         state: 'default',
-        className: 'border-gray-00 bg-white text-gray-700 hover:bg-gray-100',
+        className: 'border-gray-200 bg-white text-gray-700 hover:bg-gray-100',
       },
       {
         color: 'gray',

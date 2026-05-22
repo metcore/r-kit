@@ -1,4 +1,5 @@
 import type { VariantProps } from 'class-variance-authority';
+import type { ReactNode } from 'react';
 import type { chipVariants } from './chip-variants';
 
 export type ChipValue = string | number;
@@ -19,6 +20,8 @@ export interface ChipContextValue {
   color?: ColorVariantType;
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
+  dismissible?: boolean;
+  onDismiss?: (value: ChipValue) => void;
 }
 
 export interface ChipProps extends Omit<
@@ -29,16 +32,20 @@ export interface ChipProps extends Omit<
   selected?: boolean;
   disabled?: boolean;
   onClick?: (value?: ChipValue) => void;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
+  dismissible?: boolean;
+  onDismiss?: (value?: ChipValue) => void;
 }
 
 export interface ChipOptionProps {
   value: string | number;
   label: string;
   disabled?: boolean;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
+
+export type ChipOption = ChipOptionProps;
 
 export type ChipSelectedProps = ChipValue | ChipValue[];
 
@@ -52,8 +59,12 @@ export interface ChipArrayProps {
   scrollable?: boolean;
   block?: boolean;
   size?: 'sm' | 'md' | 'lg';
-  footer?: React.ReactNode;
-  header?: React.ReactNode;
-  children?: React.ReactNode;
+  footer?: ReactNode;
+  header?: ReactNode;
+  children?: ReactNode;
   className?: string;
+  dismissible?: boolean;
+  reorderable?: boolean;
+  onDismiss?: (value: ChipValue) => void;
+  onReorder?: (options: ChipOptionProps[]) => void;
 }
