@@ -389,6 +389,7 @@ import ArchiveIcon from './icons/ArchiveIcon';
 import UserEditTriangleExclamationIcon from './icons/UserEditTriangleExclamationIcon';
 import ArrowUpCircleIcon from './icons/ArrowUpCircleIcon';
 import Share01Icon from './icons/Share01Icon';
+import BugSlashIcon from './icons/BugSlashIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -495,6 +496,7 @@ export const iconRegistry = {
   'boxes': BoxesIcon,
   'bpjs-ketenagakerjaan': BpjsKetenagakerjaanIcon,
   'briefcase-money': BriefcaseMoneyIcon,
+  'bug-slash': BugSlashIcon,
   'buildings-alt': BuildingsAltIcon,
   'building': BuildingIcon,
   'cake': CakeIcon,
