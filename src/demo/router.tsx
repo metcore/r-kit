@@ -30,6 +30,7 @@ import ProgressBarPage from './pages/components/ProgressBarPage';
 import IconPage from './pages/components/IconPage';
 import TimelinePage from './pages/components/TimelinePage';
 import DndPage from './pages/DndPage';
+import BadgePage from './pages/components/BadgePage';
 
 const DocsRouter: React.FC = () => {
   return (
@@ -37,6 +38,7 @@ const DocsRouter: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/avatar" element={<AvatarPage />} />
+        <Route path="/badge" element={<BadgePage />} />
         <Route path="/button" element={<ButtonPage />} />
         <Route path="/button-group" element={<ButtonGroupPage />} />
         <Route path="/card" element={<CardPage />} />

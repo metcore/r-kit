@@ -58,6 +58,7 @@ function AppSidebar() {
       icon: 'book-open-text',
       children: [
         { path: '/icons', label: 'Icon' },
+        { path: '/badge', label: 'Badge' },
         { path: '/timeline', label: 'Timeline' },
         { path: '/dnd', label: 'Drag and Drop' },
         { path: '/calendar', label: 'Calendar' },
