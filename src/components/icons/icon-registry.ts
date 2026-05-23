@@ -390,6 +390,7 @@ import UserEditTriangleExclamationIcon from './icons/UserEditTriangleExclamation
 import ArrowUpCircleIcon from './icons/ArrowUpCircleIcon';
 import Share01Icon from './icons/Share01Icon';
 import BugSlashIcon from './icons/BugSlashIcon';
+import DragHandleIcon from './icons/DragHandleIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -537,6 +538,7 @@ export const iconRegistry = {
   'document-list-check': DocumentListCheckIcon,
   'docx': DocxIcon,
   'download': DownloadIcon,
+  'drag-handle': DragHandleIcon,
   'envelope-check': EnvelopeCheckIcon,
   'excel': ExcelIcon,
   'exclamation-square': ExclamationSquareIcon,
