@@ -132,7 +132,7 @@ export default function ButtonGroupPage() {
                   <Icon name="plus" />
                 </ButtonGroupItem>
               </ButtonGroup>
-              <ButtonGroup variant="tertiary" direction="vertical">
+              <ButtonGroup variant="outline" direction="vertical">
                 {buttonData.map(({ id, label }) => (
                   <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
                 ))}

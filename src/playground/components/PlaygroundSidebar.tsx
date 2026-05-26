@@ -54,6 +54,7 @@ function PlaygroundSidebar() {
         { path: '/playground/switch', label: 'Switches' },
         { path: '/playground/select', label: 'Select' },
         { path: '/playground/text-editor', label: 'Text Editor' },
+        { path: '/playground/input-otp', label: 'Input OTP' },
       ],
     },
     {
@@ -64,7 +65,6 @@ function PlaygroundSidebar() {
         { path: '/playground/timeline', label: 'Timeline' },
         { path: '/playground/calendar', label: 'Calendar' },
         { path: '/playground/progress-bar', label: 'Progress Bar' },
-        { path: '/playground/input', label: 'Input' },
         { path: '/playground/button', label: 'Button' },
         { path: '/playground/button-group', label: 'Button Group' },
         { path: '/playground/card', label: 'Card' },

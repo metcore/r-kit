@@ -60,7 +60,6 @@ export default function CheckboxPage() {
           </MainSection>
         </GridWrapper>
 
-        {/* checkbox horizontal active & non active */}
         <GridWrapper>
           <MainSection
             title="Checkbox with Text"

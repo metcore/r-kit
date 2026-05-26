@@ -32,6 +32,7 @@ import PaginationPage from '../playground/pages/PaginationPage';
 import AvatarPage from '../playground/pages/AvatarPage';
 import PlaygroundLayout from '../playground/layouts/PlaygroundLayout';
 import SidebarPage from '../playground/pages/SidebarPage';
+import InputOtpPage from '../playground/pages/form-field/InputOtpPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -68,6 +69,7 @@ export default function PlaygroundRouter() {
         <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/icons" element={<IconPage />} />
         <Route path="/sidebar" element={<SidebarPage />} />
+        <Route path="/input-otp" element={<InputOtpPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

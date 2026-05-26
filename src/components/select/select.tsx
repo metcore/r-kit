@@ -2,11 +2,14 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useCallback,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent as RMouseEvent,
 } from 'react';
+import { createPortal } from 'react-dom';
 import type { SelectGroup, SelectOption, SelectProps } from './type';
 import { Icon } from '../icons';
 import { cn, fieldHasError } from '../../lib/utils';
@@ -43,6 +46,9 @@ type RenderEntry<Extra extends object> =
       items: { option: SelectOption<Extra>; index: number }[];
     }
   | { kind: 'option'; option: SelectOption<Extra>; index: number };
+
+const MENU_MAX_HEIGHT = 320;
+const MENU_GAP = 4;
 
 export function Select<Extra extends object = object>({
   options = [],
@@ -84,23 +90,19 @@ export function Select<Extra extends object = object>({
   filterOption = true,
   isLoading = false,
 }: SelectProps<Extra> & {
-  /** Client-side filter strategy. Default keeps the original substring match. */
   filterOption?: SelectFilterOption<Extra>;
-  /** Initial/whole-list loading state (distinct from `isLoadingMore` paging). */
   isLoading?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({});
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
-
-  // Single source of truth for the two pairs of duplicated flags. This both
-  // removes repetition and fixes the inconsistent combinations used below
-  // (e.g. `isDisabled && disabled` vs `isDisabled || disabled`).
   const isMultiMode = isMulti || multiple;
   const isDisabledMode = isDisabled || disabled;
 
@@ -160,6 +162,26 @@ export function Select<Extra extends object = object>({
       onLoadMore?.();
     }
   }, [isLoadingMore, onLoadMore, treshold]);
+
+  const updateMenuPosition = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const spaceBelow = viewportHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const openUp = spaceBelow < MENU_MAX_HEIGHT && spaceAbove > spaceBelow;
+
+    setMenuStyle({
+      position: 'fixed',
+      left: rect.left,
+      width: rect.width,
+      ...(openUp
+        ? { bottom: viewportHeight - rect.top + MENU_GAP }
+        : { top: rect.bottom + MENU_GAP }),
+    });
+  }, []);
 
   const isSelected = useCallback(
     (option: SelectOption<Extra>): boolean => {
@@ -280,18 +302,29 @@ export function Select<Extra extends object = object>({
     }
   }, [highlightedIndex]);
 
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    updateMenuPosition();
+    window.addEventListener('resize', updateMenuPosition);
+    window.addEventListener('scroll', updateMenuPosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updateMenuPosition);
+      window.removeEventListener('scroll', updateMenuPosition, true);
+    };
+  }, [isOpen, updateMenuPosition]);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node | null;
+      if (!target) return;
 
-      if (
-        target &&
-        containerRef.current &&
-        !containerRef.current.contains(target)
-      ) {
-        setIsOpen(false);
-        setSearchTerm('');
-      }
+      if (containerRef.current?.contains(target) === true) return;
+      if (menuRef.current?.contains(target) === true) return;
+
+      setIsOpen(false);
+      setSearchTerm('');
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -444,6 +477,100 @@ export function Select<Extra extends object = object>({
     );
   };
 
+  const menu = (
+    <div
+      ref={menuRef}
+      style={{ zIndex: 9999, ...menuStyle }}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        'max-h-80 space-y-2 overflow-hidden rounded-lg border bg-white p-2',
+        'border-gray-200'
+      )}
+    >
+      {isSearchable && (
+        <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5">
+          <Icon name="search" size={20} className="text-gray-400" />
+          <input
+            ref={searchInputRef}
+            type="text"
+            disabled={loadingOnCreate}
+            value={searchTerm}
+            onKeyDown={handleInputSearchKeyDown}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              onSearchOptions?.(e.target.value);
+            }}
+            placeholder={searchPlaceholder}
+            className="flex-1 bg-transparent text-sm outline-none"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
+      <div
+        className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none"
+        ref={listContainerRef}
+        onScroll={onLoadMore !== undefined ? handleScroll : undefined}
+      >
+        {renderOptions === undefined && (
+          <>
+            {filteredOptions.length === 0 ? (
+              <>
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <RoundedSpinner size={20} color="primary" />
+                  </div>
+                ) : creatable ? (
+                  renderCreatable()
+                ) : (
+                  <div className="px-3 py-8 text-center text-sm text-gray-500">
+                    No options found
+                  </div>
+                )}
+              </>
+            ) : (
+              renderEntries.map((entry, i) =>
+                entry.kind === 'group' ? (
+                  <div key={`grp-${i}`} className="space-y-2">
+                    <Text
+                      variant="t2"
+                      weight="semibold"
+                      className="text-gray-900"
+                    >
+                      {entry.label}
+                    </Text>
+                    {entry.items.map(({ option, index }) =>
+                      renderOptionItem(option, index)
+                    )}
+                  </div>
+                ) : (
+                  renderOptionItem(entry.option, entry.index)
+                )
+              )
+            )}
+            {onLoadMore !== undefined && (
+              <div
+                className={clsx(
+                  'flex h-5 items-center justify-center py-2 duration-300'
+                )}
+              >
+                {isLoadingMore === true && (
+                  <RoundedSpinner size={20} color="primary" />
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {renderOptions !== undefined &&
+          renderOptions({
+            options: filteredOptions,
+            isLoadingMore,
+          })}
+      </div>
+    </div>
+  );
+
   return (
     <FormField
       label={label}
@@ -514,96 +641,9 @@ export function Select<Extra extends object = object>({
           </div>
         )}
 
-        {isOpen && (
-          <div
-            className={cn(
-              'absolute z-50 mt-1 max-h-80 w-full space-y-2 overflow-hidden rounded-lg border bg-white p-2',
-              'border-gray-200'
-            )}
-          >
-            {isSearchable && (
-              <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5">
-                <Icon name="search" size={20} className="text-gray-400" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  disabled={loadingOnCreate}
-                  value={searchTerm}
-                  onKeyDown={handleInputSearchKeyDown}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    onSearchOptions?.(e.target.value);
-                  }}
-                  placeholder={searchPlaceholder}
-                  className="flex-1 bg-transparent text-sm outline-none"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            )}
-
-            <div
-              className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none"
-              ref={listContainerRef}
-              onScroll={onLoadMore !== undefined ? handleScroll : undefined}
-            >
-              {renderOptions === undefined && (
-                <>
-                  {filteredOptions.length === 0 ? (
-                    <>
-                      {isLoading ? (
-                        <div className="flex items-center justify-center py-8">
-                          <RoundedSpinner size={20} color="primary" />
-                        </div>
-                      ) : creatable ? (
-                        renderCreatable()
-                      ) : (
-                        <div className="px-3 py-8 text-center text-sm text-gray-500">
-                          No options found
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    renderEntries.map((entry, i) =>
-                      entry.kind === 'group' ? (
-                        <div key={`grp-${i}`} className="space-y-2">
-                          <Text
-                            variant="t2"
-                            weight="semibold"
-                            className="text-gray-900"
-                          >
-                            {entry.label}
-                          </Text>
-                          {entry.items.map(({ option, index }) =>
-                            renderOptionItem(option, index)
-                          )}
-                        </div>
-                      ) : (
-                        renderOptionItem(entry.option, entry.index)
-                      )
-                    )
-                  )}
-                  {onLoadMore !== undefined && (
-                    <div
-                      className={clsx(
-                        'flex h-5 items-center justify-center py-2 duration-300'
-                      )}
-                    >
-                      {isLoadingMore === true && (
-                        <RoundedSpinner size={20} color="primary" />
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {renderOptions !== undefined &&
-                renderOptions({
-                  options: filteredOptions,
-                  isLoadingMore,
-                })}
-            </div>
-          </div>
-        )}
+        {isOpen &&
+          typeof document !== 'undefined' &&
+          createPortal(menu, document.body)}
       </div>
     </FormField>
   );
