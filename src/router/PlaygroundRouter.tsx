@@ -32,7 +32,6 @@ import PaginationPage from '../playground/pages/PaginationPage';
 import AvatarPage from '../playground/pages/AvatarPage';
 import PlaygroundLayout from '../playground/layouts/PlaygroundLayout';
 import SidebarPage from '../playground/pages/SidebarPage';
-import AsyncSelectPage from '../playground/pages/form-field/AsyncSelectPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -50,7 +49,6 @@ export default function PlaygroundRouter() {
         <Route path="/modal" element={<ModalPage />} />
         <Route path="/radio-button" element={<RadioButtonPage />} />
         <Route path="/select" element={<SelectPage />} />
-        <Route path="/async-select" element={<AsyncSelectPage />} />
         <Route path="/switch" element={<SwitchPage />} />
         <Route path="/tabs" element={<TabsPage />} />
         <Route path="/sheet" element={<SheetPage />} />

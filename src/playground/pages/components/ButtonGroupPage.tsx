@@ -1,7 +1,23 @@
 import { ButtonGroup, ButtonGroupItem } from '../../../components/button-group';
-import { Card, CardBody, CardHeader } from '../../../components/card';
 import { Hero } from '../../../components/hero';
+import { Icon } from '../../../components/icons';
+import GridWrapper from '../../components/GridWrapper';
+import MainSection from '../../components/MainSection';
 
+const buttonData = [
+  {
+    id: 1,
+    label: 'Left',
+  },
+  {
+    id: 2,
+    label: 'Middle',
+  },
+  {
+    id: 3,
+    label: 'Right',
+  },
+];
 export default function ButtonGroupPage() {
   return (
     <>
@@ -17,38 +33,124 @@ export default function ButtonGroupPage() {
       </Hero>
 
       <div className="grid grid-cols-1 gap-4">
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Group
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <ButtonGroup>
-              <ButtonGroupItem>Button 1</ButtonGroupItem>
-              <ButtonGroupItem>Button 2</ButtonGroupItem>
-              <ButtonGroupItem>Button 3</ButtonGroupItem>
+        <MainSection title="Button Group Color">
+          <div className="flex flex-wrap gap-4">
+            <ButtonGroup color="primary">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
             </ButtonGroup>
-
-            <ButtonGroup direction="vertical">
-              <ButtonGroupItem>Button 1</ButtonGroupItem>
-              <ButtonGroupItem>Button 2</ButtonGroupItem>
-              <ButtonGroupItem>Button 3</ButtonGroupItem>
+            <ButtonGroup color="success">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
             </ButtonGroup>
-
-            <ButtonGroup variant={'outline'}>
-              <ButtonGroupItem>Button 1</ButtonGroupItem>
-              <ButtonGroupItem>Button 2</ButtonGroupItem>
-              <ButtonGroupItem>Button 3</ButtonGroupItem>
-              <ButtonGroupItem>Button 4</ButtonGroupItem>
+            <ButtonGroup color="danger">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
             </ButtonGroup>
-
-            <ButtonGroup variant={'outline'} direction="vertical">
-              <ButtonGroupItem>Button 1</ButtonGroupItem>
-              <ButtonGroupItem>Button 2</ButtonGroupItem>
-              <ButtonGroupItem>Button 3</ButtonGroupItem>
-              <ButtonGroupItem>Button 4</ButtonGroupItem>
+            <ButtonGroup color="warning">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
             </ButtonGroup>
-          </CardBody>
-        </Card>
+            <ButtonGroup color="purple">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
+            </ButtonGroup>
+            <ButtonGroup color="gray">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
+            </ButtonGroup>
+            <ButtonGroup color="info">
+              {buttonData.map(({ id, label }) => (
+                <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+              ))}
+              <ButtonGroupItem>
+                <Icon name="plus" />
+              </ButtonGroupItem>
+            </ButtonGroup>
+          </div>
+        </MainSection>
+        <GridWrapper>
+          <MainSection title="Button Group variant">
+            <div className="flex flex-wrap gap-4">
+              <ButtonGroup variant="default">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+              <ButtonGroup variant="outline">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+              <ButtonGroup variant="tertiary">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+            </div>
+          </MainSection>
+          <MainSection title="Button Group variant">
+            <div className="flex flex-wrap gap-4">
+              <ButtonGroup variant="default" direction="vertical">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+              <ButtonGroup variant="tertiary" direction="vertical">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+              <ButtonGroup variant="tertiary" direction="vertical">
+                {buttonData.map(({ id, label }) => (
+                  <ButtonGroupItem key={id}>{label}</ButtonGroupItem>
+                ))}
+                <ButtonGroupItem>
+                  <Icon name="plus" />
+                </ButtonGroupItem>
+              </ButtonGroup>
+            </div>
+          </MainSection>
+        </GridWrapper>
       </div>
     </>
   );

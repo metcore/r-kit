@@ -75,8 +75,13 @@ const ButtonGroupItem = ({
       color={color ?? context?.color}
       variant={context?.variant}
       className={clsx(
-        isDefault && 'last:border-r-none border-r border-white', //prettier-ignore
-        isTertiary && 'brder-0', //prettier-ignore
+        isDefault &&
+          clsx(
+            isHorizontal && 'border-r border-white last:border-r-0',
+            isVertical && 'border-b border-white last:border-b-0'
+          ),
+
+        isTertiary && 'border-0',
 
         variant === 'outline' && [
           borderDirectionClass,
