@@ -32,6 +32,7 @@ function TooltipTrigger({
     <TooltipPrimitive.Trigger
       data-slot="tooltip-trigger"
       type="button"
+      className="cursor-pointer"
       {...props}
     />
   );

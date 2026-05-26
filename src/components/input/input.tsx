@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cn, fieldHasError } from '../../lib/utils';
 import { inputVariants, type InputVariantProps } from './input-variants';
 import { FormField } from '../form';
+import type { IconNameProps } from '../icons';
 
 export interface InputProps
   extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariantProps {
@@ -17,6 +18,7 @@ export interface InputProps
   isError?: boolean;
   mergedAddon?: boolean;
   onContainerResize?: (width: number) => void;
+  icon?: IconNameProps;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -70,7 +72,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       >
         <div
           className={cn(
-            'flex w-full items-stretch overflow-hidden rounded-lg border bg-white',
+            'flex h-10 w-full items-stretch overflow-hidden rounded-lg border bg-white',
             hasError
               ? 'border-danger-500 focus-within:border-danger-500'
               : 'focus-within:border-primary-300 border-gray-200'
@@ -98,7 +100,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={props?.id ?? generatedId}
             className={cn(
               inputVariants({ size }),
-              'font-metropolis w-full rounded-none border-none focus-visible:outline-none',
+              'font-metropolis h-10 w-full rounded-none border-none focus-visible:outline-none',
               Boolean(leftAddon) && 'pl-2',
               Boolean(rightAddon) && 'pr-2',
               Boolean(mergedAddon) && 'shadow-none',

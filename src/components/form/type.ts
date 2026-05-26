@@ -42,4 +42,5 @@ export interface FormFieldProps {
   htmlFor?: string;
   className?: string;
   children: React.ReactNode;
+  tooltip?: string;
 }

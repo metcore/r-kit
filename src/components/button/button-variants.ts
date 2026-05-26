@@ -26,8 +26,11 @@ export const buttonVariants = cva(
         purple: '',
         gray: '',
       },
+      block: {
+        true: 'w-full',
+        false: '',
+      },
     },
-
     compoundVariants: [
       /* PRIMARY */
       {

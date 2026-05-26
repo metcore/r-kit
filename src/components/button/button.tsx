@@ -6,6 +6,7 @@ import { Slot } from '@radix-ui/react-slot';
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantProps {
   asChild?: boolean;
+  block?: boolean;
   color?:
     | 'primary'
     | 'secondary'
@@ -24,6 +25,7 @@ export const Button = ({
   color,
   className,
   disabled,
+  block = false,
   asChild = false,
   ...props
 }: ButtonProps) => {
@@ -31,7 +33,7 @@ export const Button = ({
 
   return (
     <Comp
-      className={cn(buttonVariants({ variant, size, color }), className)}
+      className={cn(buttonVariants({ variant, size, color, block }), className)}
       disabled={disabled}
       {...props}
     />

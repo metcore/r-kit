@@ -1,27 +1,46 @@
 import type { ReactNode } from 'react';
+import type { IconNameProps } from '../icons';
+import type { SelectSize } from './selectSize';
 
 export interface BaseOption {
   value: string | number;
   label: string;
+  description?: string;
+  icon?: string;
 }
 
 type EmptyObject = Record<string, never>;
 
 export type SelectOption<Extra extends object = object> = BaseOption & Extra;
 
+export type SelectGroup<Extra extends object = object> = {
+  label: React.ReactNode;
+  options: SelectOption<Extra>[];
+};
+
 interface RenderOptionState {
   selected: boolean;
 }
+
+export type SelectOnCreateValue = string | number;
 
 type BaseSelectProps<Extra extends object = object> = {
   options?: SelectOption<Extra>[];
   value?: SelectOption<Extra> | SelectOption<Extra>[] | null;
 
+  isClearable?: boolean;
+  /**
+   * @deprecated Use `multiple` instead
+   */
   isMulti?: boolean;
+  multiple?: boolean;
   placeholder?: string;
   isSearchable?: boolean;
-  isClearable?: boolean;
+  /**
+   * @deprecated Use `disabled` instead
+   */
   isDisabled?: boolean;
+  disabled?: boolean;
   searchPlaceholder?: string;
 
   renderOption?:
@@ -38,12 +57,18 @@ type BaseSelectProps<Extra extends object = object> = {
   description?: string;
   hint?: string;
   errorMessages?: string | string[];
-
+  tooltip?: string;
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
   treshold?: number;
 
+  /**
+   * @deprecated Jangan make ini
+   */
   trigger?: ReactNode;
+  /**
+   * @deprecated Jangan make ini
+   */
   triggerClassName?: string;
 
   required?: boolean;
@@ -53,6 +78,11 @@ type BaseSelectProps<Extra extends object = object> = {
   onSearchOptions?: (value: string) => void;
   onOptionsChange?: (value: SelectOption<Extra>[]) => void;
   onOpenChange?: (value: boolean) => void;
+  icon?: IconNameProps;
+  creatable?: boolean;
+  onCreate?: (value: SelectOnCreateValue) => void;
+  loadingOnCreate?: boolean;
+  size?: SelectSize;
 };
 
 type SelectPropsWithCustomRender<Extra extends object = EmptyObject> = {
@@ -70,7 +100,9 @@ type SelectPropsWithCustomRender<Extra extends object = EmptyObject> = {
 type SelectPropsWithDefaultBehavior<Extra extends object = EmptyObject> = {
   renderOptions?: undefined;
 
-  onChange: (value: SelectOption<Extra> | SelectOption<Extra>[] | null) => void;
+  onChange?: (
+    value: SelectOption<Extra> | SelectOption<Extra>[] | null
+  ) => void;
 };
 
 export type SelectProps<Extra extends object = object> =

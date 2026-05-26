@@ -3,6 +3,7 @@ import type {
   CheckboxProps,
   CheckboxGroupProps,
   CheckboxGroupContextValue,
+  CheckboxValue,
 } from './type';
 import {
   CheckboxVariants,
@@ -47,13 +48,13 @@ export const CheckboxGroup: React.FC<
   direction = 'vertical',
   children,
 }) => {
-  const [internalValue, setInternalValue] = React.useState<string[]>(
+  const [internalValue, setInternalValue] = React.useState<CheckboxValue[]>(
     defaultValue ?? value ?? []
   );
 
   const currentValue = value !== undefined ? value : internalValue;
 
-  const handleValueChange = (newValue: string[]) => {
+  const handleValueChange = (newValue: CheckboxValue[]) => {
     if (value === undefined) {
       setInternalValue(newValue);
     }
@@ -225,7 +226,6 @@ export const Checkbox: React.FC<
     description?: string;
     hint?: string;
     errorMessages?: string | string[];
-    vertical?: boolean;
   }
 > = ({
   label,
@@ -235,7 +235,6 @@ export const Checkbox: React.FC<
   className,
   size: sizeProp,
   icon: iconProp,
-  vertical,
   ...props
 }) => {
   const generatedId = useId();
@@ -251,17 +250,10 @@ export const Checkbox: React.FC<
   const hasError = Boolean(errorMessages) && showHintAndError;
   return (
     <div className={cn('flex flex-col', className)}>
-      <div
-        className={cn(
-          'inline-flex items-center gap-2',
-          vertical !== undefined && 'flex-col justify-center'
-        )}
-      >
+      <div className={cn('inline-flex items-center gap-2')}>
         <BaseCheckbox {...props} id={id} size={size} icon={icon} />
 
-        <div
-          className={cn('flex flex-col', vertical === true && 'items-center')}
-        >
+        <div className={cn('flex flex-col')}>
           {label !== undefined && (
             <FormLabel htmlFor={id} className={cn('cursor-pointer')}>
               {label}

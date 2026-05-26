@@ -71,7 +71,7 @@ export const cardVariants = cva(
       {
         variant: 'filled',
         color: 'gray',
-        className: 'bg-gray-500 text-white',
+        className: 'bg-gray-700 text-white',
       },
 
       /** OUTLINE VARIANTS */

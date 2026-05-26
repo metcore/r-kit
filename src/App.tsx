@@ -1,10 +1,10 @@
 import { ToastProvider } from './components/toast';
-import DocsRouter from './demo/router';
+import AppRouter from './router/AppRouter';
 
 function App() {
   return (
     <ToastProvider>
-      <DocsRouter />
+      <AppRouter />
     </ToastProvider>
   );
 }

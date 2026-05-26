@@ -2,31 +2,66 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useMemo,
+  useCallback,
   type KeyboardEvent,
   type MouseEvent as RMouseEvent,
 } from 'react';
-import type { SelectOption, SelectProps } from './type';
+import type { SelectGroup, SelectOption, SelectProps } from './type';
 import { Icon } from '../icons';
 import { cn, fieldHasError } from '../../lib/utils';
 import { FormField } from '../form';
 import { RoundedSpinner } from '../loading';
 import clsx from 'clsx';
+import { Chip } from '../chip';
+import { Text } from '../text';
+import { Button } from '../button';
+import { selectSize } from './selectSize';
+
+const isGroup = <Extra extends object>(
+  item: SelectOption<Extra> | SelectGroup<Extra>
+): item is SelectGroup<Extra> =>
+  item != null && Array.isArray((item as SelectGroup<Extra>).options);
+
+const getSearchText = <Extra extends object>(
+  option: SelectOption<Extra>
+): string =>
+  typeof option.label === 'string' ? option.label : String(option.value ?? '');
+
+const asArray = <Extra extends object>(
+  val: SelectOption<Extra> | SelectOption<Extra>[] | null
+): SelectOption<Extra>[] => (Array.isArray(val) ? val : val ? [val] : []);
+
+type SelectFilterOption<Extra extends object> =
+  | boolean
+  | ((option: SelectOption<Extra>, search: string) => boolean);
+
+type RenderEntry<Extra extends object> =
+  | {
+      kind: 'group';
+      label: React.ReactNode;
+      items: { option: SelectOption<Extra>; index: number }[];
+    }
+  | { kind: 'option'; option: SelectOption<Extra>; index: number };
 
 export function Select<Extra extends object = object>({
   options = [],
   value = null,
   onChange,
   isMulti = false,
+  multiple = false,
   placeholder = 'Select...',
   isSearchable = true,
   isClearable = true,
   isDisabled = false,
+  disabled = false,
   renderOption = null,
   renderValue = null,
   className,
   label,
   description,
   hint,
+  tooltip,
   errorMessages,
   isLoadingMore,
   onLoadMore,
@@ -41,7 +76,19 @@ export function Select<Extra extends object = object>({
   onOpenChange,
   searchOptions,
   searchPlaceholder = 'Search...',
-}: SelectProps<Extra>) {
+  icon,
+  creatable = false,
+  onCreate,
+  loadingOnCreate = false,
+  size = 'md',
+  filterOption = true,
+  isLoading = false,
+}: SelectProps<Extra> & {
+  /** Client-side filter strategy. Default keeps the original substring match. */
+  filterOption?: SelectFilterOption<Extra>;
+  /** Initial/whole-list loading state (distinct from `isLoadingMore` paging). */
+  isLoading?: boolean;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -51,7 +98,58 @@ export function Select<Extra extends object = object>({
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = () => {
+  // Single source of truth for the two pairs of duplicated flags. This both
+  // removes repetition and fixes the inconsistent combinations used below
+  // (e.g. `isDisabled && disabled` vs `isDisabled || disabled`).
+  const isMultiMode = isMulti || multiple;
+  const isDisabledMode = isDisabled || disabled;
+
+  const onOptionsChangeRef = useRef(onOptionsChange);
+  const onOpenChangeRef = useRef(onOpenChange);
+  useEffect(() => {
+    onOptionsChangeRef.current = onOptionsChange;
+    onOpenChangeRef.current = onOpenChange;
+  });
+
+  const { filteredOptions, renderEntries } = useMemo(() => {
+    const flat: SelectOption<Extra>[] = [];
+    const entries: RenderEntry<Extra>[] = [];
+    const term = searchTerm.toLowerCase();
+
+    const matches = (o: SelectOption<Extra>) => {
+      if (filterOption === false) return true;
+      if (typeof filterOption === 'function')
+        return filterOption(o, searchTerm);
+      return getSearchText(o).toLowerCase().includes(term);
+    };
+
+    for (const item of options as (
+      | SelectOption<Extra>
+      | SelectGroup<Extra>
+    )[]) {
+      if (isGroup(item)) {
+        const matched = item.options.filter(matches);
+        if (matched.length === 0) continue;
+
+        const items = matched.map((option) => {
+          const index = flat.length;
+          flat.push(option);
+          return { option, index };
+        });
+
+        entries.push({ kind: 'group', label: item.label, items });
+      } else {
+        if (!matches(item)) continue;
+        const index = flat.length;
+        flat.push(item);
+        entries.push({ kind: 'option', option: item, index });
+      }
+    }
+
+    return { filteredOptions: flat, renderEntries: entries };
+  }, [options, searchTerm, filterOption]);
+
+  const handleScroll = useCallback(() => {
     const el = listContainerRef.current;
     if (!el || Boolean(isLoadingMore)) return;
 
@@ -61,117 +159,116 @@ export function Select<Extra extends object = object>({
     if (isAtBottom) {
       onLoadMore?.();
     }
-  };
+  }, [isLoadingMore, onLoadMore, treshold]);
 
-  const filteredOptions: SelectOption<Extra>[] = React.useMemo(() => {
-    return options.filter(
-      (option) =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase()) === true
-    );
-  }, [options, searchTerm]);
-
-  const asArray = (
-    val: SelectOption<Extra> | SelectOption<Extra>[] | null
-  ): SelectOption<Extra>[] => (Array.isArray(val) ? val : val ? [val] : []);
-
-  const isSelected = (option: SelectOption<Extra>): boolean => {
-    if (isMulti) {
-      return asArray(value).some((v) => v.value === option.value);
-    }
-    return (value as SelectOption | null)?.value === option.value;
-  };
-
-  const handleSelect = (option: SelectOption<Extra>) => {
-    if (isMulti) {
-      const arr = asArray(value);
-      const exists = arr.some((v) => v.value === option.value);
-
-      const newValue = exists
-        ? arr.filter((v) => v.value !== option.value)
-        : [...arr, option];
-
-      onChange?.(newValue);
-
-      const idx = filteredOptions.findIndex((o) => o.value === option.value);
-      setHighlightedIndex(idx);
-      containerRef.current?.focus();
-      return;
-    }
-
-    onChange?.(option);
-    setIsOpen(false);
-    setSearchTerm('');
-  };
-
-  const handleRemove = (
-    option: SelectOption<Extra>,
-    e: RMouseEvent<HTMLButtonElement>
-  ) => {
-    e.stopPropagation();
-
-    if (isMulti) {
-      const arr = asArray(value);
-      onChange?.(arr.filter((v) => v.value !== option.value));
-    } else {
-      onChange?.(null);
-    }
-  };
-
-  const handleClear = (e: RMouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    onChange?.(isMulti ? [] : null);
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (!isOpen) {
-      if (['Enter', ' ', 'ArrowDown'].includes(e.key)) {
-        e.preventDefault();
-        setIsOpen(true);
+  const isSelected = useCallback(
+    (option: SelectOption<Extra>): boolean => {
+      if (isMultiMode) {
+        return asArray(value).some((v) => v.value === option.value);
       }
-      return;
-    }
+      return (value as SelectOption<Extra> | null)?.value === option.value;
+    },
+    [isMultiMode, value]
+  );
 
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setHighlightedIndex((p) =>
-          p < filteredOptions.length - 1 ? p + 1 : 0
-        );
-        break;
+  const handleSelect = useCallback(
+    (option: SelectOption<Extra>) => {
+      if (isMultiMode) {
+        const arr = asArray(value);
+        const exists = arr.some((v) => v.value === option.value);
 
-      case 'ArrowUp':
-        e.preventDefault();
-        setHighlightedIndex((p) =>
-          p > 0 ? p - 1 : filteredOptions.length - 1
-        );
-        break;
+        const newValue = exists
+          ? arr.filter((v) => v.value !== option.value)
+          : [...arr, option];
 
-      case 'Enter':
-        e.preventDefault();
-        try {
+        onChange?.(newValue);
+
+        const idx = filteredOptions.findIndex((o) => o.value === option.value);
+        setHighlightedIndex(idx);
+        containerRef.current?.focus();
+        return;
+      }
+
+      onChange?.(option);
+      setIsOpen(false);
+      setSearchTerm('');
+    },
+    [isMultiMode, value, onChange, filteredOptions]
+  );
+
+  const handleRemove = useCallback(
+    (option: SelectOption<Extra>, e: RMouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+
+      if (isMultiMode) {
+        const arr = asArray(value);
+        onChange?.(arr.filter((v) => v.value !== option.value));
+      } else {
+        onChange?.(null);
+      }
+    },
+    [isMultiMode, value, onChange]
+  );
+
+  const handleClear = useCallback(
+    (e: RMouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      onChange?.(isMultiMode ? [] : null);
+    },
+    [isMultiMode, onChange]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      if (!isOpen) {
+        if (['Enter', ' ', 'ArrowDown'].includes(e.key)) {
+          e.preventDefault();
+          setIsOpen(true);
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          setHighlightedIndex((p) =>
+            p < filteredOptions.length - 1 ? p + 1 : 0
+          );
+          break;
+
+        case 'ArrowUp':
+          e.preventDefault();
+          setHighlightedIndex((p) =>
+            p > 0 ? p - 1 : filteredOptions.length - 1
+          );
+          break;
+
+        case 'Enter': {
+          e.preventDefault();
           const opt = filteredOptions[highlightedIndex];
-
-          if (opt) handleSelect(opt);
-        } catch (error) {
-          console.error(error);
+          if (opt !== undefined) handleSelect(opt);
+          break;
         }
 
-        break;
+        case 'Escape':
+          setIsOpen(false);
+          setSearchTerm('');
+          break;
 
-      case 'Escape':
-        setIsOpen(false);
-        setSearchTerm('');
-        break;
+        default:
+          break;
+      }
+    },
+    [isOpen, filteredOptions, highlightedIndex, handleSelect]
+  );
 
-      default:
-        break;
-    }
-  };
-
-  /* Reset highlight when filtering */
   useEffect(() => {
     setHighlightedIndex(0);
   }, [searchTerm]);
+
+  useEffect(() => {
+    optionRefs.current.length = filteredOptions.length;
+  }, [filteredOptions]);
 
   useEffect(() => {
     const el = optionRefs.current[highlightedIndex];
@@ -183,7 +280,6 @@ export function Select<Extra extends object = object>({
     }
   }, [highlightedIndex]);
 
-  //   Handle outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node | null;
@@ -209,8 +305,7 @@ export function Select<Extra extends object = object>({
   }, [isOpen, isSearchable]);
 
   useEffect(() => {
-    onOptionsChange?.(filteredOptions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    onOptionsChangeRef.current?.(filteredOptions);
   }, [filteredOptions]);
 
   useEffect(() => {
@@ -220,8 +315,7 @@ export function Select<Extra extends object = object>({
   }, [isSelectOpen]);
 
   useEffect(() => {
-    onOpenChange?.(isOpen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    onOpenChangeRef.current?.(isOpen);
   }, [isOpen]);
 
   useEffect(() => {
@@ -231,13 +325,14 @@ export function Select<Extra extends object = object>({
   }, [searchOptions]);
 
   const getDisplayValue = () => {
-    const isEmpty = value == null || (isMulti && asArray(value).length === 0);
+    const isEmpty =
+      value == null || (isMultiMode && asArray(value).length === 0);
 
     if (isEmpty) {
       return <span className="text-gray-500">{placeholder}</span>;
     }
 
-    if (isMulti) {
+    if (isMultiMode) {
       return (
         <div className="flex flex-wrap gap-1">
           {asArray(value).map((item) => (
@@ -245,10 +340,9 @@ export function Select<Extra extends object = object>({
               key={item.value}
               className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
             >
-              {renderValue !== undefined && renderValue !== null
-                ? renderValue?.(item)
-                : item.label}
+              {renderValue != null ? renderValue(item) : item.label}
               <button
+                type="button"
                 onClick={(e) => handleRemove(item, e)}
                 className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
               >
@@ -260,16 +354,95 @@ export function Select<Extra extends object = object>({
       );
     }
 
-    return renderValue !== undefined && renderValue !== null
-      ? renderValue?.(value as SelectOption<Extra>)
-      : (value as SelectOption<Extra>).label;
+    return renderValue != null ? (
+      renderValue(value as SelectOption<Extra>)
+    ) : (
+      <>
+        <Text variant="t2" weight="medium" className="text-gray-900">
+          {(value as SelectOption<Extra>).label}
+        </Text>
+        <Text variant="t3" weight="regular" className="text-gray-700">
+          {(value as SelectOption<Extra>).description}
+        </Text>
+      </>
+    );
   };
 
   const showClearButton =
-    isClearable &&
-    ((isMulti && asArray(value).length > 0) || (!isMulti && value !== null));
+    isClearable && (isMultiMode ? asArray(value).length > 0 : value !== null);
 
   const hasError = fieldHasError(errorMessages);
+
+  const renderOptionItem = (option: SelectOption<Extra>, index: number) => {
+    const selected = isSelected(option);
+    const highlighted = index === highlightedIndex;
+    return (
+      <div
+        key={option.value}
+        ref={(el) => {
+          optionRefs.current[index] = el;
+        }}
+        onMouseEnter={() => setHighlightedIndex(index)}
+        onClick={() => handleSelect(option)}
+      >
+        <Chip className="text-left" block selected={highlighted}>
+          <div className="flex-1">
+            {renderOption != null ? (
+              renderOption(option, { selected })
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  {option?.icon != undefined && <Icon name="user" size={12} />}
+                  <Text variant="t2" weight="medium" className="text-gray-900">
+                    {option.label}
+                  </Text>
+                </div>
+                <Text variant="t3" weight="regular" className="text-gray-700">
+                  {option.description}
+                </Text>
+              </>
+            )}
+          </div>
+        </Chip>
+      </div>
+    );
+  };
+
+  const handleClickInput = () => {
+    if (isDisabledMode) return;
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleOnCreate = () => {
+    onCreate?.(searchTerm);
+  };
+
+  const handleInputSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onCreate?.(searchTerm);
+    }
+  };
+
+  const renderCreatable = () => {
+    return (
+      <Button
+        block
+        variant="outline"
+        className="gap-2"
+        disabled={loadingOnCreate}
+        onClick={handleOnCreate}
+      >
+        {loadingOnCreate ? (
+          <RoundedSpinner size={20} color="primary" />
+        ) : (
+          <Icon name="plus" size={12} />
+        )}
+        <Text variant="t2">
+          Create {label} {searchTerm}
+        </Text>
+      </Button>
+    );
+  };
 
   return (
     <FormField
@@ -278,6 +451,7 @@ export function Select<Extra extends object = object>({
       description={description}
       hint={hint}
       required={required}
+      tooltip={tooltip}
     >
       <div
         ref={containerRef}
@@ -289,8 +463,8 @@ export function Select<Extra extends object = object>({
         {trigger !== undefined && (
           <div
             aria-selected={isOpen}
-            onClick={() => !isDisabled && setIsOpen(!isOpen)}
-            tabIndex={isDisabled ? -1 : 0}
+            onClick={handleClickInput}
+            tabIndex={isDisabledMode ? -1 : 0}
             className={triggerClassName}
           >
             {trigger}
@@ -300,38 +474,46 @@ export function Select<Extra extends object = object>({
           <div
             aria-selected={isOpen}
             className={cn(
-              'focus:ring-primary-300 flex min-h-10 cursor-pointer items-center justify-between rounded-lg border bg-white px-3 py-2 text-gray-900 transition-all focus-within:outline-none focus:ring',
-              isDisabled && 'cursor-not-allowed bg-gray-100',
+              'focus:ring-primary-300 flex cursor-pointer rounded-lg border bg-white text-gray-900 transition-all focus-within:outline-none focus:ring',
+              selectSize({ size }),
+              isDisabledMode && 'cursor-not-allowed bg-gray-100',
               isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
               hasError && 'border-danger-500'
             )}
-            onClick={() => !isDisabled && setIsOpen(!isOpen)}
-            tabIndex={isDisabled ? -1 : 0}
+            onClick={handleClickInput}
+            tabIndex={isDisabledMode ? -1 : 0}
           >
-            <div className="flex-1 overflow-hidden text-xs font-medium text-gray-900">
-              {getDisplayValue()}
-            </div>
-            <div className="ml-2 flex items-center gap-1">
-              {showClearButton && (
-                <button
-                  type="button"
-                  onClick={handleClear}
-                  className="cursor-pointer rounded text-center text-gray-700"
-                >
-                  <Icon name="times-circle" size={20} />
-                </button>
-              )}
+            {icon && (
+              <div className="flex items-center border-r border-gray-200 px-3 py-2">
+                <Icon name={icon} size={22} className="text-gray-600" />
+              </div>
+            )}
+            <div className="flex w-full flex-1 items-center justify-between px-3 py-2">
+              <div className="min-w-0 flex-1 text-xs font-medium text-gray-900">
+                {getDisplayValue()}
+              </div>
 
-              <Icon
-                className="text-gray-700"
-                name={isOpen ? 'angle-up-small' : 'angle-down-small'}
-                size={20}
-              />
+              <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
+                {showClearButton && (
+                  <button
+                    type="button"
+                    onClick={handleClear}
+                    className="cursor-pointer rounded text-center text-gray-700"
+                  >
+                    <Icon name="times-circle" size={20} />
+                  </button>
+                )}
+
+                <Icon
+                  className="text-gray-700"
+                  name={isOpen ? 'angle-up-small' : 'angle-down-small'}
+                  size={20}
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {/* Dropdown */}
         {isOpen && (
           <div
             className={cn(
@@ -345,7 +527,9 @@ export function Select<Extra extends object = object>({
                 <input
                   ref={searchInputRef}
                   type="text"
+                  disabled={loadingOnCreate}
                   value={searchTerm}
+                  onKeyDown={handleInputSearchKeyDown}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                     onSearchOptions?.(e.target.value);
@@ -357,7 +541,6 @@ export function Select<Extra extends object = object>({
               </div>
             )}
 
-            {/* Options */}
             <div
               className="max-h-62.5 space-y-2 overflow-y-auto focus:outline-none"
               ref={listContainerRef}
@@ -366,43 +549,38 @@ export function Select<Extra extends object = object>({
               {renderOptions === undefined && (
                 <>
                   {filteredOptions.length === 0 ? (
-                    <div className="px-3 py-8 text-center text-sm text-gray-500">
-                      No options found
-                    </div>
-                  ) : (
-                    filteredOptions.map((option, index) => {
-                      const selected = isSelected(option);
-                      const highlighted = index === highlightedIndex;
-
-                      return (
-                        <div
-                          key={option.value}
-                          ref={(el) => {
-                            optionRefs.current[index] = el;
-                          }}
-                          onMouseEnter={() => setHighlightedIndex(index)}
-                          onClick={() => handleSelect(option)}
-                          className={cn(
-                            'flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors focus:outline-none',
-                            highlighted && 'bg-primary-100',
-                            selected
-                              ? 'bg-primary-50 border-primary-300'
-                              : 'hover:bg-gray-50'
-                          )}
-                        >
-                          <div className="flex-1">
-                            {renderOption !== undefined &&
-                            renderOption !== null ? (
-                              renderOption?.(option, { selected })
-                            ) : (
-                              <div className={cn(selected && 'font-medium')}>
-                                {option.label}
-                              </div>
-                            )}
-                          </div>
+                    <>
+                      {isLoading ? (
+                        <div className="flex items-center justify-center py-8">
+                          <RoundedSpinner size={20} color="primary" />
                         </div>
-                      );
-                    })
+                      ) : creatable ? (
+                        renderCreatable()
+                      ) : (
+                        <div className="px-3 py-8 text-center text-sm text-gray-500">
+                          No options found
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    renderEntries.map((entry, i) =>
+                      entry.kind === 'group' ? (
+                        <div key={`grp-${i}`} className="space-y-2">
+                          <Text
+                            variant="t2"
+                            weight="semibold"
+                            className="text-gray-900"
+                          >
+                            {entry.label}
+                          </Text>
+                          {entry.items.map(({ option, index }) =>
+                            renderOptionItem(option, index)
+                          )}
+                        </div>
+                      ) : (
+                        renderOptionItem(entry.option, entry.index)
+                      )
+                    )
                   )}
                   {onLoadMore !== undefined && (
                     <div
@@ -419,7 +597,7 @@ export function Select<Extra extends object = object>({
               )}
 
               {renderOptions !== undefined &&
-                renderOptions?.({
+                renderOptions({
                   options: filteredOptions,
                   isLoadingMore,
                 })}
