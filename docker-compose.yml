@@ -1,0 +1,10 @@
+services:
+  app-prod:
+    container_name: kit-app
+    build:
+      context: .
+      args:
+        - NODE_ENV=production
+    ports:
+      - '9213:3000'
+    restart: always
