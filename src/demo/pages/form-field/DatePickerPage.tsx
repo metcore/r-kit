@@ -112,9 +112,11 @@ export default function DatePickerPage() {
           <MainSection title="Single Date (Default)" code={defaultExample}>
             <div className="flex flex-col gap-3">
               <DatePicker
+                isClearable
                 format="DD-MM-YYYY"
                 value={singleValue}
                 onChange={setSingleValue}
+                containerClassName="w-100"
               />
               <p className="text-xs text-gray-500">
                 Selected:{' '}
@@ -129,6 +131,7 @@ export default function DatePickerPage() {
           >
             <div className="flex flex-col gap-3">
               <DatePicker
+                placeholder="Work Estimate"
                 format="DD MMM YYYY"
                 value={singleMonthNameValue}
                 onChange={setSingleMonthNameValue}
@@ -151,6 +154,7 @@ export default function DatePickerPage() {
                 format="DD-MM-YYYY"
                 rangeValue={rangeValue}
                 onRangeChange={setRangeValue}
+                isClearable
               />
               <p className="text-xs text-gray-500">
                 Range: {rangeValue.start?.toLocaleDateString('id-ID') ?? '-'} -{' '}

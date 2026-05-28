@@ -18,6 +18,7 @@ import type {
   InputFileRef,
   UploadedFile,
 } from './type';
+import clsx from 'clsx';
 
 const defaultExtractUrl = (res: unknown): string => {
   if (
@@ -58,6 +59,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
       onUploadSuccess,
       onRemoveFile,
       onClear,
+      selectedFilesClassName,
     },
     ref
   ) => {
@@ -578,7 +580,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         />
 
         {files.length > 0 && (
-          <div className="flex flex-col gap-3">
+          <div className={clsx('flex flex-col gap-3', selectedFilesClassName)}>
             <div className="flex items-center justify-between">
               <Text
                 value="Selected Files"
