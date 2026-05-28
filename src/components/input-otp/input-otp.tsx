@@ -8,7 +8,7 @@ export type InputOTPSize = 'sm' | 'md' | 'lg';
 
 export interface InputOTPProps {
   length?: number;
-  value: string;
+  value?: string;
   onChange?: (value: string) => void;
   onComplete?: (value: string) => void;
   onBlur?: () => void;
@@ -81,12 +81,16 @@ export const InputOTP = ({
     : typeof errorMessages === 'string' && errorMessages.length > 0;
 
   const values = React.useMemo<string[]>(() => {
-    const chars = value.split('');
-    return Array.from({ length }, (_, i) => chars[i] ?? '');
+    const chars = value?.split('');
+    return Array.from({ length }, (_, i) => chars?.[i] ?? '');
   }, [value, length]);
 
   React.useEffect(() => {
-    if (value.length === length && previousValueRef.current.length !== length) {
+    if (
+      value?.length === length &&
+      previousValueRef.current != undefined &&
+      previousValueRef.current.length !== length
+    ) {
       onComplete?.(value);
     }
     previousValueRef.current = value;
@@ -240,6 +244,7 @@ export const InputOTP = ({
 
         {values.map((char, i) => {
           const displayValue = mask && char.length > 0 ? '•' : char;
+          console.log(displayValue);
           const inputId = i === 0 ? fieldId : `${fieldId}-${i}`;
           const computedAriaLabel =
             ariaLabel !== undefined
@@ -253,7 +258,7 @@ export const InputOTP = ({
                   inputsRef.current[i] = el;
                 }}
                 id={inputId}
-                value={displayValue}
+                value={char}
                 disabled={disabled}
                 readOnly={readOnly}
                 required={required && i === 0}

@@ -8,7 +8,7 @@ ringkas di dalam interface.
 ## Import
 
 ```tsx
-import { Chip, ChipGroup } from '@/components/chip';
+import { Chip, ChipGroup } from '@herca/r-kit/clients';
 ```
 
 ---
