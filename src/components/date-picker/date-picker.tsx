@@ -31,6 +31,8 @@ const DatePicker = ({
   showController = true,
   align = 'start',
   containerClassName,
+  placeholder,
+  isClearable = false,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null
@@ -343,22 +345,49 @@ const DatePicker = ({
           }
         }}
       >
-        <DropdownTrigger asChild={Boolean(trigger)}>
+        <DropdownTrigger asChild={true}>
           {Boolean(trigger) === false ? (
             <Input
-              type="text"
               mergedAddon
+              type="text"
               className="pl-0"
-              leftAddonClassName="pr-1!"
-              leftAddon={<Icon name="calendar" className="text-gray-900" />}
-              placeholder={
-                mode === 'range'
-                  ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
-                  : formatConfig.placeholder
-              }
+              leftAddonClassName="pr-1! shrink-0"
               onChange={handleInputChange}
               value={inputValue}
               readOnly={mode === 'range'}
+              leftAddon={
+                <Icon name="calendar" className="text-gray-900" size={24} />
+              }
+              rightAddonClassName="shrink-0"
+              rightAddon={
+                isClearable &&
+                inputValue && (
+                  <button
+                    className="shrink-0 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      setInputValue('');
+                      controlledOnRangeChange?.({ start: null, end: null });
+                      controlledOnChange?.(null);
+                    }}
+                  >
+                    <Icon
+                      name="times-circle"
+                      size={20}
+                      className="shrink-0 text-gray-900"
+                    />
+                  </button>
+                )
+              }
+              placeholder={
+                placeholder !== undefined
+                  ? placeholder
+                  : mode === 'range'
+                    ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
+                    : formatConfig.placeholder
+              }
             />
           ) : (
             trigger

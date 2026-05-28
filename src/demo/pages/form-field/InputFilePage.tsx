@@ -57,7 +57,7 @@ export default function InputFilePage() {
         <GridWrapper>
           <MainSection
             title="Basic Input File"
-            contentClassName="grid grid-cols-3 gap-5"
+            contentClassName="grid grid-cols-3 gap-5 "
             code={basicInput}
           >
             <InputFile
@@ -126,6 +126,7 @@ export default function InputFilePage() {
               variant="large"
               value={defaultFiles}
               onChange={setDefaultFiles}
+              selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"
             />
           </MainSection>
           <MainSection title="Input File Mode Server">

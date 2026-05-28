@@ -52,6 +52,8 @@ export interface DatePickerProps {
   align?: 'start' | 'center' | 'end';
 
   containerClassName?: string;
+  placeholder?: string;
+  isClearable?: boolean;
 }
 
 export type DateFormat =
