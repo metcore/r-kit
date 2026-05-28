@@ -37,8 +37,8 @@ npm install react
 Import komponen:
 
 ```tsx
-import { InputFile } from "@herca/r-kit/input-file";
-import type { InputFileRef } from "@herca/r-kit/input-file/type";
+import { InputFile } from '@herca/r-kit/input-file';
+import type { InputFileRef } from '@herca/r-kit/input-file/type';
 ```
 
 ## Basic Usage
@@ -51,7 +51,7 @@ function MyForm() {
 
   const handleSubmit = () => {
     const files = fileInputRef.current?.getFiles();
-    console.log("Selected files:", files);
+    console.log('Selected files:', files);
   };
 
   return (
@@ -89,16 +89,17 @@ function MyForm() {
 
 ### Core Props
 
-| Prop       | Type                                                        | Default     | Description                                     |
-| ---------- | ----------------------------------------------------------- | ----------- | ----------------------------------------------- |
-| `value`    | `FileItem[]`                                                | `undefined` | Controlled file list                            |
-| `onChange` | `(files: FileItem[]) => void`                               | `undefined` | Callback saat files berubah                     |
-| `multiple` | `boolean`                                                   | `false`     | Izinkan multiple file selection                 |
-| `accept`   | `string`                                                    | `undefined` | Tipe file yang diterima (e.g., "image/\*,.pdf") |
-| `maxSize`  | `number`                                                    | `undefined` | Ukuran maksimal file dalam bytes                |
-| `maxFiles` | `number`                                                    | `undefined` | Jumlah maksimal file                            |
-| `disabled` | `boolean`                                                   | `false`     | Disable komponen                                |
-| `variant`  | `"primary" \| "secondary" \| "gray" \| "medium" \| "large"` | `"primary"` | Style variant                                   |
+| Prop                     | Type                                                        | Default     | Description                                      |
+| ------------------------ | ----------------------------------------------------------- | ----------- | ------------------------------------------------ |
+| `value`                  | `FileItem[]`                                                | `undefined` | Controlled file list                             |
+| `onChange`               | `(files: FileItem[]) => void`                               | `undefined` | Callback saat files berubah                      |
+| `multiple`               | `boolean`                                                   | `false`     | Izinkan multiple file selection                  |
+| `accept`                 | `string`                                                    | `undefined` | Tipe file yang diterima (e.g., "image/\*,.pdf")  |
+| `maxSize`                | `number`                                                    | `undefined` | Ukuran maksimal file dalam bytes                 |
+| `maxFiles`               | `number`                                                    | `undefined` | Jumlah maksimal file                             |
+| `disabled`               | `boolean`                                                   | `false`     | Disable komponen                                 |
+| `variant`                | `"primary" \| "secondary" \| "gray" \| "medium" \| "large"` | `"primary"` | Style variant                                    |
+| `selectedFilesClassName` | `string`                                                    | `undefined` | className untuk wrapper di konten selected files |
 
 ### Label & Text Props
 
@@ -334,18 +335,18 @@ function ImageUpload() {
   const handleSave = async () => {
     const files = fileRef.current?.getFiles();
     if (!files || files.length === 0) {
-      alert("Please select an image");
+      alert('Please select an image');
       return;
     }
 
     // Upload to server
     const formData = new FormData();
     files.forEach((item) => {
-      formData.append("images", item.file);
+      formData.append('images', item.file);
     });
 
-    await fetch("/api/upload", {
-      method: "POST",
+    await fetch('/api/upload', {
+      method: 'POST',
       body: formData,
     });
   };
@@ -392,13 +393,13 @@ function DocumentUpload() {
 ```tsx
 function FormWithFileUpload() {
   const [formData, setFormData] = useState({
-    name: "",
+    name: '',
     files: [] as FileItem[],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+    console.log('Form data:', formData);
     // Process formData.files
   };
 
@@ -608,7 +609,7 @@ const InputFile = forwardRef<InputFileRef, InputFileProps>(
         {myNewFeature && <button onClick={handleMyFeature}>New Feature</button>}
       </div>
     );
-  },
+  }
 );
 ```
 
@@ -733,7 +734,7 @@ const handleSubmit = () => {
   const files = fileRef.current?.getFiles();
 
   if (!files || files.length === 0) {
-    alert("Please select at least one file");
+    alert('Please select at least one file');
     return;
   }
 
@@ -753,8 +754,8 @@ const uploadFiles = async (files: FileItem[]) => {
     formData.append(`file_${index}`, item.file, filename);
   });
 
-  const response = await fetch("/api/upload", {
-    method: "POST",
+  const response = await fetch('/api/upload', {
+    method: 'POST',
     body: formData,
   });
 
