@@ -103,8 +103,8 @@ export function Select<Extra extends object = object>({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
-  const isMultiMode = isMulti || multiple;
-  const isDisabledMode = isDisabled || disabled;
+  const isMultiMode: boolean = isMulti || multiple;
+  const isDisabledMode: boolean = isDisabled || disabled;
 
   const onOptionsChangeRef = useRef(onOptionsChange);
   const onOpenChangeRef = useRef(onOpenChange);
@@ -483,13 +483,12 @@ export function Select<Extra extends object = object>({
       style={{ zIndex: 9999, ...menuStyle }}
       onKeyDown={handleKeyDown}
       className={cn(
-        'max-h-80 space-y-2 overflow-hidden rounded-lg border bg-white p-2',
-        'border-gray-200'
+        'flex max-h-80 min-w-40 flex-col items-stretch gap-2 overflow-hidden rounded-lg border border-gray-200 bg-white p-2'
       )}
     >
       {isSearchable && (
         <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2.5">
-          <Icon name="search" size={20} className="text-gray-400" />
+          <Icon name="search" size={20} className="shrink-0 text-gray-400" />
           <input
             ref={searchInputRef}
             type="text"
@@ -501,7 +500,7 @@ export function Select<Extra extends object = object>({
               onSearchOptions?.(e.target.value);
             }}
             placeholder={searchPlaceholder}
-            className="flex-1 bg-transparent text-sm outline-none"
+            className="min-w-0 flex-1 truncate bg-transparent text-sm outline-none"
             onClick={(e) => e.stopPropagation()}
           />
         </div>
