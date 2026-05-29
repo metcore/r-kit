@@ -8,8 +8,11 @@ import { useMarkdown } from '../../hooks/useMarkdown';
 import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 import HeroSection from '../../components/HeroSection';
+import { useState } from 'react';
 
 export default function CheckboxPage() {
+  const [chekedBasic, setChekedBasic] = useState<boolean>(false);
+  const [chekedIndeminate, setChekedIndeminate] = useState<boolean>(false);
   const { doc } = useMarkdown(`/docs/checkbox.md`);
   const {
     CHECKBOXES,
@@ -20,6 +23,8 @@ export default function CheckboxPage() {
     exampleVerticalMinus,
     exampleVerticalDescription,
   } = useCheckboxes();
+
+  const handleOnCheckedParent = () => {};
 
   return (
     <>
@@ -33,30 +38,18 @@ export default function CheckboxPage() {
       <div className="flex flex-1 flex-col gap-4">
         <GridWrapper>
           <MainSection title="Checkbox Default" code={exampleDefault}>
-            <CheckboxGroup direction="horizontal" defaultValue={[1, '2']}>
-              {CHECKBOXES.map(({ id, color, disabled, checked }) => (
-                <Checkbox
-                  key={id}
-                  value={id}
-                  color={color}
-                  disabled={disabled}
-                  checked={checked}
-                />
-              ))}
-            </CheckboxGroup>
+            <Checkbox
+              onChange={setChekedBasic}
+              label={chekedBasic ? 'cheked' : 'UnCheked'}
+            />
           </MainSection>
           <MainSection title="Checkbox Inderminate" code={exampleDefault}>
-            <CheckboxGroup direction="horizontal" defaultValue={[1, '2']}>
-              {CHECKBOXES.map(({ id, color, disabled }) => (
-                <Checkbox
-                  key={id}
-                  value={id}
-                  icon="minus"
-                  color={color}
-                  disabled={disabled}
-                />
-              ))}
-            </CheckboxGroup>
+            <Checkbox
+              value={1}
+              icon="minus"
+              onChange={setChekedIndeminate}
+              label={chekedIndeminate ? 'cheked' : 'UnCheked'}
+            />
           </MainSection>
         </GridWrapper>
 
@@ -104,7 +97,7 @@ export default function CheckboxPage() {
         {/* sizes */}
         <GridWrapper>
           <MainSection
-            title="Checkbox Size Horizontal"
+            title="Checkbox Validation"
             code={exampleVerticalMinus}
             className="flex-1"
           >
@@ -121,6 +114,7 @@ export default function CheckboxPage() {
                   description={item.description}
                   color={item.color}
                   disabled={item.disabled}
+                  errorMessages="Invalid Text"
                 />
               ))}
             </CheckboxGroup>
@@ -164,6 +158,75 @@ export default function CheckboxPage() {
                   size={item.size}
                   label={item.label}
                   description={item.description}
+                  color={item.color}
+                  disabled={item.disabled}
+                />
+              ))}
+            </CheckboxGroup>
+          </MainSection>
+          <MainSection
+            title="Checkbox With Tooltip"
+            code={exampleVerticalMinus}
+            className="flex-1"
+          >
+            <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+              {SIZE_CHECKBOXES.map((item) => (
+                <Checkbox
+                  key={item.id}
+                  value={item.id}
+                  size={item.size}
+                  label={item.label}
+                  description={item.description}
+                  tooltip="Tooltip Text"
+                  color={item.color}
+                  disabled={item.disabled}
+                />
+              ))}
+            </CheckboxGroup>
+          </MainSection>
+        </GridWrapper>
+
+        <GridWrapper>
+          <MainSection
+            title="Grouping"
+            code={exampleVerticalMinus}
+            className="flex-1"
+          >
+            <div className="flex flex-col gap-4">
+              <Checkbox
+                label="Parent"
+                onCheckedChange={handleOnCheckedParent}
+              />
+              <div className="ml-6 flex flex-col">
+                <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+                  {SIZE_CHECKBOXES.map((item) => (
+                    <Checkbox
+                      key={item.id}
+                      label={item.label}
+                      description={item.description}
+                      color={item.color}
+                      checked={true}
+                      disabled={item.disabled}
+                    />
+                  ))}
+                </CheckboxGroup>
+              </div>
+            </div>
+          </MainSection>
+          <MainSection
+            title="Checkbox With Tooltip"
+            code={exampleVerticalMinus}
+            className="flex-1"
+          >
+            <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+              {SIZE_CHECKBOXES.map((item) => (
+                <Checkbox
+                  key={item.id}
+                  value={item.id}
+                  size={item.size}
+                  label={item.label}
+                  description={item.description}
+                  tooltip="Tooltip Text"
                   color={item.color}
                   disabled={item.disabled}
                 />

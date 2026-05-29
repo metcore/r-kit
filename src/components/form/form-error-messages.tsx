@@ -1,4 +1,5 @@
 import { cn } from '../../lib/utils';
+import { Text } from '../text';
 import type { FormErrorMessageProps, FormErrorMessagesProps } from './type';
 
 export const FormErrorMessages: React.FC<FormErrorMessagesProps> = ({
@@ -25,7 +26,20 @@ export const FormErrorMessages: React.FC<FormErrorMessagesProps> = ({
 
 export const FormErrorMessage: React.FC<FormErrorMessageProps> = ({
   className,
+  size = 'md',
   children,
 }) => {
-  return <p className={cn('text-danger-500 text-xs', className)}>{children}</p>;
+  const textVariant = {
+    sm: 't4',
+    md: 't3',
+    lg: 't2',
+  } as const;
+
+  const variant = textVariant[size ?? 'md'];
+
+  return (
+    <Text variant={variant} color="danger" className={cn(className)}>
+      {children}
+    </Text>
+  );
 };

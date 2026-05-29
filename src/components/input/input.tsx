@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn, fieldHasError } from '../../lib/utils';
 import { inputVariants, type InputVariantProps } from './input-variants';
 import { FormField } from '../form';
-import type { IconNameProps } from '../icons';
+import { Icon, type IconNameProps } from '../icons';
 
 export interface InputProps
   extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariantProps {
@@ -39,6 +39,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       mergedAddon,
       isError,
       onContainerResize,
+      icon,
       ...props
     },
     ref
@@ -78,6 +79,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               : 'focus-within:border-primary-300 border-gray-200'
           )}
         >
+          {icon && (
+            <div className="flex items-center border-r border-gray-200 px-3 py-2">
+              <Icon name={icon} size={22} className="text-gray-600" />
+            </div>
+          )}
           {Boolean(leftAddon) && (
             <div
               className={cn(

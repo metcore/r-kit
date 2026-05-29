@@ -96,7 +96,7 @@ export default function InputFieldPage() {
             code={exampleLabelText}
           >
             <div className="grid grid-cols-3 gap-8">
-              <Input label="Default Input" placeholder="Username" />
+              <Input label="Default Input" icon="user" placeholder="Username" />
               <Input label="Input Aktif" autoFocus value={'Maman_'} />
               <Input
                 label="Filled Input"

@@ -66,31 +66,12 @@ export default function useCheckboxes() {
   ] as const;
 
   const exampleDefault = dedent(`
-    const CHECKBOXES = [
-      { id: "1", color: "gray" },
-      { id: "2", color: "danger" },
-      { id: "3", color: "success" },
-      { id: "4", color: "warning" },
-      { id: "5", color: "info" },
-      { id: "6", color: "purple" },
-      { id: "7", color: "orange" },
-      { id: "8", color: "gray", disabled: true },
-    ];
-
     const [selected, setSelected] = useState({});
 
     {CHECKBOXES.map(({ id, color, disabled }) => (
       <Checkbox
-        key={id}
-        color={color}
-        disabled={disabled}
-        checked={!!selected[id]}
-        onCheckedChange={(val) =>
-          setSelected((prev) => ({
-            ...prev,
-            [id]: val,
-          }))
-        }
+        label={chekedBasic ? 'cheked' : 'UnCheked'}
+        onChange={setSelected}
       />
     ))}
   `);

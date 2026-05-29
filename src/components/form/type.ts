@@ -6,6 +6,7 @@ export interface FormLabelProps {
   size?: FormSizeType;
   className?: string;
   children: React.ReactNode;
+  tooltip?: string;
 }
 
 export interface FormDescriptionProps {

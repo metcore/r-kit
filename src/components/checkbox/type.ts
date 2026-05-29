@@ -23,8 +23,13 @@ export interface CheckboxProps {
   size?: SizeType;
   color?: ColorType;
   icon?: IconType;
+  /**
+   * @deprecated Gunakan onChange
+   */
   onCheckedChange?: (checked: boolean) => void;
+  onChange?: (checked: boolean) => void;
   className?: string;
+  tooltip?: string;
 }
 
 export interface CheckboxGroupProps {
@@ -47,10 +52,6 @@ export interface CheckboxGroupProps {
 
 export interface CheckboxGroupContextValue {
   value?: CheckboxValue[];
-  /**
-   * @deprecated Gunakan OnChange
-   */
-  onValueChange?: (value: CheckboxValue[]) => void;
   onChange?: (value: CheckboxValue[]) => void;
   disabled?: boolean;
   name?: string;

@@ -34,6 +34,7 @@ export const CheckboxGroup: React.FC<
   value,
   defaultValue,
   onValueChange,
+  onChange,
   disabled = false,
   required = false,
   name,
@@ -59,13 +60,14 @@ export const CheckboxGroup: React.FC<
       setInternalValue(newValue);
     }
     onValueChange?.(newValue);
+    onChange?.(newValue);
   };
 
   return (
     <CheckboxGroupContext.Provider
       value={{
         value: currentValue,
-        onValueChange: handleValueChange,
+        onChange: handleValueChange,
         disabled,
         name,
         size,
@@ -107,15 +109,21 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
   color: colorProp,
   icon: iconProp,
   onCheckedChange,
+  onChange,
   className,
 }) => {
+  const [internalChecked, setInternalChecked] = React.useState(
+    checked ?? false
+  );
   const generatedId = useId();
   const id = providedId ?? generatedId;
   const context = useContext(CheckboxGroupContext);
-
+  const isControlled = checked !== undefined;
   const isChecked = context
     ? context.value?.includes(value ?? '')
-    : (checked ?? false);
+    : isControlled
+      ? checked
+      : internalChecked;
 
   const disabled = disabledProp ?? context?.disabled ?? false;
   const name = context?.name;
@@ -128,16 +136,25 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
 
     if (context && value !== undefined) {
       const currentValues = context.value || [];
+
       const newValues =
         isChecked === true
           ? currentValues.filter((v) => v !== value)
           : [...currentValues, value];
-      context.onValueChange?.(newValues);
+
+      context.onChange?.(newValues);
     } else {
-      onCheckedChange?.(isChecked === false ? true : false);
+      const newChecked = isChecked == false;
+
+      // uncontrolled mode
+      if (!isControlled) {
+        setInternalChecked(newChecked);
+      }
+
+      onCheckedChange?.(newChecked);
+      onChange?.(newChecked);
     }
   };
-
   const disabledColorClass: Record<string, string> = {
     primary: 'bg-primary-100 border-primary-200',
     success: 'bg-success-100 border-success-200',
@@ -235,6 +252,7 @@ export const Checkbox: React.FC<
   className,
   size: sizeProp,
   icon: iconProp,
+  tooltip,
   ...props
 }) => {
   const generatedId = useId();
@@ -247,21 +265,26 @@ export const Checkbox: React.FC<
   const isInGroup = !!context;
   const showHintAndError = !isInGroup;
 
-  const hasError = Boolean(errorMessages) && showHintAndError;
+  const hasError = Boolean(errorMessages);
   return (
     <div className={cn('flex flex-col', className)}>
-      <div className={cn('inline-flex items-center gap-2')}>
+      <div className={cn('inline-flex gap-2')}>
         <BaseCheckbox {...props} id={id} size={size} icon={icon} />
 
         <div className={cn('flex flex-col')}>
           {label !== undefined && (
-            <FormLabel htmlFor={id} className={cn('cursor-pointer')}>
+            <FormLabel
+              htmlFor={id}
+              size={size}
+              tooltip={tooltip}
+              className={cn('cursor-pointer')}
+            >
               {label}
             </FormLabel>
           )}
 
           {description !== undefined && (
-            <FormDescription>{description}</FormDescription>
+            <FormDescription size={size}>{description}</FormDescription>
           )}
         </div>
       </div>
@@ -270,9 +293,7 @@ export const Checkbox: React.FC<
         <FormHint className="mt-1 ml-6">{hint}</FormHint>
       )}
 
-      {hasError && (
-        <FormErrorMessages messages={errorMessages} className="mt-1 ml-6" />
-      )}
+      {hasError && <FormErrorMessages messages={errorMessages} size={size} />}
     </div>
   );
 };
