@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export type FormSizeType = 'sm' | 'md' | 'lg' | null;
 
 export interface FormLabelProps {
@@ -42,4 +44,5 @@ export interface FormFieldProps {
   htmlFor?: string;
   className?: string;
   children: React.ReactNode;
+  style?: CSSProperties;
 }

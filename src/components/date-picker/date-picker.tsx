@@ -33,6 +33,7 @@ const DatePicker = ({
   containerClassName,
   placeholder,
   isClearable = false,
+  autoWidth = false,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null
@@ -350,15 +351,16 @@ const DatePicker = ({
             <Input
               mergedAddon
               type="text"
-              className="pl-0"
+              autoWidth={autoWidth}
+              className={`pl-0`}
               leftAddonClassName="pr-1! shrink-0"
               onChange={handleInputChange}
               value={inputValue}
               readOnly={mode === 'range'}
+              rightAddonClassName="shrink-0 pl-1!"
               leftAddon={
                 <Icon name="calendar" className="text-gray-900" size={24} />
               }
-              rightAddonClassName="shrink-0"
               rightAddon={
                 isClearable &&
                 inputValue && (

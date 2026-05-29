@@ -17,6 +17,7 @@ export interface InputProps
   isError?: boolean;
   mergedAddon?: boolean;
   onContainerResize?: (width: number) => void;
+  autoWidth?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -37,6 +38,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       mergedAddon,
       isError,
       onContainerResize,
+      autoWidth = false,
       ...props
     },
     ref
@@ -44,6 +46,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const hasError = fieldHasError(errorMessages) ?? isError;
     const generatedId = React.useId();
     const fieldRef = React.useRef<HTMLDivElement | null>(null);
+
+    const measureValue = String(props?.value ?? props.placeholder ?? undefined);
+    const textLength = measureValue.length;
 
     React.useEffect(() => {
       if (!fieldRef.current || !onContainerResize) return;
@@ -66,6 +71,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         className={className}
         required={props.required}
         size={size}
+        style={autoWidth && measureValue ? { width: 'fit-content' } : undefined}
         htmlFor={props?.id ?? generatedId}
       >
         <div
@@ -96,9 +102,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             size={inputSize}
             id={props?.id ?? generatedId}
+            style={
+              measureValue && autoWidth
+                ? { width: autoWidth ? `${textLength}ch` : '100%' }
+                : undefined
+            }
             className={cn(
               inputVariants({ size }),
-              'font-metropolis w-full rounded-none border-none focus-visible:outline-none',
+              'font-metropolis w-full min-w-0! rounded-none border-none focus-visible:outline-none',
               Boolean(leftAddon) && 'pl-2',
               Boolean(rightAddon) && 'pr-2',
               Boolean(mergedAddon) && 'shadow-none',
