@@ -1,17 +1,17 @@
-import HeroSection from '../../components/HeroSection';
-import DashboardLayout from '../../layouts/DashboardLayout';
-import illust from '../../assets/images/forms.png';
-import { DatePicker, type DateRange } from '../../../components/date-picker';
-import { useState } from 'react';
-import GridWrapper from '../../components/GridWrapper';
-import MainSection from '../../components/MainSection';
-import { Button } from '../../../components/button';
-import { Icon } from '../../../components/icons';
-import Footer from '../../components/Footer';
 import dedent from 'dedent';
-import { useMarkdown } from '../../hooks/useMarkdown';
+import { useState } from 'react';
+import { Button } from '../../../components/button';
 import { Card, CardBody } from '../../../components/card';
+import { DatePicker, type DateRange } from '../../../components/date-picker';
+import { Icon } from '../../../components/icons';
+import illust from '../../assets/images/forms.png';
+import Footer from '../../components/Footer';
+import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
+import { useMarkdown } from '../../hooks/useMarkdown';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 const addDays = (date: Date, days: number) => {
   const next = new Date(date);
@@ -112,11 +112,11 @@ export default function DatePickerPage() {
           <MainSection title="Single Date (Default)" code={defaultExample}>
             <div className="flex flex-col gap-3">
               <DatePicker
+                autoWidth
                 isClearable
                 format="DD-MM-YYYY"
                 value={singleValue}
                 onChange={setSingleValue}
-                containerClassName="w-100"
               />
               <p className="text-xs text-gray-500">
                 Selected:{' '}
@@ -126,7 +126,7 @@ export default function DatePickerPage() {
           </MainSection>
 
           <MainSection
-            title="Single Date (Custome Format)"
+            title="Single Date (Custom Format)"
             code={customeFormatExample}
           >
             <div className="flex flex-col gap-3">
@@ -150,11 +150,11 @@ export default function DatePickerPage() {
           <MainSection title="Range Date" code={rangeExample}>
             <div className="flex flex-col gap-3">
               <DatePicker
+                isClearable
                 mode="range"
-                format="DD-MM-YYYY"
+                format="DD MMM YYYY"
                 rangeValue={rangeValue}
                 onRangeChange={setRangeValue}
-                isClearable
               />
               <p className="text-xs text-gray-500">
                 Range: {rangeValue.start?.toLocaleDateString('id-ID') ?? '-'} -{' '}

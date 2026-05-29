@@ -18,11 +18,16 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
       htmlFor,
       className,
       children,
+      style,
     },
     ref
   ) {
     return (
-      <div ref={ref} className={cn('flex flex-col gap-1', className)}>
+      <div
+        ref={ref}
+        className={cn('flex flex-col gap-1', className)}
+        style={style}
+      >
         {label !== undefined && (
           <FormLabel htmlFor={htmlFor} required={required} size={size}>
             {label}

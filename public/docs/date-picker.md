@@ -170,27 +170,28 @@ Contoh style/behavior berbeda antar kalender range:
 
 ## Props API
 
-| Prop                     | Type                           | Default        | Description                                            |
-| ------------------------ | ------------------------------ | -------------- | ------------------------------------------------------ |
-| `format`                 | `DateFormat`                   | `"DD-MM-YYYY"` | Format tampilan/input tanggal                          |
-| `mode`                   | `"single" \| "range"`          | `"single"`     | Mode pemilihan tanggal                                 |
-| `value`                  | `Date \| null`                 | `undefined`    | Controlled value untuk mode single                     |
-| `rangeValue`             | `DateRange`                    | `undefined`    | Controlled value untuk mode range                      |
-| `onChange`               | `(date: Date \| null) => void` | `undefined`    | Callback saat value single berubah                     |
-| `onRangeChange`          | `(range: DateRange) => void`   | `undefined`    | Callback saat range di-apply                           |
-| `trigger`                | `ReactNode`                    | `undefined`    | Custom trigger pengganti input default                 |
-| `open`                   | `boolean`                      | `undefined`    | Controlled open/close dropdown                         |
-| `onOpenChange`           | `(open: boolean) => void`      | `undefined`    | Callback perubahan open state                          |
-| `calendarProps`          | `CalendarOverrideProps`        | `undefined`    | Override props `Calendar` di mode single               |
-| `startDateCalendarProps` | `CalendarRangeOverrideProps`   | `undefined`    | Override kalender start di mode range                  |
-| `endDateCalendarProps`   | `CalendarRangeOverrideProps`   | `undefined`    | Override kalender end di mode range                    |
-| `wrapperClassName`       | `string`                       | `undefined`    | ClassName untuk dropdown content                       |
-| `containerClassName`     | `string`                       | `undefined`    | ClassName untuk wrapper terluar                        |
-| `size`                   | `"sm" \| "md" \| "lg"`         | `"md"`         | Ukuran DatePicker & konten                             |
-| `showController`         | `boolean`                      | `true`         | Tampilkan preset controller di mode range              |
-| `align`                  | `"start" \| "center" \| "end"` | `"start"`      | Align dropdown terhadap trigger                        |
-| `isClearable`            | `boolean`                      | `false`        | (Opsional) menentukan apakah inputan nya bisa di clear |
-| `placeholder`            | `string`                       | `undefined`    | (Opsional) menentukan default placeholder              |
+| Prop                     | Type                           | Default        | Description                                                                                    |
+| ------------------------ | ------------------------------ | -------------- | ---------------------------------------------------------------------------------------------- |
+| `format`                 | `DateFormat`                   | `"DD-MM-YYYY"` | Format tampilan/input tanggal                                                                  |
+| `mode`                   | `"single" \| "range"`          | `"single"`     | Mode pemilihan tanggal                                                                         |
+| `value`                  | `Date \| null`                 | `undefined`    | Controlled value untuk mode single                                                             |
+| `rangeValue`             | `DateRange`                    | `undefined`    | Controlled value untuk mode range                                                              |
+| `onChange`               | `(date: Date \| null) => void` | `undefined`    | Callback saat value single berubah                                                             |
+| `onRangeChange`          | `(range: DateRange) => void`   | `undefined`    | Callback saat range di-apply                                                                   |
+| `trigger`                | `ReactNode`                    | `undefined`    | Custom trigger pengganti input default                                                         |
+| `open`                   | `boolean`                      | `undefined`    | Controlled open/close dropdown                                                                 |
+| `onOpenChange`           | `(open: boolean) => void`      | `undefined`    | Callback perubahan open state                                                                  |
+| `calendarProps`          | `CalendarOverrideProps`        | `undefined`    | Override props `Calendar` di mode single                                                       |
+| `startDateCalendarProps` | `CalendarRangeOverrideProps`   | `undefined`    | Override kalender start di mode range                                                          |
+| `endDateCalendarProps`   | `CalendarRangeOverrideProps`   | `undefined`    | Override kalender end di mode range                                                            |
+| `wrapperClassName`       | `string`                       | `undefined`    | ClassName untuk dropdown content                                                               |
+| `containerClassName`     | `string`                       | `undefined`    | ClassName untuk wrapper terluar                                                                |
+| `size`                   | `"sm" \| "md" \| "lg"`         | `"md"`         | Ukuran DatePicker & konten                                                                     |
+| `showController`         | `boolean`                      | `true`         | Tampilkan preset controller di mode range                                                      |
+| `align`                  | `"start" \| "center" \| "end"` | `"start"`      | Align dropdown terhadap trigger                                                                |
+| `isClearable`            | `boolean`                      | `false`        | (Opsional) menentukan apakah inputan nya bisa di clear                                         |
+| `placeholder`            | `string`                       | `undefined`    | (Opsional) menentukan default placeholder                                                      |
+| `autoWidth`              | `boolean`                      | `false`        | (Opsional) menentukan apakah width dari input date itu berdasarkan konten atau statis by style |
 
 ---
 
