@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export type FormSizeType = 'sm' | 'md' | 'lg' | null;
 
 export interface FormLabelProps {
@@ -44,4 +46,5 @@ export interface FormFieldProps {
   className?: string;
   children: React.ReactNode;
   tooltip?: string;
+  style?: CSSProperties;
 }

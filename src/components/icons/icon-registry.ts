@@ -391,6 +391,8 @@ import ArrowUpCircleIcon from './icons/ArrowUpCircleIcon';
 import Share01Icon from './icons/Share01Icon';
 import BugSlashIcon from './icons/BugSlashIcon';
 import DragHandleIcon from './icons/DragHandleIcon';
+import FloppyDiskIcon from './icons/FloppyDiskIcon';
+import GridSquarePlusIcon from './icons/GridSquareplusIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -786,4 +788,6 @@ export const iconRegistry = {
   'user-edit-triangle-exclamation': UserEditTriangleExclamationIcon,
   'arrow-up-circle': ArrowUpCircleIcon,
   'share-01': Share01Icon,
+  'floppy-disk': FloppyDiskIcon,
+  'grid-square-plus': GridSquarePlusIcon,
 };

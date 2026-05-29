@@ -54,6 +54,7 @@ export interface DatePickerProps {
   containerClassName?: string;
   placeholder?: string;
   isClearable?: boolean;
+  autoWidth?: boolean;
 }
 
 export type DateFormat =
