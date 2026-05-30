@@ -47,13 +47,14 @@ export function DropdownItem({
 }: { children: React.ReactNode } & DropdownMenu.DropdownMenuItemProps) {
   return (
     <DropdownMenu.Item
-      className={cn(
-        'hover:bg-primary-50 hover:border-primary-300 flex cursor-pointer flex-row items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 outline-0 transition-all',
-        className
-      )}
+      className={cn('px-3 py-2 outline-0 transition-all', className)}
       {...props}
     >
       {children}
     </DropdownMenu.Item>
   );
+}
+
+export function DropdownSeparator() {
+  return <div className="border-b-1 text-gray-200" />;
 }

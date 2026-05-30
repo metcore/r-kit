@@ -4,7 +4,7 @@ import { Button } from '../../../components/button';
 import { Card, CardBody } from '../../../components/card';
 import { DatePicker, type DateRange } from '../../../components/date-picker';
 import { Icon } from '../../../components/icons';
-import illust from '../../assets/images/forms.png';
+import illust from '../../../assets/images/forms.png';
 import Footer from '../../components/Footer';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';

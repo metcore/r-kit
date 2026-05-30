@@ -209,6 +209,7 @@ function SelectPage() {
             code={codeExampleSelectBasic}
           >
             <Select
+              className="w-40"
               options={dataSingle}
               value={selectedUserBasic}
               onChange={(v) =>

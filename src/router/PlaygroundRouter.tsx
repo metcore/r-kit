@@ -34,6 +34,7 @@ import PlaygroundLayout from '../playground/layouts/PlaygroundLayout';
 import SidebarPage from '../playground/pages/SidebarPage';
 import InputOtpPage from '../playground/pages/form-field/InputOtpPage';
 import BadgePage from '../playground/pages/components/BadgePage';
+import DropdownPage from '../playground/pages/DropdownPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -45,6 +46,7 @@ export default function PlaygroundRouter() {
         <Route path="/button-group" element={<ButtonGroupPage />} />
         <Route path="/breadcrumb" element={<BreadcrumbPage />} />
         <Route path="/pagination" element={<PaginationPage />} />
+        <Route path="/dropdown" element={<DropdownPage />} />
         <Route path="/card" element={<CardPage />} />
         <Route path="/chip" element={<ChipPage />} />
         <Route path="/input" element={<InputPage />} />

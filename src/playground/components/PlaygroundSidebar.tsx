@@ -82,6 +82,7 @@ function PlaygroundSidebar() {
       children: [
         { path: '/playground/tabs', label: 'Tabs' },
         { path: '/playground/sheet', label: 'Sheet' },
+        { path: '/playground/dropdown', label: 'Dropdown' },
         { path: '/playground/breadcrumb', label: 'BreadCrumb' },
         { path: '/playground/pagination', label: 'Pagination' },
         { path: '/playground/sidebar', label: 'Sidebar' },
