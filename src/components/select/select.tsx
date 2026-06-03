@@ -418,7 +418,7 @@ export function Select<Extra extends object = object>({
         onMouseEnter={() => setHighlightedIndex(index)}
         onClick={() => handleSelect(option)}
       >
-        <Chip className="text-left" block selected={highlighted}>
+        <Chip className="text-left" block selected={highlighted || selected}>
           <div className="flex-1">
             {renderOption != null ? (
               renderOption(option, { selected })
