@@ -20,6 +20,7 @@ export interface InputProps
   onContainerResize?: (width: number) => void;
   icon?: IconNameProps;
   autoWidth?: boolean;
+  tooltip?: string;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -39,6 +40,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       rightAddonClassName,
       mergedAddon,
       isError,
+      tooltip,
       onContainerResize,
       icon,
       autoWidth = false,
@@ -76,6 +78,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         size={size}
         style={autoWidth && measureValue ? { width: 'fit-content' } : undefined}
         htmlFor={props?.id ?? generatedId}
+        tooltip={tooltip}
       >
         <div
           className={cn(
@@ -117,7 +120,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             }
             className={cn(
               inputVariants({ size }),
-              'font-metropolis w-full min-w-0! rounded-none border-none focus-visible:outline-none',
+              'font-metropolis h-10 w-full min-w-0! rounded-none border-none focus-visible:outline-none',
               Boolean(leftAddon) && 'pl-2',
               Boolean(rightAddon) && 'pr-2',
               Boolean(mergedAddon) && 'shadow-none',

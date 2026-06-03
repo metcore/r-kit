@@ -1,5 +1,9 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '../../lib/utils';
+import { BaseButton, type BaseButtonProps } from '../button/base-button';
+
+export type DropdownItemProps = DropdownMenu.DropdownMenuItemProps &
+  BaseButtonProps;
 
 export function Dropdown({
   children,
@@ -44,13 +48,18 @@ export function DropdownItem({
   children,
   className,
   ...props
-}: { children: React.ReactNode } & DropdownMenu.DropdownMenuItemProps) {
+}: DropdownItemProps) {
   return (
-    <DropdownMenu.Item
-      className={cn('px-3 py-2 outline-0 transition-all', className)}
-      {...props}
-    >
-      {children}
+    <DropdownMenu.Item asChild>
+      <BaseButton
+        className={cn(
+          'flex flex-wrap items-center gap-2 px-3 py-2 outline-0 transition-all',
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </BaseButton>
     </DropdownMenu.Item>
   );
 }

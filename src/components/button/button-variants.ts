@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const buttonVariants = cva(
-  'inline-flex cursor-pointer items-center justify-center rounded-lg font-medium transition-all duration-200 focus:ring focus:ring-offset-0 focus:outline-none disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:ring focus:ring-offset-0 focus:outline-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -13,7 +13,6 @@ export const buttonVariants = cva(
         sm: 'h-8 px-4 text-xs',
         md: 'h-9 px-5 text-sm',
         lg: 'h-10 px-5.5 text-sm',
-        icon: 'p-1.5',
       },
       color: {
         primary: '',
@@ -26,6 +25,10 @@ export const buttonVariants = cva(
         purple: '',
         gray: '',
       },
+      active: {
+        true: '',
+        false: '',
+      },
       block: {
         true: 'w-full',
         false: '',
@@ -37,13 +40,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'primary',
         className:
-          'bg-primary-1000 hover:bg-primary-950 focus:ring-primary-200 text-white',
+          'bg-primary-1000 hover:bg-primary-950 focus:ring-primary-200 data-[active=true]:bg-primary-950 text-white',
       },
       {
         variant: 'outline',
         color: 'primary',
         className:
-          'border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900',
+          'border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900 data-[active=true]:bg-primary-50',
       },
       {
         variant: 'tertiary',
@@ -61,7 +64,7 @@ export const buttonVariants = cva(
         variant: 'outline',
         color: 'secondary',
         className:
-          'border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900',
+          'border-primary-1000 text-primary-1000 hover:bg-primary-50 focus:ring-primary-900 data-[active=true]:bg-primary-50',
       },
       {
         variant: 'tertiary',
@@ -74,13 +77,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'success',
         className:
-          'bg-success-600 hover:bg-success-700 focus:ring-success-500 text-white',
+          'bg-success-600 hover:bg-success-700 focus:ring-success-500 data-[active=true]:bg-success-700 text-white',
       },
       {
         variant: 'outline',
         color: 'success',
         className:
-          'border-success-600 text-success-600 hover:bg-success-50 focus:ring-success-500',
+          'border-success-600 text-success-600 hover:bg-success-50 focus:ring-success-500 data-[active=true]:bg-success-50',
       },
       {
         variant: 'tertiary',
@@ -93,13 +96,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'danger',
         className:
-          'bg-danger-500 hover:bg-danger-700 focus:ring-danger-500 text-white',
+          'bg-danger-500 hover:bg-danger-700 focus:ring-danger-500 data-[active=true]:bg-danger-700 text-white',
       },
       {
         variant: 'outline',
         color: 'danger',
         className:
-          'border-danger-500 text-danger-600 hover:bg-danger-50 focus:ring-danger-500',
+          'border-danger-500 text-danger-600 hover:bg-danger-50 focus:ring-danger-500 data-[active=true]:bg-danger-50',
       },
       {
         variant: 'tertiary',
@@ -111,14 +114,15 @@ export const buttonVariants = cva(
       {
         variant: 'default',
         color: 'warning',
+        // active now mirrors hover (was bg-warning-400 = resting state).
         className:
-          'bg-warning-400 hover:bg-warning-500 focus:ring-warning-400 text-white',
+          'bg-warning-400 hover:bg-warning-500 focus:ring-warning-400 data-[active=true]:bg-warning-500 text-white',
       },
       {
         variant: 'outline',
         color: 'warning',
         className:
-          'border-warning-400 text-warning-400 hover:bg-warning-50 focus:ring-warning-500',
+          'border-warning-400 text-warning-400 hover:bg-warning-50 focus:ring-warning-500 data-[active=true]:bg-warning-50',
       },
       {
         variant: 'tertiary',
@@ -131,13 +135,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'info',
         className:
-          'bg-info-500 hover:bg-info-700 focus:ring-info-500 text-white',
+          'bg-info-500 hover:bg-info-700 focus:ring-info-500 data-[active=true]:bg-info-700 text-white',
       },
       {
         variant: 'outline',
         color: 'info',
         className:
-          'border-info-500 text-info-500 hover:bg-info-50 focus:ring-info-500',
+          'border-info-500 text-info-500 hover:bg-info-50 focus:ring-info-500 data-[active=true]:bg-info-50',
       },
       {
         variant: 'tertiary',
@@ -150,13 +154,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'orange',
         className:
-          'bg-orange-500 text-white hover:bg-orange-700 focus:ring-orange-500',
+          'bg-orange-500 text-white hover:bg-orange-700 focus:ring-orange-500 data-[active=true]:bg-orange-700',
       },
       {
         variant: 'outline',
         color: 'orange',
         className:
-          'border-orange-500 text-orange-500 hover:bg-orange-50 focus:ring-orange-700',
+          'border-orange-500 text-orange-500 hover:bg-orange-50 focus:ring-orange-700 data-[active=true]:bg-orange-50',
       },
       {
         variant: 'tertiary',
@@ -169,13 +173,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'purple',
         className:
-          'bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500',
+          'bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500 data-[active=true]:bg-purple-700',
       },
       {
         variant: 'outline',
         color: 'purple',
         className:
-          'border-purple-600 text-purple-600 hover:bg-purple-50 focus:ring-purple-500',
+          'border-purple-600 text-purple-600 hover:bg-purple-50 focus:ring-purple-500 data-[active=true]:bg-purple-50',
       },
       {
         variant: 'tertiary',
@@ -188,13 +192,13 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'gray',
         className:
-          'bg-gray-700 text-white hover:bg-gray-800 focus:ring-gray-400',
+          'bg-gray-700 text-white hover:bg-gray-800 focus:ring-gray-400 data-[active=true]:bg-gray-800',
       },
       {
         variant: 'outline',
         color: 'gray',
         className:
-          'border-gray-700 text-gray-700 hover:bg-gray-50 focus:ring-gray-400',
+          'border-gray-700 text-gray-700 hover:bg-gray-50 focus:ring-gray-400 data-[active=true]:bg-gray-50',
       },
       {
         variant: 'tertiary',
@@ -207,6 +211,7 @@ export const buttonVariants = cva(
       variant: 'default',
       size: 'md',
       color: 'primary',
+      active: false,
     },
   }
 );

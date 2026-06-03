@@ -27,7 +27,7 @@ export const FormLabel: React.FC<FormLabelProps> = ({
       )}
     >
       <div className="flex items-center gap-2">
-        <Text variant={variant}>
+        <Text variant={variant} weight="semibold">
           {children}
           {required && <span className="text-danger-500 ml-1">*</span>}
         </Text>

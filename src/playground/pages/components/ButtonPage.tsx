@@ -1,26 +1,185 @@
-import { Card, CardBody, CardHeader } from '../../../components/card';
 import { Button } from '../../../components/button';
 import { Icon } from '../../../components/icons';
 import { Hero } from '../../../components/hero';
-import { RoundedSpinner } from '../../../components/loading';
+import GridWrapper from '../../components/GridWrapper';
+import MainSection from '../../components/MainSection';
+import dedent from 'dedent';
+const codeExampleButtonBasic = dedent(`
+  import { Button } from '@herca/r-kit';
+  return (
+    <Button color="primary">Primary</Button>
+  );
+`);
+const codeExampleButtonLink = dedent(`
+import { Button } from '@herca/r-kit';
 
+export default function Example() {
+  return (
+    <Button href="/users">
+      Lihat Pengguna
+    </Button>
+  );
+}
+`);
+const codeExampleButtonIcon = dedent(`
+import { Button, Icon } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <Button className="gap-2" color="primary">
+      <Icon name="plus" size={16} />
+      Tambah Data
+    </Button>
+  );
+}
+`);
+const codeExampleButtonLoading = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <Button loading color="primary">
+      Menyimpan...
+    </Button>
+  );
+}
+`);
+
+const codeExampleButtonColors = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <>
+      <Button loading color="primary">
+        Primary
+      </Button>
+      <Button loading color="secondary">
+        Secondary
+      </Button>
+      <Button loading color="success">
+        Success
+      </Button>
+      <Button loading color="danger">
+        Danger
+      </Button>
+      <Button loading color="warning">
+        Warning
+      </Button>
+      <Button loading color="info">
+        Info
+      </Button>
+      <Button loading color="orang">
+        Orang
+      </Button>
+      <Button loading color="purple">
+        Purple
+      </Button>
+      <Button loading color="gray">
+        Gray
+      </Button>
+    </>
+  );
+}
+`);
+
+const codeExampleButtonVariants = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <>
+      <Button loading variant="default">
+        Default
+      </Button>
+      <Button loading variant="outline">
+        Outline
+      </Button>
+      <Button loading variant="tertiary">
+        Tertiary
+      </Button>
+    </>
+  );
+}
+`);
+
+const codeExampleButtonSize = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <>
+      <Button loading size="sm">
+        Small
+      </Button>
+      <Button loading size="md">
+        Medium
+      </Button>
+      <Button loading size="lg">
+        Large
+      </Button>
+    </>
+  );
+}
+`);
+
+const codeExampleButtonDisabled = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <>
+      <Button disabled>
+        Simpan
+      </Button>
+    </>
+  );
+}
+`);
+
+const codeExampleButtonActive = dedent(`
+import { Button } from '@herca/r-kit';
+
+export default function Example() {
+  return (
+    <>
+      <Button disabled>
+        Hari Ini
+      </Button>
+    </>
+  );
+}
+`);
 function ButtonPage() {
   return (
     <>
       <Hero className="mb-4">
         <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Button</h1>
+        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900"> Button</h1>
         <p className="text-sm text-gray-800">
-          Elemen interaktif utama yang digunakan untuk mengeksekusi perintah
-          atau memulai alur tindakan.
+          Elemen interaktif utama yang digunakan untuk menjalankan aksi,
+          mengirim form, atau berpindah halaman.
         </p>
       </Hero>
+
       <div className="grid grid-cols-1 gap-4">
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
+        <GridWrapper>
+          <MainSection title="Basic Usage" code={codeExampleButtonBasic}>
+            <Button color="primary" onClick={() => alert('OnClick')}>
+              Simpan Data
+            </Button>
+          </MainSection>
+          <MainSection title="As Link" code={codeExampleButtonLink}>
+            <div className="flex flex-wrap gap-2">
+              <Button href="/playground/button"> As Link</Button>
+              <Button href="/playground/button" target="_blank">
+                Target Blank
+              </Button>
+            </div>
+          </MainSection>
+        </GridWrapper>
+        <MainSection title="Colors" code={codeExampleButtonColors}>
+          <div className="flex flex-wrap gap-2">
             <Button color="primary">Primary</Button>
             <Button color="secondary">Secondary</Button>
             <Button color="success">Success</Button>
@@ -30,325 +189,58 @@ function ButtonPage() {
             <Button color="orange">Orange</Button>
             <Button color="purple">Purple</Button>
             <Button color="gray">Gray</Button>
-          </CardBody>
-        </Card>
-
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button with Icon
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
+          </div>
+        </MainSection>
+        <GridWrapper>
+          <MainSection title="With Icon" code={codeExampleButtonIcon}>
             <Button className="gap-2" color="primary">
-              <Icon name="arrow-left-circle" size={16} /> Primary
-              <Icon name="arrow-right-circle" size={16} />
+              <Icon name="plus" size={16} />
+              Tambah Data
             </Button>
-            <Button className="gap-2" color="secondary">
-              <Icon name="arrow-left-circle" size={16} /> Secondary
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="success">
-              <Icon name="arrow-left-circle" size={16} /> Success
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="danger">
-              <Icon name="arrow-left-circle" size={16} /> Danger
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="warning">
-              <Icon name="arrow-left-circle" size={16} /> Warning
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="info">
-              <Icon name="arrow-left-circle" size={16} /> Info
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="orange">
-              <Icon name="arrow-left-circle" size={16} /> Orange
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="purple">
-              <Icon name="arrow-left-circle" size={16} /> Purple
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-            <Button className="gap-2" color="gray">
-              <Icon name="arrow-left-circle" size={16} /> Gray
-              <Icon name="arrow-right-circle" size={16} />
-            </Button>
-          </CardBody>
-        </Card>
+          </MainSection>
 
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Outline
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Button variant={'outline'} color="primary">
-              Primary
-            </Button>
-            <Button variant={'outline'} color="secondary">
-              Secondary
-            </Button>
-            <Button variant={'outline'} color="success">
-              Success
-            </Button>
-            <Button variant={'outline'} color="danger">
-              Danger
-            </Button>
-            <Button variant={'outline'} color="warning">
-              Warning
-            </Button>
-            <Button variant={'outline'} color="info">
-              Info
-            </Button>
-            <Button variant={'outline'} color="orange">
-              Orange
-            </Button>
-            <Button variant={'outline'} color="purple">
-              Purple
-            </Button>
-            <Button variant={'outline'} color="gray">
-              Gray
-            </Button>
-          </CardBody>
-        </Card>
+          <MainSection title="Variants" code={codeExampleButtonVariants}>
+            <div className="flex flex-wrap gap-2">
+              <Button color="primary">Default</Button>
 
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Tertiary
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Button variant={'tertiary'} color="primary">
-              Primary
-            </Button>
-            <Button variant={'tertiary'} color="secondary">
-              Secondary
-            </Button>
-            <Button variant={'tertiary'} color="success">
-              Success
-            </Button>
-            <Button variant={'tertiary'} color="danger">
-              Danger
-            </Button>
-            <Button variant={'tertiary'} color="warning">
-              Warning
-            </Button>
-            <Button variant={'tertiary'} color="info">
-              Info
-            </Button>
-            <Button variant={'tertiary'} color="orange">
-              Orange
-            </Button>
-            <Button variant={'tertiary'} color="purple">
-              Purple
-            </Button>
-            <Button variant={'tertiary'} color="gray">
-              Gray
-            </Button>
-          </CardBody>
-        </Card>
+              <Button variant="outline" color="primary">
+                Outline
+              </Button>
 
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Icon Only
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Button size={'icon'} color="primary">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="secondary">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="success">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="danger">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="warning">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="info">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="orange">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="purple">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-            <Button size={'icon'} color="gray">
-              <Icon name="arrow-left-circle" size={16} />
-            </Button>
-          </CardBody>
-        </Card>
+              <Button variant="tertiary" color="primary">
+                Tertiary
+              </Button>
+            </div>
+          </MainSection>
 
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Disabled
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
+          <MainSection title="Sizes" code={codeExampleButtonSize}>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm">Small</Button>
+              <Button size="md">Medium</Button>
+              <Button size="lg">Large</Button>
+            </div>
+          </MainSection>
+
+          <MainSection title="Loading" code={codeExampleButtonLoading}>
+            <Button loading color="primary">
+              Menyimpan...
+            </Button>
+          </MainSection>
+
+          <MainSection title="Disabled" code={codeExampleButtonDisabled}>
             <Button disabled color="primary">
-              Primary
+              Simpan
             </Button>
-            <Button disabled color="secondary">
-              Secondary
-            </Button>
-            <Button disabled color="success">
-              Success
-            </Button>
-            <Button disabled color="danger">
-              Danger
-            </Button>
-            <Button disabled color="warning">
-              Warning
-            </Button>
-            <Button disabled color="info">
-              Info
-            </Button>
-            <Button disabled color="orange">
-              Orange
-            </Button>
-            <Button disabled color="purple">
-              Purple
-            </Button>
-            <Button disabled color="gray">
-              Gray
-            </Button>
-          </CardBody>
-        </Card>
+          </MainSection>
 
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Loading
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <Button className="gap-2" color="primary">
-              <RoundedSpinner size={16} stroke={1.5} /> Primary
+          <MainSection title="Active" code={codeExampleButtonActive}>
+            <Button active color="primary">
+              Hari Ini
             </Button>
-            <Button className="gap-2" color="secondary">
-              <RoundedSpinner size={16} stroke={1.5} /> Secondary
-            </Button>
-            <Button className="gap-2" color="success">
-              <RoundedSpinner size={16} stroke={1.5} /> Success
-            </Button>
-            <Button className="gap-2" color="danger">
-              <RoundedSpinner size={16} stroke={1.5} /> Danger
-            </Button>
-            <Button className="gap-2" color="warning">
-              <RoundedSpinner size={16} stroke={1.5} /> Warning
-            </Button>
-            <Button className="gap-2" color="info">
-              <RoundedSpinner size={16} stroke={1.5} /> Info
-            </Button>
-            <Button className="gap-2" color="orange">
-              <RoundedSpinner size={16} stroke={1.5} /> Orange
-            </Button>
-            <Button className="gap-2" color="purple">
-              <RoundedSpinner size={16} stroke={1.5} /> Purple
-            </Button>
-            <Button className="gap-2" color="gray">
-              <RoundedSpinner size={16} stroke={1.5} /> Gray
-            </Button>
-          </CardBody>
-        </Card>
-
-        <Card size={'lg'}>
-          <CardHeader divider className="font-semibold text-gray-900">
-            Button Size
-          </CardHeader>
-          <CardBody className="flex flex-wrap gap-8">
-            <div className="flex flex-wrap gap-2">
-              <Button size={'sm'} color="primary">
-                Primary sm
-              </Button>
-              <Button size={'sm'} color="secondary">
-                Secondary sm
-              </Button>
-              <Button size={'sm'} color="success">
-                Success sm
-              </Button>
-              <Button size={'sm'} color="danger">
-                Danger sm
-              </Button>
-              <Button size={'sm'} color="warning">
-                Warning sm
-              </Button>
-              <Button size={'sm'} color="info">
-                Info sm
-              </Button>
-              <Button size={'sm'} color="orange">
-                Orange sm
-              </Button>
-              <Button size={'sm'} color="purple">
-                Purple sm
-              </Button>
-              <Button size={'sm'} color="gray">
-                Gray sm
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button size={'md'} color="primary">
-                Primary md
-              </Button>
-              <Button size={'md'} color="secondary">
-                Secondary md
-              </Button>
-              <Button size={'md'} color="success">
-                Success md
-              </Button>
-              <Button size={'md'} color="danger">
-                Danger md
-              </Button>
-              <Button size={'md'} color="warning">
-                Warning md
-              </Button>
-              <Button size={'md'} color="info">
-                Info md
-              </Button>
-              <Button size={'md'} color="orange">
-                Orange md
-              </Button>
-              <Button size={'md'} color="purple">
-                Purple md
-              </Button>
-              <Button size={'md'} color="gray">
-                Gray md
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button size={'lg'} color="primary">
-                Primary lg
-              </Button>
-              <Button size={'lg'} color="secondary">
-                Secondary lg
-              </Button>
-              <Button size={'lg'} color="success">
-                Success lg
-              </Button>
-              <Button size={'lg'} color="danger">
-                Danger lg
-              </Button>
-              <Button size={'lg'} color="warning">
-                Warning lg
-              </Button>
-              <Button size={'lg'} color="info">
-                Info lg
-              </Button>
-              <Button size={'lg'} color="orange">
-                Orange lg
-              </Button>
-              <Button size={'lg'} color="purple">
-                Purple lg
-              </Button>
-              <Button size={'lg'} color="gray">
-                Gray lg
-              </Button>
-            </div>
-          </CardBody>
-        </Card>
+          </MainSection>
+        </GridWrapper>
       </div>
     </>
   );
 }
-
 export default ButtonPage;

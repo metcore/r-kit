@@ -35,6 +35,7 @@ import SidebarPage from '../playground/pages/SidebarPage';
 import InputOtpPage from '../playground/pages/form-field/InputOtpPage';
 import BadgePage from '../playground/pages/components/BadgePage';
 import DropdownPage from '../playground/pages/DropdownPage';
+import ButtonIconPage from '../playground/pages/components/ButtonIconPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -44,6 +45,7 @@ export default function PlaygroundRouter() {
         <Route path="/avatar" element={<AvatarPage />} />
         <Route path="/button" element={<ButtonPage />} />
         <Route path="/button-group" element={<ButtonGroupPage />} />
+        <Route path="/button-icon" element={<ButtonIconPage />} />
         <Route path="/breadcrumb" element={<BreadcrumbPage />} />
         <Route path="/pagination" element={<PaginationPage />} />
         <Route path="/dropdown" element={<DropdownPage />} />

@@ -95,15 +95,11 @@ export default function InputFieldPage() {
             className="flex-1"
             code={exampleLabelText}
           >
-            <div className="grid grid-cols-3 gap-8">
-              <Input label="Default Input" icon="user" placeholder="Username" />
-              <Input label="Input Aktif" autoFocus value={'Maman_'} />
-              <Input
-                label="Filled Input"
-                value={filledInput}
-                onChange={(e) => setFilledInput(e.target.value)}
-              />
-            </div>
+            <Input
+              label="Filled Input"
+              value={filledInput}
+              onChange={(e) => setFilledInput(e.target.value)}
+            />
           </MainSection>
         </GridWrapper>
         <GridWrapper>
@@ -118,12 +114,20 @@ export default function InputFieldPage() {
               hint="This is helper text"
             />
           </MainSection>
-          <MainSection title="Input Size" className="flex-1" code={exampleSize}>
-            <div className="grid grid-cols-3 gap-8">
-              <Input size="sm" placeholder="Input small" />
-              <Input size="md" placeholder="input medium" />
-              <Input size="lg" placeholder="Input large" />
-            </div>
+          <MainSection
+            title="Error / Invalid"
+            className="flex-1"
+            code={exampleInvalid}
+          >
+            <Input
+              mergedAddon
+              placeholder="Username"
+              label="error Mode"
+              errorMessages={'Username is required'}
+              rightAddon={
+                <Icon name="info-circle-fill" className="text-danger-500" />
+              }
+            />
           </MainSection>
         </GridWrapper>
         <GridWrapper>
@@ -134,18 +138,34 @@ export default function InputFieldPage() {
           >
             <Input placeholder="Username" disabled />
           </MainSection>
+          <MainSection title="Input Size" className="flex-1" code={exampleSize}>
+            <div className="grid grid-cols-3 gap-8">
+              <Input size="sm" placeholder="Input small" />
+              <Input size="md" placeholder="input medium" />
+              <Input size="lg" placeholder="Input large" />
+            </div>
+          </MainSection>
+        </GridWrapper>
+        <GridWrapper>
           <MainSection
-            title="Error / Invalid"
+            title="Tooltip"
             className="flex-1"
-            code={exampleInvalid}
+            code={exampleDisabled}
           >
             <Input
-              mergedAddon
               placeholder="Username"
-              errorMessages={'Username is required'}
-              rightAddon={
-                <Icon name="info-circle-fill" className="text-danger-500" />
-              }
+              disabled
+              label="Username"
+              tooltip="Tooltipnnya"
+            />
+          </MainSection>
+          <MainSection title="Input Size" className="flex-1" code={exampleSize}>
+            <Input
+              placeholder="Username"
+              disabled
+              label="Username"
+              required
+              tooltip="Tooltipnnya"
             />
           </MainSection>
         </GridWrapper>

@@ -67,6 +67,7 @@ function PlaygroundSidebar() {
         { path: '/playground/calendar', label: 'Calendar' },
         { path: '/playground/badge', label: 'Badge' },
         { path: '/playground/button', label: 'Button' },
+        { path: '/playground/button-icon', label: 'Button Icon' },
         { path: '/playground/button-group', label: 'Button Group' },
         { path: '/playground/card', label: 'Card' },
         { path: '/playground/chip', label: 'Chip' },
