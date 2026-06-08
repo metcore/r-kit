@@ -1,5 +1,9 @@
 import illust from '../../../assets/images/forms.png';
-import { DatePicker, type DateRange } from '../../../components/date-picker';
+import {
+  DatePicker,
+  formatDateToString,
+  type DateRange,
+} from '../../../components/date-picker';
 import { useState } from 'react';
 import MainSection from '../../components/MainSection';
 import { Button } from '../../../components/button';
@@ -27,6 +31,9 @@ export default function DatePickerPage() {
   const [rangeValue, setRangeValue] = useState<DateRange>({
     start: addDays(new Date(), -6),
     end: new Date(),
+  });
+  console.log({
+    rangeValue: formatDateToString(rangeValue?.start, 'YYYY-MM-DD'),
   });
   const [open, setOpen] = useState(false);
 
@@ -148,7 +155,14 @@ export default function DatePickerPage() {
               <DatePicker
                 mode="range"
                 format="DD-MM-YYYY"
-                rangeValue={rangeValue}
+                rangeValue={{
+                  start: new Date(
+                    formatDateToString(rangeValue?.start, 'YYYY-MM-DD')
+                  ),
+                  end: new Date(
+                    formatDateToString(rangeValue?.end, 'YYYY-MM-DD')
+                  ),
+                }}
                 onRangeChange={setRangeValue}
               />
               <p className="text-xs text-gray-500">
