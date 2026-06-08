@@ -1,5 +1,5 @@
 import dedent from 'dedent';
-import { Card, CardBody, CardMedia } from '../../components/card';
+import { Card, CardBody, CardHeader, CardMedia } from '../../components/card';
 import { Text } from '../../components/text';
 import illust from '../../assets/images/typography.png';
 import MainSection from '../components/MainSection';
@@ -8,20 +8,90 @@ import Footer from '../components/Footer';
 import { Button } from '../../components/button';
 
 export default function CardPage() {
-  const exampleCodeH1 = dedent(`
-    <Text 
-      value="Bold" 
-      weight="bold" 
-      variant="h1" 
-    />
+  const exampleCodeCard = dedent(`
+    import { Card, CardBody, CardMedia } from '../../components/card';
+    import { Text } from '../../components/text';
+    import { Button } from '../../components/button';
+
+    export default function CardExample() {
+      return (
+        <Card>
+          <CardMedia
+            image="/images/card-example.jpg"
+            alt="Paella dish"
+          />
+          <CardBody>
+            <div className="flex flex-col gap-4">
+              <Text variant="t2" weight="semibold" className="text-gray-900">
+                Card Title
+              </Text>
+              <Text variant="t3" weight="regular" className="text-gray-700">
+                Some quick example text to build on the card title and
+                make up the bulk of the card's content.
+              </Text>
+              <div className="grid grid-cols-2 gap-4">
+                <Button variant="outline" size="sm">
+                  Secondary
+                </Button>
+                <Button size="sm" block>
+                  Primary
+                </Button>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      );
+    }
+
+    // Compact variant: pass size="sm" -> <Card size="sm"> ... </Card>
   `);
 
-  const exampleCodeP1 = dedent(`
-    <Text 
-      value="Bold" 
-      weight="bold" 
-      variant="p1" 
-    />
+  const exampleCodeColorFilled = dedent(`
+    import { Card, CardBody } from '../../components/card';
+    import { Text } from '../../components/text';
+
+    export default function ColorCardFilled() {
+      return (
+        <Card color="primary" variant="filled">
+          <CardBody>
+            <Text variant="t2" weight="semibold">
+              Primary Card
+            </Text>
+            <Text variant="t3" weight="regular">
+              Some quick example text to build on the card title and
+              make up the bulk of the card's content.
+            </Text>
+          </CardBody>
+        </Card>
+      );
+    }
+
+    // color: primary | warning | danger | success | info | orange | purple | gray
+  `);
+
+  const exampleCodeColorDefault = dedent(`
+    import { Card, CardBody } from '../../components/card';
+    import { Text } from '../../components/text';
+
+    export default function ColorCard() {
+      return (
+        <Card color="primary">
+          <CardBody>
+            <Text variant="t2" weight="semibold">
+              Primary Card
+            </Text>
+            <Text variant="t3" weight="regular">
+              Some quick example text to build on the card title and
+              make up the bulk of the card's content.
+            </Text>
+          </CardBody>
+        </Card>
+      );
+    }
+
+    // Same colors as the filled section.
+    // Omit the variant prop for the default style;
+    // add variant="filled" for the solid style shown in the previous section.
   `);
 
   return (
@@ -34,7 +104,18 @@ export default function CardPage() {
       />
 
       <div className="flex flex-col gap-4">
-        <MainSection title="Card" code={exampleCodeH1}>
+        <MainSection title="Basic">
+          <Card>
+            <CardHeader>Header Card</CardHeader>
+            <CardBody>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius
+              quae doloremque ab dolore ipsum accusamus impedit dolorem unde ad
+              a autem quod possimus exercitationem cumque, quisquam placeat,
+              minus, tenetu
+            </CardBody>
+          </Card>
+        </MainSection>
+        <MainSection title="Card" code={exampleCodeCard}>
           <div className="flex flex-1 flex-col gap-8 overflow-auto">
             <div className="grid grid-cols-4 gap-4">
               <Card>
@@ -59,12 +140,12 @@ export default function CardPage() {
                       Some quick example text to build on the card title and
                       make up the bulk of the cards content.
                     </Text>
-                    <div className="flex grid grid-cols-2 flex-col gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <Button variant="outline" size="sm">
                         Secondary
                       </Button>
                       <Button size="sm" block>
-                        Secondary
+                        Primary
                       </Button>
                     </div>
                   </div>
@@ -92,22 +173,19 @@ export default function CardPage() {
                       Some quick example text to build on the card title and
                       make up the bulk of the cards content.
                     </Text>
-                    <div className="flex grid grid-cols-2 flex-col gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <Button variant="outline" size="sm">
                         Secondary
                       </Button>
                       <Button size="sm" block>
-                        Secondary
+                        Primary
                       </Button>
                     </div>
                   </div>
                 </CardBody>
               </Card>
               <div className="col-span-2">
-                <Card
-                  size="sm"
-                  className="flex grid grid-cols-2 flex-col gap-4"
-                >
+                <Card size="sm" className="grid grid-cols-2 gap-4">
                   <CardMedia
                     image="../../src/assets/images/card-example.jpg"
                     alt="Paella dish"
@@ -129,12 +207,12 @@ export default function CardPage() {
                         Some quick example text to build on the card title and
                         make up the bulk of the cards content.
                       </Text>
-                      <div className="flex grid grid-cols-2 flex-col gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <Button variant="outline" size="sm">
                           Secondary
                         </Button>
                         <Button size="sm" block>
-                          Secondary
+                          Primary
                         </Button>
                       </div>
                     </div>
@@ -145,7 +223,7 @@ export default function CardPage() {
           </div>
         </MainSection>
 
-        <MainSection title="Color Card" code={exampleCodeP1}>
+        <MainSection title="Color Card (Filled)" code={exampleCodeColorFilled}>
           <div className="flex flex-1 flex-col gap-8 overflow-auto">
             <div className="grid grid-cols-4 gap-4">
               <Card color="primary" variant="filled">
@@ -240,7 +318,10 @@ export default function CardPage() {
           </div>
         </MainSection>
 
-        <MainSection title="Color Card" code={exampleCodeP1}>
+        <MainSection
+          title="Color Card (Default)"
+          code={exampleCodeColorDefault}
+        >
           <div className="flex flex-1 flex-col gap-8 overflow-auto">
             <div className="grid grid-cols-4 gap-4">
               <Card color="primary">

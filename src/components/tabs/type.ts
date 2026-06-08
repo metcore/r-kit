@@ -10,6 +10,7 @@ export interface TabsContextValue {
 }
 
 export interface TabsProps {
+  onLoad?: (value: string) => void;
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;

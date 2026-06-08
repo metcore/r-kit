@@ -93,7 +93,10 @@ export const Tabs: React.FC<TabsProps> = ({
   unmountOnHide = true,
   className,
   children,
+  onLoad,
 }) => {
+  const hasLoadedRef = useRef(false);
+
   const [searchParams, setSearchParams] = useUrlSearchParams();
   const [uncontrolledValue, setUncontrolledValue] = useState<string>(
     defaultValue ?? ''
@@ -147,6 +150,12 @@ export const Tabs: React.FC<TabsProps> = ({
   const unregisterTrigger = (triggerValue: string) => {
     triggersRef.current.delete(triggerValue);
   };
+
+  useEffect(() => {
+    if (hasLoadedRef.current) return;
+    hasLoadedRef.current = true;
+    onLoad?.(value);
+  }, [value, onLoad]);
 
   return (
     <TabsContext.Provider

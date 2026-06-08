@@ -176,9 +176,7 @@ function ButtonIconPage() {
           <MainSection title="Variants" code={codeExampleVariants}>
             <div className="flex gap-2">
               <ButtonIcon icon="user" color="primary" />
-
               <ButtonIcon icon="user" color="primary" variant="outline" />
-
               <ButtonIcon icon="user" color="primary" variant="tertiary" />
             </div>
           </MainSection>
@@ -186,9 +184,7 @@ function ButtonIconPage() {
           <MainSection title="Sizes" code={codeExampleSizes}>
             <div className="flex items-center gap-2">
               <ButtonIcon icon="user" size="sm" />
-
               <ButtonIcon icon="user" size="md" />
-
               <ButtonIcon icon="user" size="lg" />
             </div>
           </MainSection>
@@ -203,6 +199,21 @@ function ButtonIconPage() {
 
           <MainSection title="Active" code={codeExampleActive}>
             <ButtonIcon active icon="user" color="primary" />
+          </MainSection>
+          <MainSection title="bulat" code={codeExampleActive}>
+            <ButtonIcon icon="user" rounded color="primary" />
+          </MainSection>
+          <MainSection title="Indicator">
+            <ButtonIcon
+              indicatorProps={{
+                color: 'danger',
+                value: '22+',
+                size: 'sm',
+                indicatorClassName: 'px-[1.5px]!',
+              }}
+              color="gray"
+              icon="bell"
+            />
           </MainSection>
         </GridWrapper>
       </div>

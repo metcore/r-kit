@@ -10,7 +10,12 @@ import React, {
   type MouseEvent as RMouseEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
-import type { SelectGroup, SelectOption, SelectProps } from './type';
+import type {
+  SelectGroup,
+  SelectOption,
+  SelectProps,
+  SelectRawValue,
+} from './type';
 import { Icon } from '../icons';
 import { cn, fieldHasError } from '../../lib/utils';
 import { FormField } from '../form';
@@ -20,20 +25,20 @@ import { Chip } from '../chip';
 import { Text } from '../text';
 import { Button } from '../button';
 import { selectSize } from './selectSize';
+import { useInputGroup } from '../input-group';
 
 const isGroup = <Extra extends object>(
   item: SelectOption<Extra> | SelectGroup<Extra>
 ): item is SelectGroup<Extra> =>
   item != null && Array.isArray((item as SelectGroup<Extra>).options);
 
+const isRawValue = (v: unknown): v is SelectRawValue =>
+  typeof v === 'string' || typeof v === 'number';
+
 const getSearchText = <Extra extends object>(
   option: SelectOption<Extra>
 ): string =>
   typeof option.label === 'string' ? option.label : String(option.value ?? '');
-
-const asArray = <Extra extends object>(
-  val: SelectOption<Extra> | SelectOption<Extra>[] | null
-): SelectOption<Extra>[] => (Array.isArray(val) ? val : val ? [val] : []);
 
 type SelectFilterOption<Extra extends object> =
   | boolean
@@ -89,6 +94,7 @@ export function Select<Extra extends object = object>({
   size = 'md',
   filterOption = true,
   isLoading = false,
+  getOptionByValue,
 }: SelectProps<Extra> & {
   filterOption?: SelectFilterOption<Extra>;
   isLoading?: boolean;
@@ -106,12 +112,28 @@ export function Select<Extra extends object = object>({
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
 
+  const group = useInputGroup();
+  const inGroup = group !== null;
+
   const onOptionsChangeRef = useRef(onOptionsChange);
   const onOpenChangeRef = useRef(onOpenChange);
   useEffect(() => {
     onOptionsChangeRef.current = onOptionsChange;
     onOpenChangeRef.current = onOpenChange;
   });
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!isOpen || !el) return;
+
+    const stop = (e: Event) => e.stopPropagation();
+    el.addEventListener('wheel', stop, { passive: false });
+    el.addEventListener('touchmove', stop, { passive: false });
+
+    return () => {
+      el.removeEventListener('wheel', stop);
+      el.removeEventListener('touchmove', stop);
+    };
+  }, [isOpen]);
 
   const { filteredOptions, renderEntries } = useMemo(() => {
     const flat: SelectOption<Extra>[] = [];
@@ -151,6 +173,45 @@ export function Select<Extra extends object = object>({
     return { filteredOptions: flat, renderEntries: entries };
   }, [options, searchTerm, filterOption]);
 
+  const flatOptions = useMemo(() => {
+    const flat: SelectOption<Extra>[] = [];
+    for (const item of options as (
+      | SelectOption<Extra>
+      | SelectGroup<Extra>
+    )[]) {
+      if (isGroup(item)) flat.push(...item.options);
+      else flat.push(item);
+    }
+    return flat;
+  }, [options]);
+
+  const toOption = useCallback(
+    (v: SelectOption<Extra> | SelectRawValue): SelectOption<Extra> => {
+      if (!isRawValue(v)) return v;
+      return (
+        getOptionByValue?.(v) ??
+        flatOptions.find((o) => o.value === v) ??
+        ({ value: v, label: String(v) } as SelectOption<Extra>) // fallback: label = id mentah
+      );
+    },
+    [flatOptions, getOptionByValue]
+  );
+
+  const selectedOptions = useMemo<SelectOption<Extra>[]>(() => {
+    if (
+      value == null ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0)
+    ) {
+      return [];
+    }
+    const arr = (Array.isArray(value) ? value : [value]) as (
+      | SelectOption<Extra>
+      | SelectRawValue
+    )[];
+    return arr.map(toOption);
+  }, [value, toOption]);
+
   const handleScroll = useCallback(() => {
     const el = listContainerRef.current;
     if (!el || Boolean(isLoadingMore)) return;
@@ -184,52 +245,41 @@ export function Select<Extra extends object = object>({
   }, []);
 
   const isSelected = useCallback(
-    (option: SelectOption<Extra>): boolean => {
-      if (isMultiMode) {
-        return asArray(value).some((v) => v.value === option.value);
-      }
-      return (value as SelectOption<Extra> | null)?.value === option.value;
-    },
-    [isMultiMode, value]
+    (option: SelectOption<Extra>): boolean =>
+      selectedOptions.some((o) => o.value === option.value),
+    [selectedOptions]
   );
 
   const handleSelect = useCallback(
     (option: SelectOption<Extra>) => {
       if (isMultiMode) {
-        const arr = asArray(value);
-        const exists = arr.some((v) => v.value === option.value);
-
+        const exists = selectedOptions.some((v) => v.value === option.value);
         const newValue = exists
-          ? arr.filter((v) => v.value !== option.value)
-          : [...arr, option];
-
-        onChange?.(newValue);
-
+          ? selectedOptions.filter((v) => v.value !== option.value)
+          : [...selectedOptions, option];
+        onChange?.(newValue); // catatan: tetap emit OBJECT — lihat di bawah
         const idx = filteredOptions.findIndex((o) => o.value === option.value);
         setHighlightedIndex(idx);
         containerRef.current?.focus();
         return;
       }
-
       onChange?.(option);
       setIsOpen(false);
       setSearchTerm('');
     },
-    [isMultiMode, value, onChange, filteredOptions]
+    [isMultiMode, selectedOptions, onChange, filteredOptions]
   );
 
   const handleRemove = useCallback(
     (option: SelectOption<Extra>, e: RMouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-
       if (isMultiMode) {
-        const arr = asArray(value);
-        onChange?.(arr.filter((v) => v.value !== option.value));
+        onChange?.(selectedOptions.filter((v) => v.value !== option.value));
       } else {
         onChange?.(null);
       }
     },
-    [isMultiMode, value, onChange]
+    [isMultiMode, selectedOptions, onChange]
   );
 
   const handleClear = useCallback(
@@ -358,17 +408,13 @@ export function Select<Extra extends object = object>({
   }, [searchOptions]);
 
   const getDisplayValue = () => {
-    const isEmpty =
-      value == null || (isMultiMode && asArray(value).length === 0);
-
-    if (isEmpty) {
+    if (selectedOptions.length === 0) {
       return <span className="text-gray-500">{placeholder}</span>;
     }
-
     if (isMultiMode) {
       return (
         <div className="flex flex-wrap gap-1">
-          {asArray(value).map((item) => (
+          {selectedOptions.map((item) => (
             <div
               key={item.value}
               className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
@@ -386,23 +432,22 @@ export function Select<Extra extends object = object>({
         </div>
       );
     }
-
+    const selected = selectedOptions[0];
     return renderValue != null ? (
-      renderValue(value as SelectOption<Extra>)
+      renderValue(selected)
     ) : (
       <>
         <Text variant="t2" weight="medium" className="text-gray-900">
-          {(value as SelectOption<Extra>).label}
+          {selected.label}
         </Text>
         <Text variant="t3" weight="regular" className="text-gray-700">
-          {(value as SelectOption<Extra>).description}
+          {selected.description}
         </Text>
       </>
     );
   };
 
-  const showClearButton =
-    isClearable && (isMultiMode ? asArray(value).length > 0 : value !== null);
+  const showClearButton = isClearable && selectedOptions.length > 0;
 
   const hasError = fieldHasError(errorMessages);
 
@@ -418,7 +463,7 @@ export function Select<Extra extends object = object>({
         onMouseEnter={() => setHighlightedIndex(index)}
         onClick={() => handleSelect(option)}
       >
-        <Chip className="text-left" block selected={highlighted}>
+        <Chip className="text-left" block selected={highlighted || selected}>
           <div className="flex-1">
             {renderOption != null ? (
               renderOption(option, { selected })
@@ -480,7 +525,8 @@ export function Select<Extra extends object = object>({
   const menu = (
     <div
       ref={menuRef}
-      style={{ zIndex: 9999, ...menuStyle }}
+      data-select-menu=""
+      style={{ zIndex: 9999, pointerEvents: 'auto', ...menuStyle }}
       onKeyDown={handleKeyDown}
       className={cn(
         'flex max-h-80 min-w-40 flex-col items-stretch gap-2 overflow-hidden rounded-lg border border-gray-200 bg-white p-2'
@@ -570,6 +616,87 @@ export function Select<Extra extends object = object>({
     </div>
   );
 
+  const content = (
+    <div
+      ref={containerRef}
+      className={cn(
+        'focus-within:outline-none',
+        inGroup ? 'relative h-full shrink-0' : 'relative w-full',
+        className
+      )}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+    >
+      {/* Input Field */}
+      {trigger !== undefined && (
+        <div
+          aria-selected={isOpen}
+          onClick={handleClickInput}
+          tabIndex={isDisabledMode ? -1 : 0}
+          className={triggerClassName}
+        >
+          {trigger}
+        </div>
+      )}
+      {trigger === undefined && (
+        <div
+          aria-selected={isOpen}
+          className={cn(
+            'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
+            inGroup
+              ? 'h-full items-center bg-transparent'
+              : cn(
+                  'focus:ring-primary-300 rounded-lg border bg-white focus:ring',
+                  selectSize({ size }),
+                  isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
+                  hasError && 'border-danger-500'
+                ),
+            isDisabledMode && 'cursor-not-allowed bg-gray-100'
+          )}
+          onClick={handleClickInput}
+          tabIndex={isDisabledMode ? -1 : 0}
+        >
+          {icon && (
+            <div className="flex items-center border-r border-gray-200 px-3 py-2">
+              <Icon name={icon} size={22} className="text-gray-600" />
+            </div>
+          )}
+          <div className="flex w-full flex-1 items-center justify-between px-3 py-2">
+            <div className="min-w-0 flex-1 text-xs font-medium text-gray-900">
+              {getDisplayValue()}
+            </div>
+
+            <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
+              {showClearButton && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="cursor-pointer rounded text-center text-gray-700"
+                >
+                  <Icon name="times-circle" size={20} />
+                </button>
+              )}
+
+              <Icon
+                className="text-gray-700"
+                name={isOpen ? 'angle-up-small' : 'angle-down-small'}
+                size={20}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(menu, document.body)}
+    </div>
+  );
+
+  if (inGroup) {
+    return content;
+  }
+
   return (
     <FormField
       label={label}
@@ -579,71 +706,7 @@ export function Select<Extra extends object = object>({
       required={required}
       tooltip={tooltip}
     >
-      <div
-        ref={containerRef}
-        className={cn('relative w-full focus-within:outline-none', className)}
-        onKeyDown={handleKeyDown}
-        tabIndex={-1}
-      >
-        {/* Input Field */}
-        {trigger !== undefined && (
-          <div
-            aria-selected={isOpen}
-            onClick={handleClickInput}
-            tabIndex={isDisabledMode ? -1 : 0}
-            className={triggerClassName}
-          >
-            {trigger}
-          </div>
-        )}
-        {trigger === undefined && (
-          <div
-            aria-selected={isOpen}
-            className={cn(
-              'focus:ring-primary-300 flex cursor-pointer rounded-lg border bg-white text-gray-900 transition-all focus-within:outline-none focus:ring',
-              selectSize({ size }),
-              isDisabledMode && 'cursor-not-allowed bg-gray-100',
-              isOpen ? 'border-primary-300 ring-0' : 'border-gray-200',
-              hasError && 'border-danger-500'
-            )}
-            onClick={handleClickInput}
-            tabIndex={isDisabledMode ? -1 : 0}
-          >
-            {icon && (
-              <div className="flex items-center border-r border-gray-200 px-3 py-2">
-                <Icon name={icon} size={22} className="text-gray-600" />
-              </div>
-            )}
-            <div className="flex w-full flex-1 items-center justify-between px-3 py-2">
-              <div className="min-w-0 flex-1 text-xs font-medium text-gray-900">
-                {getDisplayValue()}
-              </div>
-
-              <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
-                {showClearButton && (
-                  <button
-                    type="button"
-                    onClick={handleClear}
-                    className="cursor-pointer rounded text-center text-gray-700"
-                  >
-                    <Icon name="times-circle" size={20} />
-                  </button>
-                )}
-
-                <Icon
-                  className="text-gray-700"
-                  name={isOpen ? 'angle-up-small' : 'angle-down-small'}
-                  size={20}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isOpen &&
-          typeof document !== 'undefined' &&
-          createPortal(menu, document.body)}
-      </div>
+      {content}
     </FormField>
   );
 }

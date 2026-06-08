@@ -7,6 +7,7 @@ import {
   Dropdown,
   DropdownContent,
   DropdownItem,
+  DropdownPanel,
   DropdownSeparator,
   DropdownTrigger,
   Input,
@@ -153,14 +154,12 @@ export default function DropdownPage() {
                 </Button>
               </DropdownTrigger>
               <DropdownContent>
-                <DropdownItem>
-                  <div className="flex flex-col gap-2">
-                    <Input label="email" />
-                    <Input label="Password" />
-                    <Checkbox label="remember me" />
-                    <Button>Sign In</Button>
-                  </div>
-                </DropdownItem>
+                <DropdownPanel className="flex flex-col gap-2">
+                  <Input label="email" />
+                  <Input label="Password" />
+                  <Checkbox label="remember me" />
+                  <Button>Sign In</Button>
+                </DropdownPanel>
                 <DropdownSeparator />
                 <DropdownItem>Forgot Password</DropdownItem>
               </DropdownContent>

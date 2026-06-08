@@ -27,10 +27,11 @@ export interface TableRowProps {
   isLast?: boolean;
   isHeader?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 export interface TableFooterProps {
   children: ReactNode;
-  colSpan: number;
+  colSpan?: number;
   className?: string;
 }
 
@@ -49,6 +50,7 @@ type WithValue = {
 export type TableCellHeadProps = {
   className?: string;
   onClick?: () => void;
+  sortable?: boolean;
 } & (WithChildren | WithValue);
 
 export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {

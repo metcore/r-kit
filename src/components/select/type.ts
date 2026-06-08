@@ -2,8 +2,10 @@ import type { ReactNode } from 'react';
 import type { IconNameProps } from '../icons';
 import type { SelectSize } from './selectSize';
 
+export type SelectRawValue = string | number;
+
 export interface BaseOption {
-  value: string | number;
+  value: string | number | '';
   label: string;
   description?: string;
   icon?: string;
@@ -26,7 +28,13 @@ export type SelectOnCreateValue = string | number;
 
 type BaseSelectProps<Extra extends object = object> = {
   options?: SelectOption<Extra>[];
-  value?: SelectOption<Extra> | SelectOption<Extra>[] | null;
+  value?:
+    | SelectOption<Extra>
+    | SelectOption<Extra>[]
+    | SelectRawValue
+    | SelectRawValue[]
+    | null;
+  getOptionByValue?: (value: SelectRawValue) => SelectOption<Extra> | undefined;
 
   isClearable?: boolean;
   /**

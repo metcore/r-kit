@@ -1,3 +1,5 @@
+import type { RadioButtonValue } from './radio';
+
 export type SizeType = 'sm' | 'md' | 'lg';
 export type ColorType =
   | 'primary'
@@ -13,7 +15,7 @@ export type ColorType =
 export interface RadioProps {
   id?: string;
   name?: string;
-  value: string;
+  value?: string | number;
   checked?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -24,9 +26,9 @@ export interface RadioProps {
 }
 
 export interface RadioGroupProps {
-  value?: string;
+  value?: RadioButtonValue;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: RadioButtonValue) => void;
   disabled?: boolean;
   required?: boolean;
   name?: string;

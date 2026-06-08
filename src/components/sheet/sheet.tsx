@@ -148,6 +148,7 @@ function SheetContent({
   children,
   side = 'right',
   size = 'md',
+  onInteractOutside,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: SheetSide;
@@ -158,6 +159,13 @@ function SheetContent({
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
+        onInteractOutside={(event) => {
+          const target = event.target as Element | null;
+          if (target?.closest('[data-select-menu]')) {
+            event.preventDefault();
+          }
+          onInteractOutside?.(event);
+        }}
         className={cn(
           'fixed z-50 flex flex-col gap-4 border-gray-200 bg-white shadow-lg transition ease-in-out',
           'data-[state=open]:animate-in data-[state=closed]:animate-out',
@@ -234,13 +242,14 @@ function SheetDescription({
   );
 }
 
-function SheetBody({
-  className,
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Description>) {
+// SheetBody adalah container konten biasa — bukan Dialog.Description.
+// Dialog.Description merender <p>, jadi menaruh <div>/<Select>/<Button> di
+// dalamnya = HTML invalid (p tidak boleh membungkus block element) dan
+// browser akan memecah strukturnya.
+function SheetBody({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <SheetPrimitive.Description
-      data-slot="sheet-description"
+    <div
+      data-slot="sheet-body"
       className={cn('flex flex-col gap-1.5 p-4', className)}
       {...props}
     />

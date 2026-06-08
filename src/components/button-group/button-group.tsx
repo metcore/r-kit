@@ -1,12 +1,8 @@
 import { createContext, useContext } from 'react';
 import clsx from 'clsx';
 
-import {
-  Button,
-  type ButtonProps,
-  type ButtonAsButtonProps,
-  type ButtonAsAnchorProps,
-} from '../button/button';
+import { Button, type ButtonProps } from '../button/button';
+import type { ButtonGroupItemProps, ButtonGroupProps } from './type';
 
 type ButtonGroupContextType = {
   size?: ButtonProps['size'];
@@ -16,18 +12,6 @@ type ButtonGroupContextType = {
 };
 
 const ButtonGroupContext = createContext<ButtonGroupContextType | null>(null);
-
-export interface ButtonGroupProps {
-  children: React.ReactNode;
-  size?: ButtonProps['size'];
-  color?: ButtonProps['color'];
-  variant?: ButtonProps['variant'];
-  direction?: 'horizontal' | 'vertical';
-}
-
-export type ButtonGroupItemProps =
-  | Omit<ButtonAsButtonProps, 'size' | 'variant'>
-  | Omit<ButtonAsAnchorProps, 'size' | 'variant'>;
 
 export const ButtonGroup = ({
   children,

@@ -212,9 +212,9 @@ function SelectPage() {
               className="w-40"
               options={dataSingle}
               value={selectedUserBasic}
-              onChange={(v) =>
-                setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
-              }
+              onChange={(v) => {
+                setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
+              }}
               placeholder="Cari & pilih user…"
             />
           </MainSection>
@@ -336,9 +336,9 @@ function SelectPage() {
             <AsyncSelect
               label="User"
               value={selectedUser}
-              onChange={(v) =>
-                setSelectedUser(v as SelectOption<ExtraUser> | null)
-              }
+              onChange={(v) => {
+                setSelectedUser(v as SelectOption<ExtraUser> | null);
+              }}
               placeholder="Cari & pilih user…"
               loadOptions={async ({ search, page, signal }) => {
                 const limit = 30;
@@ -353,7 +353,6 @@ function SelectPage() {
                   options: json.users.map((u) => ({
                     label: `${u.firstName} ${u.lastName}`,
                     value: String(u.id),
-                    extra: { email: u.email, age: u.age, image: u.image },
                   })),
                   hasMore: skip + json.users.length < json.total,
                 };

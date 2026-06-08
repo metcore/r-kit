@@ -24,7 +24,7 @@ export default function InputFieldPage() {
   const exampleLabelText = dedent(`
     <div className="grid grid-cols-3 gap-8">
       <Input label="Default Input" placeholder="Username" />
-      <Input label="Input Aktif" autoFocus value={"Maman_"} />
+      <Input label="Input Aktif" autoFocus defaultValue="Maman_" />
       <Input
         label="Filled Input"
         value={filledInput}
@@ -37,14 +37,24 @@ export default function InputFieldPage() {
     <Input
       label="Username"
       placeholder="Username"
-      hint="This is hint text"
+      hint="This is helper text"
+    />
+  `);
+
+  const exampleInvalid = dedent(`
+    <Input
+      mergedAddon
+      label="Username"
+      placeholder="Username"
+      errorMessages="Username is required"
+      rightAddon={<Icon name="info-circle-fill" className="text-danger-500" />}
     />
   `);
 
   const exampleSize = dedent(`
     <div className="grid grid-cols-3 gap-8">
       <Input size="sm" placeholder="Input small" />
-      <Input size="md" placeholder="input medium" />
+      <Input size="md" placeholder="Input medium" />
       <Input size="lg" placeholder="Input large" />
     </div>
   `);
@@ -53,13 +63,34 @@ export default function InputFieldPage() {
     <Input placeholder="Username" disabled />
   `);
 
-  const exampleInvalid = dedent(`
+  const exampleTooltip = dedent(`
     <Input
+      label="Username"
       placeholder="Username"
-      errorMessages={"Username is required"}
-      rightAddon={
-        <Icon name="info-circle-fill" className="text-danger-500" />
-      }
+      tooltip="This is a tooltip"
+    />
+  `);
+
+  const exampleRequired = dedent(`
+    <Input
+      label="Username"
+      placeholder="Username"
+      required
+      tooltip="This is a tooltip"
+    />
+  `);
+
+  const exampleLeftAddon = dedent(`
+    <Input
+      placeholder="Search..."
+      leftAddon={<Icon name="search" className="text-gray-400" />}
+    />
+  `);
+
+  const exampleRightAddon = dedent(`
+    <Input
+      placeholder="0.00"
+      rightAddon={<span className="text-sm text-gray-400">USD</span>}
     />
   `);
 
@@ -67,7 +98,7 @@ export default function InputFieldPage() {
     <InputOTP
       value={otp}
       onChange={setOtp}
-      hint="This is description"
+      hint="This is a description"
       size="lg"
     />
   `);
@@ -95,13 +126,18 @@ export default function InputFieldPage() {
             className="flex-1"
             code={exampleLabelText}
           >
-            <Input
-              label="Filled Input"
-              value={filledInput}
-              onChange={(e) => setFilledInput(e.target.value)}
-            />
+            <div className="grid grid-cols-3 gap-8">
+              <Input label="Default Input" placeholder="Username" />
+              <Input label="Input Aktif" autoFocus defaultValue="Maman_" />
+              <Input
+                label="Filled Input"
+                value={filledInput}
+                onChange={(e) => setFilledInput(e.target.value)}
+              />
+            </div>
           </MainSection>
         </GridWrapper>
+
         <GridWrapper>
           <MainSection
             title="Helper Text"
@@ -121,15 +157,16 @@ export default function InputFieldPage() {
           >
             <Input
               mergedAddon
+              label="Username"
               placeholder="Username"
-              label="error Mode"
-              errorMessages={'Username is required'}
+              errorMessages="Username is required"
               rightAddon={
                 <Icon name="info-circle-fill" className="text-danger-500" />
               }
             />
           </MainSection>
         </GridWrapper>
+
         <GridWrapper>
           <MainSection
             title="Disabled"
@@ -141,39 +178,62 @@ export default function InputFieldPage() {
           <MainSection title="Input Size" className="flex-1" code={exampleSize}>
             <div className="grid grid-cols-3 gap-8">
               <Input size="sm" placeholder="Input small" />
-              <Input size="md" placeholder="input medium" />
+              <Input size="md" placeholder="Input medium" />
               <Input size="lg" placeholder="Input large" />
             </div>
           </MainSection>
         </GridWrapper>
+
         <GridWrapper>
-          <MainSection
-            title="Tooltip"
-            className="flex-1"
-            code={exampleDisabled}
-          >
+          <MainSection title="Tooltip" className="flex-1" code={exampleTooltip}>
             <Input
-              placeholder="Username"
-              disabled
               label="Username"
-              tooltip="Tooltipnnya"
+              placeholder="Username"
+              tooltip="This is a tooltip"
             />
           </MainSection>
-          <MainSection title="Input Size" className="flex-1" code={exampleSize}>
+          <MainSection
+            title="Required"
+            className="flex-1"
+            code={exampleRequired}
+          >
             <Input
-              placeholder="Username"
-              disabled
               label="Username"
+              placeholder="Username"
               required
-              tooltip="Tooltipnnya"
+              tooltip="This is a tooltip"
             />
           </MainSection>
         </GridWrapper>
+
+        <GridWrapper>
+          <MainSection
+            title="Left Addon"
+            className="flex-1"
+            code={exampleLeftAddon}
+          >
+            <Input
+              placeholder="Search..."
+              leftAddon={<Icon name="search" className="text-gray-400" />}
+            />
+          </MainSection>
+          <MainSection
+            title="Right Addon"
+            className="flex-1"
+            code={exampleRightAddon}
+          >
+            <Input
+              placeholder="0.00"
+              rightAddon={<span className="text-sm text-gray-400">USD</span>}
+            />
+          </MainSection>
+        </GridWrapper>
+
         <MainSection title="Input OTP" code={exampleOtp}>
           <InputOTP
             value={otp}
             onChange={setOtp}
-            hint="This is description"
+            hint="This is a description"
             size="lg"
           />
         </MainSection>

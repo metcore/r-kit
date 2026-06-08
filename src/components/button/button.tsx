@@ -6,6 +6,7 @@ import { buttonVariants, type ButtonVariantProps } from './button-variants';
 
 import { RoundedSpinner } from '../loading';
 import { BaseButton } from './base-button';
+import { useInputGroup } from '../input-group/';
 
 export type ButtonColor =
   | 'primary'
@@ -47,6 +48,8 @@ function isAnchorButton(props: ButtonProps): props is ButtonAsAnchorProps {
 type SpinnerSize = NonNullable<ButtonVariantProps['size']>;
 
 const spinnerSize: Record<SpinnerSize, number> = {
+  xxs: 8,
+  xs: 10,
   sm: 12,
   md: 14,
   lg: 16,
@@ -63,6 +66,9 @@ export const Button = (props: ButtonProps) => {
     loading = false,
   } = props;
 
+  const group = useInputGroup();
+  const inGroup = group !== null;
+
   const spinner = loading ? (
     <RoundedSpinner size={spinnerSize[size ?? 'md']} />
   ) : null;
@@ -76,7 +82,8 @@ export const Button = (props: ButtonProps) => {
       active,
     }),
     className,
-    'gap-2'
+    'gap-2',
+    inGroup && 'h-full rounded-none'
   );
 
   if (isAnchorButton(props)) {
@@ -100,7 +107,6 @@ export const Button = (props: ButtonProps) => {
   if (asChild) {
     return (
       <Slot {...buttonProps} className={classes}>
-        {spinner}
         {children}
       </Slot>
     );

@@ -36,6 +36,10 @@ import InputOtpPage from '../playground/pages/form-field/InputOtpPage';
 import BadgePage from '../playground/pages/components/BadgePage';
 import DropdownPage from '../playground/pages/DropdownPage';
 import ButtonIconPage from '../playground/pages/components/ButtonIconPage';
+import ImagePage from '../playground/pages/ImagePage';
+import InvoicePage from '../playground/pages/example/InvoicePage';
+import ProfilePage from '../playground/pages/example/ProfilePage';
+import ApiTablePage from '../playground/pages/ApiTablePage';
 
 export default function PlaygroundRouter() {
   return (
@@ -53,6 +57,7 @@ export default function PlaygroundRouter() {
         <Route path="/chip" element={<ChipPage />} />
         <Route path="/input" element={<InputPage />} />
         <Route path="/modal" element={<ModalPage />} />
+        <Route path="/image" element={<ImagePage />} />
         <Route path="/radio-button" element={<RadioButtonPage />} />
         <Route path="/select" element={<SelectPage />} />
         <Route path="/switch" element={<SwitchPage />} />
@@ -68,6 +73,7 @@ export default function PlaygroundRouter() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/date-picker" element={<DatePickerPage />} />
         <Route path="/table" element={<TablePage />} />
+        <Route path="/api-table" element={<ApiTablePage />} />
         <Route path="/toast" element={<ToastPage />} />
         <Route path="/text-editor" element={<TextEditorPage />} />
         <Route path="/progress-bar" element={<ProgressBarPage />} />
@@ -76,6 +82,8 @@ export default function PlaygroundRouter() {
         <Route path="/sidebar" element={<SidebarPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
         <Route path="/badge" element={<BadgePage />} />
+        <Route path="/example/invoice" element={<InvoicePage />} />
+        <Route path="/example/profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

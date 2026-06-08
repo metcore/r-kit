@@ -4,6 +4,7 @@ import { Button } from '../button';
 import { Icon } from '../icons';
 import { Text } from '../text';
 import { getIconName } from '../input-file/helpers';
+import { ButtonIcon } from '../button-icon/button-icon';
 
 // pake open dan visible biar bisa mainin transisi smooth
 interface ModalPreviewProps {
@@ -276,22 +277,18 @@ const ZoomController = ({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      <Button
-        size={'icon'}
+      <ButtonIcon
+        icon="search-plus-fill"
         onClick={onZoomIn}
         disabled={zoom >= maxZoom}
         type="button"
-      >
-        <Icon name="search-plus-fill" />
-      </Button>
-      <Button
-        size={'icon'}
+      />
+      <ButtonIcon
+        icon="search-minus-fill"
         onClick={onZoomOut}
         disabled={zoom <= minZoom}
         type="button"
-      >
-        <Icon name="search-minus-fill" />
-      </Button>
+      />
 
       <Button color="secondary" onClick={onDownload} type="button">
         <Icon name="download" />

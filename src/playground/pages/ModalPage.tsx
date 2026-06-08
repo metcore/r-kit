@@ -4,6 +4,7 @@ import { Button } from '../../components/button';
 import { Hero } from '../../components/hero';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { Input } from '../../components/input';
+import { Select, type SelectOption } from '../../clients';
 
 export default function ModalPage() {
   const [modalCenter, setModalCenter] = useState<boolean>(false);
@@ -13,6 +14,7 @@ export default function ModalPage() {
   const [modalMd, setModalMd] = useState<boolean>(false);
   const [modalLg, setModalLg] = useState<boolean>(false);
   const [modalFull, setModalFull] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<SelectOption | null>(null);
 
   return (
     <>
@@ -69,6 +71,28 @@ export default function ModalPage() {
               description="modal description"
             >
               <ModalBody>
+                <Select
+                  className="w-40"
+                  value={selectedUser}
+                  options={[
+                    { value: 1, label: 'Jhon' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                    { value: 2, label: 'Doe' },
+                  ]}
+                  onChange={(v) => setSelectedUser(v as SelectOption | null)}
+                  placeholder="Cari & pilih user…"
+                />
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. In
                 culpa, provident nihil, accusamus praesentium quo asperiores
                 eaque porro distinctio odio nobis, molestiae aliquam aperiam

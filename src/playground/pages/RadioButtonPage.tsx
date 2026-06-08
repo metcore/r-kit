@@ -4,9 +4,9 @@ import HeroSection from '../components/HeroSection';
 import illust from '../../assets/images/forms.png';
 import MainSection from '../components/MainSection';
 import { CheckboxGroup } from '../../clients';
+import GridWrapper from '../components/GridWrapper';
 
 export default function RadioButtonPage() {
-  const [value, setValue] = React.useState('credit');
   const [value1, setValue1] = React.useState('option1');
 
   return (
@@ -14,12 +14,11 @@ export default function RadioButtonPage() {
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Checkbox"
-        description="Memungkinkan user memilih satu, beberapa, atau tidak memilih opsi sama sekali dari daftar pilihan."
+        subtitle="Radio Button"
+        description="Memungkinkan user memilih satu opsi dari beberapa pilihan."
       />
-
-      <div className="flex flex-1 flex-col gap-4">
-        <MainSection title="Size">
+      <GridWrapper>
+        <MainSection title="basic">
           <CheckboxGroup direction="horizontal">
             <RadioGroup
               value={value1}
@@ -31,39 +30,134 @@ export default function RadioButtonPage() {
             </RadioGroup>
           </CheckboxGroup>
         </MainSection>
-        <MainSection title="Radio Button Horizontal with Teks">
+        <MainSection title="Label">
           <CheckboxGroup direction="horizontal">
             <RadioGroup
-              label="Pilih Metode Pembayaran"
-              description="Pilih salah satu metode pembayaran"
-              hint="Semua metode pembayaran aman"
-              errorMessages="Harap pilih metode pembayaran"
-              direction="vertical"
-              name="payment"
-              value={value}
-              size="md"
-              color="danger"
-              onValueChange={setValue}
+              value={value1}
+              onValueChange={setValue1}
+              color="primary"
+              label="Radio Button"
             >
-              <Radio
-                value="credit"
-                label="Kartu Kredit"
-                // description="Visa, Mastercard, dll"
-              />
-              <Radio
-                value="bank"
-                label="Transfer Bank"
-                // description="BCA, Mandiri, BNI"
-              />
-              <Radio
-                value="ewallet"
-                label="E-Wallet"
-                // description="GoPay, OVO, Dana"
-              />
+              <Radio value="option1" label="Value" />
+              <Radio value="option2" label="Value2" />
             </RadioGroup>
           </CheckboxGroup>
         </MainSection>
-      </div>
+        <MainSection title="tooltip">
+          <CheckboxGroup direction="horizontal">
+            <RadioGroup
+              value={value1}
+              onValueChange={setValue1}
+              color="primary"
+              tooltip="Action from"
+              label="Radio Button"
+            >
+              <Radio value="option1" label="Value" />
+              <Radio value="option2" label="Value2" />
+            </RadioGroup>
+          </CheckboxGroup>
+        </MainSection>
+        <MainSection title="hint & deskripsi">
+          <CheckboxGroup direction="horizontal">
+            <RadioGroup
+              value={value1}
+              onValueChange={setValue1}
+              description="Pilih salah satu metode pembayaran"
+              hint="Semua metode pembayaran aman"
+              color="primary"
+              tooltip="Action from"
+              label="Radio Button"
+            >
+              <Radio value="option1" label="Value" />
+              <Radio value="option2" label="Value2" />
+            </RadioGroup>
+          </CheckboxGroup>
+        </MainSection>
+        <MainSection title="hint & deskripsi">
+          <RadioGroup
+            value={value1}
+            onValueChange={setValue1}
+            description="Pilih salah satu metode pembayaran"
+            hint="Semua metode pembayaran aman"
+            color="primary"
+            tooltip="Action from"
+            label="Radio Button"
+          >
+            <Radio
+              value="credit"
+              label="Kartu Kredit"
+              description="Visa, Mastercard, dll"
+            />
+            <Radio
+              value="bank"
+              label="Transfer Bank"
+              description="BCA, Mandiri, BNI"
+            />
+            <Radio
+              value="ewallet"
+              label="E-Wallet"
+              description="GoPay, OVO, Dana"
+            />
+          </RadioGroup>
+        </MainSection>
+        <MainSection title="Error Message">
+          <RadioGroup
+            value={value1}
+            onValueChange={setValue1}
+            description="Pilih salah satu metode pembayaran"
+            hint="Semua metode pembayaran aman"
+            color="primary"
+            tooltip="Action from"
+            errorMessages="Harap pilih metode pembayaran"
+            label="Radio Button"
+          >
+            <Radio
+              value="credit"
+              label="Kartu Kredit"
+              description="Visa, Mastercard, dll"
+            />
+            <Radio
+              value="bank"
+              label="Transfer Bank"
+              description="BCA, Mandiri, BNI"
+            />
+            <Radio
+              value="ewallet"
+              label="E-Wallet"
+              description="GoPay, OVO, Dana"
+            />
+          </RadioGroup>
+        </MainSection>
+        <MainSection title="Horizontal">
+          <RadioGroup
+            value={value1}
+            direction="horizontal"
+            onValueChange={setValue1}
+            description="Pilih salah satu metode pembayaran"
+            hint="Semua metode pembayaran aman"
+            color="primary"
+            tooltip="Action from"
+            errorMessages="Harap pilih metode pembayaran"
+            label="Radio Button"
+          >
+            <Radio
+              value="credit"
+              label="Kartu Kredit"
+              description="Visa, Mastercard, dll"
+            />
+            <Radio
+              value="bank"
+              label="Transfer Bank"
+              description="BCA, Mandiri, BNI"
+            />
+            <Radio
+              value="ewallet"
+              label="E-Wallet"
+              description="GoPay, OVO, Dana"
+            />
+          </RadioGroup>
+        </MainSection>
+      </GridWrapper>
     </>
   );
 }

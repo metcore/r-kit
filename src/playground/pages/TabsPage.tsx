@@ -21,8 +21,6 @@ const TabsPage: React.FC = () => {
         <h1 className="text-3xl font-semibold text-gray-900">Tabs</h1>
       </Hero>
       <div className="grid grid-cols-1 gap-4">
-        {/* Horizontal Tabs Example */}
-
         <h2 className="mb-4 text-xl font-semibold text-gray-800">Basic Tabs</h2>
 
         <Tabs id="profile" defaultValue="account" orientation="horizontal">

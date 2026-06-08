@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Icon } from '../../../components/icons';
 import { Input } from '../../../components/input';
 import { Text } from '../../../components/text';
@@ -9,6 +8,7 @@ import {
   Dropdown,
   DropdownContent,
   DropdownItem,
+  DropdownSeparator,
   DropdownTrigger,
 } from '../../../components/dropdown';
 import afghanistan from '../../../assets/images/flag/afghanistan.png';
@@ -20,7 +20,18 @@ import dedent from 'dedent';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import Footer from '../../components/Footer';
-
+import {
+  InputGroup,
+  InputGroupText,
+} from '../../../components/input-group/input-group';
+import { Modal, ModalBody, ModalFooter, Select } from '../../../clients';
+import { Button } from '../../../components/button';
+import {
+  toSelectOptions,
+  type SelectOption,
+} from '../../../components/select/helpers';
+import { useState } from 'react';
+import { InputGroupKbd } from '../../../components/input-group/input-group-kbd';
 interface Countries {
   name: string;
   flag: string;
@@ -28,103 +39,60 @@ interface Countries {
 }
 
 export default function InputGroupPage() {
-  const [isTypePassword, setIsTypePassword] = useState(true);
-  const [inputPhoneWidth, setInputPhoneWidth] = useState(0);
-  const [countrySearch, setCountrySearch] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState<Countries | null>(
-    null
-  );
-
+  const [modal, setModal] = useState<boolean>(false);
   const countries: Countries[] = [
-    {
-      name: 'Afghanistan',
-      flag: afghanistan,
-      phone: '+93',
-    },
-    {
-      name: 'Albania',
-      flag: albania,
-      phone: '+355',
-    },
-    {
-      name: 'Algeria',
-      flag: algeria,
-      phone: '+213',
-    },
-    {
-      name: 'America',
-      flag: america,
-      phone: '+1',
-    },
-    {
-      name: 'Andorra',
-      flag: andorra,
-      phone: '+376',
-    },
+    { name: 'Afghanistan', flag: afghanistan, phone: '+93' },
+    { name: 'Albania', flag: albania, phone: '+355' },
+    { name: 'Algeria', flag: algeria, phone: '+213' },
+    { name: 'America', flag: america, phone: '+1' },
+    { name: 'Andorra', flag: andorra, phone: '+376' },
   ];
 
-  const filteredCountry = countries.filter((country) =>
-    country.name.toLowerCase().includes(countrySearch.toLowerCase())
-  );
-
-  const exampleInputGroup = dedent(`
-    <Input
-      label="Input Addon"
-      placeholder="Username"
-      leftAddon={<Icon name="user" size={18} />}
-    />
+  const codeBasicGroup = dedent(`
+    <InputGroup>
+      <InputGroupText>
+        <Icon name="search" size={18} />
+      </InputGroupText>
+      <Input placeholder="Search..." />
+      <Button color="primary">Search</Button>
+    </InputGroup>
   `);
 
-  const exampleInputMergedAddon = dedent(`
-    <Input
-      mergedAddon
-      label="Input Addon"
-      placeholder="Username"
-      leftAddon={<Icon name="user" size={18} />}
-    />
+  const codeSelectGroup = dedent(`
+    <InputGroup label="Phone Number">
+      <Select
+        options={phoneCodes}
+        value={phoneCode}
+        onChange={(option) => setPhoneCode(option as PhoneCode)}
+        isSearchable={false}
+        isClearable={false}
+      />
+      <Input type="tel" placeholder="Enter phone number" />
+    </InputGroup>
   `);
 
-  const exampleInputSize = dedent(`
-    <div className="flex flex-col gap-6">
-      <Input
-        placeholder="Input Small"
-        size={"sm"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-      <Input
-        placeholder="Input Medium"
-        size={"md"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-      <Input
-        placeholder="Input Large"
-        size={"lg"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-    </div>
-  `);
-
-  const exampleInputMergedSize = dedent(`
-    <div className="flex flex-col gap-6">
-      <Input
-        mergedAddon
-        placeholder="Input Small"
-        size={"sm"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-      <Input
-        mergedAddon
-        placeholder="Input Medium"
-        size={"md"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-      <Input
-        mergedAddon
-        placeholder="Input Large"
-        size={"lg"}
-        leftAddon={<Icon name="user" size={18} />}
-      />
-    </div>
+  const codeDropdownGroup = dedent(`
+    <InputGroup>
+      <Dropdown>
+        <DropdownTrigger>
+          <Button color="primary">Options</Button>
+        </DropdownTrigger>
+        <DropdownContent>
+          <DropdownItem>Action</DropdownItem>
+          <DropdownItem>
+            <Icon name="user" />
+            Another Action
+          </DropdownItem>
+          <DropdownItem>Something Else</DropdownItem>
+          <DropdownSeparator />
+          <DropdownItem>Separated Link</DropdownItem>
+        </DropdownContent>
+      </Dropdown>
+      <InputGroupText>
+        <Icon name="search" size={18} />
+      </InputGroupText>
+      <Input placeholder="Search..." />
+    </InputGroup>
   `);
 
   return (
@@ -138,252 +106,111 @@ export default function InputGroupPage() {
 
       <div className="flex flex-col gap-8">
         <GridWrapper>
-          <MainSection title="Input Group" code={exampleInputGroup}>
-            <div className="flex flex-col gap-6">
-              <Input
-                label="Input Addon"
-                placeholder="Username"
-                leftAddon={<Icon name="user" size={18} />}
-              />
-              <Input
-                label="Input Nominal"
-                leftAddon={
-                  <Text
-                    value="Rp"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                label="Input Link"
-                leftAddon={
-                  <Text
-                    value="http://"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                type="number"
-                label="Input Tinggi Badan"
-                placeholder="0"
-                rightAddon={
-                  <Text
-                    value="CM"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                label="Password"
-                placeholder="Password"
-                type={isTypePassword ? 'password' : 'text'}
-                rightAddonClassName="!border-l-0"
-                leftAddon={<Icon name="lock-fill" size={20} />}
-                rightAddon={
-                  <button onClick={() => setIsTypePassword(!isTypePassword)}>
-                    <Icon
-                      name={isTypePassword ? 'eye' : 'eye-open'}
-                      size={20}
-                    />
-                  </button>
-                }
-              />
-              <Input
-                label="Input Phone Number"
-                placeholder="Enter Phone Number"
-                type="tel"
-                className="relative"
-                onContainerResize={(w) => setInputPhoneWidth(w)}
-                leftAddon={
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <FlagButton
-                        flag={selectedCountry?.flag ?? afghanistan}
-                        phone={selectedCountry?.phone ?? '+93'}
-                      />
-                    </DropdownTrigger>
-                    <DropdownContent
-                      align="start"
-                      className="-translate-x-2.5 gap-2"
-                      style={{ width: inputPhoneWidth }}
-                    >
-                      <Input
-                        mergedAddon
-                        placeholder="Search"
-                        leftAddonClassName="!pr-0"
-                        leftAddon={<Icon name="search" size={20} />}
-                        onChange={(e) => setCountrySearch(e.target.value)}
-                      />
-                      {filteredCountry.map((country) => (
-                        <DropdownItem
-                          key={country.name}
-                          onClick={() => setSelectedCountry(country)}
-                        >
-                          <Country country={country} />
-                        </DropdownItem>
-                      ))}
-                    </DropdownContent>
-                  </Dropdown>
-                }
-              />
-            </div>
+          <MainSection
+            title="Input Group"
+            className="flex-1"
+            code={codeBasicGroup}
+          >
+            <InputGroup>
+              <InputGroupText>
+                <Icon name="search" size={18} />
+              </InputGroupText>
+              <Input placeholder="Search..." />
+              <Button color="primary">Search</Button>
+            </InputGroup>
+            <InputGroup>
+              <InputGroupText>
+                <Icon name="search" size={18} />
+              </InputGroupText>
+              <Input placeholder="Search..." />
+              <InputGroupKbd size="sm">
+                <Icon name="arrow-turn-down-left" size={12} />
+              </InputGroupKbd>
+            </InputGroup>
           </MainSection>
-
-          <MainSection title="Merged Addon" code={exampleInputMergedAddon}>
-            <div className="flex flex-col gap-6">
-              <Input
-                mergedAddon
-                label="Input Addon"
-                placeholder="Username"
-                leftAddon={<Icon name="user" size={18} />}
+          <MainSection
+            title="Input Group + Select"
+            className="flex-1"
+            code={codeSelectGroup}
+          >
+            <InputGroup label="Phone Number">
+              <Select
+                options={toSelectOptions(countries, {
+                  value: 'name',
+                  label: 'flag',
+                })}
+                renderOption={(value) => {
+                  return <Country country={value} />;
+                }}
               />
-              <Input
-                mergedAddon
-                label="Input Nominal"
-                leftAddon={
-                  <Text
-                    value="Rp"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                mergedAddon
-                label="Input Link"
-                leftAddon={
-                  <Text
-                    value="http://"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                mergedAddon
-                type="number"
-                label="Input Tinggi Badan"
-                placeholder="0"
-                rightAddon={
-                  <Text
-                    value="CM"
-                    variant="t2"
-                    weight="medium"
-                    className="text-gray-800"
-                  />
-                }
-              />
-              <Input
-                mergedAddon
-                label="Password"
-                placeholder="Password"
-                type={isTypePassword ? 'password' : 'text'}
-                leftAddon={<Icon name="lock-fill" size={20} />}
-                rightAddon={
-                  <button onClick={() => setIsTypePassword(!isTypePassword)}>
-                    <Icon
-                      name={isTypePassword ? 'eye' : 'eye-open'}
-                      size={20}
-                    />
-                  </button>
-                }
-              />
-              <Input
-                mergedAddon
-                label="Input Phone Number"
-                placeholder="Enter Phone Number"
-                type="tel"
-                className="relative"
-                onContainerResize={(w) => setInputPhoneWidth(w)}
-                leftAddon={
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <FlagButton
-                        flag={selectedCountry?.flag ?? afghanistan}
-                        phone={selectedCountry?.phone ?? '+93'}
-                      />
-                    </DropdownTrigger>
-                    <DropdownContent
-                      align="start"
-                      className="-translate-x-2.5 gap-2"
-                      style={{ width: inputPhoneWidth }}
-                    >
-                      <Input
-                        mergedAddon
-                        placeholder="Search"
-                        leftAddonClassName="!pr-0"
-                        leftAddon={<Icon name="search" size={20} />}
-                        onChange={(e) => setCountrySearch(e.target.value)}
-                      />
-                      {filteredCountry.map((country) => (
-                        <DropdownItem
-                          key={country.name}
-                          onClick={() => setSelectedCountry(country)}
-                        >
-                          <Country country={country} />
-                        </DropdownItem>
-                      ))}
-                    </DropdownContent>
-                  </Dropdown>
-                }
-              />
-            </div>
+              <Input type="tel" placeholder="Enter phone number" />
+            </InputGroup>
           </MainSection>
         </GridWrapper>
 
         <GridWrapper>
-          <MainSection title="Input Group Size" code={exampleInputSize}>
-            <div className="flex flex-col gap-6">
-              <Input
-                placeholder="Input Small"
-                size={'sm'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-              <Input
-                placeholder="Input Medium"
-                size={'md'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-              <Input
-                placeholder="Input Large"
-                size={'lg'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-            </div>
+          <MainSection
+            title="Input Group + Dropdown"
+            className="flex-1"
+            code={codeDropdownGroup}
+          >
+            <InputGroup>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button color="primary">Chose FIle</Button>
+                </DropdownTrigger>
+                <DropdownContent>
+                  <DropdownItem>Action</DropdownItem>
+                  <DropdownItem>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Icon name="user" />
+                      Another Action
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem>Something Else</DropdownItem>
+                  <DropdownSeparator />
+                  <DropdownItem>Separated Link</DropdownItem>
+                </DropdownContent>
+              </Dropdown>
+              <Input placeholder="Search..." />
+            </InputGroup>
           </MainSection>
-          <MainSection title="Input Group Size" code={exampleInputMergedSize}>
-            <div className="flex flex-col gap-6">
-              <Input
-                mergedAddon
-                placeholder="Input Small"
-                size={'sm'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-              <Input
-                mergedAddon
-                placeholder="Input Medium"
-                size={'md'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-              <Input
-                mergedAddon
-                placeholder="Input Large"
-                size={'lg'}
-                leftAddon={<Icon name="user" size={18} />}
-              />
-            </div>
+          <MainSection
+            title="Input Group + Modal"
+            className="flex-1"
+            code={codeDropdownGroup}
+          >
+            <InputGroup>
+              <InputGroupText>
+                <Icon name="search" size={18} />
+              </InputGroupText>
+              <Input placeholder="Search..." />
+              <Button onClick={() => setModal(true)}>
+                Create <Icon name="plus" size={15} />
+              </Button>
+            </InputGroup>
           </MainSection>
         </GridWrapper>
-
+        <Modal
+          isOpen={modal}
+          position="top"
+          title="Modal Top Title"
+          description="modal top description"
+          onClose={() => setModal(false)}
+        >
+          <ModalBody>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. In culpa,
+            provident nihil, accusamus praesentium quo asperiores eaque porro
+            distinctio odio nobis, molestiae aliquam aperiam iusto rem aut sunt
+            sint explicabo.
+          </ModalBody>
+          <ModalFooter className="justify-between">
+            <Button variant="outline" onClick={() => setModal(false)}>
+              Batal
+            </Button>
+            <Button onClick={() => setModal(false)}>Ok</Button>
+          </ModalFooter>
+        </Modal>
         <Footer
           backTo="/input-field"
           backToTitle="Input Field"
@@ -396,21 +223,11 @@ export default function InputGroupPage() {
   );
 }
 
-const Country = ({ country }: { country: Countries }) => {
+const Country = ({ country }: { country: SelectOption }) => {
   return (
-    <>
-      <img src={country.flag} className="h-4" />
-      <Text value={country.name} variant="t2" weight="medium" />
-    </>
-  );
-};
-
-const FlagButton = ({ flag, phone }: { flag: string; phone: string }) => {
-  return (
-    <div className="relative flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-200 py-1 pr-8 pl-3.5 hover:bg-gray-100">
-      <img src={flag} className="h-4" />
-      <Text value={phone} variant="t3" />
-      <Icon name="angle-down-small" className="absolute right-1.5" size={12} />
+    <div className="flex flex-wrap gap-2">
+      <img src={country.label} className="h-4" />
+      <Text value={country.value} variant="t2" weight="medium" />
     </div>
   );
 };

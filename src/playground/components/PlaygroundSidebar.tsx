@@ -73,6 +73,7 @@ function PlaygroundSidebar() {
         { path: '/playground/chip', label: 'Chip' },
         { path: '/playground/modal', label: 'Modal' },
         { path: '/playground/progress-bar', label: 'Progress Bar' },
+        { path: '/playground/image', label: 'Image' },
       ],
     },
 
@@ -101,10 +102,19 @@ function PlaygroundSidebar() {
       icon: 'desktop',
       children: [
         { path: '/playground/table', label: 'Table' },
+        { path: '/playground/api-table', label: 'Api Table' },
         { path: '/playground/timeline', label: 'timeline' },
       ],
     },
-    { path: '/playground/pages', label: 'Pages', icon: 'cpu' },
+    {
+      path: '/playground/pages',
+      label: 'Example',
+      icon: 'cpu',
+      children: [
+        { path: '/playground/example/profile', label: 'Profile' },
+        { path: '/playground/example/invoice', label: 'Invoice' },
+      ],
+    },
     { path: '/playground/auth', label: 'Authentication', icon: 'lock' },
   ];
 

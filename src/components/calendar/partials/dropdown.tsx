@@ -1,38 +1,18 @@
 import { cn } from '../../../lib/utils';
-import { Button } from '../../button';
-import { Icon } from '../../icons';
+import { ButtonIcon } from '../../button-icon/button-icon';
 import { Text } from '../../text';
 import type { ButtonDropdownProps } from '../type';
 import { useEffect, useRef, type ReactNode } from 'react';
 
-const ButtonDropdown = ({
-  onClick,
-  active,
-  size = 'md',
-}: ButtonDropdownProps) => {
-  const size_map = {
-    sm: 11,
-    md: 12,
-    lg: 18,
-  };
+const ButtonDropdown = ({ onClick, active }: ButtonDropdownProps) => {
   return (
-    <Button
-      size={'icon'}
+    <ButtonIcon
+      icon={active == true ? 'arrow-up' : 'arrow-down'}
       onClick={onClick}
+      size="sm"
       color="gray"
-      className={cn(
-        'bg-transparent transition-colors outline-none *:duration-300 hover:bg-gray-50 focus:outline-none'
-      )}
-    >
-      <Icon
-        name="arrow-down"
-        size={size_map[size]}
-        className={cn(
-          'text-primary-1000',
-          active == true ? 'rotate-180' : 'rotate-0'
-        )}
-      />
-    </Button>
+      variant="tertiary"
+    />
   );
 };
 

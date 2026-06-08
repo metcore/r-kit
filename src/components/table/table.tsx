@@ -90,6 +90,7 @@ export function TableRow({
   isLast,
   isHeader,
   className,
+  onClick,
 }: TableRowProps) {
   const { variant } = useContext(TableContext);
   const isBordered = variant === 'bordered';
@@ -101,6 +102,7 @@ export function TableRow({
   return (
     <TableRowContext.Provider value={{ isLast }}>
       <tr
+        onClick={onClick}
         className={clsx(
           TableVariants({ tableRow: variant }),
           '[&>th:first-child]:rounded-tl-lg [&>th:last-child]:rounded-tr-lg',
@@ -152,7 +154,9 @@ export function TableCellHead({
           <Icon name="sort-vertical" size={16} className="shrink-0" />
         </button>
       ) : (
-        children
+        <div className="cursor-pointer" onClick={onClick}>
+          {children}
+        </div>
       )}
     </th>
   );
@@ -303,7 +307,11 @@ export function TablePagination({
                   )}
                   onClick={() => handleChange(item)}
                 >
-                  <Text value={String(item)} align="center" />
+                  <Text
+                    value={String(item)}
+                    align="center"
+                    className="cursor-pointer"
+                  />
                 </DropdownItem>
               ))}
             </DropdownContent>

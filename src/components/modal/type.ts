@@ -7,7 +7,7 @@ import type {
 export interface ModalProps
   extends ModalVariantProps, modalOverlayVariantsProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
