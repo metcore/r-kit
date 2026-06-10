@@ -24,7 +24,13 @@ import {
   InputGroup,
   InputGroupText,
 } from '../../../components/input-group/input-group';
-import { Modal, ModalBody, ModalFooter, Select } from '../../../clients';
+import {
+  InputFile,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Select,
+} from '../../../clients';
 import { Button } from '../../../components/button';
 import {
   toSelectOptions,
@@ -32,6 +38,8 @@ import {
 } from '../../../components/select/helpers';
 import { useState } from 'react';
 import { InputGroupKbd } from '../../../components/input-group/input-group-kbd';
+import { useInputFile } from '../../../components/input-file/use-input-file';
+import { InputFilePreview } from '../../../components/input-file/input-file-preview';
 interface Countries {
   name: string;
   flag: string;
@@ -95,6 +103,14 @@ export default function InputGroupPage() {
     </InputGroup>
   `);
 
+  const fileInput = useInputFile({
+    accept: 'image/*,.pdf',
+    maxSize: 5 * 1024 * 1024,
+    // uploadConfig: {
+    //   url: 'https://httpbin.org/post',
+    //   fieldName: 'file',
+    // },
+  });
   return (
     <>
       <HeroSection
@@ -189,6 +205,25 @@ export default function InputGroupPage() {
                 Create <Icon name="plus" size={15} />
               </Button>
             </InputGroup>
+          </MainSection>
+          <MainSection
+            title="Input Group + File"
+            className="flex-1"
+            code={codeDropdownGroup}
+          >
+            <InputGroup>
+              <InputFile
+                inputFile={fileInput}
+                buttonLabel={<Icon name="paperclip" />}
+                buttonVariant="tertiary"
+                multiple
+              />
+              <Input placeholder="Search..." />
+              <Button onClick={() => setModal(true)}>
+                Create <Icon name="plus" size={15} />
+              </Button>
+            </InputGroup>
+            <InputFilePreview inputFile={fileInput} mode="compact" />
           </MainSection>
         </GridWrapper>
         <Modal

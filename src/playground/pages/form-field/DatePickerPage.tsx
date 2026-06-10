@@ -2,7 +2,11 @@ import dedent from 'dedent';
 import { useState } from 'react';
 import { Button } from '../../../components/button';
 import { Card, CardBody } from '../../../components/card';
-import { DatePicker, type DateRange } from '../../../components/date-picker';
+import {
+  DatePicker,
+  formatDateToString,
+  type DateRange,
+} from '../../../components/date-picker';
 import { Icon } from '../../../components/icons';
 import illust from '../../../assets/images/forms.png';
 import Footer from '../../components/Footer';
@@ -27,6 +31,9 @@ export default function DatePickerPage() {
   const [rangeValue, setRangeValue] = useState<DateRange>({
     start: addDays(new Date(), -6),
     end: new Date(),
+  });
+  console.log({
+    rangeValue: formatDateToString(rangeValue?.start, 'YYYY-MM-DD'),
   });
   const [open, setOpen] = useState(false);
 
@@ -151,8 +158,15 @@ export default function DatePickerPage() {
               <DatePicker
                 isClearable
                 mode="range"
-                format="DD MMM YYYY"
-                rangeValue={rangeValue}
+                format="DD-MM-YYYY"
+                rangeValue={{
+                  start: new Date(
+                    formatDateToString(rangeValue?.start, 'YYYY-MM-DD')
+                  ),
+                  end: new Date(
+                    formatDateToString(rangeValue?.end, 'YYYY-MM-DD')
+                  ),
+                }}
                 onRangeChange={setRangeValue}
               />
               <p className="text-xs text-gray-500">

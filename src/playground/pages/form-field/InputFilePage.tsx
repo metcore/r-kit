@@ -11,6 +11,8 @@ import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
+import { InputFilePreview } from '../../../components/input-file/input-file-preview';
+import { useInputFile } from '../../../components/input-file/use-input-file';
 
 export default function InputFilePage() {
   const fileRef = useRef<InputFileRef>(null);
@@ -43,6 +45,14 @@ export default function InputFilePage() {
     />
   `);
 
+  const fileInput = useInputFile({
+    accept: 'image/*,.pdf',
+    maxSize: 5 * 1024 * 1024,
+    // uploadConfig: {
+    //   url: 'https://httpbin.org/post',
+    //   fieldName: 'file',
+    // },
+  });
   return (
     <>
       <HeroSection
@@ -138,6 +148,39 @@ export default function InputFilePage() {
               }}
               onUploadSuccess={(results) => console.log(results)}
             />
+          </MainSection>
+          <MainSection title="Menggunakan Hooks">
+            <div className="flex flex-col gap-6">
+              <InputFile
+                inputFile={fileInput}
+                label="Upload dokumen"
+                multiple
+              />
+              <InputFilePreview inputFile={fileInput} mode="compact" />
+            </div>
+          </MainSection>
+          <MainSection title="Large Menggunakan Hooks">
+            <div className="flex flex-col gap-6">
+              <InputFile
+                inputFile={fileInput}
+                useCustomName
+                variant="large"
+                selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"
+              />
+              <InputFilePreview inputFile={fileInput} mode="compact" />
+            </div>
+          </MainSection>
+          <MainSection title="Color & Variant Button">
+            <div className="flex flex-col gap-6">
+              <InputFile
+                inputFile={fileInput}
+                useCustomName
+                buttonVariant="outline"
+                variant="large"
+                selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"
+              />
+              <InputFilePreview inputFile={fileInput} mode="compact" />
+            </div>
           </MainSection>
         </GridWrapper>
       </form>

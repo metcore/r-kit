@@ -24,8 +24,10 @@ function resolveWidths({
 }): number[] {
   if (sizes != undefined) return ALL_SIZES;
   if (typeof width !== 'number') return DEVICE_SIZES;
+
   const x1 = ALL_SIZES.find((w) => w >= width) ?? width;
   const x2 = ALL_SIZES.find((w) => w >= width * 2) ?? width * 2;
+
   return [...new Set([x1, x2])];
 }
 
@@ -58,30 +60,56 @@ function Image({
   ...rest
 }: ImageProps): ReactElement {
   const [loaded, setLoaded] = useState(false);
+
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [modalLoaded, setModalLoaded] = useState(false);
+
   const ref = useRef<HTMLImageElement>(null);
 
   const widths = resolveWidths({ width, sizes });
+
   const srcSet = buildSrcSet(loader, src, widths, quality);
+
   const mainSrc = loader({
     src,
     width: width ?? widths[widths.length - 1],
     quality,
   });
 
+  const modalSrc = loader({
+    src,
+    width: 2048,
+    quality: 100,
+  });
+
   useEffect(() => {
-    if (ref.current?.complete !== undefined) setLoaded(true);
+    if (ref != undefined && ref.current && ref.current?.complete) {
+      setLoaded(true);
+    }
   }, []);
 
   useEffect(() => {
     if (!priority || !mainSrc) return;
+
     const link = document.createElement('link');
+
     link.rel = 'preload';
     link.as = 'image';
     link.href = mainSrc;
-    if (srcSet != undefined) link.setAttribute('imagesrcset', srcSet);
-    if (sizes != undefined) link.setAttribute('imagesizes', sizes);
+
+    if (srcSet) {
+      link.setAttribute('imagesrcset', srcSet);
+    }
+
+    if (sizes != undefined) {
+      link.setAttribute('imagesizes', sizes);
+    }
+
     document.head.appendChild(link);
-    return () => link.remove();
+
+    return () => {
+      link.remove();
+    };
   }, [priority, mainSrc, srcSet, sizes]);
 
   const showBlur =
@@ -95,7 +123,10 @@ function Image({
         height: '100%',
         objectFit: 'cover',
       }
-    : { width: '100%', height: 'auto' };
+    : {
+        width: '100%',
+        height: 'auto',
+      };
 
   const blurStyle: CSSProperties | undefined = showBlur
     ? {
@@ -105,6 +136,15 @@ function Image({
         filter: 'blur(20px)',
       }
     : undefined;
+
+  const handleOpenImage = () => {
+    setModalLoaded(false);
+    setOpenImageModal(true);
+  };
+
+  const handleCloseImage = () => {
+    setOpenImageModal(false);
+  };
 
   return (
     <>
@@ -119,6 +159,7 @@ function Image({
         decoding="async"
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
+        onClick={handleOpenImage}
         onLoad={(e) => {
           setLoaded(true);
           onLoad?.(e);
@@ -128,13 +169,29 @@ function Image({
           ...layoutStyle,
           ...blurStyle,
           transition: 'filter 300ms ease',
+          cursor: 'pointer',
           ...style,
         }}
         {...rest}
       />
-      <Modal isOpen={false}>
+
+      <Modal position="top" isOpen={openImageModal} onClose={handleCloseImage}>
         <ModalBody>
-          <Text>Belom</Text>
+          <div className="flex min-h-[300px] items-center justify-center">
+            {!modalLoaded && <Text> Loading image...</Text>}
+
+            {openImageModal && (
+              <img
+                src={modalSrc}
+                alt={alt}
+                loading="eager"
+                onLoad={() => setModalLoaded(true)}
+                className={`max-h-[90vh] w-auto max-w-full ${
+                  modalLoaded ? 'block' : 'hidden'
+                }`}
+              />
+            )}
+          </div>
         </ModalBody>
       </Modal>
     </>
@@ -142,17 +199,27 @@ function Image({
 }
 
 export const cloudinaryLoader: ImageLoader = ({ src, width, quality = 0 }) => {
-  const t = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto'}`].join(
-    ','
-  );
+  const t = [
+    'f_auto',
+    'c_limit',
+    `w_${width}`,
+    `q_${quality || 'auto'}
+    `,
+  ].join(',');
+
   return `https://res.cloudinary.com/<YOUR_CLOUD_NAME>/image/upload/${t}/${src}`;
 };
 
 export const imgixLoader: ImageLoader = ({ src, width, quality }) => {
   const url = new URL(`https://<YOUR_SUBDOMAIN>.imgix.net${src}`);
+
   url.searchParams.set('auto', 'format,compress');
   url.searchParams.set('w', String(width));
-  if (quality != undefined) url.searchParams.set('q', String(quality));
+
+  if (quality != undefined) {
+    url.searchParams.set('q', String(quality));
+  }
+
   return url.toString();
 };
 
@@ -162,6 +229,7 @@ export const selfHostedLoader: ImageLoader = ({ src, width, quality = 0 }) => {
     w: String(width),
     q: String(quality || 75),
   });
+
   return `/api/image?${p.toString()}`;
 };
 

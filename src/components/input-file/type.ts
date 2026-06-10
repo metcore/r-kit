@@ -1,3 +1,7 @@
+import type { ReactNode } from 'react';
+import type { ButtonColor, ButtonVariantProps } from '../button';
+import type { UseInputFileReturn } from './use-input-file';
+
 export type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
 export interface FileItem {
@@ -26,7 +30,9 @@ export interface InputFileProps extends PlayerProps {
   variant?: 'primary' | 'secondary' | 'gray' | 'medium' | 'large';
   label?: string;
   hint?: string;
-  buttonLabel?: string;
+  buttonLabel?: string | ReactNode;
+  buttonVariant?: ButtonVariantProps['variant'];
+  buttonColor?: ButtonColor;
   errorMessage?: string;
   maxSizeErrorMessage?: string;
   customNamePlaceholder?: string;
@@ -38,6 +44,7 @@ export interface InputFileProps extends PlayerProps {
   onRemoveFile?: (id: string) => void;
   onClear?: () => void;
   selectedFilesClassName?: string;
+  previewMode?: PreviewMode;
 }
 
 export interface PreviewItemProps extends PlayerProps {
@@ -51,7 +58,10 @@ export interface PreviewItemProps extends PlayerProps {
   customName?: string;
   onDownload?: (data?: { src?: string; name?: string }) => void;
   progress?: number;
+  mode?: PreviewMode;
 }
+
+export type PreviewMode = 'detailed' | 'compact';
 
 export interface PlayerProps {
   pdfViewerProps?: React.IframeHTMLAttributes<HTMLIFrameElement>;
@@ -80,4 +90,13 @@ export interface UploadedFile<UploadedData> {
   originalName: string;
   customName?: string;
   uploadedData: UploadedData | null;
+}
+
+export interface InputFilePreviewProps
+  extends
+    PlayerProps,
+    Pick<InputFileProps, 'customNamePlaceholder' | 'onDownload'> {
+  inputFile: UseInputFileReturn;
+  className?: string;
+  mode?: PreviewMode;
 }

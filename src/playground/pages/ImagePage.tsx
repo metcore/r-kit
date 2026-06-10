@@ -8,9 +8,6 @@ import GridWrapper from '../components/GridWrapper';
 import MainSection from '../components/MainSection';
 import { Image } from '../../components/image';
 
-const demoLoader = ({ src, width }) =>
-  `https://picsum.photos/seed/${encodeURIComponent(src)}/${width}/${Math.round(width * 0.625)}`;
-
 export default function ImagePage() {
   const [modalCenter, setModalCenter] = useState<boolean>(false);
   const [modalTop, setModalTop] = useState<boolean>(false);
@@ -34,7 +31,7 @@ export default function ImagePage() {
       </Hero>
       <GridWrapper>
         <MainSection title="Image preview">
-          <Image loader={demoLoader} />
+          <Image src="https://fastly.picsum.photos/id/802/1920/1200.jpg?hmac=taL7Rgv7EbMKfWqfrDUIGQB5pIv-lJEGMRdWvfuJNeA" />
         </MainSection>
       </GridWrapper>
       <div className="grid grid-cols-1 gap-4">
