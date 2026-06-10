@@ -199,6 +199,7 @@ import PercentCircleIcon from './icons/PercentCircleIcon';
 import PlayIcon from './icons/PlayIcon';
 import PlusCircleIcon from './icons/PlusCircleIcon';
 import PptIcon from './icons/PptIcon';
+import Pencil from './icons/Pencil';
 import PresentationDollarIcon from './icons/PresentationDollarIcon';
 import PresentationPollIcon from './icons/PresentationPollIcon';
 import PresentationUserIcon from './icons/PresentationUserIcon';
@@ -615,6 +616,7 @@ export const iconRegistry = {
   'paperclip': PaperclipIcon,
   'pause': PauseIcon,
   'pdf': PdfIcon,
+  'pencil': Pencil,
   'percent-circle': PercentCircleIcon,
   'play': PlayIcon,
   'plus-circle': PlusCircleIcon,

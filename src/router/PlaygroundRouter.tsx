@@ -40,6 +40,7 @@ import ImagePage from '../playground/pages/ImagePage';
 import InvoicePage from '../playground/pages/example/InvoicePage';
 import ProfilePage from '../playground/pages/example/ProfilePage';
 import ApiTablePage from '../playground/pages/ApiTablePage';
+import ColorPickerPage from '../playground/pages/form-field/ColorPickerPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -67,6 +68,7 @@ export default function PlaygroundRouter() {
         <Route path="/colors" element={<ColorsPage />} />
         <Route path="/checkbox" element={<CheckboxPage />} />
         <Route path="/input-field" element={<InputFieldPage />} />
+        <Route path="/color-picker" element={<ColorPickerPage />} />
         <Route path="/input-group" element={<InputGroupPage />} />
         <Route path="/counter" element={<CounterPage />} />
         <Route path="/input-file" element={<InputFilePage />} />

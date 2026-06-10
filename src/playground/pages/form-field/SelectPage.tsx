@@ -341,7 +341,7 @@ function SelectPage() {
               }}
               placeholder="Cari & pilih user…"
               loadOptions={async ({ search, page, signal }) => {
-                const limit = 30;
+                const limit = 10;
                 const skip = page * limit;
                 const res = await fetch(
                   `https://dummyjson.com/users/search?q=${search}&limit=${limit}&skip=${skip}`,
