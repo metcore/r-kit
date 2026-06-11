@@ -27,6 +27,7 @@ interface ButtonBaseProps extends ButtonVariantProps {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
+  type?: 'button' | 'submit';
 }
 
 export type ButtonAsButtonProps = ButtonBaseProps &
@@ -64,6 +65,7 @@ export const Button = (props: ButtonProps) => {
     block = false,
     active = false,
     loading = false,
+    type = 'button',
   } = props;
 
   const group = useInputGroup();
@@ -95,6 +97,7 @@ export const Button = (props: ButtonProps) => {
         href={href}
         disabled={disabled}
         className={classes}
+        type={type}
       >
         {spinner}
         {children}
