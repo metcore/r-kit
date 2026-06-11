@@ -1,4 +1,4 @@
-import type { InputProps } from '../input';
+import type { InputProps, InputSize } from '../input';
 
 export interface RGB {
   r: number;
@@ -29,6 +29,7 @@ export interface ColorInputProps extends Omit<
   'onChange' | 'value'
 > {
   value?: ColorInputValue;
+  size?: InputSize;
   defaultColor?: string;
   onChange?: (color: ColorValue) => void;
 }

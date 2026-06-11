@@ -392,7 +392,6 @@ export function ColorPickerPanel({
         />
       </div>
 
-      {/* eyedropper + sliders */}
       <div className="mt-3.5 flex items-center gap-3">
         <button
           type="button"
@@ -506,10 +505,14 @@ export function ColorPickerPanel({
   );
 }
 
-function parseColor(input: string): { hsv: HSV; alpha: number } {
+function parseColor(input: string): {
+  hsv: HSV;
+  alpha: number;
+  valid: boolean;
+} {
   const r = hexToRgb(input);
-  if (r) return { hsv: rgbToHsv(r.r, r.g, r.b), alpha: 1 };
-  return { hsv: { h: 0, s: 0, v: 0 }, alpha: 1 };
+  if (r) return { hsv: rgbToHsv(r.r, r.g, r.b), alpha: 1, valid: true };
+  return { hsv: { h: 0, s: 0, v: 0 }, alpha: 1, valid: false };
 }
 
 export function ColorInput({
@@ -525,12 +528,18 @@ export function ColorInput({
   const init = parseColor(defaultColor);
   const [hsv, setHsv] = useState<HSV>(init.hsv);
   const [alpha, setAlpha] = useState<number>(init.alpha);
+  const [hasValue, setHasValue] = useState<boolean>(init.valid);
   const [open, setOpen] = useState<boolean>(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const rgb = hsvToRgb(hsv.h, hsv.s, hsv.v);
   const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-  const display = alpha < 1 ? `${hex} · ${Math.round(alpha * 100)}%` : hex;
+
+  const display = !hasValue
+    ? ''
+    : alpha < 1
+      ? `${hex} · ${Math.round(alpha * 100)}%`
+      : hex;
 
   const onChangeRef = useRef<((color: ColorValue) => void) | undefined>(
     onChange
@@ -539,11 +548,17 @@ export function ColorInput({
     onChangeRef.current = onChange;
   }, [onChange]);
 
+  // Jangan emit onChange di mount kalau belum ada value.
+  const didMountRef = useRef(false);
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      if (!hasValue) return;
+    }
     const rgbNow = hsvToRgb(hsv.h, hsv.s, hsv.v);
     const hexNow = rgbToHex(rgbNow.r, rgbNow.g, rgbNow.b);
     onChangeRef.current?.({ hex: hexNow, rgb: rgbNow, alpha, hsv });
-  }, [hsv, alpha]);
+  }, [hsv, alpha, hasValue]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -556,6 +571,16 @@ export function ColorInput({
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
+  // Semua interaksi panel (SV, hue, alpha, swatch, eyedropper) lewat sini.
+  const applyHsv = (next: HSV): void => {
+    setHsv(next);
+    setHasValue(true);
+  };
+  const applyAlpha = (a: number): void => {
+    setAlpha(a);
+    setHasValue(true);
+  };
+
   const inputColorDisplay = (): React.ReactElement => (
     <button
       type="button"
@@ -565,7 +590,11 @@ export function ColorInput({
     >
       <span
         className="block h-full w-full rounded-[5px]"
-        style={{ background: `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})` }}
+        style={{
+          background: hasValue
+            ? `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`
+            : 'transparent',
+        }}
       />
     </button>
   );
@@ -594,8 +623,8 @@ export function ColorInput({
           <ColorPickerPanel
             hsv={hsv}
             alpha={alpha}
-            onHsv={setHsv}
-            onAlpha={setAlpha}
+            onHsv={applyHsv}
+            onAlpha={applyAlpha}
           />
         </div>
       ) : null}
