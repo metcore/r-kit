@@ -1,15 +1,10 @@
 import { Editor, useEditorState } from '@tiptap/react';
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-} from '../../dropdown';
-import { Icon } from '../../icons';
-import ToolbarGroup from './toolbar-group';
-import type { TableAction } from '../type';
 import clsx from 'clsx';
-import { Text } from '../../text/text';
+import { Dropdown, DropdownContent, DropdownTrigger } from '../../dropdown';
+import { Icon } from '../../icons';
+import type { TableAction } from '../type';
+import SelectItem from './select-item';
+import ToolbarGroup from './toolbar-group';
 
 export default function TableGroup({
   editor,
@@ -121,7 +116,7 @@ export default function TableGroup({
     <ToolbarGroup>
       <Dropdown>
         <DropdownTrigger
-          className="outline-none"
+          className="cursor-pointer outline-none"
           disabled={
             disabled || activeState.isInYoutube || activeState.isInImage
           }
@@ -155,70 +150,52 @@ export default function TableGroup({
         <DropdownContent
           sideOffset={3}
           className="z-30 rounded-lg p-1"
-          align="start"
+          align="end"
         >
           {mainActions.map((action, index) => (
-            <DropdownItem
+            <SelectItem
               key={index}
+              label={action.title}
+              icon={action.icon}
+              active={Boolean(action.active)}
               onClick={() => action.onClick()}
               disabled={
                 Boolean(action.disabled) ||
                 (action.requiresTable && !activeState.isInTable)
               }
-              className={clsx(
-                'rounded-md border-transparent py-1 disabled:opacity-50',
-                Boolean(action.active) && 'bg-primary-50 border-primary-300'
-              )}
-            >
-              <Icon name={action.icon} size={20} className="text-gray-900" />
-              <Text weight="medium" className="text-gray-900">
-                {action.title}
-              </Text>
-            </DropdownItem>
+            />
           ))}
 
           <div className="h-px w-full bg-gray-200" />
 
           {rowActions.map((action, index) => (
-            <DropdownItem
+            <SelectItem
               key={index}
+              label={action.title}
+              icon={action.icon}
+              active={Boolean(action.active)}
               onClick={() => action.onClick()}
               disabled={
                 Boolean(action.disabled) ||
                 (action.requiresTable && !activeState.isInTable)
               }
-              className={clsx(
-                'rounded-md border-transparent py-1 disabled:opacity-50',
-                Boolean(action.active) && 'bg-primary-50 border-primary-300'
-              )}
-            >
-              <Icon name={action.icon} size={20} className="text-gray-900" />
-              <Text weight="medium" className="text-gray-900">
-                {action.title}
-              </Text>
-            </DropdownItem>
+            />
           ))}
 
           <div className="h-px w-full bg-gray-200" />
 
           {columnActions.map((action, index) => (
-            <DropdownItem
+            <SelectItem
               key={index}
+              label={action.title}
+              icon={action.icon}
+              active={Boolean(action.active)}
               onClick={() => action.onClick()}
               disabled={
                 Boolean(action.disabled) ||
                 (action.requiresTable && !activeState.isInTable)
               }
-              className={clsx(
-                'rounded-md border-transparent py-1 disabled:opacity-50',
-                Boolean(action.active) && 'bg-primary-50 border-primary-300'
-              )}
-            >
-              <Icon name={action.icon} size={20} className="text-gray-900" />
-              <Text weight="medium" className="text-gray-900">
-                {action.title}
-              </Text>
-            </DropdownItem>
+            />
           ))}
         </DropdownContent>
       </Dropdown>
