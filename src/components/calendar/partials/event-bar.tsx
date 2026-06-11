@@ -7,14 +7,36 @@ interface Props {
   segment: { event: CalendarEvent; startCol: number; span: number };
   showTooltip?: boolean;
   tooltip?: CalendarEvent;
+  isMouseEventOnChildren?: boolean;
+  level?: number;
   onClick?: (segment: {
     event: CalendarEvent;
     startCol: number;
     span: number;
   }) => void;
-  isMouseEventOnChildren?: boolean;
-  level?: number;
 }
+
+const bg_color_map = {
+  info: '#F1FDFF',
+  purple: '#EEEBFF',
+  orange: '#FFFBED',
+  success: '#EAFFEC',
+  danger: '#FEF3F2',
+  warning: '#FFFAEB',
+  primary: '#F1F2FF',
+} as const;
+
+const ribbon_color_map = {
+  info: '#6CD8FF',
+  purple: '#A6A6FB',
+  orange: '#FFDA71',
+  success: '#6BE995',
+  danger: '#FDA29B',
+  warning: '#FEC84B',
+  primary: '#ABB1FF',
+} as const;
+
+type PresetColor = keyof typeof bg_color_map;
 
 export default function EventBar({
   segment,
@@ -41,26 +63,29 @@ export default function EventBar({
     setPos({ x, y });
   };
 
-  const bg_color_map = {
-    info: '#F1FDFF',
-    purple: '#EEEBFF',
-    orange: '#FFFBED',
-    success: '#EAFFEC',
-    danger: '#FEF3F2',
-    warning: '#FFFAEB',
-    primary: '#F1F2FF',
+  const getBgColor = (color?: string) => {
+    if (color == null) return bg_color_map.info;
+
+    if (color in bg_color_map) {
+      return bg_color_map[color as PresetColor];
+    }
+
+    if (/^#([A-Fa-f0-9]{6})$/.test(color)) {
+      return `${color}30`;
+    }
+
+    if (/^#([A-Fa-f0-9]{3})$/.test(color)) {
+      const hex = color.slice(1);
+      return `#${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}30`;
+    }
+
+    return color;
   };
 
-  const ribbon_color_map = {
-    info: '#6CD8FF',
-    purple: '#A6A6FB',
-    orange: '#FFDA71',
-    success: '#6BE995',
-    danger: '#FDA29B',
-    warning: '#FEC84B',
-    primary: '#ABB1FF',
+  const getRibbonColor = (color?: string) => {
+    if (color === undefined || color === null) return ribbon_color_map.info;
+    return color in ribbon_color_map ? ribbon_color_map[color as PresetColor] : color; //prettier-ignore
   };
-
   return (
     <>
       <button
@@ -76,15 +101,13 @@ export default function EventBar({
         style={{
           gridRowStart: level + 1,
           gridColumn: `${segment.startCol + 1} / span ${segment.span}`,
-          backgroundColor:
-            bg_color_map[segment?.event?.color ?? 'info'] ?? '#F1FDFF',
+          backgroundColor: getBgColor(segment?.event?.color),
         }}
       >
         <span
           className="absolute left-0 h-full w-1"
           style={{
-            backgroundColor:
-              ribbon_color_map[segment?.event?.color ?? 'info'] ?? '#6CD8FF',
+            backgroundColor: getRibbonColor(segment?.event?.color),
           }}
         />
 
@@ -132,12 +155,7 @@ export default function EventBar({
                   <div
                     className="size-1 rounded-full"
                     style={{
-                      backgroundColor:
-                        ribbon_color_map[
-                          segment?.event?.tooltip?.color ??
-                            segment.event.color ??
-                            'info'
-                        ] ?? '#6CD8FF',
+                      backgroundColor: getRibbonColor(segment?.event?.color),
                     }}
                   />
                   <Text variant="t3" className={clsx('text-gray-800')}>

@@ -91,9 +91,9 @@ export default function CalendarPage() {
     {
       title: 'Sprint Planning',
       subtitle: 'Full Week',
-      color: 'primary',
-      startDate: '2026-03-30',
-      endDate: '2026-04-11',
+      color: 'danger',
+      startDate: '2026-06-01',
+      endDate: '2026-06-11',
     },
   ];
 
