@@ -30,3 +30,4 @@ export * from './components/radio';
 export * from './components/dnd';
 export * from './components/input-group';
 export * from './components/api-table';
+export * from './types/api-response';
