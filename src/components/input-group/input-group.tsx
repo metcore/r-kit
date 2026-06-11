@@ -2,27 +2,29 @@ import * as React from 'react';
 import { cn, fieldHasError } from '../../lib/utils';
 import { FormField } from '../form';
 import { createContext, useContext } from 'react';
-const groupHeight: Record<InputGroupSize, string> = {
-  sm: 'h-8',
-  md: 'h-10',
-  lg: 'h-12',
-};
-
-export type InputGroupSize = 'sm' | 'md' | 'lg';
+import type { InputSize } from '../input/input';
 
 export type InputGroupContextValue = {
-  size: InputGroupSize;
+  size: InputSize;
+  disabled: boolean;
+  hasError: boolean;
 };
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);
 
 export const useInputGroup = () => useContext(InputGroupContext);
 
+const groupMinHeight: Record<InputSize, string> = {
+  sm: 'h-8 text-xs',
+  md: 'h-9 text-sm ',
+  lg: 'h-10 text-base ',
+};
+
 export interface InputGroupProps extends Omit<
   React.ComponentProps<'div'>,
   'size'
 > {
-  size?: InputGroupSize;
+  size?: InputSize;
   label?: string;
   hint?: string;
   description?: string;
@@ -47,7 +49,12 @@ export function InputGroup({
   children,
   ...props
 }: InputGroupProps) {
-  const hasError = fieldHasError(errorMessages) ?? isError;
+  const hasError = fieldHasError(errorMessages) ?? isError ?? false;
+
+  const contextValue = React.useMemo<InputGroupContextValue>(
+    () => ({ size, disabled, hasError }),
+    [size, disabled, hasError]
+  );
 
   return (
     <FormField
@@ -59,19 +66,18 @@ export function InputGroup({
       tooltip={tooltip}
       size={size}
     >
-      <InputGroupContext.Provider value={{ size }}>
+      <InputGroupContext.Provider value={contextValue}>
         <div
           data-slot="input-group"
           data-disabled={disabled || undefined}
           aria-disabled={disabled || undefined}
           className={cn(
             'flex w-full items-stretch overflow-hidden rounded-lg border bg-white transition-colors',
-            groupHeight[size],
+            groupMinHeight[size],
             hasError
               ? 'border-danger-500 focus-within:border-danger-500'
               : 'focus-within:border-primary-300 border-gray-200',
             disabled && 'pointer-events-none bg-gray-100 opacity-60',
-            // divider antar-segmen
             '[&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-gray-200',
             className
           )}

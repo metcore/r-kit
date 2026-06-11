@@ -519,6 +519,7 @@ export function ColorInput({
   label,
   hint,
   errorMessages,
+  size,
   onChange,
 }: ColorInputProps): React.ReactElement {
   const init = parseColor(defaultColor);
@@ -574,6 +575,7 @@ export function ColorInput({
       <InputGroup
         label={label}
         hint={hint}
+        size={size}
         tooltip={tooltip}
         errorMessages={errorMessages}
       >
@@ -581,6 +583,7 @@ export function ColorInput({
           placeholder={placeholder}
           onClick={() => setOpen((o) => !o)}
           className="cursor-pointer"
+          size={size}
           value={display}
           readOnly
         />

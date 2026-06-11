@@ -5,6 +5,7 @@ import { FormField } from '../form';
 import { Icon, type IconNameProps } from '../icons';
 import { useInputGroup } from '../input-group';
 
+export type InputSize = NonNullable<InputVariantProps['size']>;
 export interface InputProps
   extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariantProps {
   /**
@@ -60,18 +61,38 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onContainerResize,
       icon,
       autoWidth = false,
+      // Dikeluarkan dari ...props supaya bisa di-set EKSPLISIT setelah spread.
+      // Kalau dibiarkan di dalam {...props}, urutan spread bisa menimpa nilai
+      // yang sudah dihitung (id/style) atau memblok propagasi (disabled).
+      id,
+      style,
+      disabled,
       ...props
     },
     ref
   ) => {
-    const hasError = fieldHasError(errorMessages) ?? isError;
-    const generatedId = React.useId();
-    const fieldRef = React.useRef<HTMLDivElement | null>(null);
-
     const group = useInputGroup();
     const inGroup = group !== null;
 
-    const measureValue = String(props?.value ?? props.placeholder ?? undefined);
+    // Precedence: prop di komponen > nilai dari InputGroup > default CVA ('md').
+    const resolvedSize = size ?? group?.size;
+    const isDisabled = disabled ?? group?.disabled ?? false;
+    const hasError =
+      fieldHasError(errorMessages) ?? isError ?? group?.hasError ?? false;
+
+    const generatedId = React.useId();
+    const inputId = id ?? generatedId;
+    const fieldRef = React.useRef<HTMLDivElement | null>(null);
+
+    // Sebelumnya: String(value ?? placeholder ?? undefined) -> kalau dua-duanya
+    // kosong hasilnya string "undefined" (length 9), jadi autoWidth = 9ch padahal
+    // input kosong. Sekarang fallback ke string kosong.
+    const measureValue =
+      props.value != null
+        ? String(props.value)
+        : props.placeholder != null
+          ? String(props.placeholder)
+          : '';
     const textLength = measureValue.length;
 
     React.useEffect(() => {
@@ -85,14 +106,19 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return () => ro.disconnect();
     }, [onContainerResize]);
 
+    const mergedStyle: React.CSSProperties | undefined =
+      autoWidth && measureValue
+        ? { width: `${textLength}ch`, ...style }
+        : style;
+
     const field = (
       <div
         className={cn(
           'flex items-stretch',
           inGroup
-            ? 'h-full min-w-0 flex-1 bg-transparent'
+            ? 'min-w-0 flex-1 bg-transparent'
             : cn(
-                'h-10 w-full overflow-hidden rounded-lg border bg-white',
+                'w-full overflow-hidden rounded-lg border bg-white',
                 hasError
                   ? 'border-danger-500 focus-within:border-danger-500'
                   : 'focus-within:border-primary-300 border-gray-200'
@@ -118,29 +144,24 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {leftAddon}
           </div>
         )}
-
         <input
           ref={ref}
           type={type}
           size={inputSize}
-          id={props?.id ?? generatedId}
-          style={
-            measureValue && autoWidth
-              ? { width: autoWidth ? `${textLength}ch` : '100%' }
-              : undefined
-          }
+          {...props}
+          id={inputId}
+          disabled={isDisabled}
+          required={false}
+          style={mergedStyle}
           className={cn(
-            inputVariants({ size }),
+            inputVariants({ size: resolvedSize }),
             'font-metropolis w-full min-w-0! rounded-none border-none focus-visible:outline-none',
-            inGroup ? 'h-full' : 'h-10',
             Boolean(leftAddon) && 'pl-2',
             Boolean(rightAddon) && 'pr-2',
             Boolean(mergedAddon) && 'shadow-none',
-            Boolean(props.disabled) && 'cursor-not-allowed bg-gray-100',
+            isDisabled && 'cursor-not-allowed bg-gray-100',
             className
           )}
-          {...props}
-          required={false}
         />
 
         {Boolean(rightAddon) && (
@@ -158,7 +179,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       </div>
     );
 
-    // Di dalam InputGroup: tanpa FormField, tanpa border/radius sendiri.
     if (inGroup) {
       return field;
     }
@@ -172,9 +192,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         errorMessages={errorMessages}
         className={className}
         required={props.required}
-        size={size}
+        size={resolvedSize}
         style={autoWidth && measureValue ? { width: 'fit-content' } : undefined}
-        htmlFor={props?.id ?? generatedId}
+        htmlFor={inputId}
         tooltip={tooltip}
       >
         {field}

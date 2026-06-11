@@ -43,6 +43,7 @@ export default function ColorPickerPage() {
               label="Input Color"
               tooltip="Please change a color"
               errorMessages="Error validation"
+              size="md"
             />
           </MainSection>
         </GridWrapper>

@@ -132,16 +132,42 @@ export default function InputGroupPage() {
                 <Icon name="search" size={18} />
               </InputGroupText>
               <Input placeholder="Search..." />
-              <Button color="primary">Search</Button>
+              <InputGroupKbd size="sm">
+                <Icon name="arrow-turn-down-left" size={12} />
+              </InputGroupKbd>
             </InputGroup>
-            <InputGroup>
+          </MainSection>
+
+          <MainSection title="Input Size" className="flex-1">
+            <InputGroup size="sm" label="SM">
               <InputGroupText>
                 <Icon name="search" size={18} />
               </InputGroupText>
               <Input placeholder="Search..." />
-              <InputGroupKbd size="sm">
-                <Icon name="arrow-turn-down-left" size={12} />
-              </InputGroupKbd>
+            </InputGroup>
+            <InputGroup size="md" label="Medium">
+              <Select
+                options={toSelectOptions(countries, {
+                  value: 'name',
+                  label: 'flag',
+                })}
+                renderOption={(value) => {
+                  return <Country country={value} />;
+                }}
+              />
+              <Input type="tel" placeholder="Enter phone number" />
+            </InputGroup>
+            <InputGroup size="lg" label="Large">
+              <Input type="tel" placeholder="Enter phone number" />
+              <Select
+                options={toSelectOptions(countries, {
+                  value: 'name',
+                  label: 'flag',
+                })}
+                renderOption={(value) => {
+                  return <Country country={value} />;
+                }}
+              />
             </InputGroup>
           </MainSection>
           <MainSection
