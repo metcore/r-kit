@@ -61,9 +61,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onContainerResize,
       icon,
       autoWidth = false,
-      // Dikeluarkan dari ...props supaya bisa di-set EKSPLISIT setelah spread.
-      // Kalau dibiarkan di dalam {...props}, urutan spread bisa menimpa nilai
-      // yang sudah dihitung (id/style) atau memblok propagasi (disabled).
       id,
       style,
       disabled,
@@ -74,7 +71,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const group = useInputGroup();
     const inGroup = group !== null;
 
-    // Precedence: prop di komponen > nilai dari InputGroup > default CVA ('md').
     const resolvedSize = size ?? group?.size;
     const isDisabled = disabled ?? group?.disabled ?? false;
     const hasError =
@@ -84,9 +80,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? generatedId;
     const fieldRef = React.useRef<HTMLDivElement | null>(null);
 
-    // Sebelumnya: String(value ?? placeholder ?? undefined) -> kalau dua-duanya
-    // kosong hasilnya string "undefined" (length 9), jadi autoWidth = 9ch padahal
-    // input kosong. Sekarang fallback ke string kosong.
     const measureValue =
       props.value != null
         ? String(props.value)

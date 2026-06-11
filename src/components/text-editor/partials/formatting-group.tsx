@@ -14,6 +14,7 @@ import ToolbarGroup from './toolbar-group';
 import { useEffect, useState } from 'react';
 import { Input } from '../../input';
 import ColorPickerButton from './color-picker-button';
+import SelectItem from './select-item';
 
 const headings: { level: HeadingLevel; title: string; fontSize: number }[] = [
   { level: 1, title: 'H1', fontSize: 24 },
@@ -129,12 +130,11 @@ export default function FormattingGroup({
               size="sm"
             />
             {fontSizes.map((size, index) => (
-              <DropdownItem
+              <SelectItem
                 key={index}
-                className={clsx(
-                  'flex justify-start rounded-md border-transparent py-1',
-                  displayFontSize === size && 'bg-primary-50 border-primary-300'
-                )}
+                label={String(size)}
+                active={displayFontSize === size}
+                className="justify-center *:text-center!"
                 onClick={() => {
                   editor
                     .chain()
@@ -142,11 +142,7 @@ export default function FormattingGroup({
                     .setFontSize(size + 'px')
                     .run();
                 }}
-              >
-                <Text weight="medium" className="text-gray-900">
-                  {size}
-                </Text>
-              </DropdownItem>
+              />
             ))}
           </DropdownContent>
         </Dropdown>
@@ -155,7 +151,7 @@ export default function FormattingGroup({
       <ToolbarGroup>
         <Dropdown>
           <DropdownTrigger
-            className="outline-none"
+            className="cursor-pointer outline-none"
             disabled={
               disabled || activeState.isInYoutube || activeState.isInImage
             }
@@ -191,7 +187,7 @@ export default function FormattingGroup({
           <DropdownContent sideOffset={3} className="z-30 p-1">
             <DropdownItem
               className={clsx(
-                'rounded-md border-transparent py-1',
+                'hover:border-primary-300 hover:bg-primary-50 cursor-pointer rounded-md border border-transparent py-1',
                 activeState.activeParagraph &&
                   'bg-primary-50 border-primary-300'
               )}
@@ -204,13 +200,10 @@ export default function FormattingGroup({
               </Text>
             </DropdownItem>
             {headings.map((head, index) => (
-              <DropdownItem
+              <SelectItem
                 key={index}
-                className={clsx(
-                  'rounded-md border-transparent py-1',
-                  activeState.activeHeading === head.level &&
-                    'bg-primary-50 border-primary-300'
-                )}
+                label={head.title}
+                active={activeState.activeHeading === head.level}
                 onClick={() => {
                   editor
                     .chain()
@@ -219,11 +212,7 @@ export default function FormattingGroup({
                     .setFontSize(head.fontSize + 'px')
                     .run();
                 }}
-              >
-                <Text weight="medium" className="text-gray-900">
-                  {head.title}
-                </Text>
-              </DropdownItem>
+              />
             ))}
           </DropdownContent>
         </Dropdown>
@@ -325,21 +314,15 @@ export default function FormattingGroup({
               size="sm"
             />
             {lineHeights.map((size, index) => (
-              <DropdownItem
+              <SelectItem
                 key={index}
-                className={clsx(
-                  'flex justify-center rounded-md border-transparent py-1',
-                  displayLineHeight === size &&
-                    'bg-primary-50 border-primary-300'
-                )}
+                label={String(size)}
+                active={displayLineHeight === size}
+                className="justify-center"
                 onClick={() => {
                   editor.chain().focus().setLineHeight(String(size)).run();
                 }}
-              >
-                <Text weight="medium" className="text-gray-900">
-                  {size}
-                </Text>
-              </DropdownItem>
+              />
             ))}
           </DropdownContent>
         </Dropdown>

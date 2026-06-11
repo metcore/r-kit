@@ -394,6 +394,8 @@ import BugSlashIcon from './icons/BugSlashIcon';
 import DragHandleIcon from './icons/DragHandleIcon';
 import FloppyDiskIcon from './icons/FloppyDiskIcon';
 import GridSquarePlusIcon from './icons/GridSquareplusIcon';
+import FlagIcon from './icons/FlagIcon';
+import BadgeDiscountAltIcon from './icons/BadgeDiscountAltIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -792,4 +794,6 @@ export const iconRegistry = {
   'share-01': Share01Icon,
   'floppy-disk': FloppyDiskIcon,
   'grid-square-plus': GridSquarePlusIcon,
+  'flag': FlagIcon,
+  'badge-discount-alt': BadgeDiscountAltIcon,
 };

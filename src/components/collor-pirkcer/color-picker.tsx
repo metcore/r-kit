@@ -214,7 +214,7 @@ function HexBox({ hex, onCommit }: HexBoxProps): React.ReactElement {
   };
 
   return (
-    <div className={`${boxBaseCls} flex-[3] justify-center px-1`}>
+    <div className={`${boxBaseCls} flex-3 justify-center px-1`}>
       <input
         className={`${inputBaseCls} pl-1.5 text-left tracking-[0.5px]`}
         value={draft}
@@ -371,11 +371,11 @@ export function ColorPickerPanel({
   };
 
   return (
-    <div className="box-border w-[280px] rounded-2xl bg-white p-3.5 shadow-[0_12px_36px_rgba(15,23,42,0.18),0_0_0_1px_rgba(15,23,42,0.05)] select-none">
+    <div className="box-border w-70 rounded-2xl bg-white p-3.5 shadow-[0_12px_36px_rgba(15,23,42,0.18),0_0_0_1px_rgba(15,23,42,0.05)] select-none">
       <div
         ref={svRef}
         onPointerDown={onSvDown}
-        className="relative h-[190px] w-full cursor-crosshair touch-none rounded-[10px]"
+        className="relative h-47.5 w-full cursor-crosshair touch-none rounded-[10px]"
         style={{
           background:
             `linear-gradient(to top,#000,rgba(0,0,0,0)),` +
@@ -383,7 +383,7 @@ export function ColorPickerPanel({
         }}
       >
         <div
-          className="pointer-events-none absolute h-[18px] w-[18px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.25),0_1px_4px_rgba(0,0,0,0.35)]"
+          className="pointer-events-none absolute h-4.5 w-4.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.25),0_1px_4px_rgba(0,0,0,0.35)]"
           style={{
             left: `${hsv.s * 100}%`,
             top: `${(1 - hsv.v) * 100}%`,
@@ -403,7 +403,7 @@ export function ColorPickerPanel({
               ? 'Pick a color from screen'
               : 'EyeDropper not supported in this browser'
           }
-          className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-lg border border-[#E4E6EB] bg-white ${
+          className={`flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-lg border border-[#E4E6EB] bg-white ${
             eyedropperSupported
               ? 'cursor-pointer text-[#4b5563]'
               : 'cursor-not-allowed text-[#c4c8cf]'
@@ -455,7 +455,7 @@ export function ColorPickerPanel({
             </span>
           </button>
           {fmtOpen ? (
-            <div className="absolute top-11 left-0 z-[5] w-20 overflow-hidden rounded-[10px] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.18),0_0_0_1px_rgba(15,23,42,0.06)]">
+            <div className="absolute top-11 left-0 z-5 w-20 overflow-hidden rounded-[10px] bg-white shadow-[0_8px_24px_rgba(15,23,42,0.18),0_0_0_1px_rgba(15,23,42,0.06)]">
               {FORMATS.map((f) => (
                 <button
                   type="button"
@@ -464,7 +464,7 @@ export function ColorPickerPanel({
                     setFormat(f);
                     setFmtOpen(false);
                   }}
-                  className={`block w-full cursor-pointer px-3 py-[9px] text-left text-[13px] ${
+                  className={`block w-full cursor-pointer px-3 py-2.25 text-left text-[13px] ${
                     f === format
                       ? 'bg-[#f3f7ff] font-semibold text-[#2f80ed]'
                       : 'text-[#1f2430] hover:bg-[#f6f7f9]'
@@ -496,7 +496,7 @@ export function ColorPickerPanel({
                 onAlpha(1);
               }
             }}
-            className="h-[26px] w-[26px] cursor-pointer rounded-full border border-[rgba(0,0,0,0.08)] p-0"
+            className="h-6.5 w-6.5 cursor-pointer rounded-full border border-[rgba(0,0,0,0.08)] p-0"
             style={{ background: c }}
           />
         ))}
@@ -585,7 +585,7 @@ export function ColorInput({
     <button
       type="button"
       onClick={() => setOpen((o) => !o)}
-      className="block h-[26px] w-[26px] shrink-0 cursor-pointer rounded-md border border-[rgba(0,0,0,0.12)] p-0"
+      className="block h-6.5 w-6.5 shrink-0 cursor-pointer rounded-md p-0"
       style={{ ...CHECKER, backgroundSize: '8px 8px' }}
     >
       <span
@@ -619,7 +619,7 @@ export function ColorInput({
         <InputGroupText>{inputColorDisplay()}</InputGroupText>
       </InputGroup>
       {open ? (
-        <div className="absolute top-[52px] left-0 z-10">
+        <div className="absolute top-13 left-0 z-10">
           <ColorPickerPanel
             hsv={hsv}
             alpha={alpha}

@@ -45,6 +45,7 @@ export const ButtonIcon = ({
   className,
   iconSize,
   indicatorProps,
+  type = 'button',
   ...rest
 }: ButtonIconProps) => {
   const iconElement = <Icon name={icon} size={iconSize ?? glyphBySize[size]} />;
@@ -55,6 +56,7 @@ export const ButtonIcon = ({
       size={size}
       loading={loading}
       className={cn(boxBySize[size], rounded && 'rounded-full', className)}
+      type={type}
     >
       {!loading &&
         (indicatorProps ? (

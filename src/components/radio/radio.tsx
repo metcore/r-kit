@@ -9,6 +9,7 @@ import {
   FormHint,
   FormLabel,
 } from '../form';
+import { useInputGroup } from '../input-group';
 
 export type RadioButtonValue = string | number | boolean;
 interface RadioGroupContextValue {
@@ -226,17 +227,25 @@ export const Radio: React.FC<
   const generatedId = useId();
   const id = props.id ?? generatedId;
   const context = useContext(RadioGroupContext);
-  const size = sizeProp ?? context?.size ?? 'md';
+  const size = sizeProp ?? context?.size ?? null;
 
   const isInGroup = !!context;
   const showHintAndError = !isInGroup;
 
   const hasError = Boolean(errorMessages);
-
+  const group = useInputGroup();
+  const inGroup = group !== null;
+  const resolvedSize = size ?? group?.size;
   return (
-    <div className={cn('flex flex-col', className)}>
+    <div
+      className={cn(
+        'flex flex-col',
+        inGroup && 'h-full items-center justify-center',
+        className
+      )}
+    >
       <div className={cn('inline-flex gap-2')}>
-        <BaseRadio {...props} id={id} size={size} />
+        <BaseRadio {...props} id={id} size={resolvedSize} />
 
         <div className={cn('flex flex-col')}>
           {label !== undefined && (

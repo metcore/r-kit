@@ -456,7 +456,7 @@ export function Select<Extra extends object = object>({
     const highlighted = index === highlightedIndex;
     return (
       <div
-        key={option.value}
+        key={`${option.value} - ${index}`}
         ref={(el) => {
           optionRefs.current[index] = el;
         }}

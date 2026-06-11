@@ -29,7 +29,9 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
+  Radio,
   Select,
+  Switch,
 } from '../../../clients';
 import { Button } from '../../../components/button';
 import {
@@ -103,7 +105,7 @@ const codeEmail = dedent(`
   }
 `);
 
-const codeUrlBuilder = dedent(`
+const radioBuilder = dedent(`
   import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
   import { Input } from '@herca/r-kit/input';
 
@@ -112,6 +114,20 @@ const codeUrlBuilder = dedent(`
       <InputGroup label="Slug">
         <InputGroupText>https://example.com/</InputGroupText>
         <Input placeholder="product-name" />
+      </InputGroup>
+    );
+  }
+`);
+
+const switchExample = dedent(`
+  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
+  import { Input, switch } from '@herca/r-kit/input';
+
+  export default function UrlBuilderExample() {
+    return (
+      <InputGroup label="Slug">
+          <Switch />
+          <Input placeholder="product-name" />
       </InputGroup>
     );
   }
@@ -592,13 +608,16 @@ export default function InputGroupPage() {
             </InputGroup>
           </MainSection>
 
-          <MainSection
-            code={codeUrlBuilder}
-            title="URL Builder"
-            className="flex-1"
-          >
-            <InputGroup label="Slug">
-              <InputGroupText>https://example.com/</InputGroupText>
+          <MainSection code={radioBuilder} title="Radio" className="flex-1">
+            <InputGroup label="Slug" size="sm">
+              <Radio value="option1" />
+              <Input placeholder="product-name" />
+            </InputGroup>
+          </MainSection>
+
+          <MainSection code={switchExample} title="Switch" className="flex-1">
+            <InputGroup label="Slug" size="sm">
+              <Switch />
               <Input placeholder="product-name" />
             </InputGroup>
           </MainSection>

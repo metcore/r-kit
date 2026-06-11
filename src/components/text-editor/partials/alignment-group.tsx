@@ -1,16 +1,10 @@
 import { Editor, useEditorState } from '@tiptap/react';
-import clsx from 'clsx';
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-} from '../../dropdown';
+import { Dropdown, DropdownContent, DropdownTrigger } from '../../dropdown';
 import { Icon, type IconNameProps } from '../../icons';
-import { Text } from '../../text/text';
 import type { TextAlignValue } from '../type';
-import ToolbarGroup from './toolbar-group';
+import SelectItem from './select-item';
 import ToolbarButton from './toolbar-button';
+import ToolbarGroup from './toolbar-group';
 
 export default function AlignmentGroup({
   editor,
@@ -56,7 +50,10 @@ export default function AlignmentGroup({
     <ToolbarGroup>
       {isAlignmentActive && (
         <Dropdown>
-          <DropdownTrigger className="outline-none" disabled={disabled}>
+          <DropdownTrigger
+            className="cursor-pointer outline-none"
+            disabled={disabled}
+          >
             <div
               title="Heading"
               className="flex items-center gap-1 rounded-lg border border-gray-300 p-2"
@@ -71,21 +68,15 @@ export default function AlignmentGroup({
           </DropdownTrigger>
           <DropdownContent sideOffset={3} className="z-30 p-1" align="start">
             {alignments.map((align, index) => (
-              <DropdownItem
+              <SelectItem
                 key={index}
+                label={align.align}
+                icon={align.icon}
+                active={activeState[align.align]}
                 onClick={() =>
                   editor.chain().focus().setTextAlign(align.align).run()
                 }
-                className={clsx(
-                  'rounded-md border-transparent py-1',
-                  activeState[align.align] && 'bg-primary-50 border-primary-300'
-                )}
-              >
-                <Icon name={align.icon} size={20} className="text-gray-900" />
-                <Text weight="medium" className="text-gray-900">
-                  {align.align}
-                </Text>
-              </DropdownItem>
+              />
             ))}
           </DropdownContent>
         </Dropdown>
