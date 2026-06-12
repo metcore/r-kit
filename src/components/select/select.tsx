@@ -102,7 +102,12 @@ export function Select<Extra extends object = object>({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const [menuStyle, setMenuStyle] = useState<CSSProperties>({});
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({
+    position: 'fixed',
+    top: -9999,
+    left: -9999,
+    visibility: 'hidden',
+  });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -344,11 +349,14 @@ export function Select<Extra extends object = object>({
 
   useEffect(() => {
     const el = optionRefs.current[highlightedIndex];
-    if (el) {
-      el.scrollIntoView({
-        block: 'nearest',
-        behavior: 'smooth',
-      });
+    const container = listContainerRef.current;
+    if (!el || !container) return;
+    const elRect = el.getBoundingClientRect();
+    const cRect = container.getBoundingClientRect();
+    if (elRect.top < cRect.top) {
+      container.scrollTop -= cRect.top - elRect.top;
+    } else if (elRect.bottom > cRect.bottom) {
+      container.scrollTop += elRect.bottom - cRect.bottom;
     }
   }, [highlightedIndex]);
 
@@ -383,7 +391,7 @@ export function Select<Extra extends object = object>({
 
   useEffect(() => {
     if (isOpen && isSearchable) {
-      searchInputRef.current?.focus();
+      searchInputRef.current?.focus({ preventScroll: true });
     }
   }, [isOpen, isSearchable]);
 

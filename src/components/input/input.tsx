@@ -4,6 +4,7 @@ import { inputVariants, type InputVariantProps } from './input-variants';
 import { FormField } from '../form';
 import { Icon, type IconNameProps } from '../icons';
 import { useInputGroup } from '../input-group';
+import { Button } from '../button';
 
 export type InputSize = NonNullable<InputVariantProps['size']>;
 export interface InputProps
@@ -38,6 +39,7 @@ export interface InputProps
   icon?: IconNameProps;
   autoWidth?: boolean;
   tooltip?: string;
+  clearAble?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -64,6 +66,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       id,
       style,
       disabled,
+      clearAble = false,
       ...props
     },
     ref
@@ -103,6 +106,33 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       autoWidth && measureValue
         ? { width: `${textLength}ch`, ...style }
         : style;
+
+    const handleClear = React.useCallback(() => {
+      if (isDisabled) return;
+
+      const input =
+        ref && typeof ref !== 'function'
+          ? ref.current
+          : document.getElementById(inputId);
+
+      if (!input || !(input instanceof HTMLInputElement)) return;
+
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value'
+      )?.set;
+
+      nativeInputValueSetter?.call(input, '');
+
+      const event = new Event('input', { bubbles: true });
+      input.dispatchEvent(event);
+
+      // fallback kalau parent kasih onChange langsung
+      props.onChange?.({
+        target: input,
+        currentTarget: input,
+      } as React.ChangeEvent<HTMLInputElement>);
+    }, [isDisabled, ref, inputId, props]);
 
     const field = (
       <div
@@ -152,10 +182,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             Boolean(leftAddon) && 'pl-2',
             Boolean(rightAddon) && 'pr-2',
             Boolean(mergedAddon) && 'shadow-none',
-            isDisabled && 'cursor-not-allowed bg-gray-100',
+            isDisabled && 'cursor-not-allowed bg-gray-300',
             className
           )}
         />
+
+        {clearAble && (
+          <Button
+            variant="tertiary"
+            onClick={handleClear}
+            className="cursor-pointer rounded text-center text-gray-700"
+          >
+            <Icon name="times-circle" size={20} />
+          </Button>
+        )}
 
         {Boolean(rightAddon) && (
           <div

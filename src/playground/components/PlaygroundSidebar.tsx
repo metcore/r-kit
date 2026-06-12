@@ -56,6 +56,8 @@ function PlaygroundSidebar() {
         { path: '/playground/text-editor', label: 'Text Editor' },
         { path: '/playground/input-otp', label: 'Input OTP' },
         { path: '/playground/color-picker', label: 'Color Picker' },
+        { path: '/playground/input-password', label: 'Input Passowrd' },
+        { path: '/playground/input-phone-number', label: 'Input Phone Number' },
       ],
     },
     {
