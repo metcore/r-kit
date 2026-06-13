@@ -316,14 +316,14 @@ export const FileView: FC<FileViewProps> = ({
       )}
       <div className="grid w-full grid-cols-3 items-center justify-between gap-2">
         <div className="col-span-2 min-w-0">
+          <Text variant="t2" weight="semibold" className="truncate">
+            {fileName}
+          </Text>
           {displaySize ? (
             <Text variant="t2" weight="regular" className="truncate">
               {displaySize}
             </Text>
           ) : null}
-          <Text variant="t2" weight="semibold" className="truncate">
-            {fileName}
-          </Text>
         </div>
         <div className="flex justify-end">
           {isCorrupt ? (
