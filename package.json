@@ -40,6 +40,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
+    "build:docs": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
