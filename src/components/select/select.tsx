@@ -242,7 +242,7 @@ export function Select<Extra extends object = object>({
     setMenuStyle({
       position: 'fixed',
       left: rect.left,
-      width: rect.width,
+      // width: rect.width,
       ...(openUp
         ? { bottom: viewportHeight - rect.top + MENU_GAP }
         : { top: rect.bottom + MENU_GAP }),
@@ -445,7 +445,7 @@ export function Select<Extra extends object = object>({
       renderValue(selected)
     ) : (
       <>
-        <Text variant="t2" weight="medium" className="text-gray-900">
+        <Text variant="t2" weight="semibold" className="text-gray-900">
           {selected.label}
         </Text>
         <Text variant="t3" weight="regular" className="text-gray-700">

@@ -37,8 +37,8 @@ export interface FileViewProps extends Omit<
   src?: string | File;
   size?: number;
   kind?: FileKind;
-  thumbnailUrl?: string;
   onExpand?: (name: string) => void;
+  name?: string;
   className?: string;
 }
 
@@ -189,9 +189,9 @@ export const FileView: FC<FileViewProps> = ({
   kind,
   variant = 'large',
   color = 'default',
-  thumbnailUrl,
   onExpand,
   className,
+  name,
 }) => {
   const [preview, setPreview] = useState<PreviewState>({
     isOpen: false,
@@ -213,7 +213,11 @@ export const FileView: FC<FileViewProps> = ({
   }, [objectUrl]);
 
   const fileName =
-    typeof src === 'string' ? deriveNameFromUrl(src) : (src?.name ?? '');
+    name != null
+      ? name
+      : typeof src === 'string'
+        ? deriveNameFromUrl(src)
+        : (src?.name ?? '');
   const resolvedUrl = typeof src === 'string' ? src : (objectUrl ?? '');
   const sourceSize = typeof src !== 'string' ? src?.size : undefined;
   const effectiveSize = size ?? sourceSize;
@@ -232,13 +236,9 @@ export const FileView: FC<FileViewProps> = ({
     : KIND_ICON[resolvedKind];
   const displaySize =
     effectiveSize !== undefined ? formatFileSize(effectiveSize) : 'unknown';
-  const thumbnailSrc =
-    thumbnailUrl ?? (resolvedKind === 'image' ? resolvedUrl : undefined);
+  const thumbnailSrc = resolvedKind === 'image' ? resolvedUrl : undefined;
   const showThumbnail =
-    !isCorrupt &&
-    resolvedKind === 'image' &&
-    variant == 'small' &&
-    Boolean(thumbnailSrc);
+    !isCorrupt && resolvedKind === 'image' && Boolean(thumbnailSrc);
 
   const interactive = !isCorrupt;
 
@@ -303,7 +303,7 @@ export const FileView: FC<FileViewProps> = ({
 
   const renderFooter = () => (
     <div className={fileViewFooterVariants({ color })}>
-      {showThumbnail ? (
+      {showThumbnail && variant == 'small' ? (
         <img
           src={thumbnailSrc}
           alt={fileName}

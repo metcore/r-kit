@@ -148,7 +148,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       >
         {icon && (
-          <div className="flex items-center border-r border-gray-200 px-3 py-2">
+          <div className="flex items-center border-r border-gray-200 px-3 py-1">
             <Icon name={icon} size={22} className="text-gray-600" />
           </div>
         )}

@@ -26,7 +26,7 @@ const dataGroup = [
     options: favoriteCountries,
   },
   {
-    label: 'More Country',
+    label: 'All Country',
     options: otherCountries,
   },
 ];

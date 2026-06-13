@@ -80,17 +80,10 @@ export default function InputFieldPage() {
     />
   `);
 
-  const exampleLeftAddon = dedent(`
+  const exampleIcon = dedent(`
     <Input
       placeholder="Search..."
-      leftAddon={<Icon name="search" className="text-gray-400" />}
-    />
-  `);
-
-  const exampleRightAddon = dedent(`
-    <Input
-      placeholder="0.00"
-      rightAddon={<span className="text-sm text-gray-400">USD</span>}
+      icon="search"
     />
   `);
 
@@ -207,25 +200,8 @@ export default function InputFieldPage() {
         </GridWrapper>
 
         <GridWrapper>
-          <MainSection
-            title="Left Addon"
-            className="flex-1"
-            code={exampleLeftAddon}
-          >
-            <Input
-              placeholder="Search..."
-              leftAddon={<Icon name="search" className="text-gray-400" />}
-            />
-          </MainSection>
-          <MainSection
-            title="Right Addon"
-            className="flex-1"
-            code={exampleRightAddon}
-          >
-            <Input
-              placeholder="0.00"
-              rightAddon={<span className="text-sm text-gray-400">USD</span>}
-            />
+          <MainSection title="Icon" className="flex-1" code={exampleIcon}>
+            <Input placeholder="Search..." icon="search" />
           </MainSection>
         </GridWrapper>
 
