@@ -1,6 +1,8 @@
+import clsx from 'clsx';
 import { Button } from '../../button';
 import { Icon, type IconNameProps } from '../../icons';
 import type { ToolbarButtonProps } from '../type';
+import { ButtonIcon } from '../../button-icon';
 
 export default function ToolbarButton({
   icon,
@@ -12,23 +14,43 @@ export default function ToolbarButton({
   children,
   className,
 }: ToolbarButtonProps) {
+  if (children !== undefined) {
+    return (
+      <Button
+        title={title}
+        size="xxs"
+        variant={active ? 'default' : 'tertiary'}
+        color={active ? 'primary' : 'gray'}
+        disabled={disabled}
+        onClick={onClick}
+        className={clsx(className, 'cursor-pointer')}
+        type="button"
+      >
+        {children ?? (
+          <Icon
+            name={icon as IconNameProps}
+            size={iconSize}
+            className={!active ? 'text-gray-900' : 'text-white'}
+          />
+        )}
+      </Button>
+    );
+  }
+
   return (
-    <Button
+    <ButtonIcon
       title={title}
-      size="icon"
       variant={active ? 'default' : 'tertiary'}
       color={active ? 'primary' : 'gray'}
       disabled={disabled}
       onClick={onClick}
-      className={className}
-    >
-      {children ?? (
-        <Icon
-          name={icon as IconNameProps}
-          size={iconSize}
-          className={!active ? 'text-gray-900' : 'text-white'}
-        />
+      className={clsx(
+        className,
+        'cursor-pointer',
+        !active ? 'text-gray-900' : 'text-white'
       )}
-    </Button>
+      type="button"
+      icon={icon as IconNameProps}
+    />
   );
 }

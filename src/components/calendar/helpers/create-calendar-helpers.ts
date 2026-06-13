@@ -70,6 +70,14 @@ export const createCalendarHelpers = ({
     return t > rangeValue.start.getTime() && t < rangeValue.end.getTime();
   };
 
+  const isSameDay = (a: Date, b: Date) => {
+    return (
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate()
+    );
+  };
+
   /**
    * Check if a given date is the start of the range.
    * Only works for range mode.
@@ -78,12 +86,14 @@ export const createCalendarHelpers = ({
    */
   const isRangeStart = (day: CalendarDay): boolean => {
     if (mode !== 'range' || !rangeValue?.start) return false;
-    return rangeValue.start.getTime() === day.fullDate.getTime();
+
+    return isSameDay(rangeValue.start, day.fullDate);
   };
 
   const isRangeEnd = (day: CalendarDay): boolean => {
     if (mode !== 'range' || !rangeValue?.end) return false;
-    return rangeValue.end.getTime() === day.fullDate.getTime();
+
+    return isSameDay(rangeValue.end, day.fullDate);
   };
 
   /**

@@ -27,12 +27,12 @@ const normalize = (raw: string) => {
 // handle keyboard arrow down and up
 const handleKeyDown = ({
   e,
-  canMinus,
+  allowMinus,
   value,
   valueUpdater: updateValue,
 }: {
   e: React.KeyboardEvent<HTMLInputElement>;
-  canMinus?: boolean;
+  allowMinus?: boolean;
   value: string;
   valueUpdater: (value: string) => void;
 }) => {
@@ -48,7 +48,7 @@ const handleKeyDown = ({
     const n = Number(value);
     let next = isNaN(n) ? 0 : n - 1;
 
-    if (canMinus === false && next < 0) next = 0;
+    if (allowMinus === false && next < 0) next = 0;
 
     updateValue(String(next));
   }
@@ -66,12 +66,12 @@ const handleIncrement = ({
 const handleDecrement = ({
   value,
   valueUpdater: updateValue,
-  canMinus,
-}: CounterControllerProps & { canMinus?: boolean }) => {
+  allowMinus,
+}: CounterControllerProps & { allowMinus?: boolean }) => {
   const n = parseNumber(value);
   let next = (n ?? 0) - 1;
 
-  if (canMinus === false && next < 0) next = 0;
+  if (allowMinus === false && next < 0) next = 0;
   updateValue(normalize(String(next)));
 };
 

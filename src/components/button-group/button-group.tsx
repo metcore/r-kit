@@ -1,7 +1,8 @@
 import { createContext, useContext } from 'react';
-import { Button, type ButtonProps } from '../button/button';
-import type { ButtonGroupProps } from './type';
 import clsx from 'clsx';
+
+import { Button, type ButtonProps } from '../button/button';
+import type { ButtonGroupItemProps, ButtonGroupProps } from './type';
 
 type ButtonGroupContextType = {
   size?: ButtonProps['size'];
@@ -12,7 +13,7 @@ type ButtonGroupContextType = {
 
 const ButtonGroupContext = createContext<ButtonGroupContextType | null>(null);
 
-const ButtonGroup = ({
+export const ButtonGroup = ({
   children,
   size,
   direction = 'horizontal',
@@ -20,13 +21,28 @@ const ButtonGroup = ({
   variant = 'default',
 }: ButtonGroupProps) => {
   return (
-    <ButtonGroupContext.Provider value={{ size, color, variant, direction }}>
+    <ButtonGroupContext.Provider
+      value={{
+        size,
+        color,
+        variant,
+        direction,
+      }}
+    >
       <div
         className={clsx(
           'flex *:rounded-none',
           direction === 'horizontal'
-            ? 'flex-row items-center *:first:rounded-tl-lg *:first:rounded-bl-lg *:last:rounded-tr-lg *:last:rounded-br-lg'
-            : 'flex-col items-stretch *:first:rounded-tl-lg *:first:rounded-tr-lg *:last:rounded-br-lg *:last:rounded-bl-lg'
+            ? [
+                'flex-row items-center',
+                '*:first:rounded-l-lg',
+                '*:last:rounded-r-lg',
+              ]
+            : [
+                'flex-col items-stretch',
+                '*:first:rounded-t-lg',
+                '*:last:rounded-b-lg',
+              ]
         )}
       >
         {children}
@@ -35,59 +51,60 @@ const ButtonGroup = ({
   );
 };
 
-const ButtonGroupItem = ({
-  children,
+export const ButtonGroupItem = ({
   color,
+  className,
   ...props
-}: Omit<ButtonProps, 'size' | 'variant'>) => {
+}: ButtonGroupItemProps) => {
   const context = useContext(ButtonGroupContext);
 
   const finalColor = color ?? context?.color;
-  const variant = context?.variant;
-  const direction = context?.direction;
 
-  const isDefault = variant === 'default';
-  const isTertiary = variant === 'tertiary';
-  const isVertical = direction === 'vertical';
+  const isHorizontal = context?.direction === 'horizontal';
 
-  const isHorizontal = direction === 'horizontal';
+  const isVertical = context?.direction === 'vertical';
+
+  const isDefault = context?.variant === 'default';
+
+  const isTertiary = context?.variant === 'tertiary';
+
+  const BORDER_COLOR_MAP: Record<NonNullable<ButtonProps['color']>, string> = {
+    primary: 'border-primary-1000',
+    secondary: 'border-primary-1000',
+    success: 'border-success-500',
+    danger: 'border-danger-500',
+    warning: 'border-warning-500',
+    info: 'border-info-500',
+    orange: 'border-orange-500',
+    purple: 'border-purple-500',
+    gray: 'border-gray-400',
+  };
 
   const borderDirectionClass = clsx(
     isHorizontal && 'border-l-0 first:border-l',
     isVertical && 'border-t-0 first:border-t'
   );
 
-  const BORDER_COLOR_MAP: Record<NonNullable<ButtonProps['color']>, string> = {
-    info: 'border-info-500',
-    gray: 'border-gray-400',
-    primary: 'border-primary-1000',
-    success: 'border-success-500',
-    danger: 'border-danger-500',
-    warning: 'border-warning-500',
-    orange: 'border-orange-500',
-    purple: 'border-purple-500',
-    secondary: 'border-primary-1000',
-  };
-
   return (
     <Button
+      {...props}
       size={context?.size}
-      color={color ?? context?.color}
+      color={finalColor}
       variant={context?.variant}
       className={clsx(
-        isDefault && 'last:border-r-none border-r border-white', //prettier-ignore
-        isTertiary && 'brder-0', //prettier-ignore
+        className,
+        isDefault &&
+          clsx(
+            isHorizontal && 'border-r border-white last:border-r-0',
 
-        variant === 'outline' && [
+            isVertical && 'border-b border-white last:border-b-0'
+          ),
+        isTertiary && 'border-0',
+        context?.variant === 'outline' && [
           borderDirectionClass,
           finalColor && BORDER_COLOR_MAP[finalColor],
         ]
       )}
-      {...props}
-    >
-      {children}
-    </Button>
+    />
   );
 };
-
-export { ButtonGroup, ButtonGroupItem };

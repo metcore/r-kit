@@ -94,6 +94,25 @@ export const CardBody = ({
   );
 };
 
+interface CardMediaProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: 'sm' | 'md' | 'lg';
+  image: string;
+  alt?: string;
+}
+
+export const CardMedia = ({
+  className,
+  image,
+  alt,
+  ...props
+}: CardMediaProps) => {
+  return (
+    <div className={cn('overflow-hidden', className)} {...props}>
+      <img src={image} alt={alt} />
+    </div>
+  );
+};
+
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';
   divider?: boolean;

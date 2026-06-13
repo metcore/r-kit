@@ -8,7 +8,7 @@ type IndicatorPosition =
   | 'bottom-right'
   | 'bottom-left';
 
-interface Props {
+export interface IndicatorProps {
   color: ColorVariant;
   size?: 'sm' | 'md' | 'lg';
   value?: number | string;
@@ -26,7 +26,7 @@ export function Indicator({
   pulse = false,
   children,
   indicatorClassName,
-}: Props) {
+}: IndicatorProps) {
   const isDot = value === undefined;
 
   return (

@@ -15,46 +15,147 @@ import type {
 import { cn } from '../../lib/utils';
 
 const TabsContext = createContext<TabsContextValue | undefined>(undefined);
+const TAB_URL_EVENT = '__tab_url_change__';
+
+function readParams(): URLSearchParams {
+  if (typeof window === 'undefined') {
+    return new URLSearchParams();
+  }
+
+  return new URLSearchParams(window.location.search);
+}
+
+function useUrlSearchParams() {
+  const [params, setParams] = useState<URLSearchParams>(readParams);
+
+  useEffect(() => {
+    const sync = () => setParams(readParams());
+
+    sync();
+
+    window.addEventListener('popstate', sync);
+    window.addEventListener(TAB_URL_EVENT, sync);
+
+    return () => {
+      window.removeEventListener('popstate', sync);
+      window.removeEventListener(TAB_URL_EVENT, sync);
+    };
+  }, []);
+
+  const setSearchParams = React.useCallback(
+    (
+      updater: (prev: URLSearchParams) => URLSearchParams,
+      options?: { replace?: boolean }
+    ) => {
+      const next = updater(readParams());
+
+      const query = next.toString();
+
+      const url =
+        `${window.location.pathname}` +
+        `${query ? `?${query}` : ''}` +
+        `${window.location.hash}`;
+
+      if (options?.replace != undefined) {
+        window.history.replaceState(window.history.state, '', url);
+      } else {
+        window.history.pushState(window.history.state, '', url);
+      }
+
+      window.dispatchEvent(new Event(TAB_URL_EVENT));
+    },
+    []
+  );
+
+  return [params, setSearchParams] as const;
+}
 
 const useTabsContext = () => {
   const context = useContext(TabsContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('Tabs components must be used within Tabs');
   }
   return context;
+};
+
+export const useTabHref = (value: string): string | undefined => {
+  const { buildHref } = useTabsContext();
+  return buildHref?.(value);
 };
 
 export const Tabs: React.FC<TabsProps> = ({
   defaultValue,
   value: controlledValue,
   onValueChange,
+  id,
+  urlReplace = true,
   orientation = 'horizontal',
   unmountOnHide = true,
   className,
   children,
+  onLoad,
 }) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState(
+  const hasLoadedRef = useRef(false);
+
+  const [searchParams, setSearchParams] = useUrlSearchParams();
+  const [uncontrolledValue, setUncontrolledValue] = useState<string>(
     defaultValue ?? ''
   );
-  const triggersRef = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const triggersRef = useRef<Map<string, HTMLElement>>(new Map());
 
   const isControlled = controlledValue !== undefined;
-  const value = isControlled ? controlledValue : uncontrolledValue;
+  const urlParam = id !== undefined ? `tab-${id}` : undefined;
+  const isUrlSynced = urlParam !== undefined && !isControlled;
+
+  let value: string;
+  if (isControlled) {
+    value = controlledValue;
+  } else if (isUrlSynced) {
+    value = searchParams.get(urlParam) ?? defaultValue ?? '';
+  } else {
+    value = uncontrolledValue;
+  }
+
+  const buildHref = isUrlSynced
+    ? (newValue: string): string => {
+        const next = new URLSearchParams(searchParams);
+        next.set(urlParam, newValue);
+        return `?${next.toString()}`;
+      }
+    : undefined;
 
   const handleValueChange = (newValue: string) => {
-    if (!isControlled) {
+    if (isUrlSynced && urlParam !== undefined) {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set(urlParam, newValue);
+          return next;
+        },
+        { replace: urlReplace }
+      );
+    }
+
+    if (!isUrlSynced && !isControlled) {
       setUncontrolledValue(newValue);
     }
+
     onValueChange?.(newValue);
   };
 
-  const registerTrigger = (triggerValue: string, ref: HTMLButtonElement) => {
+  const registerTrigger = (triggerValue: string, ref: HTMLElement) => {
     triggersRef.current.set(triggerValue, ref);
   };
 
   const unregisterTrigger = (triggerValue: string) => {
     triggersRef.current.delete(triggerValue);
   };
+
+  useEffect(() => {
+    if (hasLoadedRef.current) return;
+    hasLoadedRef.current = true;
+    onLoad?.(value);
+  }, [value, onLoad]);
 
   return (
     <TabsContext.Provider
@@ -65,6 +166,8 @@ export const Tabs: React.FC<TabsProps> = ({
         unmountOnHide,
         registerTrigger,
         unregisterTrigger,
+        buildHref,
+        urlReplace,
       }}
     >
       <div className={cn(className)} data-orientation={orientation}>
@@ -78,17 +181,17 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
   const { orientation, value } = useTabsContext();
   const listRef = useRef<HTMLDivElement>(null);
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     const updateIndicator = () => {
-      if (!listRef.current) return;
+      if (listRef.current === null) return;
 
-      const activeButton = listRef.current.querySelector(
-        `[aria-selected="true"]`
-      ) as HTMLButtonElement;
+      const activeButton = listRef.current.querySelector<HTMLElement>(
+        '[aria-selected="true"]'
+      );
 
-      if (activeButton === null || activeButton === undefined) return;
+      if (activeButton === null) return;
 
       const listRect = listRef.current.getBoundingClientRect();
       const buttonRect = activeButton.getBoundingClientRect();
@@ -115,9 +218,7 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children }) => {
     };
 
     updateIndicator();
-
     window.addEventListener('resize', updateIndicator);
-
     const timer = setTimeout(updateIndicator, 50);
 
     return () => {
@@ -168,13 +269,20 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
   className,
   children,
 }) => {
-  const { value, onValueChange, registerTrigger, unregisterTrigger } =
-    useTabsContext();
+  const {
+    value,
+    onValueChange,
+    buildHref,
+    registerTrigger,
+    unregisterTrigger,
+  } = useTabsContext();
   const isSelected = value === triggerValue;
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
+
+  const href = buildHref?.(triggerValue);
 
   useEffect(() => {
-    if (triggerRef.current) {
+    if (triggerRef.current !== null) {
       registerTrigger(triggerValue, triggerRef.current);
     }
     return () => {
@@ -182,24 +290,47 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({
     };
   }, [triggerValue, registerTrigger, unregisterTrigger]);
 
+  const sharedClass = cn(
+    'inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 whitespace-nowrap',
+    'text-sm font-semibold transition-colors duration-200',
+    'focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:outline-none',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+    isSelected ? 'text-white' : 'text-gray-700 hover:text-gray-900',
+    className
+  );
+
+  const sharedA11y = {
+    'role': 'tab' as const,
+    'aria-selected': isSelected,
+    'aria-controls': `panel-${triggerValue}`,
+    'id': `tab-${triggerValue}`,
+  };
+
+  if (href !== undefined && !disabled) {
+    return (
+      <a
+        ref={triggerRef as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        onClick={(e) => {
+          e.preventDefault();
+          onValueChange(triggerValue);
+        }}
+        className={sharedClass}
+        {...sharedA11y}
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
     <button
-      ref={triggerRef}
-      role="tab"
+      ref={triggerRef as React.RefObject<HTMLButtonElement>}
       type="button"
-      aria-selected={isSelected}
-      aria-controls={`panel-${triggerValue}`}
-      id={`tab-${triggerValue}`}
       disabled={disabled}
       onClick={() => onValueChange(triggerValue)}
-      className={cn(
-        'inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 whitespace-nowrap',
-        'text-sm font-semibold transition-colors duration-200',
-        'focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:outline-none',
-        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-        isSelected ? 'text-white' : 'text-gray-700 hover:text-gray-900',
-        className
-      )}
+      className={sharedClass}
+      {...sharedA11y}
     >
       {children}
     </button>

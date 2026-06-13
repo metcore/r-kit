@@ -3,6 +3,7 @@ import type { SwitchProps } from './type';
 import { SwitchVariants, SwitchThumbVariants } from './switch-variants';
 import { cn } from '../../lib/utils';
 import { FormField, FormLabel } from '../form';
+import { useInputGroup } from '../input-group';
 
 export const BaseSwitch: React.FC<SwitchProps> = ({
   id: providedId,
@@ -104,6 +105,10 @@ export const Switch: React.FC<
     lg: 'text-base',
   };
 
+  const group = useInputGroup();
+  const inGroup = group !== null;
+  const resolvedSize = size ?? group?.size;
+
   return (
     <FormField hint={hint} errorMessages={errorMessages} className={className}>
       <div
@@ -111,7 +116,8 @@ export const Switch: React.FC<
           'flex flex-col items-center gap-2',
           direction === "horizontal" && "inline-flex flex-row-reverse items-center justify-end", //prettier-ignore
           direction === "horizontal-reverse" && "inline-flex flex-row items-center justify-start text-end", //prettier-ignore
-          direction === "vertical-reverse" && "inline-flex flex-col-reverse items-center" //prettier-ignore
+          direction === "vertical-reverse" && "inline-flex flex-col-reverse items-center", //prettier-ignore
+          inGroup && 'px-2'
         )}
       >
         {Boolean(label) && (
@@ -119,7 +125,7 @@ export const Switch: React.FC<
             {label}
           </FormLabel>
         )}
-        <BaseSwitch {...props} id={id} size={size} />
+        <BaseSwitch {...props} id={id} size={resolvedSize} />
       </div>
     </FormField>
   );

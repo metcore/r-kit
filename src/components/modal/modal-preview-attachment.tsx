@@ -4,6 +4,7 @@ import { Button } from '../button';
 import { Icon } from '../icons';
 import { Text } from '../text';
 import { getIconName } from '../input-file/helpers';
+import { ButtonIcon } from '../button-icon/button-icon';
 
 // pake open dan visible biar bisa mainin transisi smooth
 interface ModalPreviewProps {
@@ -37,9 +38,9 @@ const ModalPreviewAttachment = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const isImage = type.startsWith('image/');
-  const isMp3 = type.startsWith('audio/');
-  const isVideo = type.startsWith('video/');
+  const isImage = type?.startsWith('image/');
+  const isMp3 = type?.startsWith('audio/');
+  const isVideo = type?.startsWith('video/');
   const isPdf = type === 'application/pdf';
 
   const iconName = getIconName({ fileType: type });
@@ -55,7 +56,6 @@ const ModalPreviewAttachment = ({
   const handleZoomOut = () => {
     setZoom((prev) => {
       const newZoom = Math.max(prev - ZOOM_STEP, MIN_ZOOM);
-      // Reset position if zooming out to 1 or below
       if (newZoom <= 1) {
         setPosition({ x: 0, y: 0 });
       }
@@ -232,7 +232,6 @@ const ModalPreviewAttachment = ({
           </div>
         )}
 
-        {/* pdf viewer */}
         {isPdf && (
           <div className="flex size-full overflow-auto">
             <iframe
@@ -243,7 +242,6 @@ const ModalPreviewAttachment = ({
           </div>
         )}
 
-        {/* audio player */}
         {isMp3 && (
           <div className="flex size-full items-center justify-center overflow-auto">
             <audio
@@ -276,22 +274,18 @@ const ZoomController = ({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      <Button
-        size={'icon'}
+      <ButtonIcon
+        icon="search-plus-fill"
         onClick={onZoomIn}
         disabled={zoom >= maxZoom}
         type="button"
-      >
-        <Icon name="search-plus-fill" />
-      </Button>
-      <Button
-        size={'icon'}
+      />
+      <ButtonIcon
+        icon="search-minus-fill"
         onClick={onZoomOut}
         disabled={zoom <= minZoom}
         type="button"
-      >
-        <Icon name="search-minus-fill" />
-      </Button>
+      />
 
       <Button color="secondary" onClick={onDownload} type="button">
         <Icon name="download" />

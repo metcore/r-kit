@@ -136,7 +136,8 @@ export interface CalendarEvent {
     | 'danger'
     | 'primary'
     | 'orange'
-    | 'purple';
+    | 'purple'
+    | (string & {});
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   tooltip?: {
@@ -152,7 +153,8 @@ export interface CalendarEvent {
       | 'danger'
       | 'primary'
       | 'orange'
-      | 'purple';
+      | 'purple'
+      | (string & {});
   };
 }
 

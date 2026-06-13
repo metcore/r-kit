@@ -8,6 +8,7 @@ export interface FormLabelProps {
   size?: FormSizeType;
   className?: string;
   children: React.ReactNode;
+  tooltip?: string;
 }
 
 export interface FormDescriptionProps {
@@ -44,5 +45,6 @@ export interface FormFieldProps {
   htmlFor?: string;
   className?: string;
   children: React.ReactNode;
+  tooltip?: string;
   style?: CSSProperties;
 }

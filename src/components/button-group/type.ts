@@ -1,10 +1,18 @@
 import type React from 'react';
-import type { ButtonProps } from '../button/button';
+import type {
+  ButtonAsAnchorProps,
+  ButtonAsButtonProps,
+  ButtonProps,
+} from '../button/button';
 
 export interface ButtonGroupProps {
-  direction?: 'horizontal' | 'vertical';
+  children: React.ReactNode;
   size?: ButtonProps['size'];
-  children?: React.ReactNode;
   color?: ButtonProps['color'];
   variant?: ButtonProps['variant'];
+  direction?: 'horizontal' | 'vertical';
 }
+
+export type ButtonGroupItemProps =
+  | Omit<ButtonAsButtonProps, 'size' | 'variant'>
+  | Omit<ButtonAsAnchorProps, 'size' | 'variant'>;

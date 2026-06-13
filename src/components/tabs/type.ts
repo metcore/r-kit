@@ -2,21 +2,25 @@ export interface TabsContextValue {
   value: string;
   onValueChange: (value: string) => void;
   orientation: 'horizontal' | 'vertical';
-  registerTrigger: (value: string, ref: HTMLButtonElement) => void;
-  unregisterTrigger: (value: string) => void;
   unmountOnHide: boolean;
+  registerTrigger: (value: string, ref: HTMLElement) => void;
+  unregisterTrigger: (value: string) => void;
+  buildHref?: (value: string) => string;
+  urlReplace: boolean;
 }
 
 export interface TabsProps {
+  onLoad?: (value: string) => void;
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
+  id: string;
+  urlReplace?: boolean;
   orientation?: 'horizontal' | 'vertical';
-  className?: string;
-  children: React.ReactNode;
   unmountOnHide?: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }
-
 export interface TabsListProps {
   className?: string;
   children: React.ReactNode;

@@ -60,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onClose?.();
         return;
       }
 
@@ -104,7 +104,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && closable) {
-      onClose();
+      onClose?.();
     }
   };
 

@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { cn } from '../../lib/utils';
-import { Button } from '../button';
-import { Icon } from '../icons';
 import { Input } from '../input';
 import { counterVariants } from './counter-variants';
 import {
@@ -10,13 +8,22 @@ import {
   handleInputChange,
   handleKeyDown,
 } from './helpers';
-import type { ButtonIconProps, CounterProps } from './type';
+import type { CounterProps } from './type';
+import { ButtonIcon } from '../button-icon/button-icon';
 
+type CounterSize = 'sm' | 'md' | 'lg';
+type ButtonIconSize = 'xxs' | 'xs' | 'md';
+
+const buttonSizeMap: Record<CounterSize, ButtonIconSize> = {
+  sm: 'xxs',
+  md: 'xs',
+  lg: 'md',
+};
 const Counter = ({
   iconLeft,
   iconRight,
   className,
-  canMinus,
+  allowMinus,
   inputWidth,
   disabled,
   variant = 'primary',
@@ -48,13 +55,12 @@ const Counter = ({
         className
       )}
     >
-      {/* Tombol kiri (custom atau default minus) */}
       {iconLeft !== undefined && (
         <button
           className="cursor-pointer"
-          disabled={(canMinus === false && value === '0') || disabled}
+          disabled={(allowMinus === false && value === '0') || disabled}
           onClick={() =>
-            handleDecrement({ value, valueUpdater: updateValue, canMinus })
+            handleDecrement({ value, valueUpdater: updateValue, allowMinus })
           }
         >
           {iconLeft}
@@ -63,12 +69,13 @@ const Counter = ({
       {iconLeft === undefined && (
         <ButtonIcon
           icon={'minus'}
-          iconClassName={cn(counterVariants({ controlIconSize: size }))}
-          disabled={(canMinus === false && value === '0') || disabled}
+          size={buttonSizeMap[size]}
+          disabled={(allowMinus === false && value === '0') || disabled}
           onClick={() =>
-            handleDecrement({ value, valueUpdater: updateValue, canMinus })
+            handleDecrement({ value, valueUpdater: updateValue, allowMinus })
           }
-          variant={variant}
+          rounded
+          variant="default"
         />
       )}
 
@@ -85,7 +92,7 @@ const Counter = ({
           )}
           disabled={disabled}
           onKeyDown={(e) =>
-            handleKeyDown({ e, value, canMinus, valueUpdater: updateValue })
+            handleKeyDown({ e, value, allowMinus, valueUpdater: updateValue })
           }
           style={{
             width: inputWidth ?? `${Math.max(value.length, 1) + 1.2}ch`,
@@ -107,42 +114,13 @@ const Counter = ({
         <ButtonIcon
           disabled={disabled}
           icon={'plus'}
-          iconClassName={cn(counterVariants({ controlIconSize: size }))}
           onClick={() => handleIncrement({ value, valueUpdater: updateValue })}
-          variant={variant}
+          variant="default"
+          size={buttonSizeMap[size]}
+          rounded
         />
       )}
     </div>
-  );
-};
-
-const ButtonIcon = ({
-  icon,
-  disabled,
-  onClick,
-  variant,
-  iconClassName,
-}: ButtonIconProps) => {
-  return (
-    <Button
-      size={'icon'}
-      className={cn(
-        'w-fit rounded-full',
-        variant === "secondary" && "bg-tansparent hover:bg-transparent focus:ring-0", //prettier-ignore
-        variant == 'primary' && disabled === true && 'bg-gray-400!'
-      )}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <Icon
-        name={icon}
-        className={cn(
-          'size-4',
-          variant === 'secondary' && 'text-gray-600',
-          iconClassName
-        )}
-      />
-    </Button>
   );
 };
 

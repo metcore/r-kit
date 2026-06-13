@@ -12,9 +12,10 @@ export type ColorType =
 
 export type IconType = 'check' | 'minus';
 
+export type CheckboxValue = number | string;
 export interface CheckboxProps {
   id?: string;
-  value?: string;
+  value?: CheckboxValue;
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
@@ -22,14 +23,23 @@ export interface CheckboxProps {
   size?: SizeType;
   color?: ColorType;
   icon?: IconType;
+  /**
+   * @deprecated Gunakan onChange
+   */
   onCheckedChange?: (checked: boolean) => void;
+  onChange?: (checked: boolean) => void;
   className?: string;
+  tooltip?: string;
 }
 
 export interface CheckboxGroupProps {
-  value?: string[];
-  defaultValue?: string[];
-  onValueChange?: (value: string[]) => void;
+  value?: CheckboxValue[];
+  defaultValue?: CheckboxValue[];
+  /**
+   * @deprecated Gunakan OnChange
+   */
+  onValueChange?: (value: CheckboxValue[]) => void;
+  onChange?: (value: CheckboxValue[]) => void;
   disabled?: boolean;
   required?: boolean;
   name?: string;
@@ -41,8 +51,8 @@ export interface CheckboxGroupProps {
 }
 
 export interface CheckboxGroupContextValue {
-  value?: string[];
-  onValueChange?: (value: string[]) => void;
+  value?: CheckboxValue[];
+  onChange?: (value: CheckboxValue[]) => void;
   disabled?: boolean;
   name?: string;
   size?: SizeType;

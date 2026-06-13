@@ -1,0 +1,7 @@
+services:
+  app-prod:
+    container_name: kit-app
+    build: .
+    ports:
+      - "9213:5173"
+    restart: always
