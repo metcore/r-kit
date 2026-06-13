@@ -56,7 +56,6 @@ export const buttonVariants = cva(
         className: 'text-primary-1000 focus:ring-0',
       },
 
-      /* SECONDARY */
       {
         variant: 'default',
         color: 'secondary',

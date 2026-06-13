@@ -548,7 +548,6 @@ export function ColorInput({
     onChangeRef.current = onChange;
   }, [onChange]);
 
-  // Jangan emit onChange di mount kalau belum ada value.
   const didMountRef = useRef(false);
   useEffect(() => {
     if (!didMountRef.current) {
@@ -571,7 +570,6 @@ export function ColorInput({
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
-  // Semua interaksi panel (SV, hue, alpha, swatch, eyedropper) lewat sini.
   const applyHsv = (next: HSV): void => {
     setHsv(next);
     setHasValue(true);

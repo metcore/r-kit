@@ -7,6 +7,7 @@ import { buttonVariants, type ButtonVariantProps } from './button-variants';
 import { RoundedSpinner } from '../loading';
 import { BaseButton } from './base-button';
 import { useInputGroup } from '../input-group/';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 
 export type ButtonColor =
   | 'primary'
@@ -28,6 +29,7 @@ interface ButtonBaseProps extends ButtonVariantProps {
   loading?: boolean;
   className?: string;
   type?: 'button' | 'submit';
+  tooltip?: string;
 }
 
 export type ButtonAsButtonProps = ButtonBaseProps &
@@ -66,6 +68,7 @@ export const Button = (props: ButtonProps) => {
     active = false,
     loading = false,
     type = 'button',
+    tooltip,
   } = props;
 
   const group = useInputGroup();
@@ -88,10 +91,13 @@ export const Button = (props: ButtonProps) => {
     inGroup && 'h-full rounded-none'
   );
 
+  let buttonElement: React.ReactNode;
+
+  // anchor button
   if (isAnchorButton(props)) {
     const { href, disabled, children, ...anchorProps } = props;
 
-    return (
+    buttonElement = (
       <BaseButton
         {...anchorProps}
         href={href}
@@ -103,22 +109,37 @@ export const Button = (props: ButtonProps) => {
         {children}
       </BaseButton>
     );
+  } else {
+    const { asChild = false, children, ...buttonProps } = props;
+
+    // slot mode
+    if (asChild) {
+      buttonElement = (
+        <Slot {...buttonProps} className={classes}>
+          {children}
+        </Slot>
+      );
+    } else {
+      buttonElement = (
+        <BaseButton {...buttonProps} className={classes}>
+          {spinner}
+          {children}
+        </BaseButton>
+      );
+    }
   }
 
-  const { asChild = false, children, ...buttonProps } = props;
-
-  if (asChild) {
-    return (
-      <Slot {...buttonProps} className={classes}>
-        {children}
-      </Slot>
-    );
+  if (tooltip == undefined) {
+    return buttonElement;
   }
 
   return (
-    <BaseButton {...buttonProps} className={classes}>
-      {spinner}
-      {children}
-    </BaseButton>
+    <Tooltip>
+      <TooltipTrigger asChild>{buttonElement}</TooltipTrigger>
+
+      <TooltipContent side="bottom" className="text-center">
+        {tooltip}
+      </TooltipContent>
+    </Tooltip>
   );
 };

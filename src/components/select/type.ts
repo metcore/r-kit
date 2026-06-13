@@ -27,7 +27,7 @@ interface RenderOptionState {
 export type SelectOnCreateValue = string | number;
 
 type BaseSelectProps<Extra extends object = object> = {
-  options?: SelectOption<Extra>[];
+  options?: (SelectOption<Extra> | SelectGroup<Extra>)[];
   value?:
     | SelectOption<Extra>
     | SelectOption<Extra>[]

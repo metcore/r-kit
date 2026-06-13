@@ -165,7 +165,11 @@ function ButtonPage() {
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
           <MainSection title="Basic Usage" code={codeExampleButtonBasic}>
-            <Button color="primary" onClick={() => alert('OnClick')}>
+            <Button
+              color="primary"
+              tooltip="tooltip"
+              onClick={() => alert('OnClick')}
+            >
               Simpan Data
             </Button>
           </MainSection>

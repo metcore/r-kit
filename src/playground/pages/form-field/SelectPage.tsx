@@ -52,22 +52,22 @@ const dataSingleWithDescription: SelectOption<{ description?: string }>[] = [
   },
 ];
 
-const dataGroup: (SelectOption | SelectGroup)[] = [
+const dataGroup: (SelectOption<ExtraUser> | SelectGroup<ExtraUser>)[] = [
   {
     label: 'Jakarta',
     options: [
-      { label: 'Jack', value: 'Jack' },
-      { label: 'lucy', value: 'Lucy' },
+      { label: 'Jack', value: 'Jack', email: 'metcore2@gmail.com' },
+      { label: 'lucy', value: 'Lucy', email: 'metcore2@gmail.com' },
     ],
   },
   {
     label: 'Bandung',
     options: [
-      { label: 'Jack', value: 'Jack' },
-      { label: 'lucy', value: 'Lucy' },
+      { label: 'Jack', value: 'Jack', email: 'metcore2@gmail.com' },
+      { label: 'lucy', value: 'Lucy', email: 'metcore2@gmail.com' },
     ],
   },
-  { label: 'Bandung', value: 'bdg' },
+  { label: 'Bandung', value: 'bdg', email: 'metcore2@gmail.com' },
 ];
 
 interface UserOption extends SelectOption {
@@ -78,6 +78,9 @@ interface UserOption extends SelectOption {
 interface ExtraUser {
   email: string;
   company?: string;
+  firstName?: string;
+  lastName?: string;
+  id?: string;
 }
 
 function UserOptionRenderer(
@@ -279,7 +282,7 @@ function SelectPage() {
             className="flex-1"
             code={codeExampleSelectGroup}
           >
-            <Select
+            <Select<ExtraUser>
               label="User"
               options={dataGroup}
               value={selectedUser}
@@ -350,7 +353,7 @@ function SelectPage() {
                 if (!res.ok) throw new Error(`Request failed: ${res.status}`);
                 const json = await res.json();
                 return {
-                  options: json.users.map((u) => ({
+                  options: json.users.map((u: ExtraUser) => ({
                     label: `${u.firstName} ${u.lastName}`,
                     value: String(u.id),
                   })),

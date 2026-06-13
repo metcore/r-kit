@@ -43,6 +43,9 @@ import ApiTablePage from '../playground/pages/ApiTablePage';
 import ColorPickerPage from '../playground/pages/form-field/ColorPickerPage';
 import InputPasswordPage from '../playground/pages/form-field/InputPasswordPage';
 import InputPhoneNumberPage from '../playground/pages/form-field/InputPhoneNumberPage';
+import FileViewPage from '../playground/pages/FileViewPage';
+import AlertPage from '../playground/pages/AlertPage';
+import TextAreaPage from '../playground/pages/form-field/TextAreaPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -82,12 +85,15 @@ export default function PlaygroundRouter() {
         <Route path="/api-table" element={<ApiTablePage />} />
         <Route path="/toast" element={<ToastPage />} />
         <Route path="/text-editor" element={<TextEditorPage />} />
+        <Route path="/text-area" element={<TextAreaPage />} />
         <Route path="/progress-bar" element={<ProgressBarPage />} />
         <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/icons" element={<IconPage />} />
         <Route path="/sidebar" element={<SidebarPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
         <Route path="/badge" element={<BadgePage />} />
+        <Route path="/file-view" element={<FileViewPage />} />
+        <Route path="/alert" element={<AlertPage />} />
         <Route path="/example/invoice" element={<InvoicePage />} />
         <Route path="/example/profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />

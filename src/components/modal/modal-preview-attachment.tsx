@@ -38,9 +38,9 @@ const ModalPreviewAttachment = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const isImage = type.startsWith('image/');
-  const isMp3 = type.startsWith('audio/');
-  const isVideo = type.startsWith('video/');
+  const isImage = type?.startsWith('image/');
+  const isMp3 = type?.startsWith('audio/');
+  const isVideo = type?.startsWith('video/');
   const isPdf = type === 'application/pdf';
 
   const iconName = getIconName({ fileType: type });
@@ -56,7 +56,6 @@ const ModalPreviewAttachment = ({
   const handleZoomOut = () => {
     setZoom((prev) => {
       const newZoom = Math.max(prev - ZOOM_STEP, MIN_ZOOM);
-      // Reset position if zooming out to 1 or below
       if (newZoom <= 1) {
         setPosition({ x: 0, y: 0 });
       }
@@ -233,7 +232,6 @@ const ModalPreviewAttachment = ({
           </div>
         )}
 
-        {/* pdf viewer */}
         {isPdf && (
           <div className="flex size-full overflow-auto">
             <iframe
@@ -244,7 +242,6 @@ const ModalPreviewAttachment = ({
           </div>
         )}
 
-        {/* audio player */}
         {isMp3 && (
           <div className="flex size-full items-center justify-center overflow-auto">
             <audio

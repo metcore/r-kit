@@ -1,13 +1,46 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { InputGroup } from '../input-group';
 import { Input, type InputProps } from './input';
 import { Select, type SelectOption } from '../select';
 import countries from '../../assets/countries.json';
 
-const countryOptions = countries.map((country) => ({
+const favoriteCodes = ['ID', 'SG', 'MY'];
+
+const favoriteCountries = countries
+  .filter((c) => favoriteCodes.includes(c.code))
+  .map((country) => ({
+    label: `${country.flag} ${country.name}`,
+    value: country.code,
+    dialCode: country.dial_code,
+    flag: country.flag,
+  }));
+
+const otherCountries: SelectOption[] = countries.map((country) => ({
   label: `${country.flag} ${country.name}`,
-  value: country.code,
+  value: country.dial_code,
 }));
+
+const dataGroup = [
+  {
+    label: 'Favorite',
+    options: favoriteCountries,
+  },
+  {
+    label: 'More Country',
+    options: otherCountries,
+  },
+];
+
+export type PhoneNumberValue = {
+  code?: string;
+  value?: string;
+};
+
+export type InputPhoneNumberProps = Omit<InputProps, 'value' | 'onChange'> & {
+  value?: PhoneNumberValue;
+  onChange?: (value: PhoneNumberValue) => void;
+};
+
 export function InputPhoneNumber({
   label,
   value,
@@ -19,9 +52,24 @@ export function InputPhoneNumber({
   required,
   disabled,
   clearAble = true,
-}: InputProps): React.ReactElement {
-  const [selectedUserBasic, setSelectedUserBasic] =
-    useState<SelectOption | null>(null);
+  placeholder,
+}: InputPhoneNumberProps): React.ReactElement {
+  const selectedFlag = useMemo(
+    () => otherCountries.find((option) => option.value === value?.code) ?? null,
+    [value?.code]
+  );
+
+  const handleCodeChange = (option: SelectOption | null) => {
+    onChange?.({
+      code: option?.value != null ? String(option.value) : undefined,
+      value: value?.value,
+    });
+  };
+
+  const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange?.({ code: value?.code, value: event.target.value });
+  };
+
   return (
     <InputGroup
       label={label}
@@ -33,16 +81,15 @@ export function InputPhoneNumber({
       disabled={disabled}
     >
       <Select
-        options={countryOptions}
-        value={selectedUserBasic}
-        onChange={(v) => {
-          setSelectedUserBasic(v as SelectOption | null);
-        }}
+        options={dataGroup}
+        value={selectedFlag}
+        onChange={(v) => handleCodeChange(v as SelectOption | null)}
       />
       <Input
-        placeholder="Enter password"
-        value={value}
-        onChange={onChange}
+        placeholder={placeholder}
+        value={value?.value ?? ''}
+        disabled={disabled}
+        onChange={handleNumberChange}
         clearAble={clearAble}
       />
     </InputGroup>

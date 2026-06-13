@@ -54,6 +54,7 @@ function PlaygroundSidebar() {
         { path: '/playground/switch', label: 'Switches' },
         { path: '/playground/select', label: 'Select' },
         { path: '/playground/text-editor', label: 'Text Editor' },
+        { path: '/playground/text-area', label: 'Text Area' },
         { path: '/playground/input-otp', label: 'Input OTP' },
         { path: '/playground/color-picker', label: 'Color Picker' },
         { path: '/playground/input-password', label: 'Input Passowrd' },
@@ -98,7 +99,10 @@ function PlaygroundSidebar() {
       path: '/feedback',
       label: 'Feedback',
       icon: 'message-text-notification',
-      children: [{ label: 'Snackbar/Toast', path: '/playground/toast' }],
+      children: [
+        { label: 'Alert', path: '/playground/alert' },
+        { label: 'Snackbar/Toast', path: '/playground/toast' },
+      ],
     },
     {
       label: 'Data Display',
@@ -107,6 +111,7 @@ function PlaygroundSidebar() {
         { path: '/playground/table', label: 'Table' },
         { path: '/playground/api-table', label: 'Api Table' },
         { path: '/playground/timeline', label: 'timeline' },
+        { path: '/playground/file-view', label: 'File View' },
       ],
     },
     {

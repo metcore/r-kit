@@ -127,7 +127,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       const event = new Event('input', { bubbles: true });
       input.dispatchEvent(event);
 
-      // fallback kalau parent kasih onChange langsung
       props.onChange?.({
         target: input,
         currentTarget: input,

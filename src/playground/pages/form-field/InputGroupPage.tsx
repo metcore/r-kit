@@ -768,7 +768,7 @@ export default function InputGroupPage() {
                 multiple
               />
               <Input placeholder="Search..." />
-              <Button onClick={() => setModal(true)}>
+              <Button onClick={() => setModal(true)} tooltip="tooltip">
                 Create <Icon name="plus" size={15} />
               </Button>
             </InputGroup>

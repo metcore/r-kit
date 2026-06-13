@@ -32,9 +32,9 @@ const PreviewItem = ({
     isVisible: false,
   });
 
-  const isImage = data?.file?.type.startsWith('image/');
-  const isMp3 = data?.file?.type.startsWith('audio/');
-  const isVideo = data?.file?.type.startsWith('video/');
+  const isImage = data?.file?.type?.startsWith('image/');
+  const isMp3 = data?.file?.type?.startsWith('audio/');
+  const isVideo = data?.file?.type?.startsWith('video/');
   const isPdf = data?.file?.type === 'application/pdf';
 
   const isNotViewable = !isImage && !isMp3 && !isVideo && !isPdf;
