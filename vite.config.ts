@@ -12,6 +12,9 @@ export default defineConfig(({ mode }) => {
     server: {
       allowedHosts: env?.BASE_URL ? env.BASE_URL.split(',') : [],
     },
-    build: { outDir: 'dist' },
+    build: {
+      outDir: '../dist-docs',
+      emptyOutDir: true,
+    },
   };
 });
