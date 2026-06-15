@@ -18,15 +18,137 @@ export default function InputPasswordPage() {
   const [value, setValue] = useState<PhoneNumberValue>();
 
   const exampleBasic = dedent(`
-    <Input />
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          placeholder="Please fill phone number"
+        />
+      );
+    }
   `);
+
+  const exampleLabel = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          value={{
+            dialCode: '',
+            value: '8960403339',
+          }}
+        />
+      );
+    }
+  `);
+
+  const exampleHint = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          hint="Please enter active phone number."
+        />
+      );
+    }
+  `);
+
+  const exampleRequired = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          required
+          hint="This field is required."
+        />
+      );
+    }
+  `);
+
+  const exampleDisabled = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          disabled
+          value={{
+            dialCode: '+62',
+            value: '8123456789',
+          }}
+        />
+      );
+    }
+  `);
+
+  const exampleInvalid = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          required
+          errorMessages="This field is required."
+        />
+      );
+    }
+  `);
+
+  const exampleTooltip = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <InputPhoneNumber
+          label="Phone Number"
+          tooltip="Please fill your active phone number."
+          required
+        />
+      );
+    }
+  `);
+
+  const exampleSizes = dedent(`
+    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+
+    export default function Example() {
+      return (
+        <>
+          <InputPhoneNumber
+            label="Small"
+            size="sm"
+          />
+
+          <InputPhoneNumber
+            label="Medium"
+            size="md"
+          />
+
+          <InputPhoneNumber
+            label="Large"
+            size="lg"
+          />
+        </>
+      );
+    }
+  `);
+
   return (
     <>
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Input Field"
-        description="Memungkinkan user memasukkan teks, baik untuk entri pendek maupun panjang."
+        subtitle="Input Phone Number"
+        description="Komponen input khusus untuk memasukkan memasukkan nomor telepon, termasuk kode negara dan kode identifikasi lainnya."
       />
 
       <div className="flex flex-col gap-4">
@@ -45,7 +167,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Label Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleLabel}
           >
             <InputPhoneNumber
               label="Label"
@@ -58,7 +180,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Hint Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleHint}
           >
             <InputPhoneNumber
               label="Label"
@@ -68,7 +190,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Required Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleRequired}
           >
             <InputPhoneNumber
               label="Label"
@@ -79,7 +201,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Disabled Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleDisabled}
           >
             <InputPhoneNumber
               label="Label"
@@ -91,7 +213,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Invalid Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleInvalid}
           >
             <InputPhoneNumber
               label="Label"
@@ -103,7 +225,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Tooltip Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleTooltip}
           >
             <InputPhoneNumber
               label="Label"
@@ -116,7 +238,7 @@ export default function InputPasswordPage() {
           <MainSection
             title="Size Input Phone Number"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleSizes}
           >
             <InputPhoneNumber label="Small" size="sm" required />
             <InputPhoneNumber label="Medium" size="md" required />
