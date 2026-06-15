@@ -311,8 +311,8 @@ export const FileView: FC<FileViewProps> = ({
           <Icon name={iconName} size={variant == 'small' ? 40 : 20} />
         </div>
       )}
-      <div className="grid w-full grid-cols-3 items-center justify-between gap-2">
-        <div className="col-span-2 min-w-0">
+      <div className="grid w-full grid-cols-4 items-center justify-between gap-2">
+        <div className="col-span-3 min-w-0">
           <Text variant="t2" weight="semibold" className="truncate">
             {displayName}
           </Text>

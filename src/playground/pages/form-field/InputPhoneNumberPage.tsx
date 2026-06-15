@@ -47,7 +47,13 @@ export default function InputPasswordPage() {
             className="flex-1"
             code={exampleBasic}
           >
-            <InputPhoneNumber label="Label" />
+            <InputPhoneNumber
+              label="Label"
+              value={{
+                dialCode: '',
+                value: '8960403339',
+              }}
+            />
           </MainSection>
           <MainSection
             title="Hint Input Phone Number"

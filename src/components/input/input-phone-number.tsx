@@ -1,36 +1,34 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { InputGroup } from '../input-group';
 import { Input, type InputProps } from './input';
-import { Select, type SelectOption } from '../select';
+import { Select, type SelectGroup, type SelectOption } from '../select';
 import countries from '../../assets/countries.json';
 import { Text } from '../text';
+import { Chip } from '../chip';
 
 const favoriteCodes = ['ID', 'SG', 'MY'];
 
 interface Country {
-  name?: string;
+  label?: string;
   value?: string;
-  dialCode?: string;
   flag?: string;
 }
 
 const favoriteCountries = countries
   .filter((c) => favoriteCodes.includes(c.code))
   .map((country) => ({
-    name: country.name,
+    label: country.name,
     value: country.dial_code,
-    dialCode: country.dial_code,
     flag: country.flag,
   }));
 
-const otherCountries: Country[] = countries.map((country) => ({
-  name: country.name,
+const otherCountries = countries.map((country) => ({
+  label: country.name,
   value: country.dial_code,
-  dialCode: country.dial_code,
   flag: country.flag,
 }));
 
-const dataGroup = [
+const dataGroup: (SelectOption<Country> | SelectGroup<Country>)[] = [
   {
     label: 'Favorite',
     options: favoriteCountries,
@@ -42,7 +40,7 @@ const dataGroup = [
 ];
 
 export type PhoneNumberValue = {
-  code?: string;
+  dialCode?: string;
   value?: string;
 };
 
@@ -52,22 +50,34 @@ export type InputPhoneNumberProps = Omit<InputProps, 'value' | 'onChange'> & {
 };
 
 function UserOptionRenderer(
-  option: SelectOption
-  // { selected }: { selected: boolean }
+  option: SelectOption,
+  { selected }: { selected: boolean }
 ) {
   const u = option as Country;
   return (
-    <div className="bg-primary-100 flex flex-col">
-      <div className="flex items-center gap-2">
+    <Chip selected={selected} className="flex w-full flex-col items-start">
+      <div className="flex gap-2">
         {u.flag}
         <Text variant="t2" weight="medium" className="text-primary-1000">
-          {u.dialCode}
+          {u.value}
         </Text>
       </div>
       <Text variant="t3" weight="medium" className="text-gray-700">
-        {u.name}
+        {u.label}
       </Text>
-    </div>
+    </Chip>
+  );
+}
+
+function renderValue(option: SelectOption) {
+  const u = option as Country;
+  return (
+    <span className="flex items-center gap-2">
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-600">
+        {u.flag}
+      </span>
+      <span>{u.value}</span>
+    </span>
   );
 }
 export function InputPhoneNumber({
@@ -83,21 +93,29 @@ export function InputPhoneNumber({
   clearAble = true,
   placeholder,
 }: InputPhoneNumberProps): React.ReactElement {
+  const [selectedDialCode, setSelectedDialCode] = useState<string>();
+  const [phoneNumber, setPhoneNumber] = useState<string>();
+
   const selectedFlag = useMemo(
-    () => otherCountries.find((option) => option.value === value?.code) ?? null,
-    [value?.code]
+    () =>
+      otherCountries.find((option) => option.value === value?.dialCode) ?? null,
+    [value?.dialCode]
   );
 
   const handleCodeChange = (option: SelectOption | null) => {
-    onChange?.({
-      code: option?.value != null ? String(option.value) : undefined,
-      value: value?.value,
-    });
+    setSelectedDialCode(option?.value as string);
   };
 
   const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange?.({ code: value?.code, value: event.target.value });
+    setPhoneNumber(event.target.value);
   };
+
+  useEffect(() => {
+    onChange?.({
+      value: phoneNumber,
+      dialCode: selectedDialCode,
+    });
+  }, [phoneNumber, selectedDialCode, onChange]);
 
   return (
     <InputGroup
@@ -112,8 +130,10 @@ export function InputPhoneNumber({
       <Select
         options={dataGroup}
         value={selectedFlag}
+        isClearable={false}
         onChange={(v) => handleCodeChange(v as SelectOption | null)}
         renderOption={UserOptionRenderer}
+        renderValue={renderValue}
       />
       <Input
         placeholder={placeholder}

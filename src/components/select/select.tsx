@@ -262,7 +262,7 @@ export function Select<Extra extends object = object>({
         const newValue = exists
           ? selectedOptions.filter((v) => v.value !== option.value)
           : [...selectedOptions, option];
-        onChange?.(newValue); // catatan: tetap emit OBJECT — lihat di bawah
+        onChange?.(newValue);
         const idx = filteredOptions.findIndex((o) => o.value === option.value);
         setHighlightedIndex(idx);
         containerRef.current?.focus();
@@ -471,11 +471,11 @@ export function Select<Extra extends object = object>({
         onMouseEnter={() => setHighlightedIndex(index)}
         onClick={() => handleSelect(option)}
       >
-        <Chip className="text-left" block selected={highlighted || selected}>
-          <div className="flex-1">
-            {renderOption != null ? (
-              renderOption(option, { selected })
-            ) : (
+        {renderOption != null ? (
+          renderOption(option, { selected })
+        ) : (
+          <Chip className="text-left" block selected={highlighted || selected}>
+            <div className="flex-1">
               <>
                 <div className="flex items-center gap-2">
                   {option?.icon != undefined && <Icon name="user" size={12} />}
@@ -487,9 +487,9 @@ export function Select<Extra extends object = object>({
                   {option.description}
                 </Text>
               </>
-            )}
-          </div>
-        </Chip>
+            </div>
+          </Chip>
+        )}
       </div>
     );
   };
