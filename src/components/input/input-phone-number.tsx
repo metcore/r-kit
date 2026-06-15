@@ -3,21 +3,31 @@ import { InputGroup } from '../input-group';
 import { Input, type InputProps } from './input';
 import { Select, type SelectOption } from '../select';
 import countries from '../../assets/countries.json';
+import { Text } from '../text';
 
 const favoriteCodes = ['ID', 'SG', 'MY'];
+
+interface Country {
+  name?: string;
+  value?: string;
+  dialCode?: string;
+  flag?: string;
+}
 
 const favoriteCountries = countries
   .filter((c) => favoriteCodes.includes(c.code))
   .map((country) => ({
-    label: `${country.flag} ${country.name}`,
-    value: country.code,
+    name: country.name,
+    value: country.dial_code,
     dialCode: country.dial_code,
     flag: country.flag,
   }));
 
-const otherCountries: SelectOption[] = countries.map((country) => ({
-  label: `${country.flag} ${country.name}`,
+const otherCountries: Country[] = countries.map((country) => ({
+  name: country.name,
   value: country.dial_code,
+  dialCode: country.dial_code,
+  flag: country.flag,
 }));
 
 const dataGroup = [
@@ -41,6 +51,25 @@ export type InputPhoneNumberProps = Omit<InputProps, 'value' | 'onChange'> & {
   onChange?: (value: PhoneNumberValue) => void;
 };
 
+function UserOptionRenderer(
+  option: SelectOption
+  // { selected }: { selected: boolean }
+) {
+  const u = option as Country;
+  return (
+    <div className="bg-primary-100 flex flex-col">
+      <div className="flex items-center gap-2">
+        {u.flag}
+        <Text variant="t2" weight="medium" className="text-primary-1000">
+          {u.dialCode}
+        </Text>
+      </div>
+      <Text variant="t3" weight="medium" className="text-gray-700">
+        {u.name}
+      </Text>
+    </div>
+  );
+}
 export function InputPhoneNumber({
   label,
   value,
@@ -84,6 +113,7 @@ export function InputPhoneNumber({
         options={dataGroup}
         value={selectedFlag}
         onChange={(v) => handleCodeChange(v as SelectOption | null)}
+        renderOption={UserOptionRenderer}
       />
       <Input
         placeholder={placeholder}

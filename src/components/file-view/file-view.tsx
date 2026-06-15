@@ -213,11 +213,7 @@ export const FileView: FC<FileViewProps> = ({
   }, [objectUrl]);
 
   const fileName =
-    name != null
-      ? name
-      : typeof src === 'string'
-        ? deriveNameFromUrl(src)
-        : (src?.name ?? '');
+    typeof src === 'string' ? deriveNameFromUrl(src) : (src?.name ?? '');
   const resolvedUrl = typeof src === 'string' ? src : (objectUrl ?? '');
   const sourceSize = typeof src !== 'string' ? src?.size : undefined;
   const effectiveSize = size ?? sourceSize;
@@ -239,6 +235,7 @@ export const FileView: FC<FileViewProps> = ({
   const thumbnailSrc = resolvedKind === 'image' ? resolvedUrl : undefined;
   const showThumbnail =
     !isCorrupt && resolvedKind === 'image' && Boolean(thumbnailSrc);
+  const displayName = name != null ? name : fileName;
 
   const interactive = !isCorrupt;
 
@@ -317,7 +314,7 @@ export const FileView: FC<FileViewProps> = ({
       <div className="grid w-full grid-cols-3 items-center justify-between gap-2">
         <div className="col-span-2 min-w-0">
           <Text variant="t2" weight="semibold" className="truncate">
-            {fileName}
+            {displayName}
           </Text>
           {displaySize ? (
             <Text variant="t2" weight="regular" className="truncate">

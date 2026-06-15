@@ -30,7 +30,10 @@ export default function FileViewPage() {
             <FileView src="ex.xls" color="info" />
             <FileView src="../../src/assets/images/card-example.jpg" />
             <FileView src="" />
-            <FileView src="https://stg.cdn.herca.id/test/tq6Cjvuvsnc3ojkukeyy98G0lt1DTETNfHtHdEz1.png" />
+            <FileView
+              src="https://stg.cdn.herca.id/test/tq6Cjvuvsnc3ojkukeyy98G0lt1DTETNfHtHdEz1.png"
+              name="Custom display name"
+            />
             <FileView src="../../src/assets/doc/sample.pdf" />
             <FileView src="ex.csv" />
             <FileView src="ex.mp4" />
@@ -46,6 +49,7 @@ export default function FileViewPage() {
             <FileView variant="small" src="adad.xls" color="info" />
             <FileView
               variant="small"
+              name="tes"
               src="https://stg.cdn.herca.id/test/tq6Cjvuvsnc3ojkukeyy98G0lt1DTETNfHtHdEz1.png"
               color="purple"
             />
