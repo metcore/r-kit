@@ -524,6 +524,8 @@ export function ColorInput({
   errorMessages,
   size,
   onChange,
+  required,
+  disabled,
 }: ColorInputProps): React.ReactElement {
   const init = parseColor(defaultColor);
   const [hsv, setHsv] = useState<HSV>(init.hsv);
@@ -601,6 +603,8 @@ export function ColorInput({
     <div ref={wrapRef} className="relative w-80">
       <InputGroup
         label={label}
+        required={required}
+        disabled={disabled}
         hint={hint}
         size={size}
         tooltip={tooltip}
