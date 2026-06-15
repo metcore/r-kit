@@ -130,7 +130,6 @@ const ChevronIcon = (): React.ReactElement => (
   </svg>
 );
 
-/* ---- runtime-only styles (cannot be Tailwind classes) ----------------- */
 const CHECKER: React.CSSProperties = {
   backgroundImage:
     'linear-gradient(45deg,#cbd0d8 25%,transparent 25%),' +
