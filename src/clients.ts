@@ -1,4 +1,5 @@
 export * from './components/alert';
+export * from './components/accordion';
 export * from './components/checkbox';
 export * from './components/chip';
 export * from './components/collapsible';

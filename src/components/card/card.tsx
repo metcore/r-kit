@@ -88,7 +88,10 @@ export const CardBody = ({
   ...props
 }: CardBodyProps) => {
   return (
-    <div className={cn(paddingBySize[size], className)} {...props}>
+    <div
+      className={cn(paddingBySize[size], className, 'rounded-md')}
+      {...props}
+    >
       {children}
     </div>
   );

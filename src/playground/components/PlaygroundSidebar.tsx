@@ -108,6 +108,8 @@ function PlaygroundSidebar() {
       label: 'Data Display',
       icon: 'desktop',
       children: [
+        { path: '/playground/accordion', label: 'Accordion' },
+        { path: '/playground/list', label: 'List' },
         { path: '/playground/table', label: 'Table' },
         { path: '/playground/api-table', label: 'Api Table' },
         { path: '/playground/timeline', label: 'timeline' },

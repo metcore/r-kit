@@ -46,6 +46,8 @@ import InputPhoneNumberPage from '../playground/pages/form-field/InputPhoneNumbe
 import FileViewPage from '../playground/pages/FileViewPage';
 import AlertPage from '../playground/pages/AlertPage';
 import TextAreaPage from '../playground/pages/form-field/TextAreaPage';
+import ListPage from '../playground/pages/data-display/ListPage';
+import AccordionPage from '../playground/pages/data-display/AccordionPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -90,6 +92,8 @@ export default function PlaygroundRouter() {
         <Route path="/timeline" element={<TimelinePage />} />
         <Route path="/icons" element={<IconPage />} />
         <Route path="/sidebar" element={<SidebarPage />} />
+        <Route path="/list" element={<ListPage />} />
+        <Route path="/accordion" element={<AccordionPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/file-view" element={<FileViewPage />} />
