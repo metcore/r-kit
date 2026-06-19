@@ -1,8 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { chipVariants } from './chip-variants';
 import { ChipContext } from './context';
 import type { ChipProps } from './type';
-import { cn } from '../../lib/utils';
+import { cn, hexToRgba } from '../../lib/utils';
+
+function getHexStyle(
+  hex: string,
+  state: 'default' | 'selected' | 'disabled',
+  hovered: boolean
+): React.CSSProperties {
+  if (state === 'disabled') {
+    return {
+      backgroundColor: '#ffffff',
+      borderColor: hexToRgba(hex, 0.5),
+      color: hexToRgba(hex, 0.5),
+    };
+  }
+  if (state === 'selected') {
+    return {
+      backgroundColor: hexToRgba(hex, hovered ? 0.22 : 0.15),
+      borderColor: hex,
+      color: hex,
+    };
+  }
+  return {
+    backgroundColor: hovered ? hexToRgba(hex, 0.08) : '#ffffff',
+    borderColor: hex,
+    color: hex,
+  };
+}
 
 export const Chip: React.FC<ChipProps> = ({
   value,
@@ -16,6 +42,7 @@ export const Chip: React.FC<ChipProps> = ({
   className,
   dismissible: dismissibleProp,
   onDismiss: onDismissProp,
+  hexColor: hexColorProp,
 }) => {
   const context = useContext(ChipContext);
 
@@ -24,6 +51,7 @@ export const Chip: React.FC<ChipProps> = ({
   const size = sizeProp ?? context?.size ?? 'md';
   const block = blockProp ?? context?.block ?? false;
   const dismissible = dismissibleProp ?? context?.dismissible ?? false;
+  const hexColor = hexColorProp ?? context?.hexColor;
 
   // Determine if selected from context or prop
   const isSelected = context
@@ -61,12 +89,28 @@ export const Chip: React.FC<ChipProps> = ({
   const dismissSizeClass =
     size === 'sm' ? 'w-2.5 h-2.5' : size === 'lg' ? 'w-4 h-4' : 'w-3 h-3';
 
+  const isHex = hexColor !== undefined && hexColor !== '';
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <button
       type="button"
       onClick={handleClick}
       disabled={disabled}
-      className={cn(chipVariants({ size, color, state, block }), className)}
+      onMouseEnter={() => {
+        if (isHex && !disabled) setIsHovered(true);
+      }}
+      onMouseLeave={() => setIsHovered(false)}
+      style={isHex ? getHexStyle(hexColor, state, isHovered) : undefined}
+      className={cn(
+        chipVariants({
+          size,
+          color: isHex ? null : color,
+          state: isHex ? null : state,
+          block,
+        }),
+        className
+      )}
     >
       {children}
       {Boolean(dismissible) && (
