@@ -417,7 +417,17 @@ export function Select<Extra extends object = object>({
 
   const getDisplayValue = () => {
     if (selectedOptions.length === 0) {
-      return <span className="text-gray-500">{placeholder}</span>;
+      return (
+        <span
+          className={cn(
+            'text-gray-800',
+            isDisabledMode && value != null && 'text-gray-600',
+            isDisabledMode && 'text-gray-500'
+          )}
+        >
+          {placeholder}
+        </span>
+      );
     }
     if (isMultiMode) {
       return (
@@ -425,16 +435,21 @@ export function Select<Extra extends object = object>({
           {selectedOptions.map((item) => (
             <div
               key={item.value}
-              className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
+              className={cn(
+                'border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900',
+                isDisabledMode && 'border-gray-500 bg-gray-300'
+              )}
             >
               {renderValue != null ? renderValue(item) : item.label}
-              <button
-                type="button"
-                onClick={(e) => handleRemove(item, e)}
-                className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
-              >
-                <Icon name="times-circle" size={14} />
-              </button>
+              {isDisabledMode == false && (
+                <button
+                  type="button"
+                  onClick={(e) => handleRemove(item, e)}
+                  className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
+                >
+                  <Icon name="times-circle" size={14} />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -445,7 +460,11 @@ export function Select<Extra extends object = object>({
       renderValue(selected)
     ) : (
       <>
-        <Text variant="t2" weight="semibold" className="text-gray-900">
+        <Text
+          variant="t2"
+          weight="semibold"
+          className={cn('text-gray-900', isDisabledMode && 'text-gray-600')}
+        >
           {selected.label}
         </Text>
         <Text variant="t3" weight="regular" className="text-gray-700">
@@ -675,7 +694,7 @@ export function Select<Extra extends object = object>({
             </div>
 
             <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
-              {showClearButton && (
+              {showClearButton && isDisabledMode == false && (
                 <button
                   type="button"
                   onClick={handleClear}

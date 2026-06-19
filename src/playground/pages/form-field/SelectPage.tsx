@@ -221,25 +221,6 @@ function SelectPage() {
             />
           </MainSection>
           <MainSection
-            title="Select Disable"
-            className="flex-1"
-            code={codeExampleSelectDisabled}
-          >
-            <Select
-              options={users.data}
-              value={selectedUser}
-              onChange={(v) =>
-                setSelectedUser(v as SelectOption<ExtraUser> | null)
-              }
-              placeholder="Cari & pilih user…"
-              disabled={true}
-              onLoadMore={posts.hasMore ? users.loadMore : undefined}
-              isLoadingMore={users.isLoadingMore}
-            />
-          </MainSection>
-        </GridWrapper>
-        <GridWrapper>
-          <MainSection
             title="Select with label and Tooltip"
             className="flex-1"
             code={codeExampleSelectTooltip}
@@ -253,6 +234,34 @@ function SelectPage() {
                 setSelectedUserTooltip(v as SelectOption<ExtraUser> | null)
               }
               placeholder="Cari & pilih user…"
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+          </MainSection>
+          <MainSection
+            title="Select Disable"
+            className="flex-1"
+            code={codeExampleSelectDisabled}
+          >
+            <Select
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              disabled={true}
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={[{ label: 'Tes user', value: 1 }]}
+              value={{ label: 'Tes user', value: 1 }}
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              disabled={true}
+              isClearable
               onLoadMore={posts.hasMore ? users.loadMore : undefined}
               isLoadingMore={users.isLoadingMore}
             />
@@ -297,6 +306,17 @@ function SelectPage() {
             className="flex-1"
             code={codeExampleSelectGroup}
           >
+            <Select
+              label="Team members"
+              options={dataSingle}
+              value={selectedUserMultiple}
+              onChange={(v) => {
+                setSelectedUserMultiple(v as SelectOption[]);
+              }}
+              disabled
+              multiple
+              placeholder="Pilih beberapa user…"
+            />
             <Select
               label="Team members"
               options={dataSingle}

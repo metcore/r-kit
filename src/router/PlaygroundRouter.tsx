@@ -48,6 +48,8 @@ import AlertPage from '../playground/pages/AlertPage';
 import TextAreaPage from '../playground/pages/form-field/TextAreaPage';
 import ListPage from '../playground/pages/data-display/ListPage';
 import AccordionPage from '../playground/pages/data-display/AccordionPage';
+import StepPage from '../playground/pages/data-display/StepPage';
+import { SliderPage } from '../playground/pages/form-field/SliderPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -95,6 +97,8 @@ export default function PlaygroundRouter() {
         <Route path="/list" element={<ListPage />} />
         <Route path="/accordion" element={<AccordionPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
+        <Route path="/step" element={<StepPage />} />
+        <Route path="/slider" element={<SliderPage />} />
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/file-view" element={<FileViewPage />} />
         <Route path="/alert" element={<AlertPage />} />

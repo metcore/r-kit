@@ -3,7 +3,6 @@ import MainSection from '../../components/MainSection';
 import { Input } from '../../../components/input';
 import { useState } from 'react';
 import { Icon } from '../../../components/icons';
-import { InputOTP } from '../../../components/input-otp';
 import { useMarkdown } from '../../hooks/useMarkdown';
 import { Card, CardBody } from '../../../components/card';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
@@ -15,8 +14,6 @@ import Footer from '../../components/Footer';
 export default function InputFieldPage() {
   const { doc } = useMarkdown(`/docs/input-field.md`);
   const [filledInput, setFilledInput] = useState('Maman_alkatiri23');
-  const [otp, setOtp] = useState('');
-
   const exampleBasic = dedent(`
     <Input />
   `);
@@ -84,15 +81,6 @@ export default function InputFieldPage() {
     <Input
       placeholder="Search..."
       icon="search"
-    />
-  `);
-
-  const exampleOtp = dedent(`
-    <InputOTP
-      value={otp}
-      onChange={setOtp}
-      hint="This is a description"
-      size="lg"
     />
   `);
 
@@ -204,15 +192,6 @@ export default function InputFieldPage() {
             <Input placeholder="Search..." icon="search" />
           </MainSection>
         </GridWrapper>
-
-        <MainSection title="Input OTP" code={exampleOtp}>
-          <InputOTP
-            value={otp}
-            onChange={setOtp}
-            hint="This is a description"
-            size="lg"
-          />
-        </MainSection>
 
         <Card>
           <CardBody>

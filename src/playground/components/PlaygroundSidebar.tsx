@@ -53,6 +53,7 @@ function PlaygroundSidebar() {
         { path: '/playground/radio-button', label: 'Radio Button' },
         { path: '/playground/switch', label: 'Switches' },
         { path: '/playground/select', label: 'Select' },
+        { path: '/playground/slider', label: 'Slider' },
         { path: '/playground/text-editor', label: 'Text Editor' },
         { path: '/playground/text-area', label: 'Text Area' },
         { path: '/playground/input-otp', label: 'Input OTP' },
