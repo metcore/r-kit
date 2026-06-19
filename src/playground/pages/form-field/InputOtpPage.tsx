@@ -186,6 +186,22 @@ export default function InputOtpPage() {
           </MainSection>
 
           <MainSection
+            title="Label Input OTP && Required"
+            className="flex-1"
+            code={exampleLabel}
+          >
+            <InputOTP required label="Verification Code" length={6} />
+          </MainSection>
+
+          <MainSection
+            title="Label Input Hint & tooltip"
+            className="flex-1"
+            code={exampleLabel}
+          >
+            <InputOTP required label="Verification Code" length={6} />
+          </MainSection>
+
+          <MainSection
             title="Controlled Input OTP"
             className="flex-1"
             code={exampleControlled}
@@ -215,14 +231,6 @@ export default function InputOtpPage() {
             code={exampleUnmask}
           >
             <InputOTP mask={false} length={6} />
-          </MainSection>
-
-          <MainSection
-            title="Label Input OTP"
-            className="flex-1"
-            code={exampleLabel}
-          >
-            <InputOTP label="Verification Code" length={6} />
           </MainSection>
 
           <MainSection

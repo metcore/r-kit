@@ -30,6 +30,7 @@ export interface InputOTPProps {
   ariaLabel?: (index: number, length: number) => string;
   className?: string;
   size?: InputOTPSize;
+  tooltip?: string;
 }
 
 const PATTERNS: Record<InputOTPType, RegExp> = {
@@ -68,6 +69,7 @@ export const InputOTP = ({
   ariaLabel,
   className,
   size = 'md',
+  tooltip,
 }: InputOTPProps): React.ReactElement => {
   const inputsRef = React.useRef<Array<HTMLInputElement | null>>([]);
   const generatedId = React.useId();
@@ -247,6 +249,8 @@ export const InputOTP = ({
       hint={hint}
       className={className}
       errorMessages={errorMessages}
+      required={required}
+      tooltip={tooltip}
     >
       <div
         className="flex items-center gap-2"
