@@ -15,7 +15,10 @@ export type InputGroupContextValue = {
 
 const InputGroupContext = createContext<InputGroupContextValue | null>(null);
 
+const InputGroupControlContext = createContext<boolean>(false);
+
 export const useInputGroup = () => useContext(InputGroupContext);
+export const useInputGroupControl = () => useContext(InputGroupControlContext);
 
 const groupMinHeight: Record<InputSize, string> = {
   sm: 'h-8 text-xs',
@@ -49,7 +52,6 @@ const variantStyles: Record<
     disabled: '',
   },
 };
-
 export interface InputGroupProps extends Omit<
   React.ComponentProps<'div'>,
   'size'
@@ -120,6 +122,24 @@ export function InputGroup({
         </div>
       </InputGroupContext.Provider>
     </FormField>
+  );
+}
+
+export function InputGroupControl({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<'div'>) {
+  return (
+    <InputGroupControlContext.Provider value={true}>
+      <div
+        data-slot="input-group-control"
+        className={cn('flex min-w-0 flex-1 items-stretch', className)}
+        {...props}
+      >
+        {children}
+      </div>
+    </InputGroupControlContext.Provider>
   );
 }
 

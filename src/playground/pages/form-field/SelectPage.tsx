@@ -131,6 +131,7 @@ function UserValueRenderer(option: SelectOption) {
 function SelectPage() {
   const toast = useToast();
   const { fetchPosts, fetchUsers, usePaginatedFetch } = useGetUsers();
+  const [searchValue, setSearchValue] = useState<string>('');
   const [loadingOnCreate, setLoadingOnCreate] = useState(false);
   const [selectedUser, setSelectedUser] =
     useState<SelectOption<ExtraUser> | null>(null);
@@ -213,12 +214,15 @@ function SelectPage() {
             <Select
               className="w-40"
               options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
               value={selectedUserBasic}
               onChange={(v) => {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
               }}
-              placeholder="Cari & pilih user…"
+              placeholder="Cari22 & pilih user…"
             />
+            {searchValue}
           </MainSection>
           <MainSection
             title="Select with label and Tooltip"
@@ -361,6 +365,8 @@ function SelectPage() {
               onChange={(v) => {
                 setSelectedUser(v as SelectOption<ExtraUser> | null);
               }}
+              onSearch={setSearchValue}
+              searchValue={searchValue}
               placeholder="Cari & pilih user…"
               loadOptions={async ({ search, page, signal }) => {
                 const limit = 10;

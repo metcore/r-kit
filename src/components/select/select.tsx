@@ -25,7 +25,7 @@ import { Chip } from '../chip';
 import { Text } from '../text';
 import { Button } from '../button';
 import { selectSize } from './selectSize';
-import { useInputGroup } from '../input-group';
+import { useInputGroup, useInputGroupControl } from '../input-group';
 
 const isGroup = <Extra extends object>(
   item: SelectOption<Extra> | SelectGroup<Extra>
@@ -81,11 +81,13 @@ export function Select<Extra extends object = object>({
   triggerClassName,
   renderOptions,
   onSearchOptions,
+  onSearch,
   onOptionsChange,
   required,
   isSelectOpen,
   onOpenChange,
   searchOptions,
+  searchValue,
   searchPlaceholder = 'Search...',
   icon,
   creatable = false,
@@ -99,6 +101,7 @@ export function Select<Extra extends object = object>({
   filterOption?: SelectFilterOption<Extra>;
   isLoading?: boolean;
 }) {
+  // --- state --------------------------------------------------------------
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -109,23 +112,47 @@ export function Select<Extra extends object = object>({
     visibility: 'hidden',
   });
 
+  // --- refs ---------------------------------------------------------------
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
+
+  // --- derived flags ------------------------------------------------------
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
+  const isSearchControlled =
+    searchOptions !== undefined || searchValue !== undefined;
 
+  const effectiveSearchTerm = isSearchControlled
+    ? searchOptions !== undefined && searchOptions !== null
+      ? searchOptions
+      : searchValue !== undefined && searchValue !== null
+        ? searchValue
+        : ''
+    : searchTerm;
+
+  // --- group context ------------------------------------------------------
   const group = useInputGroup();
+  /**
+   * True when this Select is a direct child of InputGroupControl.
+   * Only in this case does the Select fill its container (flex-1 / w-full).
+   * When inGroup but NOT inControl, the Select remains at intrinsic/content
+   * width so it doesn't compete with a sibling InputGroupControl for space.
+   */
+  const inControl = useInputGroupControl();
   const inGroup = group !== null;
 
+  // --- stable refs for callbacks ------------------------------------------
   const onOptionsChangeRef = useRef(onOptionsChange);
   const onOpenChangeRef = useRef(onOpenChange);
   useEffect(() => {
     onOptionsChangeRef.current = onOptionsChange;
     onOpenChangeRef.current = onOpenChange;
   });
+
+  // --- scroll lock in menu ------------------------------------------------
   useEffect(() => {
     const el = menuRef.current;
     if (!isOpen || !el) return;
@@ -140,10 +167,11 @@ export function Select<Extra extends object = object>({
     };
   }, [isOpen]);
 
+  // --- filtering ----------------------------------------------------------
   const { filteredOptions, renderEntries } = useMemo(() => {
     const flat: SelectOption<Extra>[] = [];
     const entries: RenderEntry<Extra>[] = [];
-    const term = searchTerm.toLowerCase();
+    const term = effectiveSearchTerm.toLowerCase();
 
     const matches = (o: SelectOption<Extra>) => {
       if (filterOption === false) return true;
@@ -196,7 +224,7 @@ export function Select<Extra extends object = object>({
       return (
         getOptionByValue?.(v) ??
         flatOptions.find((o) => o.value === v) ??
-        ({ value: v, label: String(v) } as SelectOption<Extra>) // fallback: label = id mentah
+        ({ value: v, label: String(v) } as SelectOption<Extra>)
       );
     },
     [flatOptions, getOptionByValue]
@@ -217,6 +245,7 @@ export function Select<Extra extends object = object>({
     return arr.map(toOption);
   }, [value, toOption]);
 
+  // --- scroll handler for infinite load -----------------------------------
   const handleScroll = useCallback(() => {
     const el = listContainerRef.current;
     if (!el || Boolean(isLoadingMore)) return;
@@ -229,6 +258,7 @@ export function Select<Extra extends object = object>({
     }
   }, [isLoadingMore, onLoadMore, treshold]);
 
+  // --- menu positioning ---------------------------------------------------
   const updateMenuPosition = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -242,7 +272,6 @@ export function Select<Extra extends object = object>({
     setMenuStyle({
       position: 'fixed',
       left: rect.left,
-      // width: rect.width,
       ...(openUp
         ? { bottom: viewportHeight - rect.top + MENU_GAP }
         : { top: rect.bottom + MENU_GAP }),
@@ -409,12 +438,6 @@ export function Select<Extra extends object = object>({
     onOpenChangeRef.current?.(isOpen);
   }, [isOpen]);
 
-  useEffect(() => {
-    if (searchOptions !== undefined) {
-      setSearchTerm(searchOptions);
-    }
-  }, [searchOptions]);
-
   const getDisplayValue = () => {
     if (selectedOptions.length === 0) {
       return (
@@ -475,9 +498,9 @@ export function Select<Extra extends object = object>({
   };
 
   const showClearButton = isClearable && selectedOptions.length > 0;
-
   const hasError = fieldHasError(errorMessages);
 
+  // --- option item renderer -----------------------------------------------
   const renderOptionItem = (option: SelectOption<Extra>, index: number) => {
     const selected = isSelected(option);
     const highlighted = index === highlightedIndex;
@@ -513,6 +536,7 @@ export function Select<Extra extends object = object>({
     );
   };
 
+  // --- event handlers -----------------------------------------------------
   const handleClickInput = () => {
     if (isDisabledMode) return;
     setIsOpen((prev) => !prev);
@@ -566,11 +590,12 @@ export function Select<Extra extends object = object>({
             ref={searchInputRef}
             type="text"
             disabled={loadingOnCreate}
-            value={searchTerm}
             onKeyDown={handleInputSearchKeyDown}
+            value={effectiveSearchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
               onSearchOptions?.(e.target.value);
+              onSearch?.(e.target.value);
             }}
             placeholder={searchPlaceholder}
             className="min-w-0 flex-1 truncate bg-transparent text-sm outline-none"
@@ -648,13 +673,14 @@ export function Select<Extra extends object = object>({
       ref={containerRef}
       className={cn(
         'focus-within:outline-none',
-        inGroup ? 'relative h-full shrink-0' : 'relative w-full',
+        inGroup
+          ? cn('min-w-0 items-center bg-transparent', inControl && 'flex-1')
+          : 'relative w-full',
         className
       )}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      {/* Input Field */}
       {trigger !== undefined && (
         <div
           aria-selected={isOpen}
@@ -665,13 +691,14 @@ export function Select<Extra extends object = object>({
           {trigger}
         </div>
       )}
+
       {trigger === undefined && (
         <div
           aria-selected={isOpen}
           className={cn(
             'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
             inGroup
-              ? 'h-full items-center bg-transparent'
+              ? cn('h-full items-center bg-transparent', inControl && 'w-full')
               : cn(
                   'focus:ring-primary-300 rounded-lg border bg-white focus:ring',
                   selectSize({ size }),
@@ -688,7 +715,13 @@ export function Select<Extra extends object = object>({
               <Icon name={icon} size={22} className="text-gray-600" />
             </div>
           )}
-          <div className="flex w-full flex-1 items-center justify-between px-3 py-2">
+
+          <div
+            className={cn(
+              'flex items-center justify-between px-3 py-2',
+              (!inGroup || inControl) && 'w-full flex-1'
+            )}
+          >
             <div className="min-w-0 flex-1 text-xs font-medium text-gray-900">
               {getDisplayValue()}
             </div>

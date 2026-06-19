@@ -214,6 +214,7 @@ export function AsyncSelect<Extra extends object = object>({
   ...selectProps
 }: AsyncSelectProps<Extra>) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { onSearch } = selectProps;
 
   const enabled = loadOnMount || menuOpen;
 
@@ -235,6 +236,11 @@ export function AsyncSelect<Extra extends object = object>({
     [onOpenChange]
   );
 
+  const handleSearch = (e: string) => {
+    setSearch(e);
+    onSearch?.(e);
+  };
+
   return (
     <Select<Extra>
       {...selectProps}
@@ -243,7 +249,7 @@ export function AsyncSelect<Extra extends object = object>({
       isLoading={isLoading}
       isLoadingMore={isLoadingMore}
       onLoadMore={hasMore ? loadMore : undefined}
-      onSearchOptions={setSearch}
+      onSearch={handleSearch}
       onOpenChange={handleOpenChange}
     />
   );

@@ -22,6 +22,7 @@ import HeroSection from '../../components/HeroSection';
 import Footer from '../../components/Footer';
 import {
   InputGroup,
+  InputGroupControl,
   InputGroupText,
 } from '../../../components/input-group/input-group';
 import {
@@ -564,6 +565,33 @@ export default function InputGroupPage() {
               <InputGroupText>https://</InputGroupText>
               <Input placeholder="your-domain.com" />
             </InputGroup>
+          </MainSection>
+
+          <MainSection code={codeCurrency} title="Sizing" className="flex-1">
+            <div className="flex-column gap-2">
+              <InputGroup size="sm" label="Price">
+                <Select />
+                <InputGroupControl>
+                  <Input placeholder="0" />
+                </InputGroupControl>
+                <InputGroupText>IDR</InputGroupText>
+              </InputGroup>
+              <InputGroup size="sm" label="Price">
+                <InputGroupText>IDR</InputGroupText>
+                <InputGroupControl>
+                  <Select />
+                </InputGroupControl>
+                <InputGroupText>IDR</InputGroupText>
+              </InputGroup>
+              <InputGroup size="md" label="Price">
+                <InputGroupText>IDR</InputGroupText>
+                <Input placeholder="0" />
+              </InputGroup>
+              <InputGroup size="lg" label="Price">
+                <InputGroupText>IDR</InputGroupText>
+                <Input placeholder="0" />
+              </InputGroup>
+            </div>
           </MainSection>
 
           <MainSection
