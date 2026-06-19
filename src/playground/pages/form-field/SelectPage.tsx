@@ -220,7 +220,7 @@ function SelectPage() {
               onChange={(v) => {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
               }}
-              placeholder="Cari22 & pilih user…"
+              placeholder="Cari & pilih user…"
             />
             {searchValue}
           </MainSection>
@@ -265,6 +265,46 @@ function SelectPage() {
               }
               placeholder="Cari & pilih user…"
               disabled={true}
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+          </MainSection>
+          <MainSection
+            title="Select Size"
+            className="flex-1"
+            code={codeExampleSelectDisabled}
+          >
+            <Select
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              size="sm"
+              placeholder="Cari & pilih user…"
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={[{ label: 'Tes user', value: 1 }]}
+              value={{ label: 'Tes user', value: 1 }}
+              size="md"
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={[{ label: 'Tes user', value: 1 }]}
+              value={{ label: 'Tes user', value: 1 }}
+              size="lg"
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
               isClearable
               onLoadMore={posts.hasMore ? users.loadMore : undefined}
               isLoadingMore={users.isLoadingMore}

@@ -5,6 +5,7 @@ import { FormField } from '../form';
 import { Icon, type IconNameProps } from '../icons';
 import { useInputGroup, useInputGroupControl } from '../input-group';
 import { Button } from '../button';
+import { selectSize } from '../select/selectSize';
 
 export type InputSize = NonNullable<InputVariantProps['size']>;
 
@@ -143,6 +144,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ? cn('min-w-0 bg-transparent', inControl && 'flex-1')
             : cn(
                 'w-full overflow-hidden rounded-lg border bg-white',
+                selectSize({ size: resolvedSize }),
                 hasError
                   ? 'border-danger-500 focus-within:border-danger-500'
                   : 'focus-within:border-primary-300 border-gray-200'
@@ -182,6 +184,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             inputVariants({ size: resolvedSize }),
             'font-metropolis min-w-0! rounded-none border-none focus-visible:outline-none',
+            !inGroup && 'h-full',
             (!inGroup || inControl) && 'w-full',
             Boolean(leftAddon) && 'pl-2',
             Boolean(rightAddon) && 'pr-2',

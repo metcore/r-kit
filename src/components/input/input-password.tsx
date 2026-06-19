@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../button';
 import { Icon } from '../icons';
-import { InputGroup, InputGroupText } from '../input-group';
+import { InputGroup, InputGroupControl, InputGroupText } from '../input-group';
 import { Input, type InputProps } from './input';
 
 export function InputPassword({
@@ -29,12 +29,14 @@ export function InputPassword({
       <InputGroupText>
         <Icon name="lock" />
       </InputGroupText>
-      <Input
-        type={showPassword ? 'text' : 'password'}
-        placeholder="Enter password"
-        value={value}
-        onChange={onChange}
-      />
+      <InputGroupControl>
+        <Input
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Enter password"
+          value={value}
+          onChange={onChange}
+        />
+      </InputGroupControl>
 
       <Button variant="tertiary" onClick={() => setShowPassword(!showPassword)}>
         <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />

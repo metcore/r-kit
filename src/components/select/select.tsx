@@ -101,7 +101,6 @@ export function Select<Extra extends object = object>({
   filterOption?: SelectFilterOption<Extra>;
   isLoading?: boolean;
 }) {
-  // --- state --------------------------------------------------------------
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -112,14 +111,12 @@ export function Select<Extra extends object = object>({
     visibility: 'hidden',
   });
 
-  // --- refs ---------------------------------------------------------------
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
 
-  // --- derived flags ------------------------------------------------------
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
   const isSearchControlled =
@@ -133,18 +130,10 @@ export function Select<Extra extends object = object>({
         : ''
     : searchTerm;
 
-  // --- group context ------------------------------------------------------
   const group = useInputGroup();
-  /**
-   * True when this Select is a direct child of InputGroupControl.
-   * Only in this case does the Select fill its container (flex-1 / w-full).
-   * When inGroup but NOT inControl, the Select remains at intrinsic/content
-   * width so it doesn't compete with a sibling InputGroupControl for space.
-   */
   const inControl = useInputGroupControl();
   const inGroup = group !== null;
 
-  // --- stable refs for callbacks ------------------------------------------
   const onOptionsChangeRef = useRef(onOptionsChange);
   const onOpenChangeRef = useRef(onOpenChange);
   useEffect(() => {
@@ -152,7 +141,6 @@ export function Select<Extra extends object = object>({
     onOpenChangeRef.current = onOpenChange;
   });
 
-  // --- scroll lock in menu ------------------------------------------------
   useEffect(() => {
     const el = menuRef.current;
     if (!isOpen || !el) return;
@@ -167,7 +155,6 @@ export function Select<Extra extends object = object>({
     };
   }, [isOpen]);
 
-  // --- filtering ----------------------------------------------------------
   const { filteredOptions, renderEntries } = useMemo(() => {
     const flat: SelectOption<Extra>[] = [];
     const entries: RenderEntry<Extra>[] = [];
@@ -245,7 +232,6 @@ export function Select<Extra extends object = object>({
     return arr.map(toOption);
   }, [value, toOption]);
 
-  // --- scroll handler for infinite load -----------------------------------
   const handleScroll = useCallback(() => {
     const el = listContainerRef.current;
     if (!el || Boolean(isLoadingMore)) return;
@@ -258,7 +244,6 @@ export function Select<Extra extends object = object>({
     }
   }, [isLoadingMore, onLoadMore, treshold]);
 
-  // --- menu positioning ---------------------------------------------------
   const updateMenuPosition = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -500,7 +485,6 @@ export function Select<Extra extends object = object>({
   const showClearButton = isClearable && selectedOptions.length > 0;
   const hasError = fieldHasError(errorMessages);
 
-  // --- option item renderer -----------------------------------------------
   const renderOptionItem = (option: SelectOption<Extra>, index: number) => {
     const selected = isSelected(option);
     const highlighted = index === highlightedIndex;
@@ -536,7 +520,6 @@ export function Select<Extra extends object = object>({
     );
   };
 
-  // --- event handlers -----------------------------------------------------
   const handleClickInput = () => {
     if (isDisabledMode) return;
     setIsOpen((prev) => !prev);
@@ -764,6 +747,7 @@ export function Select<Extra extends object = object>({
       description={description}
       hint={hint}
       required={required}
+      size={size}
       tooltip={tooltip}
     >
       {content}

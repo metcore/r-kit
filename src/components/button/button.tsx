@@ -88,7 +88,7 @@ export const Button = (props: ButtonProps) => {
     }),
     className,
     'gap-2',
-    inGroup && 'h-full rounded-none'
+    inGroup && 'h-full rounded-none border-0'
   );
 
   let buttonElement: React.ReactNode;

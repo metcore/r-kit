@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { InputGroup } from '../input-group';
+import { InputGroup, InputGroupControl } from '../input-group';
 import { Input, type InputProps } from './input';
 import { Select, type SelectGroup, type SelectOption } from '../select';
 import countries from '../../assets/countries.json';
@@ -135,13 +135,15 @@ export function InputPhoneNumber({
         renderOption={UserOptionRenderer}
         renderValue={renderValue}
       />
-      <Input
-        placeholder={placeholder}
-        value={value?.value ?? ''}
-        disabled={disabled}
-        onChange={handleNumberChange}
-        clearAble={clearAble}
-      />
+      <InputGroupControl>
+        <Input
+          placeholder={placeholder}
+          value={value?.value ?? ''}
+          disabled={disabled}
+          onChange={handleNumberChange}
+          clearAble={clearAble}
+        />
+      </InputGroupControl>
     </InputGroup>
   );
 }
