@@ -1,6 +1,5 @@
 import { Editor, useEditorState } from '@tiptap/react';
 import { useState } from 'react';
-import { Button } from '../../button';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../../dropdown';
 import { Icon } from '../../icons';
 import { Input } from '../../input';
@@ -13,6 +12,7 @@ import ToolbarButton from './toolbar-button';
 import ToolbarGroup from './toolbar-group';
 import type { AttachmentField } from '../type';
 import objectfitOptions from '../constants/object-fit-options';
+import { ButtonIcon } from '../../button-icon';
 
 export function InsertGroup({
   editor,
@@ -78,31 +78,29 @@ export function InsertGroup({
                 }
               }}
               rightAddon={
-                <button onClick={applyLink}>
+                <button type="button" onClick={applyLink}>
                   <Kbd size="sm">
                     <Icon name="arrow-turn-down-left" size={12} />
                   </Kbd>
                 </button>
               }
             />
-            <Button
+            <ButtonIcon
+              icon="trash-regular"
               variant="outline"
-              size="icon"
+              onClick={removeLink}
+              type="button"
               color="danger"
               className="rounded-lg"
-              onClick={removeLink}
-            >
-              <Icon name="trash-regular" size={17} />
-            </Button>
-            <Button
+            />
+            <ButtonIcon
+              icon="arrow-export"
               variant="outline"
-              size="icon"
+              onClick={openLink}
+              type="button"
               color="primary"
               className="rounded-lg"
-              onClick={openLink}
-            >
-              <Icon name="arrow-export" size={17} />
-            </Button>
+            />
           </div>
         </DropdownContent>
       </Dropdown>
