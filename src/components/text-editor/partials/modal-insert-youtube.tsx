@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Button } from '../../button';
-import { Icon } from '../../icons';
 import { Input } from '../../input';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Text } from '../../text/text';
@@ -8,6 +7,7 @@ import toEmbedUrl from '../helpers/yt-url-to-embed';
 import isValidYoutubeUrl from '../helpers/is-valid-youtube-url';
 import { Kbd } from '../../kbd';
 import { useKeyboardShortcut } from '../hooks/use-keyboard-shortcut';
+import { ButtonIcon } from '../../button-icon';
 
 interface YoutubeForm {
   size: {
@@ -60,6 +60,7 @@ export default function ModalInsertYoutube({
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           onSubmit?.(youtubeForm);
           setYoutubeForm(defaultValue);
         }}
@@ -71,14 +72,12 @@ export default function ModalInsertYoutube({
           </Text>
           <div className="flex items-center">
             <Kbd>ESC</Kbd>
-            <Button
-              size={'icon'}
-              onClick={() => onClose(false)}
+            <ButtonIcon
+              icon="times"
               variant={'tertiary'}
+              onClick={() => onClose(false)}
               type="button"
-            >
-              <Icon name="times" size={17} />
-            </Button>
+            />
           </div>
         </ModalHeader>
 

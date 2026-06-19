@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '../../lib/utils';
+import { lockBodyScroll, unlockBodyScroll } from './scroll-lock';
 import { Button } from '../button';
 import { Icon } from '../icons';
 import { Text } from '../text';
@@ -33,6 +35,7 @@ const ModalPreviewAttachment = ({
   videoProps,
   onDownload,
 }: ModalPreviewProps) => {
+  const [mounted, setMounted] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -108,9 +111,13 @@ const ModalPreviewAttachment = ({
     }
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Reset zoom and position when modal closes
   useEffect(() => {
-    if (!open.isOpen) {
+    if (open.isOpen === false) {
       setZoom(1);
       setPosition({ x: 0, y: 0 });
       setIsDragging(false);
@@ -118,13 +125,18 @@ const ModalPreviewAttachment = ({
   }, [open.isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = open.isOpen ? 'hidden' : 'unset';
+    if (open.isOpen) {
+      lockBodyScroll();
+      return () => {
+        unlockBodyScroll();
+      };
+    }
   }, [open.isOpen]);
 
-  if (!open.isOpen) return null;
+  if (mounted === false || open.isOpen === false) return null;
 
-  return (
-    <div className={cn('fixed inset-0 z-20')}>
+  return createPortal(
+    <div className={cn('fixed inset-0 z-1000')}>
       {/* overlay */}
       <div
         className={cn(
@@ -253,7 +265,8 @@ const ModalPreviewAttachment = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
