@@ -198,7 +198,13 @@ export default function InputOtpPage() {
             className="flex-1"
             code={exampleLabel}
           >
-            <InputOTP required label="Verification Code" length={6} />
+            <InputOTP
+              required
+              label="Verification Code"
+              length={6}
+              tooltip="tooltipnnya"
+              hint="Please fill the form"
+            />
           </MainSection>
 
           <MainSection
