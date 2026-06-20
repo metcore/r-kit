@@ -417,82 +417,6 @@ const codeWebsiteBuilder = dedent(`
   }
 `);
 
-const codeAmountWithTax = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-
-  export default function AmountWithTaxExample() {
-    return (
-      <InputGroup>
-        <InputGroupText>Rp</InputGroupText>
-        <Input placeholder="100000" />
-        <InputGroupText>+ PPN</InputGroupText>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeInvoiceSearch = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Icon } from '@herca/r-kit/icons';
-
-  export default function InvoiceSearchExample() {
-    return (
-      <InputGroup>
-        <InputGroupText>#</InputGroupText>
-        <Input placeholder="INV-2026-0001" />
-        <Button color="primary">
-          <Icon name="search" size={15} />
-        </Button>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeErpCustomer = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Icon } from '@herca/r-kit/icons';
-
-  export default function ErpCustomerExample() {
-    return (
-      <InputGroup label="Customer">
-        <InputGroupText>
-          <Icon name="user" />
-        </InputGroupText>
-        <Input placeholder="Choose customer..." />
-        <Button variant="outline">New</Button>
-        <Button variant="outline">Detail</Button>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeProductSearch = dedent(`
-  import { InputGroup } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Select } from '@herca/r-kit
-  export default function ProductSearchExample() {
-    return (
-      <InputGroup>
-        <Select
-          options={[
-            { label: 'Product', value: 'product' },
-            { label: 'SKU', value: 'sku' },
-            { label: 'Category', value: 'category' },
-          ]}
-        />
-        <Input placeholder="Search..." />
-        <Button color="primary">Search</Button>
-      </InputGroup>
-    );
-  }
-`);
-
 const codeQuickCommand = dedent(`
   import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
   import { InputGroupKbd } from '@herca/r-kit/input-group/input-group-kbd';
@@ -809,76 +733,6 @@ export default function InputGroupPage() {
           </MainSection>
 
           <MainSection
-            code={codeAmountWithTax}
-            title="Amount With Tax"
-            className="flex-1"
-          >
-            <InputGroup>
-              <InputGroupText>Rp</InputGroupText>
-
-              <Input placeholder="100000" />
-
-              <InputGroupText>+ PPN</InputGroupText>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
-            code={codeInvoiceSearch}
-            title="Invoice Search"
-            className="flex-1"
-          >
-            <InputGroup>
-              <InputGroupText>#</InputGroupText>
-
-              <Input placeholder="INV-2026-0001" />
-
-              <Button color="primary">
-                <Icon name="search" size={15} />
-              </Button>
-            </InputGroup>
-          </MainSection>
-        </GridWrapper>
-
-        <GridWrapper>
-          <MainSection
-            code={codeErpCustomer}
-            title="ERP Customer Example"
-            className="flex-1"
-          >
-            <InputGroup label="Customer">
-              <InputGroupText>
-                <Icon name="user" />
-              </InputGroupText>
-
-              <Input placeholder="Choose customer..." />
-
-              <Button variant="outline">New</Button>
-
-              <Button variant="outline"> Detail</Button>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
-            code={codeProductSearch}
-            title="Product Search"
-            className="flex-1"
-          >
-            <InputGroup>
-              <Select
-                options={[
-                  { label: 'Product', value: 'product' },
-                  { label: 'SKU', value: 'sku' },
-                  { label: 'Category', value: 'category' },
-                ]}
-              />
-
-              <Input placeholder="Search..." />
-
-              <Button color="primary">Search</Button>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
             code={codeQuickCommand}
             title="Quick Command"
             className="flex-1"
@@ -887,8 +741,9 @@ export default function InputGroupPage() {
               <InputGroupText>
                 <Icon name="file" />
               </InputGroupText>
-
-              <Input placeholder="Run command..." />
+              <InputGroupControl>
+                <Input placeholder="Run command..." />
+              </InputGroupControl>
 
               <InputGroupKbd> Ctrl </InputGroupKbd>
 

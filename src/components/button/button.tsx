@@ -75,7 +75,10 @@ export const Button = (props: ButtonProps) => {
   const inGroup = group !== null;
 
   const spinner = loading ? (
-    <RoundedSpinner size={spinnerSize[size ?? 'md']} />
+    <RoundedSpinner
+      size={spinnerSize[size ?? 'md']}
+      color={variant === 'outline' ? color : undefined}
+    />
   ) : null;
 
   const classes = cn(

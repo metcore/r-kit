@@ -396,6 +396,7 @@ import FloppyDiskIcon from './icons/FloppyDiskIcon';
 import GridSquarePlusIcon from './icons/GridSquareplusIcon';
 import FlagIcon from './icons/FlagIcon';
 import BadgeDiscountAltIcon from './icons/BadgeDiscountAltIcon';
+import DoorClosedIcon from './icons/DoorClosedIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -796,4 +797,5 @@ export const iconRegistry = {
   'grid-square-plus': GridSquarePlusIcon,
   'flag': FlagIcon,
   'badge-discount-alt': BadgeDiscountAltIcon,
+  'door-closed': DoorClosedIcon,
 };

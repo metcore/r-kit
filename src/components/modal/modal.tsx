@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon } from '../icons';
 import { cn } from '../../lib/utils';
 import type { ModalComponentProps, ModalProps } from './type';
 import { modalOverlayVariants, modalVariants } from './modal-variants';
+import { lockBodyScroll, unlockBodyScroll } from './scroll-lock';
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
@@ -14,6 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   closable = true,
 }) => {
+  const [mounted, setMounted] = React.useState<boolean>(false);
   const [isVisible, setIsVisible] = React.useState<boolean>(isOpen);
   const [animationState, setAnimationState] = React.useState<'open' | 'closed'>(
     'open'
@@ -24,17 +27,23 @@ export const Modal: React.FC<ModalProps> = ({
   const hasHeader = Boolean(title ?? description);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (isOpen === true) {
       setIsVisible(true);
       setAnimationState('open');
-      document.body.style.overflow = 'hidden';
+      lockBodyScroll();
       lastFocusedElement.current = document.activeElement as HTMLElement;
+      return () => {
+        unlockBodyScroll();
+      };
     } else {
       setAnimationState('closed');
 
       const timer = setTimeout(() => {
         setIsVisible(false);
-        document.body.style.overflow = 'unset';
       }, 200);
 
       return () => clearTimeout(timer);
@@ -100,7 +109,7 @@ export const Modal: React.FC<ModalProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isVisible, onClose]);
 
-  if (isVisible === false) return null;
+  if (mounted === false || isVisible === false) return null;
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && closable) {
@@ -108,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <>
       <div
         className={cn(
@@ -164,7 +173,8 @@ export const Modal: React.FC<ModalProps> = ({
           {children}
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 };
 

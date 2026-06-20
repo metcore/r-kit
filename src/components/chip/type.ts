@@ -18,6 +18,7 @@ export interface ChipContextValue {
   selectedValues: ChipValue[];
   toggleSelection: (value: ChipValue) => void;
   color?: ColorVariantType;
+  hexColor?: string;
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
   dismissible?: boolean;
@@ -36,6 +37,7 @@ export interface ChipProps extends Omit<
   className?: string;
   dismissible?: boolean;
   onDismiss?: (value?: ChipValue) => void;
+  hexColor?: string;
 }
 
 export interface ChipOptionProps {
@@ -55,6 +57,7 @@ export interface ChipArrayProps {
   onSelect?: (selected: ChipValue[]) => void;
   direction?: 'horizontal' | 'vertical';
   color?: ColorVariantType;
+  hexColor?: string;
   multiple?: boolean;
   scrollable?: boolean;
   block?: boolean;

@@ -127,7 +127,7 @@ export default function ModalInsertImage({
           Image Properties
         </Text>
         <Button
-          size={'icon'}
+          size={'xs'}
           onClick={() => onClose(false)}
           variant={'tertiary'}
           type="button"
@@ -139,6 +139,7 @@ export default function ModalInsertImage({
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           if (!validate()) return;
 
           onSubmit(imageForm);
@@ -153,6 +154,7 @@ export default function ModalInsertImage({
             defaultValue="0"
             value={currentTabImage}
             onValueChange={setCurrentTabImage}
+            id="modal-insert-image-tabs"
           >
             <TabsList className="w-full">
               <TabsTrigger value="0">Image Detail</TabsTrigger>

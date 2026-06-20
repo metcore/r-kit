@@ -287,7 +287,6 @@ function SelectPage() {
             />
             <Select
               options={[{ label: 'Tes user', value: 1 }]}
-              value={{ label: 'Tes user', value: 1 }}
               size="md"
               onChange={(v) =>
                 setSelectedUser(v as SelectOption<ExtraUser> | null)
@@ -299,7 +298,6 @@ function SelectPage() {
             />
             <Select
               options={[{ label: 'Tes user', value: 1 }]}
-              value={{ label: 'Tes user', value: 1 }}
               size="lg"
               onChange={(v) =>
                 setSelectedUser(v as SelectOption<ExtraUser> | null)

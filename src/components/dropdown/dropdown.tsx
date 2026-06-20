@@ -89,10 +89,56 @@ export function DropdownPanel({
   );
 }
 
-export function DropdownSeparator({ className }: { className?: string }) {
+export function DropdownSeparator({
+  className,
+  ...props
+}: { className?: string } & DropdownMenu.DropdownMenuSeparatorProps) {
   return (
     <DropdownMenu.Separator
       className={cn('my-1 h-px bg-gray-200', className)}
+      {...props}
     />
+  );
+}
+
+export function DropdownSub({
+  children,
+  ...props
+}: { children: React.ReactNode } & DropdownMenu.DropdownMenuSubProps) {
+  return <DropdownMenu.Sub {...props}>{children}</DropdownMenu.Sub>;
+}
+
+export function DropdownSubTrigger({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+} & DropdownMenu.DropdownMenuSubTriggerProps) {
+  return (
+    <DropdownMenu.SubTrigger {...props}>{children}</DropdownMenu.SubTrigger>
+  );
+}
+
+export function DropdownSubContent({
+  children,
+  className,
+  portalProps,
+  ...props
+}: DropdownMenu.DropdownMenuSubContentProps & {
+  children: React.ReactNode;
+  portalProps?: DropdownMenu.DropdownMenuPortalProps;
+}) {
+  return (
+    <DropdownMenu.Portal {...portalProps}>
+      <DropdownMenu.SubContent
+        className={cn(
+          'shadow-dropdown rounded-xl border border-gray-200 bg-white p-3',
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Portal>
   );
 }

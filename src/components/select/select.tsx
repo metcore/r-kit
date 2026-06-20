@@ -709,12 +709,12 @@ export function Select<Extra extends object = object>({
               {getDisplayValue()}
             </div>
 
-            <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
+            <div className="ml-2 flex shrink-0 items-start gap-1 self-start">
               {showClearButton && isDisabledMode == false && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="cursor-pointer rounded text-center text-gray-700"
+                  className="cursor-pointer items-center rounded text-center text-gray-700"
                 >
                   <Icon name="times-circle" size={20} />
                 </button>
