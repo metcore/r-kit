@@ -628,7 +628,7 @@ export function Select<Extra extends object = object>({
     <div
       ref={containerRef}
       className={cn(
-        'h-fit! focus-within:outline-none',
+        'focus-within:outline-none',
         inGroup ? 'relative h-full shrink-0' : 'relative w-full',
         className
       )}
@@ -650,7 +650,7 @@ export function Select<Extra extends object = object>({
         <div
           aria-selected={isOpen}
           className={cn(
-            'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
+            'flex h-fit! cursor-pointer text-gray-900 transition-all focus-within:outline-none',
             inGroup
               ? 'h-full items-center bg-transparent'
               : cn(
