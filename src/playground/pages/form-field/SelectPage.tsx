@@ -276,8 +276,12 @@ function SelectPage() {
             code={codeExampleSelectDisabled}
           >
             <Select
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
               onChange={(v) =>
-                setSelectedUser(v as SelectOption<ExtraUser> | null)
+                setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
               }
               size="sm"
               placeholder="Cari & pilih user…"
@@ -286,10 +290,13 @@ function SelectPage() {
               isLoadingMore={users.isLoadingMore}
             />
             <Select
-              options={[{ label: 'Tes user', value: 1 }]}
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
               size="md"
               onChange={(v) =>
-                setSelectedUser(v as SelectOption<ExtraUser> | null)
+                setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
               }
               placeholder="Cari & pilih user…"
               isClearable
@@ -297,7 +304,10 @@ function SelectPage() {
               isLoadingMore={users.isLoadingMore}
             />
             <Select
-              options={[{ label: 'Tes user', value: 1 }]}
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
               size="lg"
               onChange={(v) =>
                 setSelectedUser(v as SelectOption<ExtraUser> | null)
@@ -325,8 +335,7 @@ function SelectPage() {
               isLoadingMore={users.isLoadingMore}
             />
           </MainSection>
-        </GridWrapper>
-        <GridWrapper>
+
           <MainSection
             title="Group Select"
             className="flex-1"
@@ -355,6 +364,7 @@ function SelectPage() {
               onChange={(v) => {
                 setSelectedUserMultiple(v as SelectOption[]);
               }}
+              size="sm"
               disabled
               multiple
               placeholder="Pilih beberapa user…"
@@ -362,6 +372,18 @@ function SelectPage() {
             <Select
               label="Team members"
               options={dataSingle}
+              size="md"
+              value={selectedUserMultiple}
+              onChange={(v) => {
+                setSelectedUserMultiple(v as SelectOption[]);
+              }}
+              multiple
+              placeholder="Pilih beberapa user…"
+            />
+            <Select
+              label="Team members"
+              options={dataSingle}
+              size="lg"
               value={selectedUserMultiple}
               onChange={(v) => {
                 setSelectedUserMultiple(v as SelectOption[]);
@@ -370,8 +392,6 @@ function SelectPage() {
               placeholder="Pilih beberapa user…"
             />
           </MainSection>
-        </GridWrapper>
-        <GridWrapper>
           <MainSection
             title="Select Createable"
             className="flex-1"

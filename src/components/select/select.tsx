@@ -24,7 +24,7 @@ import clsx from 'clsx';
 import { Chip } from '../chip';
 import { Text } from '../text';
 import { Button } from '../button';
-import { selectSize } from './selectSize';
+import { selectSize, type SelectSize } from './selectSize';
 import { useInputGroup, useInputGroupControl } from '../input-group';
 
 const isGroup = <Extra extends object>(
@@ -54,6 +54,19 @@ type RenderEntry<Extra extends object> =
 
 const MENU_MAX_HEIGHT = 320;
 const MENU_GAP = 4;
+
+const fontSizeMap = {
+  single: {
+    sm: 't3',
+    md: 't2',
+    lg: 't1',
+  },
+  multiple: {
+    sm: 't4',
+    md: 't3',
+    lg: 't2',
+  },
+} as const;
 
 export function Select<Extra extends object = object>({
   options = [],
@@ -352,7 +365,13 @@ export function Select<Extra extends object = object>({
     },
     [isOpen, filteredOptions, highlightedIndex, handleSelect]
   );
+  function getFontSize(size: SelectSize, multiple?: boolean) {
+    const currentSize = size ?? 'md';
 
+    return multiple == true
+      ? fontSizeMap.multiple[currentSize]
+      : fontSizeMap.single[currentSize];
+  }
   useEffect(() => {
     setHighlightedIndex(0);
   }, [searchTerm]);
@@ -444,11 +463,15 @@ export function Select<Extra extends object = object>({
             <div
               key={item.value}
               className={cn(
-                'border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900',
+                'border-primary-200 py-0.2 flex items-center gap-1 rounded border bg-white px-1 text-xs text-gray-900',
                 isDisabledMode && 'border-gray-500 bg-gray-300'
               )}
             >
-              {renderValue != null ? renderValue(item) : item.label}
+              {renderValue != null ? (
+                renderValue(item)
+              ) : (
+                <Text variant={getFontSize(size, multiple)}>{label}</Text>
+              )}
               {isDisabledMode == false && (
                 <button
                   type="button"
@@ -469,7 +492,7 @@ export function Select<Extra extends object = object>({
     ) : (
       <>
         <Text
-          variant="t2"
+          variant={getFontSize(size, multiple)}
           weight="semibold"
           className={cn('text-gray-900', isDisabledMode && 'text-gray-600')}
         >
@@ -679,7 +702,7 @@ export function Select<Extra extends object = object>({
         <div
           aria-selected={isOpen}
           className={cn(
-            'flex h-fit! cursor-pointer text-gray-900 transition-all focus-within:outline-none',
+            'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
             inGroup
               ? cn('h-full items-center bg-transparent', inControl && 'w-full')
               : cn(
@@ -701,7 +724,7 @@ export function Select<Extra extends object = object>({
 
           <div
             className={cn(
-              'flex items-center justify-between px-3 py-2',
+              'flex items-center justify-between px-3 py-1.5',
               (!inGroup || inControl) && 'w-full flex-1'
             )}
           >
@@ -716,14 +739,14 @@ export function Select<Extra extends object = object>({
                   onClick={handleClear}
                   className="cursor-pointer items-center rounded text-center text-gray-700"
                 >
-                  <Icon name="times-circle" size={20} />
+                  <Icon name="times-circle" size={15} />
                 </button>
               )}
 
               <Icon
                 className="text-gray-700"
                 name={isOpen ? 'angle-up-small' : 'angle-down-small'}
-                size={20}
+                size={15}
               />
             </div>
           </div>
