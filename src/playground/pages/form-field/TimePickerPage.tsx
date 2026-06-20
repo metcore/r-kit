@@ -7,7 +7,12 @@ export default function TimePickerpage() {
     <>
       <GridWrapper>
         <MainSection title="default">
-          <TimePicker />
+          <TimePicker
+            initialPosition="5:30"
+            onChange={(e) => console.log(e)}
+            showAmPm
+            use12Hour
+          />
         </MainSection>
         <MainSection title="default">
           <TimePicker label="Time" showSeconds={true} />

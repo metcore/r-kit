@@ -9,7 +9,7 @@ import type {
   RGB,
 } from './type';
 import { Input } from '../input';
-import { InputGroup, InputGroupText } from '../input-group';
+import { InputGroup, InputGroupControl, InputGroupText } from '../input-group';
 import { Icon } from '../icons';
 
 function getEyeDropper(): EyeDropperCtor | undefined {
@@ -609,14 +609,16 @@ export function ColorInput({
         tooltip={tooltip}
         errorMessages={errorMessages}
       >
-        <Input
-          placeholder={placeholder}
-          onClick={() => setOpen((o) => !o)}
-          className="cursor-pointer"
-          size={size}
-          value={display}
-          readOnly
-        />
+        <InputGroupControl>
+          <Input
+            placeholder={placeholder}
+            onClick={() => setOpen((o) => !o)}
+            className="cursor-pointer"
+            size={size}
+            value={display}
+            readOnly
+          />
+        </InputGroupControl>
         <InputGroupText>{inputColorDisplay()}</InputGroupText>
       </InputGroup>
       {open ? (

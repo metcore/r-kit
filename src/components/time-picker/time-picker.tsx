@@ -14,6 +14,13 @@ const MINUTES = Array.from({ length: 60 }, (_, i) => pad2(i));
 const SECONDS = Array.from({ length: 60 }, (_, i) => pad2(i));
 const AMPM_RAW = ['AM', 'PM'];
 
+type TimeState = {
+  h: string;
+  m: string;
+  s: string;
+  ap: 'AM' | 'PM';
+};
+
 interface TimePickerProps {
   showHours?: boolean;
   showMinutes?: boolean;
@@ -22,6 +29,7 @@ interface TimePickerProps {
   use12Hour?: boolean;
   value?: string;
   defaultValue?: string;
+  initialPosition?: string;
   onChange?: (val: string) => void;
   onApply?: (val: string) => void;
   placeholder?: string;
@@ -41,6 +49,7 @@ export function TimePicker({
   showAmPm = false,
   use12Hour = false,
   defaultValue,
+  initialPosition,
   onChange,
   onApply,
   placeholder = 'Pilih waktu',
@@ -54,29 +63,28 @@ export function TimePicker({
 }: TimePickerProps) {
   const hourOpts = use12Hour ? HOURS_12 : HOURS_24;
 
-  const parseVal = (val?: string) => {
-    if (val == undefined)
-      return {
-        h: use12Hour ? '10' : '00',
-        m: '00',
-        s: '00',
-        ap: 'AM' as const,
-      };
-    const [rawH, rawM = '00', rawS = '00'] = val.split(':');
+  const parseVal = (val?: string): TimeState => {
+    if (val == null)
+      return { h: use12Hour ? '10' : '00', m: '00', s: '00', ap: 'AM' };
+
+    const [rawH = '00', rawM = '00', rawS = '00'] = val.split(':');
     let s = rawS;
     let ap: 'AM' | 'PM' = 'AM';
-    if (s.includes(' ')) {
-      [s, ap] = s.split(' ') as [string, 'AM' | 'PM'];
-    }
-    return { h: Number(rawH) || '00', m: rawM, s, ap };
+    if (s.includes(' ')) [s, ap] = s.split(' ') as [string, 'AM' | 'PM'];
+
+    const h = use12Hour ? String(Number(rawH)) : rawH;
+    return { h, m: rawM, s, ap };
   };
 
-  const init = parseVal(defaultValue);
-  const [committed, setCommitted] = useState(init);
-  const [draft, setDraft] = useState(init);
+  const [committed, setCommitted] = useState<TimeState | null>(
+    defaultValue != null ? parseVal(defaultValue) : null
+  );
+  const [draft, setDraft] = useState<TimeState>(
+    () => committed ?? parseVal(initialPosition)
+  );
   const [open, setOpen] = useState(false);
 
-  const buildTime = ({ h, m, s, ap }: typeof init) => {
+  const buildTime = ({ h, m, s, ap }: TimeState) => {
     const parts: string[] = [];
     if (showHours) parts.push(h);
     if (showMinutes) parts.push(m);
@@ -84,10 +92,13 @@ export function TimePicker({
     return showAmPm ? `${parts.join(':')} ${ap}` : parts.join(':');
   };
 
+  const displayValue = committed ? buildTime(committed) : '';
+
   const handleOpen = () => {
-    setDraft({ ...committed });
+    setDraft(committed ?? parseVal(initialPosition));
     setOpen(true);
   };
+
   const handleNow = () => {
     const now = new Date();
     let h = now.getHours();
@@ -100,6 +111,7 @@ export function TimePicker({
       ap: ap as 'AM' | 'PM',
     });
   };
+
   const handleApply = () => {
     const timeStr = buildTime(draft);
     setCommitted({ ...draft });
@@ -107,8 +119,6 @@ export function TimePicker({
     onApply?.(timeStr);
     setOpen(false);
   };
-
-  const displayValue = buildTime(committed);
 
   return (
     <Dropdown open={open} onOpenChange={setOpen}>
@@ -155,7 +165,6 @@ export function TimePicker({
               options={hourOpts}
               value={draft.h}
               onChange={(v) => setDraft((d) => ({ ...d, h: v }))}
-              width={125}
             />
           )}
           {showMinutes && (
@@ -163,7 +172,6 @@ export function TimePicker({
               options={MINUTES}
               value={draft.m}
               onChange={(v) => setDraft((d) => ({ ...d, m: v }))}
-              width={125}
             />
           )}
           {showSeconds && (
@@ -171,7 +179,6 @@ export function TimePicker({
               options={SECONDS}
               value={draft.s}
               onChange={(v) => setDraft((d) => ({ ...d, s: v }))}
-              width={125}
             />
           )}
           {showAmPm && (
@@ -181,7 +188,6 @@ export function TimePicker({
               onChange={(v) =>
                 setDraft((d) => ({ ...d, ap: v as 'AM' | 'PM' }))
               }
-              width={76}
               circular
             />
           )}
@@ -191,7 +197,7 @@ export function TimePicker({
           <Button onClick={handleNow} variant="tertiary">
             Batalkan
           </Button>
-          <Button onClick={handleApply}> Terapkan </Button>
+          <Button onClick={handleApply}>Terapkan</Button>
         </div>
       </DropdownContent>
     </Dropdown>

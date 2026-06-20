@@ -679,7 +679,7 @@ export function Select<Extra extends object = object>({
         <div
           aria-selected={isOpen}
           className={cn(
-            'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
+            'flex h-fit! cursor-pointer text-gray-900 transition-all focus-within:outline-none',
             inGroup
               ? cn('h-full items-center bg-transparent', inControl && 'w-full')
               : cn(

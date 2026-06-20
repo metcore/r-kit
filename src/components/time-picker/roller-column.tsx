@@ -11,7 +11,6 @@ interface RollerColumnProps {
   options: string[];
   value: string;
   onChange: (val: string) => void;
-  width?: number;
   circular?: boolean;
 }
 
@@ -21,7 +20,6 @@ export function RollerColumn({
   options: rawOptions,
   value,
   onChange,
-  width = 88,
   circular = false,
 }: RollerColumnProps) {
   const listOptions = circular
@@ -86,15 +84,14 @@ export function RollerColumn({
 
   return (
     <div
-      className="relative shrink-0 overflow-hidden"
-      style={{ width, height: COL_H }}
+      className="relative flex-1 overflow-hidden" // ← shrink-0 → flex-1, hapus style width
+      style={{ height: COL_H }}
     >
       <div
         className="bg-primary-50 pointer-events-none absolute inset-x-0 top-0 z-0"
         style={{ top: PAD, height: ITEM_H }}
       />
 
-      {/* Scroll list */}
       <div
         ref={scrollRef}
         onScroll={handleScroll}
@@ -146,7 +143,6 @@ export function RollerColumn({
             'linear-gradient(to bottom, rgba(255,255,255,0.98) 10%, rgba(255,255,255,0.55) 65%, transparent 100%)',
         }}
       />
-      {/* Fade bottom */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2]"
         style={{
