@@ -3,18 +3,20 @@ import { cn, fieldHasError } from '../../lib/utils';
 import { inputVariants, type InputVariantProps } from './input-variants';
 import { FormField } from '../form';
 import { Icon, type IconNameProps } from '../icons';
-import { useInputGroup } from '../input-group';
+import { useInputGroup, useInputGroupControl } from '../input-group';
 import { Button } from '../button';
+import { selectSize } from '../select/selectSize';
 
 export type InputSize = NonNullable<InputVariantProps['size']>;
+
 export interface InputProps
   extends Omit<React.ComponentProps<'input'>, 'size'>, InputVariantProps {
   /**
-   * @deprecated Jangan make ini, gunakan input group
+   * @deprecated Use InputGroup + InputGroupText instead.
    */
   leftAddon?: React.ReactNode;
   /**
-   * @deprecated Jangan make ini, gunakan input group
+   * @deprecated Use InputGroup + InputGroupText instead.
    */
   rightAddon?: React.ReactNode;
   label?: string;
@@ -23,16 +25,16 @@ export interface InputProps
   inputSize?: number;
   description?: string;
   /**
-   * @deprecated Jangan make ini, gunakan input group
+   * @deprecated Use InputGroup + InputGroupText instead.
    */
   leftAddonClassName?: string;
   /**
-   * @deprecated Jangan make ini, gunakan input group
+   * @deprecated Use InputGroup + InputGroupText instead.
    */
   rightAddonClassName?: string;
   isError?: boolean;
   /**
-   * @deprecated Jangan make ini, gunakan input group
+   * @deprecated Use InputGroup + InputGroupText instead.
    */
   mergedAddon?: boolean;
   onContainerResize?: (width: number) => void;
@@ -72,6 +74,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const group = useInputGroup();
+    const inControl = useInputGroupControl();
     const inGroup = group !== null;
 
     const resolvedSize = size ?? group?.size;
@@ -138,9 +141,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         className={cn(
           'flex items-stretch',
           inGroup
-            ? 'min-w-0 flex-1 bg-transparent'
+            ? cn('min-w-0 bg-transparent', inControl && 'flex-1')
             : cn(
                 'w-full overflow-hidden rounded-lg border bg-white',
+                selectSize({ size: resolvedSize }),
                 hasError
                   ? 'border-danger-500 focus-within:border-danger-500'
                   : 'focus-within:border-primary-300 border-gray-200'
@@ -148,10 +152,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       >
         {icon && (
-          <div className="flex items-center border-r border-gray-200 px-3 py-2">
+          <div className="flex items-center border-r border-gray-200 px-3 py-1">
             <Icon name={icon} size={22} className="text-gray-600" />
           </div>
         )}
+
         {Boolean(leftAddon) && (
           <div
             className={cn(
@@ -166,6 +171,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {leftAddon}
           </div>
         )}
+
         <input
           ref={ref}
           type={type}
@@ -177,7 +183,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           style={mergedStyle}
           className={cn(
             inputVariants({ size: resolvedSize }),
-            'font-metropolis w-full min-w-0! rounded-none border-none focus-visible:outline-none',
+            'font-metropolis min-w-0! rounded-none border-none focus-visible:outline-none',
+            !inGroup && 'h-full',
+            (!inGroup || inControl) && 'w-full',
             Boolean(leftAddon) && 'pl-2',
             Boolean(rightAddon) && 'pr-2',
             Boolean(mergedAddon) && 'shadow-none',

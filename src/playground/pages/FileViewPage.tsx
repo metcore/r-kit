@@ -17,15 +17,23 @@ export default function FileViewPage() {
       <div className="flex flex-col gap-4">
         <MainSection title="Default">
           <div className="grid grid-cols-4 gap-4">
-            <FileView src="laporan.pdf" color="primary" size={20000} />
+            <FileView
+              name="ddd.dd"
+              src="laporan.pdf"
+              color="primary"
+              size={20000}
+            />
             <FileView src={illust} color="danger" size={20000000} />
             <FileView src="ex.pdf" color="warning" />
             <FileView src="ex.xls" color="success" />
             <FileView src="ex.xls" color="orange" />
             <FileView src="ex.xls" color="info" />
-            <FileView src="ex.xls" color="purple" />
-            <FileView src="" />
             <FileView src="../../src/assets/images/card-example.jpg" />
+            <FileView src="" />
+            <FileView
+              src="https://stg.cdn.herca.id/test/tq6Cjvuvsnc3ojkukeyy98G0lt1DTETNfHtHdEz1.png"
+              name="Custom display name"
+            />
             <FileView src="../../src/assets/doc/sample.pdf" />
             <FileView src="ex.csv" />
             <FileView src="ex.mp4" />
@@ -39,7 +47,12 @@ export default function FileViewPage() {
             <FileView variant="small" src="adad.doc" color="success" />
             <FileView variant="small" src="adad.doc" color="orange" />
             <FileView variant="small" src="adad.xls" color="info" />
-            <FileView variant="small" src="adad.mp3" color="purple" />
+            <FileView
+              variant="small"
+              name="tes"
+              src="https://stg.cdn.herca.id/test/tq6Cjvuvsnc3ojkukeyy98G0lt1DTETNfHtHdEz1.png"
+              color="purple"
+            />
             <FileView variant="small" src="" />
             <FileView
               variant="small"

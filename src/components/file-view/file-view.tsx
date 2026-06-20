@@ -37,8 +37,8 @@ export interface FileViewProps extends Omit<
   src?: string | File;
   size?: number;
   kind?: FileKind;
-  thumbnailUrl?: string;
   onExpand?: (name: string) => void;
+  name?: string;
   className?: string;
 }
 
@@ -189,9 +189,9 @@ export const FileView: FC<FileViewProps> = ({
   kind,
   variant = 'large',
   color = 'default',
-  thumbnailUrl,
   onExpand,
   className,
+  name,
 }) => {
   const [preview, setPreview] = useState<PreviewState>({
     isOpen: false,
@@ -232,13 +232,10 @@ export const FileView: FC<FileViewProps> = ({
     : KIND_ICON[resolvedKind];
   const displaySize =
     effectiveSize !== undefined ? formatFileSize(effectiveSize) : 'unknown';
-  const thumbnailSrc =
-    thumbnailUrl ?? (resolvedKind === 'image' ? resolvedUrl : undefined);
+  const thumbnailSrc = resolvedKind === 'image' ? resolvedUrl : undefined;
   const showThumbnail =
-    !isCorrupt &&
-    resolvedKind === 'image' &&
-    variant == 'small' &&
-    Boolean(thumbnailSrc);
+    !isCorrupt && resolvedKind === 'image' && Boolean(thumbnailSrc);
+  const displayName = name != null ? name : fileName;
 
   const interactive = !isCorrupt;
 
@@ -303,7 +300,7 @@ export const FileView: FC<FileViewProps> = ({
 
   const renderFooter = () => (
     <div className={fileViewFooterVariants({ color })}>
-      {showThumbnail ? (
+      {showThumbnail && variant == 'small' ? (
         <img
           src={thumbnailSrc}
           alt={fileName}
@@ -314,10 +311,10 @@ export const FileView: FC<FileViewProps> = ({
           <Icon name={iconName} size={variant == 'small' ? 40 : 20} />
         </div>
       )}
-      <div className="grid w-full grid-cols-3 items-center justify-between gap-2">
-        <div className="col-span-2 min-w-0">
+      <div className="grid w-full grid-cols-4 items-center justify-between gap-2">
+        <div className="col-span-3 min-w-0">
           <Text variant="t2" weight="semibold" className="truncate">
-            {fileName}
+            {displayName}
           </Text>
           {displaySize ? (
             <Text variant="t2" weight="regular" className="truncate">

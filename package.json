@@ -1,6 +1,6 @@
 {
   "name": "@herca/r-kit",
-  "version": "0.0.98",
+  "version": "0.0.103",
   "description": "UI Kit untuk pengembangan adplikasi internal HerCa.",
   "keywords": [
     "React",
@@ -40,6 +40,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
+    "build:docs": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

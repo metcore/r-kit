@@ -24,8 +24,8 @@ import clsx from 'clsx';
 import { Chip } from '../chip';
 import { Text } from '../text';
 import { Button } from '../button';
-import { selectSize } from './selectSize';
-import { useInputGroup } from '../input-group';
+import { selectSize, type SelectSize } from './selectSize';
+import { useInputGroup, useInputGroupControl } from '../input-group';
 
 const isGroup = <Extra extends object>(
   item: SelectOption<Extra> | SelectGroup<Extra>
@@ -55,6 +55,19 @@ type RenderEntry<Extra extends object> =
 const MENU_MAX_HEIGHT = 320;
 const MENU_GAP = 4;
 
+const fontSizeMap = {
+  single: {
+    sm: 't3',
+    md: 't2',
+    lg: 't1',
+  },
+  multiple: {
+    sm: 't4',
+    md: 't3',
+    lg: 't2',
+  },
+} as const;
+
 export function Select<Extra extends object = object>({
   options = [],
   value = null,
@@ -81,11 +94,13 @@ export function Select<Extra extends object = object>({
   triggerClassName,
   renderOptions,
   onSearchOptions,
+  onSearch,
   onOptionsChange,
   required,
   isSelectOpen,
   onOpenChange,
   searchOptions,
+  searchValue,
   searchPlaceholder = 'Search...',
   icon,
   creatable = false,
@@ -114,10 +129,22 @@ export function Select<Extra extends object = object>({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const listContainerRef = useRef<HTMLDivElement>(null);
+
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
+  const isSearchControlled =
+    searchOptions !== undefined || searchValue !== undefined;
+
+  const effectiveSearchTerm = isSearchControlled
+    ? searchOptions !== undefined && searchOptions !== null
+      ? searchOptions
+      : searchValue !== undefined && searchValue !== null
+        ? searchValue
+        : ''
+    : searchTerm;
 
   const group = useInputGroup();
+  const inControl = useInputGroupControl();
   const inGroup = group !== null;
 
   const onOptionsChangeRef = useRef(onOptionsChange);
@@ -126,6 +153,7 @@ export function Select<Extra extends object = object>({
     onOptionsChangeRef.current = onOptionsChange;
     onOpenChangeRef.current = onOpenChange;
   });
+
   useEffect(() => {
     const el = menuRef.current;
     if (!isOpen || !el) return;
@@ -143,7 +171,7 @@ export function Select<Extra extends object = object>({
   const { filteredOptions, renderEntries } = useMemo(() => {
     const flat: SelectOption<Extra>[] = [];
     const entries: RenderEntry<Extra>[] = [];
-    const term = searchTerm.toLowerCase();
+    const term = effectiveSearchTerm.toLowerCase();
 
     const matches = (o: SelectOption<Extra>) => {
       if (filterOption === false) return true;
@@ -196,7 +224,7 @@ export function Select<Extra extends object = object>({
       return (
         getOptionByValue?.(v) ??
         flatOptions.find((o) => o.value === v) ??
-        ({ value: v, label: String(v) } as SelectOption<Extra>) // fallback: label = id mentah
+        ({ value: v, label: String(v) } as SelectOption<Extra>)
       );
     },
     [flatOptions, getOptionByValue]
@@ -242,7 +270,6 @@ export function Select<Extra extends object = object>({
     setMenuStyle({
       position: 'fixed',
       left: rect.left,
-      width: rect.width,
       ...(openUp
         ? { bottom: viewportHeight - rect.top + MENU_GAP }
         : { top: rect.bottom + MENU_GAP }),
@@ -262,7 +289,7 @@ export function Select<Extra extends object = object>({
         const newValue = exists
           ? selectedOptions.filter((v) => v.value !== option.value)
           : [...selectedOptions, option];
-        onChange?.(newValue); // catatan: tetap emit OBJECT — lihat di bawah
+        onChange?.(newValue);
         const idx = filteredOptions.findIndex((o) => o.value === option.value);
         setHighlightedIndex(idx);
         containerRef.current?.focus();
@@ -338,7 +365,13 @@ export function Select<Extra extends object = object>({
     },
     [isOpen, filteredOptions, highlightedIndex, handleSelect]
   );
+  function getFontSize(size: SelectSize, multiple?: boolean) {
+    const currentSize = size ?? 'md';
 
+    return multiple == true
+      ? fontSizeMap.multiple[currentSize]
+      : fontSizeMap.single[currentSize];
+  }
   useEffect(() => {
     setHighlightedIndex(0);
   }, [searchTerm]);
@@ -409,15 +442,19 @@ export function Select<Extra extends object = object>({
     onOpenChangeRef.current?.(isOpen);
   }, [isOpen]);
 
-  useEffect(() => {
-    if (searchOptions !== undefined) {
-      setSearchTerm(searchOptions);
-    }
-  }, [searchOptions]);
-
   const getDisplayValue = () => {
     if (selectedOptions.length === 0) {
-      return <span className="text-gray-500">{placeholder}</span>;
+      return (
+        <span
+          className={cn(
+            'text-gray-800',
+            isDisabledMode && value != null && 'text-gray-600',
+            isDisabledMode && 'text-gray-500'
+          )}
+        >
+          {placeholder}
+        </span>
+      );
     }
     if (isMultiMode) {
       return (
@@ -425,16 +462,25 @@ export function Select<Extra extends object = object>({
           {selectedOptions.map((item) => (
             <div
               key={item.value}
-              className="border-primary-200 flex items-center gap-1 rounded border bg-white px-2 py-0.5 text-xs text-gray-900"
+              className={cn(
+                'border-primary-200 py-0.2 flex items-center gap-1 rounded border bg-white px-1 text-xs text-gray-900',
+                isDisabledMode && 'border-gray-500 bg-gray-300'
+              )}
             >
-              {renderValue != null ? renderValue(item) : item.label}
-              <button
-                type="button"
-                onClick={(e) => handleRemove(item, e)}
-                className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
-              >
-                <Icon name="times-circle" size={14} />
-              </button>
+              {renderValue != null ? (
+                renderValue(item)
+              ) : (
+                <Text variant={getFontSize(size, multiple)}>{label}</Text>
+              )}
+              {isDisabledMode == false && (
+                <button
+                  type="button"
+                  onClick={(e) => handleRemove(item, e)}
+                  className="text-primary-1000 rounded p-0.5 hover:bg-blue-200"
+                >
+                  <Icon name="times-circle" size={14} />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -445,7 +491,11 @@ export function Select<Extra extends object = object>({
       renderValue(selected)
     ) : (
       <>
-        <Text variant="t2" weight="medium" className="text-gray-900">
+        <Text
+          variant={getFontSize(size, multiple)}
+          weight="semibold"
+          className={cn('text-gray-900', isDisabledMode && 'text-gray-600')}
+        >
           {selected.label}
         </Text>
         <Text variant="t3" weight="regular" className="text-gray-700">
@@ -456,7 +506,6 @@ export function Select<Extra extends object = object>({
   };
 
   const showClearButton = isClearable && selectedOptions.length > 0;
-
   const hasError = fieldHasError(errorMessages);
 
   const renderOptionItem = (option: SelectOption<Extra>, index: number) => {
@@ -471,11 +520,11 @@ export function Select<Extra extends object = object>({
         onMouseEnter={() => setHighlightedIndex(index)}
         onClick={() => handleSelect(option)}
       >
-        <Chip className="text-left" block selected={highlighted || selected}>
-          <div className="flex-1">
-            {renderOption != null ? (
-              renderOption(option, { selected })
-            ) : (
+        {renderOption != null ? (
+          renderOption(option, { selected })
+        ) : (
+          <Chip className="text-left" block selected={highlighted || selected}>
+            <div className="flex-1">
               <>
                 <div className="flex items-center gap-2">
                   {option?.icon != undefined && <Icon name="user" size={12} />}
@@ -487,9 +536,9 @@ export function Select<Extra extends object = object>({
                   {option.description}
                 </Text>
               </>
-            )}
-          </div>
-        </Chip>
+            </div>
+          </Chip>
+        )}
       </div>
     );
   };
@@ -547,11 +596,12 @@ export function Select<Extra extends object = object>({
             ref={searchInputRef}
             type="text"
             disabled={loadingOnCreate}
-            value={searchTerm}
             onKeyDown={handleInputSearchKeyDown}
+            value={effectiveSearchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
               onSearchOptions?.(e.target.value);
+              onSearch?.(e.target.value);
             }}
             placeholder={searchPlaceholder}
             className="min-w-0 flex-1 truncate bg-transparent text-sm outline-none"
@@ -629,13 +679,14 @@ export function Select<Extra extends object = object>({
       ref={containerRef}
       className={cn(
         'focus-within:outline-none',
-        inGroup ? 'relative h-full shrink-0' : 'relative w-full',
+        inGroup
+          ? cn('min-w-0 items-center bg-transparent', inControl && 'flex-1')
+          : 'relative w-full',
         className
       )}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      {/* Input Field */}
       {trigger !== undefined && (
         <div
           aria-selected={isOpen}
@@ -646,13 +697,14 @@ export function Select<Extra extends object = object>({
           {trigger}
         </div>
       )}
+
       {trigger === undefined && (
         <div
           aria-selected={isOpen}
           className={cn(
             'flex cursor-pointer text-gray-900 transition-all focus-within:outline-none',
             inGroup
-              ? 'h-full items-center bg-transparent'
+              ? cn('h-full items-center bg-transparent', inControl && 'w-full')
               : cn(
                   'focus:ring-primary-300 rounded-lg border bg-white focus:ring',
                   selectSize({ size }),
@@ -669,26 +721,32 @@ export function Select<Extra extends object = object>({
               <Icon name={icon} size={22} className="text-gray-600" />
             </div>
           )}
-          <div className="flex w-full flex-1 items-center justify-between px-3 py-2">
+
+          <div
+            className={cn(
+              'flex items-center justify-between px-3 py-1.5',
+              (!inGroup || inControl) && 'w-full flex-1'
+            )}
+          >
             <div className="min-w-0 flex-1 text-xs font-medium text-gray-900">
               {getDisplayValue()}
             </div>
 
-            <div className="ml-2 flex shrink-0 items-start gap-1 self-start pt-0.5">
-              {showClearButton && (
+            <div className="ml-2 flex shrink-0 items-start gap-1 self-start">
+              {showClearButton && isDisabledMode == false && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="cursor-pointer rounded text-center text-gray-700"
+                  className="cursor-pointer items-center rounded text-center text-gray-700"
                 >
-                  <Icon name="times-circle" size={20} />
+                  <Icon name="times-circle" size={15} />
                 </button>
               )}
 
               <Icon
                 className="text-gray-700"
                 name={isOpen ? 'angle-up-small' : 'angle-down-small'}
-                size={20}
+                size={15}
               />
             </div>
           </div>
@@ -712,6 +770,7 @@ export function Select<Extra extends object = object>({
       description={description}
       hint={hint}
       required={required}
+      size={size}
       tooltip={tooltip}
     >
       {content}

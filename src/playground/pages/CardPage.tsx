@@ -227,10 +227,12 @@ export default function CardPage() {
           <div className="flex flex-1 flex-col gap-8 overflow-auto">
             <div className="grid grid-cols-4 gap-4">
               <Card color="primary" variant="filled">
-                <CardBody>
+                <CardHeader divider>
                   <Text variant="t2" weight="semibold">
                     Primary Card
                   </Text>
+                </CardHeader>
+                <CardBody>
                   <Text variant="t3" weight="regular">
                     Some quick example text to build on the card title and make
                     up the bulk of the cards content.

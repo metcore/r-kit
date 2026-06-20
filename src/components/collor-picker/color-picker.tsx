@@ -9,7 +9,7 @@ import type {
   RGB,
 } from './type';
 import { Input } from '../input';
-import { InputGroup, InputGroupText } from '../input-group';
+import { InputGroup, InputGroupControl, InputGroupText } from '../input-group';
 import { Icon } from '../icons';
 
 function getEyeDropper(): EyeDropperCtor | undefined {
@@ -130,7 +130,6 @@ const ChevronIcon = (): React.ReactElement => (
   </svg>
 );
 
-/* ---- runtime-only styles (cannot be Tailwind classes) ----------------- */
 const CHECKER: React.CSSProperties = {
   backgroundImage:
     'linear-gradient(45deg,#cbd0d8 25%,transparent 25%),' +
@@ -524,6 +523,8 @@ export function ColorInput({
   errorMessages,
   size,
   onChange,
+  required,
+  disabled,
 }: ColorInputProps): React.ReactElement {
   const init = parseColor(defaultColor);
   const [hsv, setHsv] = useState<HSV>(init.hsv);
@@ -601,19 +602,23 @@ export function ColorInput({
     <div ref={wrapRef} className="relative w-80">
       <InputGroup
         label={label}
+        required={required}
+        disabled={disabled}
         hint={hint}
         size={size}
         tooltip={tooltip}
         errorMessages={errorMessages}
       >
-        <Input
-          placeholder={placeholder}
-          onClick={() => setOpen((o) => !o)}
-          className="cursor-pointer"
-          size={size}
-          value={display}
-          readOnly
-        />
+        <InputGroupControl>
+          <Input
+            placeholder={placeholder}
+            onClick={() => setOpen((o) => !o)}
+            className="cursor-pointer"
+            size={size}
+            value={display}
+            readOnly
+          />
+        </InputGroupControl>
         <InputGroupText>{inputColorDisplay()}</InputGroupText>
       </InputGroup>
       {open ? (

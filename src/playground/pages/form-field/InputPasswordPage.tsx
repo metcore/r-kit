@@ -13,15 +13,152 @@ export default function InputPasswordPage() {
   const { doc } = useMarkdown(`/docs/input-field.md`);
 
   const exampleBasic = dedent(`
-    <Input />
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return <InputPassword />;
+    }
   `);
+
+  const exampleControlled = dedent(`
+    import { useState } from 'react';
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      const [password, setPassword] = useState('');
+
+      return (
+        <InputPassword
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      );
+    }
+  `);
+
+  const examplePlaceholder = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          placeholder="Enter password"
+        />
+      );
+    }
+  `);
+
+  const exampleLabel = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+        />
+      );
+    }
+  `);
+
+  const exampleHint = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+          hint="Use at least 8 characters."
+        />
+      );
+    }
+  `);
+
+  const exampleRequired = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+          required
+          hint="This field is required."
+        />
+      );
+    }
+  `);
+
+  const exampleDisabled = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+          disabled
+          value="secret-password"
+        />
+      );
+    }
+  `);
+
+  const exampleInvalid = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+          errorMessages="This field is required."
+        />
+      );
+    }
+  `);
+
+  const exampleTooltip = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <InputPassword
+          label="Password"
+          tooltip="Use a strong password."
+        />
+      );
+    }
+  `);
+
+  const exampleSizes = dedent(`
+    import { InputPassword } from '@herca/r-kit/input-password';
+
+    export default function Example() {
+      return (
+        <>
+          <InputPassword
+            label="Small"
+            size="sm"
+          />
+
+          <InputPassword
+            label="Medium"
+            size="md"
+          />
+
+          <InputPassword
+            label="Large"
+            size="lg"
+          />
+        </>
+      );
+    }
+  `);
+
   return (
     <>
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Input Field"
-        description="Memungkinkan user memasukkan teks, baik untuk entri pendek maupun panjang."
+        subtitle="Input Password"
+        description="Komponen input khusus untuk memasukkan password dengan fitur keamanan dan visibility toggle."
       />
 
       <div className="flex flex-col gap-4">
@@ -33,59 +170,89 @@ export default function InputPasswordPage() {
           >
             <InputPassword />
           </MainSection>
+
+          <MainSection
+            title="Controlled Input Password"
+            className="flex-1"
+            code={exampleControlled}
+          >
+            <InputPassword />
+          </MainSection>
+
+          <MainSection
+            title="Placeholder Input Password"
+            className="flex-1"
+            code={examplePlaceholder}
+          >
+            <InputPassword placeholder="Enter password" />
+          </MainSection>
+
           <MainSection
             title="Label Input Password"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleLabel}
           >
-            <InputPassword label="Label" />
+            <InputPassword label="Password" />
           </MainSection>
+
           <MainSection
             title="Hint Input Password"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleHint}
           >
-            <InputPassword
-              label="Label"
-              hint="Use at least 8 characters, including uppercase letters, numbers, and special characters."
-            />
+            <InputPassword label="Password" hint="Use at least 8 characters." />
           </MainSection>
+
           <MainSection
             title="Required Input Password"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleRequired}
           >
             <InputPassword
-              label="Label"
-              hint="Use at least 8 characters, including uppercase letters, numbers, and special characters."
+              label="Password"
               required
+              hint="This field is required."
             />
           </MainSection>
+
           <MainSection
             title="Disabled Input Password"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleDisabled}
           >
-            <InputPassword
-              label="Label"
-              hint="Use at least 8 characters, including uppercase letters, numbers, and special characters."
-              required
-              disabled
-            />
+            <InputPassword label="Password" disabled value="secret-password" />
           </MainSection>
+
           <MainSection
             title="Invalid Input Password"
             className="flex-1"
-            code={exampleBasic}
+            code={exampleInvalid}
           >
             <InputPassword
-              label="Label"
-              hint="Use at least 8 characters, including uppercase letters, numbers, and special characters."
+              label="Password"
               errorMessages="This field is required."
-              required
             />
           </MainSection>
+
+          <MainSection
+            title="Tooltip Input Password"
+            className="flex-1"
+            code={exampleTooltip}
+          >
+            <InputPassword label="Password" tooltip="Use a strong password." />
+          </MainSection>
+
+          <MainSection
+            title="Size Input Password"
+            className="flex-1"
+            code={exampleSizes}
+          >
+            <InputPassword label="Small" size="sm" />
+            <InputPassword label="Medium" size="md" />
+            <InputPassword label="Large" size="lg" />
+          </MainSection>
         </GridWrapper>
+
         <Card>
           <CardBody>
             <MarkdownRenderer content={doc?.content ?? ''} />
@@ -96,7 +263,7 @@ export default function InputPasswordPage() {
           backTo="/checkbox"
           backToTitle="Checkbox"
           nextTo="/input-group"
-          title="Input Field"
+          title="Input Password"
           nextToTitle="Input Group"
         />
       </div>

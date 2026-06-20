@@ -22,6 +22,7 @@ import HeroSection from '../../components/HeroSection';
 import Footer from '../../components/Footer';
 import {
   InputGroup,
+  InputGroupControl,
   InputGroupText,
 } from '../../../components/input-group/input-group';
 import {
@@ -345,19 +346,6 @@ const codeDisabled = dedent(`
   }
 `);
 
-const codeErrorState = dedent(`
-  import { InputGroup } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-
-  export default function ErrorStateExample() {
-    return (
-      <InputGroup label="Email" errorMessages="Email already exists">
-        <Input placeholder="email@example.com" />
-      </InputGroup>
-    );
-  }
-`);
-
 const codeFileUpload = dedent(`
   import { useState } from 'react';
   import { InputGroup } from '@herca/r-kit/input-group/input-group';
@@ -429,82 +417,6 @@ const codeWebsiteBuilder = dedent(`
   }
 `);
 
-const codeAmountWithTax = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-
-  export default function AmountWithTaxExample() {
-    return (
-      <InputGroup>
-        <InputGroupText>Rp</InputGroupText>
-        <Input placeholder="100000" />
-        <InputGroupText>+ PPN</InputGroupText>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeInvoiceSearch = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Icon } from '@herca/r-kit/icons';
-
-  export default function InvoiceSearchExample() {
-    return (
-      <InputGroup>
-        <InputGroupText>#</InputGroupText>
-        <Input placeholder="INV-2026-0001" />
-        <Button color="primary">
-          <Icon name="search" size={15} />
-        </Button>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeErpCustomer = dedent(`
-  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Icon } from '@herca/r-kit/icons';
-
-  export default function ErpCustomerExample() {
-    return (
-      <InputGroup label="Customer">
-        <InputGroupText>
-          <Icon name="user" />
-        </InputGroupText>
-        <Input placeholder="Choose customer..." />
-        <Button variant="outline">New</Button>
-        <Button variant="outline">Detail</Button>
-      </InputGroup>
-    );
-  }
-`);
-
-const codeProductSearch = dedent(`
-  import { InputGroup } from '@herca/r-kit/input-group/input-group';
-  import { Input } from '@herca/r-kit/input';
-  import { Button } from '@herca/r-kit/button';
-  import { Select } from '@herca/r-kit
-  export default function ProductSearchExample() {
-    return (
-      <InputGroup>
-        <Select
-          options={[
-            { label: 'Product', value: 'product' },
-            { label: 'SKU', value: 'sku' },
-            { label: 'Category', value: 'category' },
-          ]}
-        />
-        <Input placeholder="Search..." />
-        <Button color="primary">Search</Button>
-      </InputGroup>
-    );
-  }
-`);
-
 const codeQuickCommand = dedent(`
   import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
   import { InputGroupKbd } from '@herca/r-kit/input-group/input-group-kbd';
@@ -567,12 +479,30 @@ export default function InputGroupPage() {
           </MainSection>
 
           <MainSection
+            code={codeCurrency}
+            title="Select Group"
+            className="flex-1"
+          >
+            <div className="flex-column gap-2">
+              <InputGroup size="md" label="Price">
+                <InputGroupText>IDR</InputGroupText>
+                <InputGroupControl>
+                  <Select />
+                </InputGroupControl>
+                <InputGroupText>IDR</InputGroupText>
+              </InputGroup>
+            </div>
+          </MainSection>
+
+          <MainSection
             code={codeSuffixText}
             title="Suffix Text"
             className="flex-1"
           >
             <InputGroup label="Weight">
-              <Input placeholder="0" />
+              <InputGroupControl>
+                <Input placeholder="0" />
+              </InputGroupControl>
               <InputGroupText>kg</InputGroupText>
             </InputGroup>
           </MainSection>
@@ -580,7 +510,9 @@ export default function InputGroupPage() {
           <MainSection code={codeCurrency} title="Currency" className="flex-1">
             <InputGroup label="Price">
               <InputGroupText>IDR</InputGroupText>
-              <Input placeholder="0" />
+              <InputGroupControl>
+                <Input placeholder="0" />
+              </InputGroupControl>
             </InputGroup>
           </MainSection>
 
@@ -588,7 +520,9 @@ export default function InputGroupPage() {
             <div className="flex-column gap-2">
               <InputGroup size="sm" label="Price">
                 <InputGroupText>IDR</InputGroupText>
-                <Input placeholder="0" />
+                <InputGroupControl>
+                  <Input placeholder="0" />
+                </InputGroupControl>
               </InputGroup>
               <InputGroup size="md" label="Price">
                 <InputGroupText>IDR</InputGroupText>
@@ -603,7 +537,9 @@ export default function InputGroupPage() {
 
           <MainSection code={codeEmail} title="Email" className="flex-1">
             <InputGroup label="Email">
-              <Input placeholder="username" />
+              <InputGroupControl>
+                <Input placeholder="username" />
+              </InputGroupControl>
               <InputGroupText>@gmail.com</InputGroupText>
             </InputGroup>
           </MainSection>
@@ -624,11 +560,12 @@ export default function InputGroupPage() {
 
           <MainSection code={codePassword} title="Password" className="flex-1">
             <InputGroup label="Password">
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter password"
-              />
-
+              <InputGroupControl>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter password"
+                />
+              </InputGroupControl>
               <Button
                 variant="default"
                 onClick={() => setShowPassword(!showPassword)}
@@ -660,7 +597,9 @@ export default function InputGroupPage() {
                 <Icon name="search" size={18} />
               </InputGroupText>
 
-              <Input placeholder="Search..." />
+              <InputGroupControl>
+                <Input placeholder="Search..." />
+              </InputGroupControl>
 
               <Button color="primary"> Search </Button>
             </InputGroup>
@@ -668,7 +607,9 @@ export default function InputGroupPage() {
 
           <MainSection code={codeOtp} title="OTP" className="flex-1">
             <InputGroup label="Verification Code">
-              <Input placeholder="Enter code" />
+              <InputGroupControl>
+                <Input placeholder="Enter code" />
+              </InputGroupControl>
 
               <Button variant="outline"> Send OTP </Button>
             </InputGroup>
@@ -684,8 +625,9 @@ export default function InputGroupPage() {
                 <Icon name="table" />
               </InputGroupText>
 
-              <Input placeholder="Type command..." />
-
+              <InputGroupControl>
+                <Input placeholder="Type command..." />
+              </InputGroupControl>
               <InputGroupKbd> ⏎ </InputGroupKbd>
             </InputGroup>
           </MainSection>
@@ -700,7 +642,9 @@ export default function InputGroupPage() {
                 <Icon name="table" />
               </InputGroupText>
 
-              <Input placeholder="Type command..." />
+              <InputGroupControl>
+                <Input placeholder="Type command..." />
+              </InputGroupControl>
               <Dropdown>
                 <DropdownTrigger>
                   <Button color="primary">Anonther</Button>
@@ -728,8 +672,9 @@ export default function InputGroupPage() {
             className="flex-1"
           >
             <InputGroup label="Customer">
-              <Input placeholder="Select customer..." />
-
+              <InputGroupControl>
+                <Input placeholder="Select customer..." />
+              </InputGroupControl>
               <Button variant="outline">
                 <Icon name="user" />
               </Button>
@@ -750,15 +695,6 @@ export default function InputGroupPage() {
             </InputGroup>
           </MainSection>
 
-          <MainSection
-            code={codeErrorState}
-            title="Error State"
-            className="flex-1"
-          >
-            <InputGroup label="Email" errorMessages="Email already exists">
-              <Input placeholder="email@example.com" />
-            </InputGroup>
-          </MainSection>
           <MainSection code={codeFileUpload} title="file upload">
             <InputGroup>
               <InputFile
@@ -767,7 +703,9 @@ export default function InputGroupPage() {
                 buttonVariant="tertiary"
                 multiple
               />
-              <Input placeholder="Search..." />
+              <InputGroupControl>
+                <Input placeholder="Search..." />
+              </InputGroupControl>
               <Button onClick={() => setModal(true)} tooltip="tooltip">
                 Create <Icon name="plus" size={15} />
               </Button>
@@ -795,76 +733,6 @@ export default function InputGroupPage() {
           </MainSection>
 
           <MainSection
-            code={codeAmountWithTax}
-            title="Amount With Tax"
-            className="flex-1"
-          >
-            <InputGroup>
-              <InputGroupText>Rp</InputGroupText>
-
-              <Input placeholder="100000" />
-
-              <InputGroupText>+ PPN</InputGroupText>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
-            code={codeInvoiceSearch}
-            title="Invoice Search"
-            className="flex-1"
-          >
-            <InputGroup>
-              <InputGroupText>#</InputGroupText>
-
-              <Input placeholder="INV-2026-0001" />
-
-              <Button color="primary">
-                <Icon name="search" size={15} />
-              </Button>
-            </InputGroup>
-          </MainSection>
-        </GridWrapper>
-
-        <GridWrapper>
-          <MainSection
-            code={codeErpCustomer}
-            title="ERP Customer Example"
-            className="flex-1"
-          >
-            <InputGroup label="Customer">
-              <InputGroupText>
-                <Icon name="user" />
-              </InputGroupText>
-
-              <Input placeholder="Choose customer..." />
-
-              <Button variant="outline">New</Button>
-
-              <Button variant="outline"> Detail</Button>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
-            code={codeProductSearch}
-            title="Product Search"
-            className="flex-1"
-          >
-            <InputGroup>
-              <Select
-                options={[
-                  { label: 'Product', value: 'product' },
-                  { label: 'SKU', value: 'sku' },
-                  { label: 'Category', value: 'category' },
-                ]}
-              />
-
-              <Input placeholder="Search..." />
-
-              <Button color="primary">Search</Button>
-            </InputGroup>
-          </MainSection>
-
-          <MainSection
             code={codeQuickCommand}
             title="Quick Command"
             className="flex-1"
@@ -873,8 +741,9 @@ export default function InputGroupPage() {
               <InputGroupText>
                 <Icon name="file" />
               </InputGroupText>
-
-              <Input placeholder="Run command..." />
+              <InputGroupControl>
+                <Input placeholder="Run command..." />
+              </InputGroupControl>
 
               <InputGroupKbd> Ctrl </InputGroupKbd>
 

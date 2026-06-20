@@ -3,5 +3,5 @@ services:
     container_name: kit-app
     build: .
     ports:
-      - "9213:5173"
+      - "9213:3000"
     restart: always

@@ -90,7 +90,6 @@ function UserOptionRenderer(
   const u = option as UserOption;
   return (
     <div className="flex items-center gap-3">
-      {/* Avatar initials */}
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-600">
         {u.label
           .split(' ')
@@ -132,6 +131,7 @@ function UserValueRenderer(option: SelectOption) {
 function SelectPage() {
   const toast = useToast();
   const { fetchPosts, fetchUsers, usePaginatedFetch } = useGetUsers();
+  const [searchValue, setSearchValue] = useState<string>('');
   const [loadingOnCreate, setLoadingOnCreate] = useState(false);
   const [selectedUser, setSelectedUser] =
     useState<SelectOption<ExtraUser> | null>(null);
@@ -214,32 +214,16 @@ function SelectPage() {
             <Select
               className="w-40"
               options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
               value={selectedUserBasic}
               onChange={(v) => {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
               }}
               placeholder="Cari & pilih user…"
             />
+            {searchValue}
           </MainSection>
-          <MainSection
-            title="Select Disable"
-            className="flex-1"
-            code={codeExampleSelectDisabled}
-          >
-            <Select
-              options={users.data}
-              value={selectedUser}
-              onChange={(v) =>
-                setSelectedUser(v as SelectOption<ExtraUser> | null)
-              }
-              placeholder="Cari & pilih user…"
-              disabled={true}
-              onLoadMore={posts.hasMore ? users.loadMore : undefined}
-              isLoadingMore={users.isLoadingMore}
-            />
-          </MainSection>
-        </GridWrapper>
-        <GridWrapper>
           <MainSection
             title="Select with label and Tooltip"
             className="flex-1"
@@ -254,6 +238,82 @@ function SelectPage() {
                 setSelectedUserTooltip(v as SelectOption<ExtraUser> | null)
               }
               placeholder="Cari & pilih user…"
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+          </MainSection>
+          <MainSection
+            title="Select Disable"
+            className="flex-1"
+            code={codeExampleSelectDisabled}
+          >
+            <Select
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              disabled={true}
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={[{ label: 'Tes user', value: 1 }]}
+              value={{ label: 'Tes user', value: 1 }}
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              disabled={true}
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+          </MainSection>
+          <MainSection
+            title="Select Size"
+            className="flex-1"
+            code={codeExampleSelectDisabled}
+          >
+            <Select
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
+              onChange={(v) =>
+                setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
+              }
+              size="sm"
+              placeholder="Cari & pilih user…"
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
+              size="md"
+              onChange={(v) =>
+                setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              isClearable
+              onLoadMore={posts.hasMore ? users.loadMore : undefined}
+              isLoadingMore={users.isLoadingMore}
+            />
+            <Select
+              options={dataSingle}
+              onSearch={(e) => setSearchValue(e)}
+              searchValue={searchValue}
+              value={selectedUserBasic}
+              size="lg"
+              onChange={(v) =>
+                setSelectedUser(v as SelectOption<ExtraUser> | null)
+              }
+              placeholder="Cari & pilih user…"
+              isClearable
               onLoadMore={posts.hasMore ? users.loadMore : undefined}
               isLoadingMore={users.isLoadingMore}
             />
@@ -275,8 +335,7 @@ function SelectPage() {
               isLoadingMore={users.isLoadingMore}
             />
           </MainSection>
-        </GridWrapper>
-        <GridWrapper>
+
           <MainSection
             title="Group Select"
             className="flex-1"
@@ -305,12 +364,34 @@ function SelectPage() {
               onChange={(v) => {
                 setSelectedUserMultiple(v as SelectOption[]);
               }}
+              size="sm"
+              disabled
+              multiple
+              placeholder="Pilih beberapa user…"
+            />
+            <Select
+              label="Team members"
+              options={dataSingle}
+              size="md"
+              value={selectedUserMultiple}
+              onChange={(v) => {
+                setSelectedUserMultiple(v as SelectOption[]);
+              }}
+              multiple
+              placeholder="Pilih beberapa user…"
+            />
+            <Select
+              label="Team members"
+              options={dataSingle}
+              size="lg"
+              value={selectedUserMultiple}
+              onChange={(v) => {
+                setSelectedUserMultiple(v as SelectOption[]);
+              }}
               multiple
               placeholder="Pilih beberapa user…"
             />
           </MainSection>
-        </GridWrapper>
-        <GridWrapper>
           <MainSection
             title="Select Createable"
             className="flex-1"
@@ -342,6 +423,8 @@ function SelectPage() {
               onChange={(v) => {
                 setSelectedUser(v as SelectOption<ExtraUser> | null);
               }}
+              onSearch={setSearchValue}
+              searchValue={searchValue}
               placeholder="Cari & pilih user…"
               loadOptions={async ({ search, page, signal }) => {
                 const limit = 10;

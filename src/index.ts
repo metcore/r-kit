@@ -12,3 +12,4 @@ export * from './components/brand-logo';
 export * from './components/kbd';
 export * from './components/breadcrumbs';
 export * from './components/timeline';
+export * from './components/list';

@@ -49,7 +49,6 @@ type BaseSelectProps<Extra extends object = object> = {
    */
   isDisabled?: boolean;
   disabled?: boolean;
-  searchPlaceholder?: string;
 
   renderOption?:
     | ((
@@ -81,9 +80,17 @@ type BaseSelectProps<Extra extends object = object> = {
 
   required?: boolean;
   isSelectOpen?: boolean;
+  searchPlaceholder?: string;
+  /**
+   * @deprecated Jangan make ini, make searchValue
+   */
   searchOptions?: string;
-
+  searchValue?: string;
+  /**
+   * @deprecated Jangan make ini, make onSearch
+   */
   onSearchOptions?: (value: string) => void;
+  onSearch?: (value: string) => void;
   onOptionsChange?: (value: SelectOption<Extra>[]) => void;
   onOpenChange?: (value: boolean) => void;
   icon?: IconNameProps;

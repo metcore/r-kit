@@ -30,6 +30,7 @@ export interface InputOTPProps {
   ariaLabel?: (index: number, length: number) => string;
   className?: string;
   size?: InputOTPSize;
+  tooltip?: string;
 }
 
 const PATTERNS: Record<InputOTPType, RegExp> = {
@@ -68,11 +69,15 @@ export const InputOTP = ({
   ariaLabel,
   className,
   size = 'md',
+  tooltip,
 }: InputOTPProps): React.ReactElement => {
   const inputsRef = React.useRef<Array<HTMLInputElement | null>>([]);
   const generatedId = React.useId();
   const fieldId = id ?? generatedId;
-  const previousValueRef = React.useRef<string>(value);
+  const previousValueRef = React.useRef<string>(value ?? '');
+
+  // Internal state handles in-progress display; onChange only fires when complete
+  const [internalValue, setInternalValue] = React.useState<string>(value ?? '');
 
   const charPattern = PATTERNS[type];
   const fullPattern = FULL_PATTERNS[type];
@@ -80,21 +85,29 @@ export const InputOTP = ({
     ? errorMessages.length > 0
     : typeof errorMessages === 'string' && errorMessages.length > 0;
 
-  const values = React.useMemo<string[]>(() => {
-    const chars = value?.split('');
-    return Array.from({ length }, (_, i) => chars?.[i] ?? '');
+  // Sync from controlled prop only on reset (empty) or externally-set complete value
+  React.useEffect(() => {
+    const normalized = value ?? '';
+    if (normalized.length === 0 || normalized.length === length) {
+      setInternalValue(normalized);
+    }
   }, [value, length]);
+
+  const values = React.useMemo<string[]>(() => {
+    const chars = internalValue.split('');
+    return Array.from({ length }, (_, i) => chars?.[i] ?? '');
+  }, [internalValue, length]);
 
   React.useEffect(() => {
     if (
-      value?.length === length &&
+      internalValue.length === length &&
       previousValueRef.current != undefined &&
       previousValueRef.current.length !== length
     ) {
-      onComplete?.(value);
+      onComplete?.(internalValue);
     }
-    previousValueRef.current = value;
-  }, [value, length, onComplete]);
+    previousValueRef.current = internalValue;
+  }, [internalValue, length, onComplete]);
 
   React.useEffect(() => {
     if (autoFocus && !disabled && !readOnly) {
@@ -110,7 +123,11 @@ export const InputOTP = ({
   };
 
   const updateValue = (next: string[]): void => {
-    onChange?.(next.join(''));
+    const joined = next.join('');
+    setInternalValue(joined);
+    if (next.every((char) => char.length > 0)) {
+      onChange?.(joined);
+    }
   };
 
   const handleChange = (index: number, char: string): void => {
@@ -232,6 +249,8 @@ export const InputOTP = ({
       hint={hint}
       className={className}
       errorMessages={errorMessages}
+      required={required}
+      tooltip={tooltip}
     >
       <div
         className="flex items-center gap-2"

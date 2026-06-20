@@ -3,7 +3,6 @@ import MainSection from '../../components/MainSection';
 import { Input } from '../../../components/input';
 import { useState } from 'react';
 import { Icon } from '../../../components/icons';
-import { InputOTP } from '../../../components/input-otp';
 import { useMarkdown } from '../../hooks/useMarkdown';
 import { Card, CardBody } from '../../../components/card';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
@@ -15,8 +14,6 @@ import Footer from '../../components/Footer';
 export default function InputFieldPage() {
   const { doc } = useMarkdown(`/docs/input-field.md`);
   const [filledInput, setFilledInput] = useState('Maman_alkatiri23');
-  const [otp, setOtp] = useState('');
-
   const exampleBasic = dedent(`
     <Input />
   `);
@@ -80,26 +77,10 @@ export default function InputFieldPage() {
     />
   `);
 
-  const exampleLeftAddon = dedent(`
+  const exampleIcon = dedent(`
     <Input
       placeholder="Search..."
-      leftAddon={<Icon name="search" className="text-gray-400" />}
-    />
-  `);
-
-  const exampleRightAddon = dedent(`
-    <Input
-      placeholder="0.00"
-      rightAddon={<span className="text-sm text-gray-400">USD</span>}
-    />
-  `);
-
-  const exampleOtp = dedent(`
-    <InputOTP
-      value={otp}
-      onChange={setOtp}
-      hint="This is a description"
-      size="lg"
+      icon="search"
     />
   `);
 
@@ -207,36 +188,10 @@ export default function InputFieldPage() {
         </GridWrapper>
 
         <GridWrapper>
-          <MainSection
-            title="Left Addon"
-            className="flex-1"
-            code={exampleLeftAddon}
-          >
-            <Input
-              placeholder="Search..."
-              leftAddon={<Icon name="search" className="text-gray-400" />}
-            />
-          </MainSection>
-          <MainSection
-            title="Right Addon"
-            className="flex-1"
-            code={exampleRightAddon}
-          >
-            <Input
-              placeholder="0.00"
-              rightAddon={<span className="text-sm text-gray-400">USD</span>}
-            />
+          <MainSection title="Icon" className="flex-1" code={exampleIcon}>
+            <Input placeholder="Search..." icon="search" />
           </MainSection>
         </GridWrapper>
-
-        <MainSection title="Input OTP" code={exampleOtp}>
-          <InputOTP
-            value={otp}
-            onChange={setOtp}
-            hint="This is a description"
-            size="lg"
-          />
-        </MainSection>
 
         <Card>
           <CardBody>
