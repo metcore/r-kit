@@ -628,7 +628,7 @@ export function Select<Extra extends object = object>({
     <div
       ref={containerRef}
       className={cn(
-        'focus-within:outline-none',
+        'h-fit! focus-within:outline-none',
         inGroup ? 'relative h-full shrink-0' : 'relative w-full',
         className
       )}
