@@ -50,6 +50,7 @@ import ListPage from '../playground/pages/data-display/ListPage';
 import AccordionPage from '../playground/pages/data-display/AccordionPage';
 import StepPage from '../playground/pages/data-display/StepPage';
 import { SliderPage } from '../playground/pages/form-field/SliderPage';
+import { DrawingPage } from '../playground/pages/form-field/DrawingPage';
 import TimePickerpage from '../playground/pages/form-field/TimePickerPage';
 
 export default function PlaygroundRouter() {
@@ -100,11 +101,11 @@ export default function PlaygroundRouter() {
         <Route path="/input-otp" element={<InputOtpPage />} />
         <Route path="/step" element={<StepPage />} />
         <Route path="/slider" element={<SliderPage />} />
+        <Route path="/drawing" element={<DrawingPage />} />
         <Route path="/badge" element={<BadgePage />} />
         <Route path="/file-view" element={<FileViewPage />} />
         <Route path="/alert" element={<AlertPage />} />
         <Route path="/time-picker" element={<TimePickerpage />} />
-
         <Route path="/example/invoice" element={<InvoicePage />} />
         <Route path="/example/profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />

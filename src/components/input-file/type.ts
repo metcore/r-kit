@@ -99,4 +99,17 @@ export interface InputFilePreviewProps
   inputFile: UseInputFileReturn;
   className?: string;
   mode?: PreviewMode;
+  title?: string;
+  /**
+   * Called when the user scrolls near the bottom of the list. Providing this
+   * enables infinite scroll: the list becomes a bounded, scrollable area and
+   * more items are requested lazily instead of all at once.
+   */
+  onLoadMore?: () => void;
+  /** Whether there are more items to load. */
+  hasMore?: boolean;
+  /** Whether a load-more request is currently in flight. */
+  isLoadingMore?: boolean;
+  /** Max height of the scroll area when infinite scroll is enabled. @default 320 */
+  maxHeight?: number | string;
 }
