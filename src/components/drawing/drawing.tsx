@@ -13,7 +13,7 @@ import { Icon } from '../icons';
 import type { DrawingProps, DrawingRef } from './type';
 import { Button } from '../button';
 
-const DEFAULT_STROKE_COLOR = '#1D1D80';
+const DEFAULT_STROKE_COLOR = '#000000';
 const DEFAULT_STROKE_WIDTH = 2;
 const DEFAULT_BACKGROUND = 'transparent';
 const DEFAULT_HEIGHT = 200;
@@ -30,6 +30,7 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
       readOnly = false,
       showActions = false,
       placeholder,
+      initialValue,
       onChange,
       className,
       style,
@@ -47,10 +48,9 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
     const isDrawingRef = useRef(false);
     const emptyRef = useRef(true);
+    const initialValueLoadedRef = useRef(false);
     const [isEmpty, setIsEmpty] = useState(true);
 
-    // Undo / redo history of canvas snapshots. `null` represents an empty
-    // canvas; index 0 is always the initial blank state.
     const historyRef = useRef<(string | null)[]>([null]);
     const historyIndexRef = useRef(0);
     const restoreTokenRef = useRef(0);
@@ -60,7 +60,6 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
     const hasError = fieldHasError(errorMessages);
     const isInteractive = !disabled && !readOnly;
 
-    // Paint the background (in CSS pixels — the context is already DPR-scaled).
     const fillBackground = useCallback(
       (ctx: CanvasRenderingContext2D, w: number, h: number): void => {
         if (!backgroundColor || backgroundColor === 'transparent') return;
@@ -77,8 +76,6 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
       setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
     }, []);
 
-    // Wipe the canvas, repaint the background, then draw a snapshot (if any).
-    // A token guards against a stale async image draw overwriting a newer state.
     const restore = useCallback(
       (snapshot: string | null): void => {
         const canvas = canvasRef.current;
@@ -86,7 +83,8 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
         if (!canvas || !ctx) return;
 
         const token = ++restoreTokenRef.current;
-        const { width: cssW, height: cssH } = canvas.getBoundingClientRect();
+        const cssW = canvas.offsetWidth;
+        const cssH = canvas.offsetHeight;
 
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -122,13 +120,12 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
       [syncHistoryFlags]
     );
 
-    // Size the backing store to the displayed box × devicePixelRatio so strokes
-    // stay crisp on HiDPI screens, preserving any existing drawing across resizes.
     const setupCanvas = useCallback((): void => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
-      const { width: cssW, height: cssH } = canvas.getBoundingClientRect();
+      const cssW = canvas.offsetWidth;
+      const cssH = canvas.offsetHeight;
       if (cssW === 0 || cssH === 0) return;
 
       const dpr = window.devicePixelRatio || 1;
@@ -150,8 +147,22 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
         const img = new Image();
         img.onload = () => ctx.drawImage(img, 0, 0, cssW, cssH);
         img.src = snapshot;
+      } else if (
+        initialValue != null &&
+        initialValue !== '' &&
+        !initialValueLoadedRef.current
+      ) {
+        initialValueLoadedRef.current = true;
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, cssW, cssH);
+          emptyRef.current = false;
+          setIsEmpty(false);
+          pushHistory(canvas.toDataURL());
+        };
+        img.src = initialValue;
       }
-    }, [fillBackground]);
+    }, [fillBackground, initialValue, pushHistory]);
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -166,8 +177,14 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
     const getPoint = (
       e: ReactPointerEvent<HTMLCanvasElement>
     ): { x: number; y: number } => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      const canvas = e.currentTarget;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.offsetWidth / rect.width;
+      const scaleY = canvas.offsetHeight / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+      };
     };
 
     const handlePointerDown = (
@@ -184,7 +201,6 @@ const Drawing = forwardRef<DrawingRef, DrawingProps>(
       ctx.lineWidth = strokeWidth;
 
       const { x, y } = getPoint(e);
-      // Render a dot so a single tap leaves a visible mark.
       ctx.beginPath();
       ctx.arc(x, y, strokeWidth / 2, 0, Math.PI * 2);
       ctx.fill();
