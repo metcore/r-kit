@@ -2,7 +2,6 @@ import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
 import { Input } from '../../../components/input';
 import { useState } from 'react';
-import { Icon } from '../../../components/icons';
 import { useMarkdown } from '../../hooks/useMarkdown';
 import { Card, CardBody } from '../../../components/card';
 import MarkdownRenderer from '../../components/MarkdownRenderer';
@@ -137,13 +136,9 @@ export default function InputFieldPage() {
             code={exampleInvalid}
           >
             <Input
-              mergedAddon
               label="Username"
               placeholder="Username"
               errorMessages="Username is required"
-              rightAddon={
-                <Icon name="info-circle-fill" className="text-danger-500" />
-              }
             />
           </MainSection>
         </GridWrapper>

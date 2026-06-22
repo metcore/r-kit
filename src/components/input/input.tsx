@@ -5,7 +5,6 @@ import { FormField } from '../form';
 import { Icon, type IconNameProps } from '../icons';
 import { useInputGroup, useInputGroupControl } from '../input-group';
 import { Button } from '../button';
-import { selectSize } from '../select/selectSize';
 
 export type InputSize = NonNullable<InputVariantProps['size']>;
 
@@ -144,7 +143,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ? cn('min-w-0 bg-transparent', inControl && 'flex-1')
             : cn(
                 'w-full overflow-hidden rounded-lg border bg-white',
-                selectSize({ size: resolvedSize }),
+                inputVariants({ size: resolvedSize }),
                 hasError
                   ? 'border-danger-500 focus-within:border-danger-500'
                   : 'focus-within:border-primary-300 border-gray-200'
@@ -182,6 +181,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           required={false}
           style={mergedStyle}
           className={cn(
+            'w-full min-w-0 rounded-lg border bg-transparent px-2 text-base font-medium text-gray-800 transition outline-none placeholder:text-gray-500',
             inputVariants({ size: resolvedSize }),
             'font-metropolis min-w-0! rounded-none border-none focus-visible:outline-none',
             !inGroup && 'h-full',
@@ -194,7 +194,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         />
 
-        {clearAble && (
+        {clearAble && disabled == false && (
           <Button
             variant="tertiary"
             onClick={handleClear}

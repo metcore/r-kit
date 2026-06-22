@@ -1,19 +1,16 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const inputVariants = cva(
-  'min-w-0 rounded-lg border bg-transparent px-3 text-base font-medium text-gray-800 transition outline-none placeholder:text-gray-500',
-  {
-    variants: {
-      size: {
-        sm: 'h-8 text-xs',
-        md: 'h-9 text-sm',
-        lg: 'h-10 text-base',
-      },
+export const inputVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'h-8 text-xs',
+      md: 'h-9 text-sm',
+      lg: 'h-10 text-base',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 export type InputVariantProps = VariantProps<typeof inputVariants>;
