@@ -470,7 +470,7 @@ export function Select<Extra extends object = object>({
               {renderValue != null ? (
                 renderValue(item)
               ) : (
-                <Text variant={getFontSize(size, multiple)}>{label}</Text>
+                <Text variant={getFontSize(size, multiple)}>{item.label}</Text>
               )}
               {isDisabledMode == false && (
                 <button
