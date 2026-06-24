@@ -62,6 +62,7 @@ function PlaygroundSidebar() {
         { path: '/playground/color-picker', label: 'Color Picker' },
         { path: '/playground/input-password', label: 'Input Passowrd' },
         { path: '/playground/input-phone-number', label: 'Input Phone Number' },
+        { path: '/playground/drawing', label: 'Drawing' },
       ],
     },
     {
