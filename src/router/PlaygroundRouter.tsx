@@ -52,6 +52,7 @@ import StepPage from '../playground/pages/data-display/StepPage';
 import { SliderPage } from '../playground/pages/form-field/SliderPage';
 import { DrawingPage } from '../playground/pages/form-field/DrawingPage';
 import TimePickerpage from '../playground/pages/form-field/TimePickerPage';
+import MonthPickerPage from '../playground/pages/form-field/MonthPickerPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -106,6 +107,8 @@ export default function PlaygroundRouter() {
         <Route path="/file-view" element={<FileViewPage />} />
         <Route path="/alert" element={<AlertPage />} />
         <Route path="/time-picker" element={<TimePickerpage />} />
+        <Route path="/month-picker" element={<MonthPickerPage />} />
+
         <Route path="/example/invoice" element={<InvoicePage />} />
         <Route path="/example/profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />
