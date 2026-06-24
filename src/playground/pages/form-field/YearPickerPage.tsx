@@ -1,24 +1,24 @@
-import { MonthPicker } from '../../../components/month-picker';
+import { YearPicker } from '../../../clients';
 import { TimePicker } from '../../../components/time-picker/time-picker';
 import GridWrapper from '../../components/GridWrapper';
 import MainSection from '../../components/MainSection';
 
-export default function MonthPickerPage() {
+export default function YearPickerPage() {
   return (
     <>
       <GridWrapper>
         <MainSection title="default">
-          <MonthPicker onChange={(e) => console.log(e)} />
+          <YearPicker onChange={(e) => console.log(e)} />
         </MainSection>
         <MainSection title="default">
-          <MonthPicker
+          <YearPicker
             mode="range"
             label="Time"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
         <MainSection title="default">
-          <MonthPicker mode="multiple" label="Time" />
+          <YearPicker mode="multiple" label="Time" />
         </MainSection>
         <MainSection title="required">
           <TimePicker required label="Time" />
