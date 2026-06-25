@@ -21,4 +21,5 @@ export interface SwitchProps {
   size?: SizeType;
   color?: ColorType;
   className?: string;
+  tooltip?: string;
 }

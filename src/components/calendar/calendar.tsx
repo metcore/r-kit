@@ -368,7 +368,6 @@ const ButtonNavigation = ({
       <Icon
         name={type === 'next' ? 'angle-right-small' : 'angle-left-small'}
         size={30}
-        className="text-gray-900"
       />
     </button>
   );

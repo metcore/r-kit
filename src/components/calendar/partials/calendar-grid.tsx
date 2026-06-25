@@ -44,15 +44,18 @@ export function CalendarGrid({
         const segments = getWeekEventSegments({ week, events });
 
         const threshold = isMobile ? 1 : 2;
-        const displayLimit = 1;
+
+        const sortedSegments = [...segments].sort(
+          (a, b) => a.startCol - b.startCol || b.span - a.span
+        );
 
         const segmentLevels = new Map<(typeof segments)[number], number>();
 
-        segments.forEach((seg) => {
+        sortedSegments.forEach((seg) => {
           let placed = false;
 
           for (let level = 0; level < threshold; level++) {
-            const conflict = segments.some((other) => {
+            const conflict = sortedSegments.some((other) => {
               if (other === seg) return false;
 
               const otherLevel = segmentLevels.get(other);
@@ -79,31 +82,98 @@ export function CalendarGrid({
           }
         });
 
-        const columnHiddenCount = Array(7).fill(0);
+        const columnLevelOccupied = Array.from(
+          { length: 7 },
+          () => new Array(threshold).fill(false) as boolean[]
+        );
 
         segments.forEach((seg) => {
           const level = segmentLevels.get(seg) ?? 0;
-
-          if (level >= threshold) {
+          if (level < threshold) {
             for (let i = 0; i < seg.span; i++) {
               const col = seg.startCol + i;
-              if (col >= 0 && col < 7) {
-                columnHiddenCount[col]++;
-              }
+              if (col >= 0 && col < 7) columnLevelOccupied[col][level] = true;
             }
           }
         });
 
-        const hasOverflow = segments.length > threshold;
+        const renderSegments: ((typeof segments)[number] & {
+          level: number;
+        })[] = [];
 
-        const visibleSegments = segments.filter((seg) => {
+        segments.forEach((seg) => {
           const level = segmentLevels.get(seg) ?? 0;
+          if (level < threshold) renderSegments.push({ ...seg, level });
+        });
 
-          if (!hasOverflow) {
-            return level < threshold;
+        sortedSegments.forEach((seg) => {
+          if ((segmentLevels.get(seg) ?? 0) < threshold) return;
+
+          const segEnd = Math.min(seg.startCol + seg.span - 1, 6);
+
+          let runStart = -1;
+          let runLevel = -1;
+
+          const flushRun = (endExclusive: number) => {
+            if (runStart !== -1) {
+              renderSegments.push({
+                event: seg.event,
+                startCol: runStart,
+                span: endExclusive - runStart,
+                level: runLevel,
+              });
+            }
+            runStart = -1;
+            runLevel = -1;
+          };
+
+          const pickLevel = (col: number): number => {
+            let bestLevel = -1;
+            let bestRun = 0;
+            for (let l = 0; l < threshold; l++) {
+              if (columnLevelOccupied[col][l] !== false) continue;
+              let run = 0;
+              for (let c = col; c <= segEnd; c++) {
+                if (columnLevelOccupied[c][l] !== false) break;
+                run++;
+              }
+              if (run > bestRun) {
+                bestRun = run;
+                bestLevel = l;
+              }
+            }
+            return bestLevel;
+          };
+
+          for (let i = 0; i < seg.span; i++) {
+            const col = seg.startCol + i;
+            if (col < 0 || col >= 7) {
+              flushRun(col);
+              continue;
+            }
+
+            if (runLevel !== -1) {
+              if (columnLevelOccupied[col][runLevel] === false) {
+                columnLevelOccupied[col][runLevel] = true;
+              } else {
+                flushRun(col);
+                const availableLevel = pickLevel(col);
+                if (availableLevel !== -1) {
+                  runStart = col;
+                  runLevel = availableLevel;
+                  columnLevelOccupied[col][availableLevel] = true;
+                }
+              }
+            } else {
+              const availableLevel = pickLevel(col);
+              if (availableLevel !== -1) {
+                runStart = col;
+                runLevel = availableLevel;
+                columnLevelOccupied[col][availableLevel] = true;
+              }
+            }
           }
-
-          return level < displayLimit;
+          flushRun(seg.startCol + seg.span);
         });
 
         const columnHiddenSegments = Array.from(
@@ -112,43 +182,21 @@ export function CalendarGrid({
         );
 
         segments.forEach((seg) => {
-          const isVisible = visibleSegments.includes(seg);
-
-          if (!isVisible) {
-            for (let i = 0; i < seg.span; i++) {
-              const col = seg.startCol + i;
-              if (col >= 0 && col < 7) {
-                columnHiddenSegments[col].push(seg);
-              }
-            }
-          }
-        });
-
-        const columnTotalCount = Array(7).fill(0);
-
-        segments.forEach((seg) => {
+          if ((segmentLevels.get(seg) ?? 0) < threshold) return;
           for (let i = 0; i < seg.span; i++) {
             const col = seg.startCol + i;
-            if (col >= 0 && col < 7) {
-              columnTotalCount[col]++;
-            }
+            if (col < 0 || col >= 7) continue;
+            const rendered = renderSegments.some(
+              (rs) =>
+                rs.event === seg.event &&
+                rs.startCol <= col &&
+                col < rs.startCol + rs.span
+            );
+            if (!rendered) columnHiddenSegments[col].push(seg);
           }
         });
 
-        const columnVisibleCount = Array(7).fill(0);
-
-        visibleSegments.forEach((seg) => {
-          for (let i = 0; i < seg.span; i++) {
-            const col = seg.startCol + i;
-            if (col >= 0 && col < 7) {
-              columnVisibleCount[col]++;
-            }
-          }
-        });
-
-        const columnMoreCount = columnTotalCount.map((total, i) =>
-          Math.max(0, total - columnVisibleCount[i])
-        );
+        const columnMoreCount = columnHiddenSegments.map((segs) => segs.length);
 
         return (
           <div
@@ -191,17 +239,21 @@ export function CalendarGrid({
             {/* Event bars */}
             {segments.length > 0 && (
               <div className="absolute inset-x-0 bottom-2 grid grid-cols-7 gap-0.5">
-                {(useLimitEvent ? visibleSegments : segments).map(
-                  (seg, index) => (
-                    <EventBar
-                      key={index}
-                      segment={seg}
-                      level={segmentLevels.get(seg) ?? 0}
-                      showTooltip={showCalendarTooltip}
-                      onClick={() => onEventClick?.(seg.event)}
-                    />
-                  )
-                )}
+                {(useLimitEvent
+                  ? renderSegments
+                  : segments.map((s) => ({
+                      ...s,
+                      level: segmentLevels.get(s) ?? 0,
+                    }))
+                ).map(({ level, ...seg }, index) => (
+                  <EventBar
+                    key={index}
+                    segment={seg}
+                    level={level}
+                    showTooltip={showCalendarTooltip}
+                    onClick={() => onEventClick?.(seg.event)}
+                  />
+                ))}
                 {useLimitEvent &&
                   columnMoreCount.map((count, colIndex) =>
                     count > 0 ? (
@@ -213,7 +265,7 @@ export function CalendarGrid({
                         </DropdownTrigger>
                         <DropdownContent
                           sideOffset={-130}
-                          className="min-w-45 transform"
+                          className="z-10 min-w-45 transform"
                         >
                           <Text
                             variant="t2"
@@ -227,16 +279,19 @@ export function CalendarGrid({
                                 year: 'numeric',
                               }).format(week[colIndex].fullDate)}
                           </Text>
-                          {columnHiddenSegments[colIndex].map((seg, index) => (
-                            <EventBar
-                              key={index}
-                              segment={seg}
-                              level={segmentLevels.get(seg) ?? 0}
-                              isMouseEventOnChildren={true}
-                              showTooltip={showCalendarTooltip}
-                              onClick={() => onEventClick?.(seg.event)}
-                            />
-                          ))}
+                          <div className="max-h-64 max-w-64 overflow-x-hidden overflow-y-auto">
+                            {columnHiddenSegments[colIndex].map(
+                              (seg, index) => (
+                                <EventBar
+                                  key={index}
+                                  segment={seg}
+                                  level={segmentLevels.get(seg) ?? 0}
+                                  showTooltip={showCalendarTooltip}
+                                  onClick={() => onEventClick?.(seg.event)}
+                                />
+                              )
+                            )}
+                          </div>
                         </DropdownContent>
                       </Dropdown>
                     ) : null

@@ -109,7 +109,7 @@ Menentukan warna teks berdasarkan **semantic token**.
 <Text color="danger">Danger text</Text>
 ```
 
-> Daftar warna mengikuti `ColorVariant` yang didefinisikan di sistem UI.
+> Daftar warna mengikuti `BaseColor` yang didefinisikan di sistem UI.
 
 ---
 

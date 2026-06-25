@@ -1,16 +1,5 @@
 import type React from 'react';
-
-export type ColorVariant =
-  | 'default'
-  | 'muted'
-  | 'primary'
-  | 'success'
-  | 'warning'
-  | 'orange'
-  | 'danger'
-  | 'info'
-  | 'purple'
-  | 'gray';
+import type { BaseColor } from '../base';
 
 export type AlignMent = 'start' | 'center' | 'end' | 'justify';
 export type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold';
@@ -31,7 +20,7 @@ export interface TextBaseProps {
   as?: React.ElementType;
   variant?: TextVariant;
   weight?: TextWeight;
-  color?: ColorVariant;
+  color?: BaseColor;
   align?: AlignMent;
   numberOfLines?: 1 | 2 | 3 | 4;
   className?: string;

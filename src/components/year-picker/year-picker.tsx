@@ -5,8 +5,9 @@ import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
 import { Icon } from '../icons';
 import { Input, type InputSize } from '../input';
 import { InputGroup, InputGroupControl, InputGroupText } from '../input-group';
-import { generateMonthOptions } from './helpers';
 import { Text } from '../text';
+import { cn } from '../../lib/utils';
+import { ButtonNavigator } from '../calendar';
 
 type YearPickerMode = 'single' | 'range' | 'multiple';
 type RangeValue = { startDate: number | null; endDate: number | null };
@@ -17,6 +18,8 @@ interface YearPickerProps {
   defaultValue?: YearPickerValue;
   onChange?: (value: YearPickerValue) => void;
   onApply?: (value: YearPickerValue) => void;
+  minYear?: number;
+  maxYear?: number;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -27,16 +30,16 @@ interface YearPickerProps {
   errorMessages?: string | string[];
   direction?: 'horizontal' | 'vertical';
   tooltip?: string;
-  cancelLabel?: string;
   confirmLabel?: string;
   title?: string;
 }
 
-const MONTH_OPTIONS = generateMonthOptions();
+const PAGE_SIZE = 12;
+const CURRENT_YEAR = new Date().getFullYear();
 
-const MONTH_LABEL: Record<number, string> = Object.fromEntries(
-  MONTH_OPTIONS.map(({ value, label }) => [value, label])
-);
+function getPageStart(year: number): number {
+  return Math.floor(year / PAGE_SIZE) * PAGE_SIZE;
+}
 
 function parseDefault(
   defaultValue: YearPickerValue | undefined,
@@ -49,11 +52,7 @@ function parseDefault(
   };
   if (!defaultValue) return empty;
   if (Array.isArray(defaultValue)) {
-    if (mode === 'single')
-      return {
-        ...empty,
-        single: defaultValue[0] ?? null,
-      };
+    if (mode === 'single') return { ...empty, single: defaultValue[0] ?? null };
     if (mode === 'multiple') return { ...empty, multiple: defaultValue };
   } else if (mode === 'range') {
     return { ...empty, range: defaultValue };
@@ -68,20 +67,19 @@ function buildDisplayValue(
   multiple: number[]
 ): string {
   if (mode === 'single') {
-    return single !== null ? (MONTH_LABEL[single] ?? '') : '';
+    return single !== null ? String(single) : '';
   }
   if (mode === 'range') {
     const { startDate, endDate } = range;
     if (startDate === null) return '';
-    const from = MONTH_LABEL[startDate] ?? '';
-    return endDate !== null ? `${from} – ${MONTH_LABEL[endDate] ?? ''}` : from;
+    return endDate !== null ? `${startDate} – ${endDate}` : String(startDate);
   }
-  return multiple
-    .slice()
-    .sort((a, b) => a - b)
-    .map((m) => MONTH_LABEL[m] ?? '')
-    .filter(Boolean)
-    .join(', ');
+  return multiple.length > 0
+    ? multiple
+        .slice()
+        .sort((a, b) => a - b)
+        .join(', ')
+    : '';
 }
 
 export const YearPicker: React.FC<YearPickerProps> = ({
@@ -89,7 +87,9 @@ export const YearPicker: React.FC<YearPickerProps> = ({
   defaultValue,
   onChange,
   onApply,
-  placeholder = 'Pilih bulan',
+  minYear,
+  maxYear,
+  placeholder = 'Pilih tahun',
   disabled = false,
   required = false,
   size = 'md',
@@ -97,11 +97,11 @@ export const YearPicker: React.FC<YearPickerProps> = ({
   hint,
   errorMessages,
   tooltip,
-  cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
-  title,
+  title = 'Year',
 }) => {
   const [open, setOpen] = useState(false);
+  const [pageStart, setPageStart] = useState(() => getPageStart(CURRENT_YEAR));
 
   const init = useMemo(
     () => parseDefault(defaultValue, mode),
@@ -120,12 +120,28 @@ export const YearPicker: React.FC<YearPickerProps> = ({
   const [draftRange, setDraftRange] = useState<RangeValue>(init.range);
   const [draftMultiple, setDraftMultiple] = useState<number[]>(init.multiple);
 
+  const yearOptions = useMemo(
+    () => Array.from({ length: PAGE_SIZE }, (_, i) => pageStart + i),
+    [pageStart]
+  );
+
   const displayValue = buildDisplayValue(
     mode,
     committedSingle,
     committedRange,
     committedMultiple
   );
+
+  const isPrevDisabled = minYear !== undefined && pageStart <= minYear;
+  const isNextDisabled =
+    maxYear !== undefined && pageStart + PAGE_SIZE > maxYear;
+
+  const handlePrevPage = () => {
+    if (!isPrevDisabled) setPageStart((p) => p - PAGE_SIZE);
+  };
+  const handleNextPage = () => {
+    if (!isNextDisabled) setPageStart((p) => p + PAGE_SIZE);
+  };
 
   const handleOpen = () => {
     if (disabled) return;
@@ -135,44 +151,71 @@ export const YearPicker: React.FC<YearPickerProps> = ({
     setOpen(true);
   };
 
-  const handleSelectMonth = useCallback(
-    (month: number) => {
+  const isYearDisabled = useCallback(
+    (year: number): boolean => {
+      if (minYear !== undefined && year < minYear) return true;
+      if (maxYear !== undefined && year > maxYear) return true;
+      return false;
+    },
+    [minYear, maxYear]
+  );
+
+  const handleSelectYear = useCallback(
+    (year: number) => {
+      if (isYearDisabled(year)) return;
       if (mode === 'single') {
-        setDraftSingle(month);
+        setDraftSingle(year);
       } else if (mode === 'range') {
         setDraftRange((prev) => {
           if (prev.startDate === null || prev.endDate !== null) {
-            return { startDate: month, endDate: null };
+            return { startDate: year, endDate: null };
           }
-          if (month < prev.startDate) {
-            return { startDate: month, endDate: prev.startDate };
+          if (year < prev.startDate) {
+            return { startDate: year, endDate: prev.startDate };
           }
-          return { startDate: prev.startDate, endDate: month };
+          return { startDate: prev.startDate, endDate: year };
         });
       } else {
         setDraftMultiple((prev) =>
-          prev.includes(month)
-            ? prev.filter((m) => m !== month)
-            : [...prev, month]
+          prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
         );
       }
     },
-    [mode]
+    [mode, isYearDisabled]
   );
 
   const isSelected = useCallback(
-    (month: number): boolean => {
-      if (mode === 'single') return month === draftSingle;
+    (year: number): boolean => {
+      if (mode === 'single') return year === draftSingle;
       if (mode === 'range') {
         const { startDate, endDate } = draftRange;
         if (startDate === null) return false;
-        if (endDate === null) return month === startDate;
-        return month >= startDate && month <= endDate;
+        if (endDate === null) return year === startDate;
+        return year >= startDate && year <= endDate;
       }
-      return draftMultiple.includes(month);
+      return draftMultiple.includes(year);
     },
     [mode, draftSingle, draftRange, draftMultiple]
   );
+
+  const handleNow = () => {
+    const year = CURRENT_YEAR;
+    if (isYearDisabled(year)) return;
+    setPageStart(getPageStart(year));
+    if (mode === 'single') {
+      setDraftSingle(year);
+    } else if (mode === 'range') {
+      setDraftRange((prev) =>
+        prev.startDate === null || prev.endDate !== null
+          ? { startDate: year, endDate: null }
+          : { startDate: prev.startDate, endDate: year }
+      );
+    } else {
+      setDraftMultiple((prev) =>
+        prev.includes(year) ? prev : [...prev, year]
+      );
+    }
+  };
 
   const handleApply = () => {
     let value: YearPickerValue;
@@ -190,8 +233,6 @@ export const YearPicker: React.FC<YearPickerProps> = ({
     onApply?.(value);
     setOpen(false);
   };
-
-  const handleCancel = () => setOpen(false);
 
   return (
     <Dropdown open={open} onOpenChange={setOpen}>
@@ -214,7 +255,7 @@ export const YearPicker: React.FC<YearPickerProps> = ({
               placeholder={placeholder}
               readOnly
               onClick={() =>
-                disabled == false && (open ? setOpen(false) : handleOpen())
+                !disabled && (open ? setOpen(false) : handleOpen())
               }
             />
           </InputGroupControl>
@@ -231,36 +272,57 @@ export const YearPicker: React.FC<YearPickerProps> = ({
         </InputGroup>
       </DropdownTrigger>
 
-      <DropdownContent>
-        {title == null && (
-          <div className="flex items-center justify-center">
-            <Text
-              variant="p2"
-              className="text-center text-gray-900"
-              weight="semibold"
-            >
-              Month
-            </Text>
-          </div>
-        )}
-
-        <div className="grid grid-cols-3 gap-2">
-          {MONTH_OPTIONS.map(({ value: monthVal, label: monthLabel }) => (
-            <Chip
-              key={monthVal}
-              onClick={() => handleSelectMonth(monthVal)}
-              selected={isSelected(monthVal)}
-            >
-              {monthLabel}
-            </Chip>
-          ))}
+      <DropdownContent className="flex gap-4">
+        <div className="flex items-center justify-between">
+          <ButtonNavigator
+            icon="arrow-left"
+            onClick={handlePrevPage}
+            disabled={isPrevDisabled}
+          />
+          <Text variant="p3" weight="semibold" className="text-gray-900">
+            {title}
+          </Text>
+          <ButtonNavigator
+            icon="arrow-right"
+            onClick={handleNextPage}
+            disabled={isNextDisabled}
+          />
         </div>
 
-        <div className="flex items-center justify-between gap-2 border-t border-gray-100 py-3">
-          <Button onClick={handleCancel} variant="tertiary">
-            {cancelLabel}
+        <div className="grid grid-cols-3 gap-2">
+          {yearOptions.map((year) => {
+            const yearDisabled = isYearDisabled(year);
+            const selected = isSelected(year);
+            const isCurrent = year === CURRENT_YEAR;
+            return (
+              <Chip
+                key={year}
+                onClick={() => handleSelectYear(year)}
+                selected={selected}
+                disabled={yearDisabled}
+                className={cn(
+                  'px-6',
+                  isCurrent && !selected && !yearDisabled && 'text-primary-500'
+                )}
+              >
+                {year}
+              </Chip>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-2 border-t border-gray-100 pt-4">
+          <Button
+            variant="tertiary"
+            onClick={handleNow}
+            block
+            disabled={isYearDisabled(CURRENT_YEAR)}
+          >
+            Now
           </Button>
-          <Button onClick={handleApply}>{confirmLabel}</Button>
+          <Button block onClick={handleApply}>
+            {confirmLabel}
+          </Button>
         </div>
       </DropdownContent>
     </Dropdown>

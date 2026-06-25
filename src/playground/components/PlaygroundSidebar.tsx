@@ -58,10 +58,12 @@ function PlaygroundSidebar() {
         { path: '/playground/text-area', label: 'Text Area' },
         { path: '/playground/time-picker', label: 'Time Picker' },
         { path: '/playground/month-picker', label: 'Month Picker' },
+        { path: '/playground/year-picker', label: 'Year Picker' },
         { path: '/playground/input-otp', label: 'Input OTP' },
         { path: '/playground/color-picker', label: 'Color Picker' },
         { path: '/playground/input-password', label: 'Input Passowrd' },
         { path: '/playground/input-phone-number', label: 'Input Phone Number' },
+        { path: '/playground/drawing', label: 'Drawing' },
       ],
     },
     {

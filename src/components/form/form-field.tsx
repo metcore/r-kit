@@ -29,8 +29,8 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
         className={cn('flex flex-col gap-1', className)}
         style={style}
       >
-        <div className="flex items-center gap-2">
-          {label !== undefined && (
+        {label !== undefined && (
+          <div className="flex items-center gap-2">
             <FormLabel
               htmlFor={htmlFor}
               tooltip={tooltip}
@@ -39,8 +39,8 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             >
               {label}
             </FormLabel>
-          )}
-        </div>
+          </div>
+        )}
         {description !== undefined && (
           <FormDescription size={size}>{description}</FormDescription>
         )}

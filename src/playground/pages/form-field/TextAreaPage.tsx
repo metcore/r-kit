@@ -1,20 +1,9 @@
-import { useState } from 'react';
 import { Card, CardBody, CardHeader } from '../../../components/card';
 import illust from '../../../assets/images/forms.png';
-import { Textarea, TextEditor, type FileItem } from '../../../clients';
+import { Textarea } from '../../../clients';
 import HeroSection from '../../components/HeroSection';
 
-type UploadedImage = {
-  data: {
-    url: string;
-    name: string;
-  };
-};
-
 export default function TextAreaPage() {
-  const [value, setValue] = useState('');
-  const [files, setFiles] = useState<FileItem[]>([]);
-
   return (
     <>
       <HeroSection
@@ -31,42 +20,6 @@ export default function TextAreaPage() {
 
         <CardBody>
           <Textarea />
-          <TextEditor
-            field={{
-              label: 'Desciption',
-              required: true,
-            }}
-            editor={{
-              value,
-              onChange: (v) => setValue(v.getHTML()),
-              attachmentField: {
-                accept: 'image/*',
-                hint: 'hint',
-                label: 'label',
-                onChange: (files) => setFiles(files),
-                value: files,
-                maxSize: 5,
-                extractUploadResult: (results) => {
-                  const imageResult = results[0].uploadedData as UploadedImage;
-
-                  return {
-                    url: imageResult?.data?.url,
-                    altText: imageResult?.data?.name,
-                  };
-                },
-                uploadConfig: {
-                  url: import.meta.env.VITE_UPLOAD_URL,
-                  headers: {
-                    'accept': 'application/json',
-                    'X-API-KEY': import.meta.env.VITE_UPLOAD_SECRET_KEY,
-                  },
-                },
-              },
-            }}
-            ui={{
-              size: 'sm',
-            }}
-          />
         </CardBody>
       </Card>
     </>

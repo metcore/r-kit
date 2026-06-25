@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import type { ButtonColor, ButtonVariantProps } from '../button';
+import type { ButtonVariantProps } from '../button';
 import type { UseInputFileReturn } from './use-input-file';
+import type { BaseColor } from '../base/type/base-color';
 
 export type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
@@ -32,7 +33,7 @@ export interface InputFileProps extends PlayerProps {
   hint?: string;
   buttonLabel?: string | ReactNode;
   buttonVariant?: ButtonVariantProps['variant'];
-  buttonColor?: ButtonColor;
+  buttonColor?: BaseColor;
   errorMessage?: string;
   maxSizeErrorMessage?: string;
   customNamePlaceholder?: string;
@@ -99,4 +100,17 @@ export interface InputFilePreviewProps
   inputFile: UseInputFileReturn;
   className?: string;
   mode?: PreviewMode;
+  title?: string;
+  /**
+   * Called when the user scrolls near the bottom of the list. Providing this
+   * enables infinite scroll: the list becomes a bounded, scrollable area and
+   * more items are requested lazily instead of all at once.
+   */
+  onLoadMore?: () => void;
+  /** Whether there are more items to load. */
+  hasMore?: boolean;
+  /** Whether a load-more request is currently in flight. */
+  isLoadingMore?: boolean;
+  /** Max height of the scroll area when infinite scroll is enabled. @default 320 */
+  maxHeight?: number | string;
 }

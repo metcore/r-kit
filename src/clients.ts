@@ -38,3 +38,4 @@ export * from './components/time-picker';
 export * from './components/year-picker';
 export * from './components/month-picker';
 export * from './types/api-response';
+export * from './components/drawing';

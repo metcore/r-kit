@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import ProgresssContent from './progress-content';
-import type { ColorVariant, ProgressBarProps } from './type';
+import type { ProgressBarProps } from './type';
+import type { BaseColor } from '../base';
 
 export default function ProgressBar({
   value,
@@ -10,7 +11,7 @@ export default function ProgressBar({
   valueClassName,
   tooltipSide = 'top',
 }: ProgressBarProps) {
-  const bg_color_map: Record<ColorVariant, string> = {
+  const bg_color_map: Record<BaseColor, string> = {
     primary: 'bg-primary-50',
     warning: 'bg-warning-50',
     danger: 'bg-danger-50',
@@ -19,6 +20,7 @@ export default function ProgressBar({
     orange: 'bg-orange-50',
     purple: 'bg-purple-50',
     gray: 'bg-gray-50',
+    secondary: 'bg-primary-100', // <-- ini blom ada di ui jadi gw set dulu biar gk kena error eslint, kal oada silahkan benerin
   };
 
   return (

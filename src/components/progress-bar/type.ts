@@ -1,17 +1,9 @@
-export type ColorVariant =
-  | 'primary'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | 'purple'
-  | 'orange'
-  | 'gray';
+import type { BaseColor } from '../base';
 
 export interface ProgressBarProps {
   value: number;
   useTooltip?: boolean;
-  color?: ColorVariant;
+  color?: BaseColor;
   className?: string;
   valueClassName?: string;
   tooltipSide?: 'top' | 'bottom';
@@ -20,7 +12,7 @@ export interface ProgressBarProps {
 export interface ProgressContentProps {
   value: number;
   classsName?: string;
-  color?: ColorVariant;
+  color?: BaseColor;
   useTooltip?: boolean;
   tooltipSide?: 'top' | 'bottom';
 }

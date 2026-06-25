@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Text } from '../../text';
 import type { CalendarEvent } from '../type';
 import clsx from 'clsx';
@@ -7,7 +8,6 @@ interface Props {
   segment: { event: CalendarEvent; startCol: number; span: number };
   showTooltip?: boolean;
   tooltip?: CalendarEvent;
-  isMouseEventOnChildren?: boolean;
   level?: number;
   onClick?: (segment: {
     event: CalendarEvent;
@@ -42,25 +42,13 @@ export default function EventBar({
   segment,
   showTooltip = true,
   onClick,
-  isMouseEventOnChildren = false,
   level = 0,
 }: Props) {
   const [hovered, setHovered] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: React.MouseEvent, useParentWrap?: boolean) => {
-    const rect =
-      useParentWrap !== undefined && useParentWrap === true
-        ? e.currentTarget.getBoundingClientRect()
-        : {
-            left: 0,
-            top: 0,
-          };
-
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    setPos({ x, y });
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setPos({ x: e.clientX, y: e.clientY });
   };
 
   const getBgColor = (color?: string) => {
@@ -93,9 +81,9 @@ export default function EventBar({
         onClick={() => onClick?.(segment)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onMouseMove={(e) => handleMouseMove(e, isMouseEventOnChildren)}
+        onMouseMove={handleMouseMove}
         className={clsx(
-          'relative mx-0.5 mt-1 flex items-center justify-between gap-3 overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5',
+          'relative mx-0.5 mt-1 flex w-full items-center justify-between gap-3 overflow-hidden rounded p-1 text-[11px] leading-5 font-medium md:p-1.5',
           onClick && 'cursor-pointer'
         )}
         style={{
@@ -120,52 +108,60 @@ export default function EventBar({
           </Text>
         </div>
 
-        <Text variant="t3" className="line-clamp-1 text-gray-800">
+        <Text variant="t3" className="line-clamp-1 shrink-0 text-gray-800">
           {segment.event.label}
         </Text>
-        {hovered && showTooltip === true && (
-          <div
-            className="pointer-events-none fixed z-50"
-            style={{
-              top: pos.y + (isMouseEventOnChildren ? 30 : 12),
-              left: pos.x + (isMouseEventOnChildren ? 30 : 12),
-            }}
-          >
-            <div className="flex flex-col rounded-lg bg-white p-3 shadow">
-              <Text
-                variant="t3"
-                weight="semibold"
-                className="text-nowrap text-gray-800"
-              >
-                {segment?.event?.tooltip?.title ?? segment.event.title}
-              </Text>
-
-              {Boolean(
-                segment?.event?.tooltip?.subtitle ?? segment.event.subtitle
-              ) && (
-                <Text variant="t3" className="text-nowrap text-gray-700">
-                  {segment?.event?.tooltip?.subtitle ?? segment.event.subtitle}
+        {hovered &&
+          showTooltip === true &&
+          createPortal(
+            <div
+              className="pointer-events-none fixed z-50"
+              style={{
+                top: pos.y > window.innerHeight - 150 ? pos.y - 12 : pos.y + 12,
+                left: pos.x + 12,
+                transform:
+                  pos.y > window.innerHeight - 150
+                    ? 'translateY(-100%)'
+                    : undefined,
+              }}
+            >
+              <div className="flex max-w-xs flex-col rounded-lg bg-white p-3 shadow">
+                <Text
+                  variant="t3"
+                  weight="semibold"
+                  className="truncate text-gray-800"
+                >
+                  {segment?.event?.tooltip?.title ?? segment.event.title}
                 </Text>
-              )}
 
-              {Boolean(
-                segment?.event?.tooltip?.label ?? segment.event.label
-              ) && (
-                <div className="mt-1 flex items-center gap-1">
-                  <div
-                    className="size-1 rounded-full"
-                    style={{
-                      backgroundColor: getRibbonColor(segment?.event?.color),
-                    }}
-                  />
-                  <Text variant="t3" className={clsx('text-gray-800')}>
-                    {segment?.event?.tooltip?.label ?? segment.event.label}
+                {Boolean(
+                  segment?.event?.tooltip?.subtitle ?? segment.event.subtitle
+                ) && (
+                  <Text variant="t3" className="truncate text-gray-700">
+                    {segment?.event?.tooltip?.subtitle ??
+                      segment.event.subtitle}
                   </Text>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+                )}
+
+                {Boolean(
+                  segment?.event?.tooltip?.label ?? segment.event.label
+                ) && (
+                  <div className="mt-1 flex items-center gap-1">
+                    <div
+                      className="size-1 rounded-full"
+                      style={{
+                        backgroundColor: getRibbonColor(segment?.event?.color),
+                      }}
+                    />
+                    <Text variant="t3" className={clsx('text-gray-800')}>
+                      {segment?.event?.tooltip?.label ?? segment.event.label}
+                    </Text>
+                  </div>
+                )}
+              </div>
+            </div>,
+            document.body
+          )}
       </button>
     </>
   );

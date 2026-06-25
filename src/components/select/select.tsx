@@ -732,7 +732,7 @@ export function Select<Extra extends object = object>({
               {getDisplayValue()}
             </div>
 
-            <div className="ml-2 flex shrink-0 items-start gap-1 self-start">
+            <div className="ml-2 flex shrink-0 items-start gap-1">
               {showClearButton && isDisabledMode == false && (
                 <button
                   type="button"

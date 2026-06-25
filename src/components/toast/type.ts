@@ -1,18 +1,8 @@
+import type { BaseColor } from '../base';
 import type { IconNameProps } from '../icons';
 
-export type ColorVariant =
-  | 'primary'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'orange'
-  | 'danger'
-  | 'purple'
-  | 'gray'
-  | 'secondary';
-
 export interface ToastProps {
-  color?: ColorVariant;
+  color?: BaseColor;
   title: string;
   description: string;
   onClose?: () => void;

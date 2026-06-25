@@ -231,7 +231,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         </InputGroup>
       </DropdownTrigger>
 
-      <DropdownContent>
+      <DropdownContent className="flex gap-4">
         {title == null && (
           <div className="flex items-center justify-center">
             <Text
@@ -249,6 +249,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
             <Chip
               key={monthVal}
               onClick={() => handleSelectMonth(monthVal)}
+              className="px-6"
               selected={isSelected(monthVal)}
             >
               {monthLabel}
@@ -256,7 +257,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-2 border-t border-gray-100 py-3">
+        <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-4">
           <Button onClick={handleCancel} variant="tertiary">
             {cancelLabel}
           </Button>

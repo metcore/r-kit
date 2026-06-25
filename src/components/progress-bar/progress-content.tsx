@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import type { ColorVariant, ProgressContentProps } from './type';
+import type { ProgressContentProps } from './type';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
 import { Icon } from '../icons';
 import { Text } from '../text';
+import type { BaseColor } from '../base';
 
 export default function ProgresssContent({
   classsName,
@@ -11,7 +12,7 @@ export default function ProgresssContent({
   useTooltip = false,
   tooltipSide = 'top',
 }: ProgressContentProps) {
-  const color_map: Record<ColorVariant, string> = {
+  const color_map: Record<BaseColor, string> = {
     primary: 'bg-primary-1000',
     warning: 'bg-warning-500',
     danger: 'bg-danger-500',
@@ -20,6 +21,7 @@ export default function ProgresssContent({
     orange: 'bg-orange-500',
     purple: 'bg-purple-500',
     gray: 'bg-gray-600',
+    secondary: 'bg-primary-100', // <-- ini blom ada di ui jadi gw set dulu biar gk kena error eslint, kal oada silahkan benerin
   };
 
   return (
