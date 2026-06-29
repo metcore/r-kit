@@ -1,30 +1,38 @@
 import { Editor, useEditorState } from '@tiptap/react';
 import { useState } from 'react';
+import { ButtonIcon } from '../../button-icon';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../../dropdown';
 import { Icon } from '../../icons';
 import { Input } from '../../input';
 import { Kbd } from '../../kbd';
+import objectfitOptions from '../constants/object-fit-options';
 import toEmbedUrl from '../helpers/yt-url-to-embed';
 import useLinkHandler from '../hooks/use-link-handler';
+import type { AttachmentField, BaseInputFile, BaseInputYoutube } from '../type';
 import ModalInsertImage from './modal-insert-image';
 import ModalInsertYoutube from './modal-insert-youtube';
 import ToolbarButton from './toolbar-button';
 import ToolbarGroup from './toolbar-group';
-import type { AttachmentField } from '../type';
-import objectfitOptions from '../constants/object-fit-options';
-import { ButtonIcon } from '../../button-icon';
+
+interface Props {
+  editor: Editor;
+  disabled?: boolean;
+  attachmentField?: AttachmentField;
+  onDownload?: (data: { src?: string; name?: string }) => void;
+  insertLinkPlaceholder?: string;
+  insertYoutube?: BaseInputYoutube;
+  modalImage?: BaseInputFile;
+}
 
 export function InsertGroup({
   editor,
   disabled = false,
   attachmentField,
+  insertLinkPlaceholder,
   onDownload,
-}: {
-  editor: Editor;
-  disabled?: boolean;
-  attachmentField?: AttachmentField;
-  onDownload?: (data: { src?: string; name?: string }) => void;
-}) {
+  modalImage,
+  insertYoutube,
+}: Props) {
   const [isModalImageOpen, setIsModalImageOpen] = useState(false);
   const [isModalYoutubeOpen, setIsModalYoutubeOpen] = useState(false);
 
@@ -69,7 +77,7 @@ export function InsertGroup({
               rightAddonClassName="pl-0!"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="Paste URL here..."
+              placeholder={insertLinkPlaceholder ?? 'Paste URL here...'}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
@@ -126,6 +134,10 @@ export function InsertGroup({
       <ModalInsertYoutube
         isOpen={isModalYoutubeOpen}
         onClose={setIsModalYoutubeOpen}
+        height={insertYoutube?.height}
+        width={insertYoutube?.width}
+        labelPreviewTitle={insertYoutube?.labelPreviewTitle}
+        modal={insertYoutube?.modal}
         initialValues={
           isInYoutube
             ? {
@@ -160,6 +172,10 @@ export function InsertGroup({
         isOpen={isModalImageOpen}
         onClose={setIsModalImageOpen}
         attachmentField={attachmentField}
+        modal={modalImage?.modal}
+        imageDetail={modalImage?.imageDetail}
+        link={modalImage?.link}
+        upload={modalImage?.upload}
         initialValues={
           isInImage
             ? {

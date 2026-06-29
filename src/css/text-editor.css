@@ -239,3 +239,7 @@
   border-radius: 6px;
   overflow: hidden;
 }
+
+.ProseMirror {
+  height: var(--editor-height, 100px);
+}

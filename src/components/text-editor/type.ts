@@ -5,6 +5,22 @@ import type { SelectOption } from '../select/type';
 import type { FileItem, UploadConfig, UploadedFile } from '../input-file';
 
 export interface TextEditorProps {
+  label?: string;
+  description?: string;
+  hint?: string;
+  required?: boolean;
+  errorMessages?: string | string[];
+  size?: 'sm' | 'md' | 'lg';
+  height?: number;
+  disabled?: boolean;
+  value?: string;
+  placeholder?: string;
+  onChange?: (value: Editor) => void;
+  plugins?: Plugins;
+
+  /**
+   * @deprecated Use top-level `size` & `disabled` instead
+   */
   ui?: {
     className?: string;
     toolbarClassName?: string;
@@ -14,6 +30,9 @@ export interface TextEditorProps {
     disabled?: boolean;
   };
 
+  /**
+   * @deprecated Use top-level `field` instead
+   */
   field?: {
     label?: string;
     description?: string;
@@ -22,6 +41,9 @@ export interface TextEditorProps {
     errorMessages?: string | string[];
   };
 
+  /**
+   * @deprecated Use top-level `value`, `placeholder` & `onChange` instead
+   */
   editor?: {
     value?: string;
     placeholder?: string;
@@ -30,18 +52,111 @@ export interface TextEditorProps {
     attachmentField?: AttachmentField;
   };
 
-  toolbar?: {
-    formatting?: boolean;
-    alignment?: boolean;
-    list?: boolean;
-    insert?: boolean;
-    table?: boolean;
-    indent?: boolean;
-    advance?: boolean;
-  };
+  /**
+   * @deprecated Use top-level plugis?.toolbar instead
+   */
+  toolbar?: BaseToolbar;
 
   onDownload?: (data: { src?: string; name?: string }) => void;
 }
+
+export type BaseModal = {
+  title?: string;
+  labelButtonSave?: string;
+  labelButtonCancel?: string;
+};
+
+export type BaseToolbar = {
+  formatting?: boolean;
+  alignment?: boolean;
+  list?: boolean;
+  insert?: boolean;
+  table?: boolean;
+  indent?: boolean;
+  advance?: boolean;
+};
+
+export type BaseInput = {
+  label?: string;
+  placeholder?: string;
+};
+
+export type BaseImageDetail = {
+  label?: string;
+  uri?: BaseInput;
+  altText?: BaseInput;
+  width?: BaseInput;
+  height?: BaseInput;
+  objectFit?: BaseInput;
+};
+
+export type BaseInputLink = {
+  label?: string;
+  url?: BaseInput;
+  target?: BaseInput;
+};
+
+export type BaseUploadConfig = UploadConfig & {
+  maxSize?: number;
+  accept?: string;
+};
+
+export type BaseUpload = {
+  label?: string;
+  hint?: string;
+  labelButtonChooseFile?: string;
+  config: BaseUploadConfig;
+};
+
+export type BaseInputFile = {
+  modal?: BaseModal;
+  imageDetail?: BaseImageDetail;
+  link?: BaseInputLink;
+  upload?: BaseUpload;
+};
+
+export type BaseInputYoutube = {
+  modal?: BaseModal;
+  url?: BaseInput;
+  width?: BaseInput;
+  height?: BaseInput;
+  labelPreviewTitle?: string;
+};
+
+export type BaseInputParagraph = {
+  labelParagraph?: string;
+};
+
+export type BaseInputAlignment = {
+  labelLeft?: string;
+  labelRight?: string;
+  labelCenter?: string;
+  labelJustify?: string;
+};
+
+export type BaseInputTable = {
+  labelAddTable?: string;
+  labelHeaderCell?: string;
+  labelMergeCell?: string;
+  labelNoBorder?: string;
+  labelDeleteTable?: string;
+  labelInsertRow?: string;
+  labelDeleteRow?: string;
+  labelInsertColumn?: string;
+  labelDeleteColumn?: string;
+};
+
+export type Plugins = {
+  showToolbar?: BaseToolbar;
+  inputFile?: BaseInputFile;
+  inputYoutube?: BaseInputYoutube;
+  inputParagraph?: BaseInputParagraph;
+  inputAlignment?: BaseInputAlignment;
+  inputTable?: BaseInputTable;
+  inputLink?: {
+    placeholder?: string;
+  };
+};
 
 export interface ToolbarButtonProps {
   icon?: IconNameProps;
@@ -75,7 +190,6 @@ export interface ImageForm {
 }
 
 export interface ColorPickerButtonProps {
-  id: string;
   icon: IconNameProps;
   color: string;
   disabled?: boolean;

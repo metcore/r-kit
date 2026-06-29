@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from '../../button';
+import { ButtonIcon } from '../../button-icon';
 import { Input } from '../../input';
+import { Kbd } from '../../kbd';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Text } from '../../text/text';
-import toEmbedUrl from '../helpers/yt-url-to-embed';
 import isValidYoutubeUrl from '../helpers/is-valid-youtube-url';
-import { Kbd } from '../../kbd';
+import toEmbedUrl from '../helpers/yt-url-to-embed';
 import { useKeyboardShortcut } from '../hooks/use-keyboard-shortcut';
-import { ButtonIcon } from '../../button-icon';
+import type { BaseInputYoutube } from '../type';
 
 interface YoutubeForm {
   size: {
@@ -17,7 +18,7 @@ interface YoutubeForm {
   url: string;
 }
 
-interface Props {
+interface Props extends BaseInputYoutube {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   onSubmit: (form?: YoutubeForm) => void;
@@ -29,6 +30,11 @@ export default function ModalInsertYoutube({
   onClose,
   onSubmit,
   initialValues,
+  height,
+  modal,
+  url,
+  width,
+  labelPreviewTitle,
 }: Props) {
   const defaultValue = {
     size: {
@@ -68,7 +74,7 @@ export default function ModalInsertYoutube({
       >
         <ModalHeader className="flex-row! items-center justify-between border-b border-gray-200">
           <Text variant="t1" weight="medium" className="mb-0! text-gray-900">
-            Insert Youtube
+            {modal?.title ?? 'Insert Youtube'}
           </Text>
           <div className="flex items-center">
             <Kbd>ESC</Kbd>
@@ -84,9 +90,11 @@ export default function ModalInsertYoutube({
         <ModalBody className="space-y-4 pb-5">
           <Input
             required
-            label="URL"
+            label={url?.label ?? 'URL'}
             type="url"
-            placeholder="e.g https://www.youtube.com/watch?v=xxxx"
+            placeholder={
+              url?.placeholder ?? 'e.g https://www.youtube.com/watch?v=xxxx'
+            }
             errorMessages={!isValid ? 'Youtube URL is invalid' : undefined}
             value={youtubeForm?.url ?? ''}
             onChange={(e) => {
@@ -100,8 +108,8 @@ export default function ModalInsertYoutube({
           <div className="flex items-center gap-2 *:flex-1">
             <Input
               type="number"
-              label="Width"
-              placeholder="100"
+              label={width?.label ?? 'Width'}
+              placeholder={width?.placeholder ?? '600'}
               rightAddon={
                 <Text weight="medium" className="text-gray-900">
                   px
@@ -117,8 +125,8 @@ export default function ModalInsertYoutube({
             />
             <Input
               type="number"
-              label="Height"
-              placeholder="100"
+              label={height?.label ?? 'Height'}
+              placeholder={height?.placeholder ?? '100'}
               rightAddon={
                 <Text weight="medium" className="text-gray-900">
                   px
@@ -137,7 +145,7 @@ export default function ModalInsertYoutube({
           {youtubeForm.url && isValid && (
             <div className="flex w-full flex-col gap-2">
               <Text variant="t2" weight="semibold" className="text-gray-900">
-                Preview Video Youtube
+                {labelPreviewTitle ?? 'Preview Video Youtube'}
               </Text>
               <div className="aspect-video w-full">
                 <iframe
@@ -154,16 +162,16 @@ export default function ModalInsertYoutube({
           )}
         </ModalBody>
 
-        <ModalFooter className="flex items-center justify-between">
+        <ModalFooter className="flex items-center justify-end">
           <Button
             variant={'outline'}
-            color="gray"
+            color="danger"
             type="button"
             onClick={() => onClose(false)}
           >
-            Cancel
+            {modal?.labelButtonCancel ?? 'Cancel'}
           </Button>
-          <Button color="primary">Save</Button>
+          <Button color="primary">{modal?.labelButtonSave ?? 'Save'}</Button>
         </ModalFooter>
       </form>
     </Modal>
