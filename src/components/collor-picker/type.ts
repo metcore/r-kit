@@ -24,13 +24,30 @@ export interface ColorValue {
 }
 type ColorInputValue = string | RGB | HSV | number;
 
-export interface ColorInputProps extends Omit<
-  InputProps,
-  'onChange' | 'value'
-> {
+export interface BaseColorPickerProps {
   value?: ColorInputValue;
   size?: InputSize;
   defaultColor?: string;
+  onChange?: (color: ColorValue) => void;
+  children: (props: {
+    open: boolean;
+    toggle: () => void;
+    openPicker: () => void;
+    closePicker: () => void;
+    color: ColorValue | null;
+    rgb: RGB;
+    alpha: number;
+    display: string;
+    hasValue: boolean;
+  }) => React.ReactNode;
+}
+
+export interface ColorInputProps extends Omit<
+  InputProps,
+  'onChange' | 'value' | 'children'
+> {
+  value?: ColorInputValue;
+  size?: InputSize;
   onChange?: (color: ColorValue) => void;
 }
 
