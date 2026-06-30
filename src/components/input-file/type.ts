@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import type { ButtonColor, ButtonVariantProps } from '../button';
+import type { ButtonVariantProps } from '../button';
 import type { UseInputFileReturn } from './use-input-file';
+import type { BaseColor } from '../base/type/base-color';
 
 export type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
@@ -32,7 +33,7 @@ export interface InputFileProps extends PlayerProps {
   hint?: string;
   buttonLabel?: string | ReactNode;
   buttonVariant?: ButtonVariantProps['variant'];
-  buttonColor?: ButtonColor;
+  buttonColor?: BaseColor;
   errorMessage?: string;
   maxSizeErrorMessage?: string;
   customNamePlaceholder?: string;

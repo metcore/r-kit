@@ -1,9 +1,13 @@
 import type { CSSProperties, HTMLAttributes } from 'react';
 import { badgeVariants, type BadgeVariantProps } from './badge-variants';
 import { cn, hexToRgba } from '../../lib/utils';
+import type { BaseColor } from '../base/type/base-color';
 
 export interface BadgeProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'color'>, BadgeVariantProps {
+  extends
+    Omit<HTMLAttributes<HTMLDivElement>, 'color'>,
+    Omit<BadgeVariantProps, 'color'> {
+  color?: BaseColor;
   hexColor?: string;
 }
 

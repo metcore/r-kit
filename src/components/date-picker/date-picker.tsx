@@ -9,6 +9,7 @@ import { Button } from '../button';
 import { ChipGroup, type ChipOptionProps, type ChipValue } from '../chip';
 import type { DatePickerProps } from './type';
 import clsx from 'clsx';
+import { FormField } from '../form';
 
 const DatePicker = ({
   format = 'DD-MM-YYYY',
@@ -34,6 +35,12 @@ const DatePicker = ({
   placeholder,
   isClearable = false,
   autoWidth = false,
+  label,
+  hint,
+  tooltip,
+  description,
+  errorMessages,
+  required,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null
@@ -331,239 +338,226 @@ const DatePicker = ({
   }, [open]);
 
   return (
-    <div
-      ref={containerRef}
-      className={clsx('relative flex max-w-sm flex-col', containerClassName)}
+    <FormField
+      label={label}
+      hint={hint}
+      description={description}
+      errorMessages={errorMessages}
+      required={required}
+      size={size}
+      tooltip={tooltip}
     >
-      <Dropdown
-        open={isCalendarShow}
-        onOpenChange={(open) => {
-          setIsCalendarShow(open);
-          onOpenChange?.(open);
-
-          if (mode === 'range' && controlledRangeValue) {
-            setDateRange(controlledRangeValue);
-          }
-        }}
+      <div
+        ref={containerRef}
+        className={clsx('relative flex max-w-sm flex-col', containerClassName)}
       >
-        <DropdownTrigger asChild={true}>
-          {Boolean(trigger) === false ? (
-            <Input
-              mergedAddon
-              type="text"
-              autoWidth={autoWidth}
-              className={`pl-0`}
-              leftAddonClassName="pr-1! shrink-0"
-              onChange={handleInputChange}
-              value={inputValue}
-              readOnly={mode === 'range'}
-              rightAddonClassName="shrink-0 pl-1!"
-              leftAddon={
-                <Icon name="calendar" className="text-gray-900" size={24} />
-              }
-              rightAddon={
-                isClearable &&
-                inputValue && (
-                  <button
-                    className="shrink-0 cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
+        <Dropdown
+          open={isCalendarShow}
+          onOpenChange={(open) => {
+            setIsCalendarShow(open);
+            onOpenChange?.(open);
 
-                      setInputValue('');
-                      controlledOnRangeChange?.({ start: null, end: null });
-                      controlledOnChange?.(null);
-                    }}
-                  >
-                    <Icon
-                      name="times-circle"
-                      size={20}
-                      className="shrink-0 text-gray-900"
-                    />
-                  </button>
-                )
-              }
-              placeholder={
-                placeholder !== undefined
-                  ? placeholder
-                  : mode === 'range'
-                    ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
-                    : formatConfig.placeholder
-              }
-            />
-          ) : (
-            trigger
-          )}
-        </DropdownTrigger>
-
-        <DropdownContent
-          align={align}
-          sideOffset={5}
-          className={clsx('z-10 overflow-hidden p-0', wrapperClassName)}
+            if (mode === 'range' && controlledRangeValue) {
+              setDateRange(controlledRangeValue);
+            }
+          }}
         >
-          <div className="top-full z-10">
-            {mode === 'single' ? (
-              <Calendar
-                variant="compact"
-                size={size}
-                wrapperClassname="w-full border-0"
-                weekWrapperClassname="w-full justify-between"
-                dayWrapperClassname="justify-between"
-                onChange={handleCalendarChange}
-                value={selectedDate}
-                disabled={(date) => {
-                  if (minDate !== undefined && date < minDate) return true;
-                  if (maxDate !== undefined && date > maxDate) return true;
-                  return false;
-                }}
-                disabledDateClassName={disabledDateClassName}
-                {...calendarProps}
-              />
-            ) : (
-              <div className="flex">
-                {showController && (
-                  <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
-                    <ChipGroup
-                      direction="vertical"
-                      options={filterCalendar}
-                      selected={selectedFilter}
-                      onSelect={(val) => {
-                        setSelectedFilter(val);
-                        const now = new Date();
+          <DropdownTrigger asChild={true}>
+            {Boolean(trigger) === false ? (
+              <Input
+                mergedAddon
+                type="text"
+                autoWidth={autoWidth}
+                className={`pl-0`}
+                leftAddonClassName="pr-1! shrink-0"
+                onChange={handleInputChange}
+                value={inputValue}
+                readOnly={mode === 'range'}
+                rightAddonClassName="shrink-0 pl-1!"
+                leftAddon={
+                  <Icon name="calendar" className="text-gray-900" size={24} />
+                }
+                rightAddon={
+                  isClearable &&
+                  inputValue && (
+                    <button
+                      className="shrink-0 cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
 
-                        const end = new Date();
-                        const start = new Date();
-
-                        if (val[0] === 0) {
-                          const day = now.getDay(); // 0 = Minggu
-                          const diffToMonday = day === 0 ? -6 : 1 - day;
-
-                          const startOfThisWeek = new Date(now);
-                          startOfThisWeek.setDate(now.getDate() + diffToMonday);
-                          startOfThisWeek.setHours(0, 0, 0, 0);
-
-                          const startOfLastWeek = new Date(startOfThisWeek);
-                          startOfLastWeek.setDate(
-                            startOfThisWeek.getDate() - 7
-                          );
-
-                          const endOfLastWeek = new Date(startOfThisWeek);
-                          endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
-                          endOfLastWeek.setHours(23, 59, 59, 999);
-
-                          setDateRange({
-                            start: startOfLastWeek,
-                            end: endOfLastWeek,
-                          });
-                        } else if (val[0] === 1) {
-                          start.setDate(end.getDate() - 7);
-
-                          start.setHours(0, 0, 0, 0);
-                          end.setHours(23, 59, 59, 999);
-
-                          setDateRange({
-                            start,
-                            end,
-                          });
-                        } else if (val[0] === 2) {
-                          start.setDate(end.getDate() - 29);
-
-                          start.setHours(0, 0, 0, 0);
-                          end.setHours(23, 59, 59, 999);
-
-                          setDateRange({
-                            start,
-                            end,
-                          });
-                        } else if (val[0] === 3) {
-                          const start = new Date(
-                            now.getFullYear(),
-                            now.getMonth(),
-                            1
-                          );
-                          const end = new Date(
-                            now.getFullYear(),
-                            now.getMonth() + 1,
-                            0
-                          );
-
-                          start.setHours(0, 0, 0, 0);
-                          end.setHours(23, 59, 59, 999);
-
-                          setDateRange({
-                            start,
-                            end,
-                          });
-                        } else if (val[0] === 4) {
-                          start.setFullYear(end.getFullYear() - 1);
-
-                          start.setHours(0, 0, 0, 0);
-                          end.setHours(23, 59, 59, 999);
-
-                          setDateRange({
-                            start,
-                            end,
-                          });
-                        }
-                      }}
-                      color="gray"
-                      size={size}
-                    />
-                    <Button
-                      color="danger"
-                      variant={'outline'}
-                      size={size}
-                      onClick={() => {
-                        setDateRange({ start: null, end: null });
-                        setSelectedFilter([]);
+                        setInputValue('');
+                        controlledOnRangeChange?.({ start: null, end: null });
+                        controlledOnChange?.(null);
                       }}
                     >
-                      Reset
-                    </Button>
-                  </div>
-                )}
+                      <Icon
+                        name="times-circle"
+                        size={20}
+                        className="shrink-0 text-gray-900"
+                      />
+                    </button>
+                  )
+                }
+                placeholder={
+                  placeholder !== undefined
+                    ? placeholder
+                    : mode === 'range'
+                      ? `${formatConfig.placeholder} - ${formatConfig.placeholder}`
+                      : formatConfig.placeholder
+                }
+              />
+            ) : (
+              trigger
+            )}
+          </DropdownTrigger>
 
-                <div className="flex flex-col">
-                  <div
-                    className={cn('flex', isMobile ? 'flex-col' : 'flex-row')}
-                  >
-                    {/* First Calendar */}
-                    <Calendar
-                      variant="compact"
-                      size={size}
-                      wrapperClassname="w-full rounded-none! border-0"
-                      weekWrapperClassname="w-full justify-between"
-                      dayWrapperClassname="justify-between"
-                      onChange={handleRangeCalendarChange}
-                      value={dateRange.start}
-                      rangeValue={dateRange}
-                      mode="range"
-                      disabled={(date) => {
-                        if (minDate !== undefined && date < minDate) {
-                          return true;
-                        }
-                        if (maxDate !== undefined && date > maxDate) {
-                          return true;
-                        }
-                        return false;
-                      }}
-                      disabledDateClassName={disabledDateClassName}
-                      {...startDateCalendarProps}
-                    />
-                    {/* Second Calendar (desktop only) */}
-                    {!isMobile && (
+          <DropdownContent
+            align={align}
+            sideOffset={5}
+            className={clsx('z-10 overflow-hidden p-0', wrapperClassName)}
+          >
+            <div className="top-full z-10">
+              {mode === 'single' ? (
+                <Calendar
+                  variant="compact"
+                  size={size}
+                  wrapperClassname="w-full border-0"
+                  weekWrapperClassname="w-full justify-between"
+                  dayWrapperClassname="justify-between"
+                  onChange={handleCalendarChange}
+                  value={selectedDate}
+                  disabled={(date) => {
+                    if (minDate !== undefined && date < minDate) return true;
+                    if (maxDate !== undefined && date > maxDate) return true;
+                    return false;
+                  }}
+                  disabledDateClassName={disabledDateClassName}
+                  {...calendarProps}
+                />
+              ) : (
+                <div className="flex">
+                  {showController && (
+                    <div className="flex flex-col items-start gap-2 border-r border-gray-400 px-3 py-6.5">
+                      <ChipGroup
+                        direction="vertical"
+                        options={filterCalendar}
+                        selected={selectedFilter}
+                        onSelect={(val) => {
+                          setSelectedFilter(val);
+                          const now = new Date();
+
+                          const end = new Date();
+                          const start = new Date();
+
+                          if (val[0] === 0) {
+                            const day = now.getDay(); // 0 = Minggu
+                            const diffToMonday = day === 0 ? -6 : 1 - day;
+
+                            const startOfThisWeek = new Date(now);
+                            startOfThisWeek.setDate(
+                              now.getDate() + diffToMonday
+                            );
+                            startOfThisWeek.setHours(0, 0, 0, 0);
+
+                            const startOfLastWeek = new Date(startOfThisWeek);
+                            startOfLastWeek.setDate(
+                              startOfThisWeek.getDate() - 7
+                            );
+
+                            const endOfLastWeek = new Date(startOfThisWeek);
+                            endOfLastWeek.setDate(
+                              startOfThisWeek.getDate() - 1
+                            );
+                            endOfLastWeek.setHours(23, 59, 59, 999);
+
+                            setDateRange({
+                              start: startOfLastWeek,
+                              end: endOfLastWeek,
+                            });
+                          } else if (val[0] === 1) {
+                            start.setDate(end.getDate() - 7);
+
+                            start.setHours(0, 0, 0, 0);
+                            end.setHours(23, 59, 59, 999);
+
+                            setDateRange({
+                              start,
+                              end,
+                            });
+                          } else if (val[0] === 2) {
+                            start.setDate(end.getDate() - 29);
+
+                            start.setHours(0, 0, 0, 0);
+                            end.setHours(23, 59, 59, 999);
+
+                            setDateRange({
+                              start,
+                              end,
+                            });
+                          } else if (val[0] === 3) {
+                            const start = new Date(
+                              now.getFullYear(),
+                              now.getMonth(),
+                              1
+                            );
+                            const end = new Date(
+                              now.getFullYear(),
+                              now.getMonth() + 1,
+                              0
+                            );
+
+                            start.setHours(0, 0, 0, 0);
+                            end.setHours(23, 59, 59, 999);
+
+                            setDateRange({
+                              start,
+                              end,
+                            });
+                          } else if (val[0] === 4) {
+                            start.setFullYear(end.getFullYear() - 1);
+
+                            start.setHours(0, 0, 0, 0);
+                            end.setHours(23, 59, 59, 999);
+
+                            setDateRange({
+                              start,
+                              end,
+                            });
+                          }
+                        }}
+                        color="gray"
+                        size={size}
+                      />
+                      <Button
+                        color="danger"
+                        variant={'outline'}
+                        size={size}
+                        onClick={() => {
+                          setDateRange({ start: null, end: null });
+                          setSelectedFilter([]);
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col">
+                    <div
+                      className={cn('flex', isMobile ? 'flex-col' : 'flex-row')}
+                    >
+                      {/* First Calendar */}
                       <Calendar
                         variant="compact"
                         size={size}
-                        wrapperClassname="w-full rounded-none border-0 border-l"
+                        wrapperClassname="w-full rounded-none! border-0"
                         weekWrapperClassname="w-full justify-between"
                         dayWrapperClassname="justify-between"
                         onChange={handleRangeCalendarChange}
-                        value={dateRange.end}
+                        value={dateRange.start}
                         rangeValue={dateRange}
                         mode="range"
-                        defaultMonth={nextMonthData.month}
-                        defaultYear={nextMonthData.year}
                         disabled={(date) => {
                           if (minDate !== undefined && date < minDate) {
                             return true;
@@ -574,57 +568,87 @@ const DatePicker = ({
                           return false;
                         }}
                         disabledDateClassName={disabledDateClassName}
-                        {...endDateCalendarProps}
+                        {...startDateCalendarProps}
                       />
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end justify-between gap-2 border-t border-gray-300 px-4 py-3 md:flex-row md:items-center">
-                    <div className="flex items-center gap-2">
-                      <Input
-                        size={size}
-                        readOnly
-                        className="w-30 truncate"
-                        placeholder="Start Date"
-                        value={formatDateToString(
-                          dateRange.start,
-                          'DD MMM YYYY'
-                        )}
-                      />
-                      <Icon name="minus" size={16} />
-                      <Input
-                        size={size}
-                        readOnly
-                        placeholder="End Date"
-                        className="w-30 truncate"
-                        value={formatDateToString(dateRange.end, 'DD MMM YYYY')}
-                      />
+                      {/* Second Calendar (desktop only) */}
+                      {!isMobile && (
+                        <Calendar
+                          variant="compact"
+                          size={size}
+                          wrapperClassname="w-full rounded-none border-0 border-l"
+                          weekWrapperClassname="w-full justify-between"
+                          dayWrapperClassname="justify-between"
+                          onChange={handleRangeCalendarChange}
+                          value={dateRange.end}
+                          rangeValue={dateRange}
+                          mode="range"
+                          defaultMonth={nextMonthData.month}
+                          defaultYear={nextMonthData.year}
+                          disabled={(date) => {
+                            if (minDate !== undefined && date < minDate) {
+                              return true;
+                            }
+                            if (maxDate !== undefined && date > maxDate) {
+                              return true;
+                            }
+                            return false;
+                          }}
+                          disabledDateClassName={disabledDateClassName}
+                          {...endDateCalendarProps}
+                        />
+                      )}
                     </div>
+                    <div className="flex flex-col items-end justify-between gap-2 border-t border-gray-300 px-4 py-3 md:flex-row md:items-center">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          size={size}
+                          readOnly
+                          className="w-30 truncate"
+                          placeholder="Start Date"
+                          value={formatDateToString(
+                            dateRange.start,
+                            'DD MMM YYYY'
+                          )}
+                        />
+                        <Icon name="minus" size={16} />
+                        <Input
+                          size={size}
+                          readOnly
+                          placeholder="End Date"
+                          className="w-30 truncate"
+                          value={formatDateToString(
+                            dateRange.end,
+                            'DD MMM YYYY'
+                          )}
+                        />
+                      </div>
 
-                    <div className="flex items-center gap-2">
-                      <Button
-                        onClick={() => setIsCalendarShow(false)}
-                        variant={'tertiary'}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={handleApplyDateRange}
-                        disabled={
-                          Boolean(dateRange.start) &&
-                          Boolean(dateRange.end) === false
-                        }
-                      >
-                        Apply
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          onClick={() => setIsCalendarShow(false)}
+                          variant={'tertiary'}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleApplyDateRange}
+                          disabled={
+                            Boolean(dateRange.start) &&
+                            Boolean(dateRange.end) === false
+                          }
+                        >
+                          Apply
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </DropdownContent>
-      </Dropdown>
-    </div>
+              )}
+            </div>
+          </DropdownContent>
+        </Dropdown>
+      </div>
+    </FormField>
   );
 };
 

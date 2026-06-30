@@ -611,6 +611,13 @@ export default function ApiTablePage() {
                 t={t}
                 columns={columns}
                 onRowClick={(row) => console.log('row clicked:', row)}
+                rowOptions={(data, key, index) => {
+                  console.log('tes', data, key, index);
+                  return {
+                    className: 'bg-gray-200',
+                  };
+                }}
+                showPagination={true}
               />
             </CardBody>
           </Card>

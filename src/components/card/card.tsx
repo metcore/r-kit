@@ -3,19 +3,11 @@ import { cn } from '../../lib/utils';
 
 import { cardVariants, dividerColors, paddingBySize } from './card-variants';
 import type { CardVariantProps } from './card-variants';
+import type { BaseColor } from '../base/type/base-color';
 
 interface CardProps
   extends React.HtmlHTMLAttributes<HTMLDivElement>, CardVariantProps {
-  color?:
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'danger'
-    | 'warning'
-    | 'info'
-    | 'orange'
-    | 'purple'
-    | 'gray';
+  color?: BaseColor;
 }
 
 export const Card = ({

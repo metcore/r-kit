@@ -36,6 +36,7 @@ export const TextVariants = cva('font-metropolis', {
       info: 'text-info-500',
       purple: 'text-purple-500',
       gray: 'text-gray-500',
+      secondary: 'text-primary-1000',
     },
 
     align: {

@@ -84,7 +84,6 @@ export interface TableUrlState {
   sort: { by: string | null; order: SortOrder };
   filters: Filters;
 }
-
 export interface UseApiTableConfig<
   T extends RowLike = RowLike,
   F extends Record<keyof F, string> = Filters,
@@ -106,6 +105,10 @@ export interface UseApiTableConfig<
   fetcher?: Fetcher;
 
   urlSync?: UrlSync;
+  enabled?: boolean;
+  keepPreviousData?: boolean;
+  retry?: boolean | number;
+  retryDelay?: number;
 
   buildUrl?: (ctx: BuildUrlContext) => string;
   transformParams?: (params: QueryParams, ctx: BuildUrlContext) => QueryParams;
@@ -113,9 +116,11 @@ export interface UseApiTableConfig<
     data: unknown,
     res: AdapterResponse
   ) => ParsedResponse<T>;
-  onRequest?: (url: string) => void;
-}
 
+  onRequest?: (url: string) => void;
+  onSuccess?: (data: T[], total: number) => void;
+  onError?: (error: Error) => void;
+}
 export interface UseApiTableResult<
   T extends RowLike = RowLike,
   F extends Record<keyof F, string> = Filters,
@@ -123,6 +128,7 @@ export interface UseApiTableResult<
   data: T[];
   total: number;
   loading: boolean;
+  isFetching: boolean;
   error: Error | null;
   lastUrl: string;
   page: number;
@@ -140,6 +146,8 @@ export interface UseApiTableResult<
   refetch: () => void;
 }
 
+export type HideBelow = 'sm' | 'md' | 'lg' | 'xl';
+
 export interface ApiTableColumn<T extends RowLike = RowLike> {
   key: string;
   header?: ReactNode;
@@ -148,6 +156,21 @@ export interface ApiTableColumn<T extends RowLike = RowLike> {
   align?: 'left' | 'center' | 'right';
   width?: string | number;
   render?: (value: unknown, row: T, index: number) => ReactNode;
+  className?: string;
+  hideBelow?: HideBelow;
+}
+
+export interface RowOption<T extends RowLike = RowLike> {
+  label: ReactNode;
+  icon?: string;
+  onClick: (row: T, index: number) => void;
+  disabled?: (row: T) => boolean;
+  hidden?: (row: T) => boolean;
+  variant?: 'default' | 'danger';
+}
+
+export type ResponsiveMode = 'scroll' | 'cards';
+export interface RowOptionResult {
   className?: string;
 }
 
@@ -161,14 +184,10 @@ export interface ApiTableProps<
   rowKey?: (row: T, index: number) => Key;
   onRowClick?: (row: T, index: number) => void;
   renderEmptyData?: ReactNode;
+  loadingRowCount?: number;
+  rowOptions?: (data: T, key: Key, index: number) => RowOptionResult;
+  rowOptionsLabel?: ReactNode;
+  responsive?: boolean | ResponsiveMode;
+  showPagination?: boolean;
+  showFooter?: boolean;
 }
-
-// export interface ApiTableProps<
-//   T extends RowLike = RowLike,
-//   F extends Record<keyof F, string> = Filters,
-// > extends UseApiTableConfig<T, F> {
-//   columns: ApiTableColumn<T>[];
-//   emptyText?: ReactNode;
-//   rowKey?: (row: T, index: number) => Key;
-//   onRowClick?: (row: T, index: number) => void;
-// }

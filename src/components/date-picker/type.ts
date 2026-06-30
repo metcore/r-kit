@@ -55,6 +55,13 @@ export interface DatePickerProps {
   placeholder?: string;
   isClearable?: boolean;
   autoWidth?: boolean;
+
+  label?: string;
+  hint?: string;
+  required?: boolean;
+  tooltip?: string;
+  description?: string;
+  errorMessages?: string;
 }
 
 export type DateFormat =

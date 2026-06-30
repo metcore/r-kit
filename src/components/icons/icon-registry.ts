@@ -311,6 +311,7 @@ import HorizontalLineIcon from './icons/HorizontalLineIcon';
 import LetterAIcon from './icons/LetterAIcon';
 import ParagraphSpacingIcon from './icons/ParagraphSpacingIcon';
 import StabiloIcon from './icons/StabiloIcon';
+import SignatureIcon from './icons/SignatureIcon';
 import YoutubeIcon from './icons/YoutubeIcon';
 import QuoteIcon from './icons/QuoteIcon';
 import TableMergeCellIcon from './icons/TableMergeCellIcon';
@@ -650,6 +651,7 @@ export const iconRegistry = {
   'shopping-cart-arrow-top': ShoppingCartArrowTopIcon,
   'shopping-cart-plus': ShoppingCartPlusIcon,
   'shopping-cart': ShoppingCartIcon,
+  'signature': SignatureIcon,
   'sort-ascending-circle': SortAscendingCircleIcon,
   'sort-descending-circle': SortDescendingCircleIcon,
   'sort-vertical': SortVerticalIcon,

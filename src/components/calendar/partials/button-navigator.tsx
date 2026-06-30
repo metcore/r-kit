@@ -6,18 +6,21 @@ const ButtonNavigator = ({
   onClick,
   icon,
   className,
+  disabled = false,
 }: {
   onClick: () => void;
   icon: IconNameProps;
   className?: string;
+  disabled?: boolean;
 }) => {
   return (
     <ButtonIcon
       onClick={onClick}
       icon={icon}
       color="gray"
+      disabled={disabled}
       size="xs"
-      className={cn('bg-gray-500 hover:bg-gray-600', className)}
+      className={cn(className)}
     />
   );
 };

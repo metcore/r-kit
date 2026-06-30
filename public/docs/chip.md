@@ -76,7 +76,7 @@ Gunakan `reorderable` untuk mengaktifkan drag and drop sederhana pada opsi.
 | value       | string \| number            | -       | Nilai chip               |
 | selected    | boolean                     | false   | Status selected          |
 | disabled    | boolean                     | false   | Nonaktifkan chip         |
-| color       | ColorVariantType            | primary | Warna chip               |
+| color       | BaseColor            | primary | Warna chip               |
 | size        | sm \| md \| lg              | md      | Ukuran chip              |
 | block       | boolean                     | false   | Membuat chip lebar penuh |
 | dismissible | boolean                     | false   | Tampilkan tombol hapus   |

@@ -136,7 +136,7 @@ export const SwitchPage = () => {
             code={defaultHorizontalExample}
           >
             <div className="flex flex-row gap-8">
-              <Switch label="Default" />
+              <Switch label="Default" tooltip="tes" />
               <Switch checked label="Active" />
               <Switch disabled label="Disable Default" />
               <Switch checked disabled label="Disabled Active" />
@@ -158,8 +158,6 @@ export const SwitchPage = () => {
               />
             </div>
           </MainSection>
-          {/* direction end */}
-          {/* revers direction */}
           <MainSection
             title="Switches Horizontal Reverse"
             code={horizontalReverseExample}
