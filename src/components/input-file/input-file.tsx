@@ -163,6 +163,7 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
           audioPlayerProps={audioPlayerProps}
           videoPlayerProps={videoPlayerProps}
           onDownload={onDownload}
+          hideDownloadButton={props.hideDownloadButton}
         />
       </div>
     );

@@ -79,7 +79,10 @@ export default function EventBar({
       <button
         type="button"
         onClick={() => onClick?.(segment)}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={(e) => {
+          setPos({ x: e.clientX, y: e.clientY });
+          setHovered(true);
+        }}
         onMouseLeave={() => setHovered(false)}
         onMouseMove={handleMouseMove}
         className={clsx(

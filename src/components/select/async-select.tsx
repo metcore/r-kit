@@ -144,7 +144,7 @@ export function useAsyncOptions<Extra extends object = object>({
 
     const delay = search === '' ? 0 : debounceMs;
     const timer = setTimeout(() => {
-      void fetchPage(0, search, false);
+      void fetchPage(1, search, false);
     }, delay);
 
     return () => clearTimeout(timer);
@@ -159,7 +159,7 @@ export function useAsyncOptions<Extra extends object = object>({
 
   const reload = useCallback(() => {
     cacheRef.current.delete(search);
-    void fetchPage(0, search, false);
+    void fetchPage(1, search, false);
   }, [search, fetchPage]);
 
   const reset = useCallback(() => {

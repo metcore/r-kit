@@ -40,6 +40,7 @@ export interface FileViewProps extends Omit<
   onExpand?: (name: string) => void;
   name?: string;
   className?: string;
+  hideDownloadButton?: boolean;
 }
 
 type FileIconName =
@@ -192,6 +193,7 @@ export const FileView: FC<FileViewProps> = ({
   onExpand,
   className,
   name,
+  hideDownloadButton,
 }) => {
   const [preview, setPreview] = useState<PreviewState>({
     isOpen: false,
@@ -267,6 +269,7 @@ export const FileView: FC<FileViewProps> = ({
     }
   };
 
+  // prettier-ignore
   const rootProps = {
     'role': interactive ? ('button' as const) : undefined,
     'tabIndex': interactive ? 0 : undefined,
@@ -350,6 +353,7 @@ export const FileView: FC<FileViewProps> = ({
           src={resolvedUrl}
           name={fileName}
           type={mimeType}
+          hideDownloadButton={hideDownloadButton}
         />
       ) : null}
     </div>

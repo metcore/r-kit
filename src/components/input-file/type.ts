@@ -45,6 +45,7 @@ export interface InputFileProps extends PlayerProps {
   onClear?: () => void;
   selectedFilesClassName?: string;
   previewMode?: PreviewMode;
+  hideDownloadButton?: boolean;
 }
 
 export interface PreviewItemProps extends PlayerProps {
@@ -59,6 +60,7 @@ export interface PreviewItemProps extends PlayerProps {
   onDownload?: (data?: { src?: string; name?: string }) => void;
   progress?: number;
   mode?: PreviewMode;
+  hideDownloadButton?: boolean;
 }
 
 export type PreviewMode = 'detailed' | 'compact';
@@ -100,16 +102,9 @@ export interface InputFilePreviewProps
   className?: string;
   mode?: PreviewMode;
   title?: string;
-  /**
-   * Called when the user scrolls near the bottom of the list. Providing this
-   * enables infinite scroll: the list becomes a bounded, scrollable area and
-   * more items are requested lazily instead of all at once.
-   */
   onLoadMore?: () => void;
-  /** Whether there are more items to load. */
   hasMore?: boolean;
-  /** Whether a load-more request is currently in flight. */
   isLoadingMore?: boolean;
-  /** Max height of the scroll area when infinite scroll is enabled. @default 320 */
   maxHeight?: number | string;
+  hideDownloadButton?: boolean;
 }

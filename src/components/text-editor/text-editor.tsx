@@ -41,28 +41,76 @@ export function TextEditor({
   toolbar,
   editor: editorProps,
   onDownload,
+  description,
+  errorMessages,
+  disabled,
+  hint,
+  label,
+  onChange,
+  placeholder,
+  required,
+  value,
+  size,
+  height = 350,
+  plugins,
 }: TextEditorProps) {
   // props
   const {
-    disabled = false,
+    disabled: uiDisabled = false,
     className,
-    size,
+    size: uiSize,
     toolbarClassName,
     dragHandleClassName,
     textEditorClassName,
   } = ui ?? {};
-  const { value, onChange, placeholder, dragHandleProps, attachmentField } =
-    editorProps ?? {};
-  const { description, errorMessages, required, hint, label } = field ?? {};
+
   const {
-    formatting = true,
-    alignment = true,
-    list = true,
-    insert = true,
-    table = true,
-    indent = true,
-    advance = true,
+    value: editorValue,
+    onChange: editorOnChange,
+    placeholder: editorPlaceholder,
+    dragHandleProps,
+    attachmentField,
+  } = editorProps ?? {};
+
+  const {
+    description: fieldDescription,
+    errorMessages: fieldErrorMessages,
+    required: fieldRequired,
+    hint: fieldHint,
+    label: fieldLabel,
+  } = field ?? {};
+
+  const {
+    formatting: toolbarFormatting,
+    alignment: toolbarAlignment,
+    list: toolbarList,
+    insert: toolbarInsert,
+    table: toolbarTable,
+    indent: toolbarIndent,
+    advance: toolbarAdvance,
   } = toolbar ?? {};
+
+  // resolved props
+  const resolvedLabel = label ?? fieldLabel;
+  const resolvedDescription = description ?? fieldDescription;
+  const resolvedErrorMessages = errorMessages ?? fieldErrorMessages;
+  const resolvedHint = hint ?? fieldHint;
+  const resolvedRequired = required ?? fieldRequired;
+  const resolvedValue = value ?? editorValue;
+  const resolvedOnChange = onChange ?? editorOnChange;
+  const resolvedPlaceholder = placeholder ?? editorPlaceholder;
+  const resolvedSize = size ?? uiSize;
+  const resolvedDisabled = disabled ?? uiDisabled;
+
+  const resolvedToolbar = {
+    formatting: plugins?.showToolbar?.formatting ?? toolbarFormatting ?? true,
+    alignment: plugins?.showToolbar?.alignment ?? toolbarAlignment ?? true,
+    list: plugins?.showToolbar?.list ?? toolbarList ?? true,
+    insert: plugins?.showToolbar?.insert ?? toolbarInsert ?? true,
+    table: plugins?.showToolbar?.table ?? toolbarTable ?? true,
+    indent: plugins?.showToolbar?.indent ?? toolbarIndent ?? true,
+    advance: plugins?.showToolbar?.advance ?? toolbarAdvance ?? false,
+  };
 
   // local state
   const [isHtmlMode, setIsHtmlMode] = useState(false);
@@ -71,7 +119,7 @@ export function TextEditor({
   // main editor
   const editor = useEditor({
     content: undefined,
-    editable: !disabled,
+    editable: !resolvedDisabled,
     immediatelyRender: true,
     extensions: [
       StarterKit.configure({
@@ -120,7 +168,7 @@ export function TextEditor({
       setHtmlValue(editor.getHTML());
 
       if (!isHtmlMode) {
-        onChange?.(editor);
+        resolvedOnChange?.(editor);
       }
     },
   });
@@ -147,57 +195,74 @@ export function TextEditor({
 
   useEffect(() => {
     if (editor === null) return;
-    if (value === undefined) return;
-    if (editor.getHTML() === value) return;
+    if (resolvedValue === undefined) return;
+    if (editor.getHTML() === resolvedValue) return;
 
-    editor.commands.setContent(value);
-  }, [editor, value]);
+    editor.commands.setContent(resolvedValue);
+  }, [editor, resolvedValue]);
 
   if (editor === undefined || editor === null) return null;
 
   return (
     <FormField
-      label={label}
+      label={resolvedLabel}
       className={className}
-      description={description}
-      errorMessages={errorMessages}
-      hint={hint}
-      required={required}
-      size={size}
+      description={resolvedDescription}
+      errorMessages={resolvedErrorMessages}
+      hint={resolvedHint}
+      required={resolvedRequired}
+      size={resolvedSize}
     >
       <div
         className={clsx(
-          'relative flex w-full flex-col rounded-xl border',
-          errorMessages !== undefined ? 'border-danger-500' : 'border-gray-300'
+          'relative z-auto flex w-full flex-col rounded-xl border',
+          resolvedErrorMessages !== undefined
+            ? 'border-danger-500'
+            : 'border-gray-300'
         )}
       >
         <div
           className={clsx(
-            'sticky top-0 z-10 rounded-t-xl bg-white',
+            'sticky top-0 rounded-t-xl bg-white',
             toolbarClassName
           )}
         >
           <div className="scrollbar-hide flex flex-wrap divide-x divide-gray-300 overflow-x-auto border-b border-gray-300 *:p-2">
-            {formatting && (
-              <FormattingGroup disabled={isHtmlMode} editor={editor} />
+            {resolvedToolbar?.formatting && (
+              <FormattingGroup
+                disabled={isHtmlMode}
+                editor={editor}
+                paragrapghLabel={plugins?.inputParagraph?.labelParagraph}
+              />
             )}
             <AlignmentGroup
               disabled={isHtmlMode}
               editor={editor}
-              isAlignmentActive={alignment}
-              isListActive={list}
+              isAlignmentActive={resolvedToolbar?.alignment}
+              isListActive={resolvedToolbar?.list}
+              labelLeft={plugins?.inputAlignment?.labelLeft}
+              labelRight={plugins?.inputAlignment?.labelRight}
+              labelCenter={plugins?.inputAlignment?.labelCenter}
+              labelJustify={plugins?.inputAlignment?.labelJustify}
             />
-            {indent && <IndentGroup disabled={isHtmlMode} editor={editor} />}
-            {insert && (
+            {resolvedToolbar?.indent && (
+              <IndentGroup disabled={isHtmlMode} editor={editor} />
+            )}
+            {resolvedToolbar?.insert && (
               <InsertGroup
                 disabled={isHtmlMode}
                 editor={editor}
                 attachmentField={attachmentField}
                 onDownload={onDownload}
+                insertLinkPlaceholder={plugins?.inputLink?.placeholder}
+                insertYoutube={plugins?.inputYoutube}
+                modalImage={plugins?.inputFile}
               />
             )}
-            {table && <TableGroup disabled={isHtmlMode} editor={editor} />}
-            {advance && (
+            {resolvedToolbar?.table && (
+              <TableGroup disabled={isHtmlMode} editor={editor} />
+            )}
+            {resolvedToolbar?.advance && (
               <AdvanceGroup
                 editor={editor}
                 onModeChange={async (nextMode) => {
@@ -228,13 +293,19 @@ export function TextEditor({
           className={clsx(isHtmlMode ? 'block' : 'hidden')}
         />
         <EditorContent
-          placeholder={placeholder}
-          disabled={disabled}
+          placeholder={resolvedPlaceholder}
+          disabled={resolvedDisabled}
           editor={editor}
+          style={
+            {
+              '--editor-height': `${height}px`,
+            } as React.CSSProperties
+          }
           className={clsx(
-            '*:min-h-100 *:translate-y-1 *:px-5 *:py-2 *:outline-none',
+            '*:translate-y-1 *:px-5 *:py-2 *:outline-none',
             textEditorClassName,
-            isHtmlMode && 'hidden'
+            isHtmlMode && 'hidden',
+            resolvedDisabled && 'cursor-not-allowed opacity-50'
           )}
         />
       </div>
