@@ -127,6 +127,7 @@ export default function TextEditorPage() {
           >
             <TextEditor
               label="Description"
+              height={'fit-content'}
               value={defaultValue}
               onChange={(v) => setDefaultValue(v.getHTML())}
             />

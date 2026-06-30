@@ -298,14 +298,15 @@ export function TextEditor({
           editor={editor}
           style={
             {
-              '--editor-height': `${height}px`,
+              '--editor-height': height === 'fit-content' ? 'fit-content' : `${height}px`, //prettier-ignore
             } as React.CSSProperties
           }
           className={clsx(
             '*:translate-y-1 *:px-5 *:py-2 *:outline-none',
             textEditorClassName,
             isHtmlMode && 'hidden',
-            resolvedDisabled && 'cursor-not-allowed opacity-50'
+            resolvedDisabled && 'cursor-not-allowed opacity-50',
+            height === 'fit-content' ? '*:min-h-100' : 'overflow-auto'
           )}
         />
       </div>
