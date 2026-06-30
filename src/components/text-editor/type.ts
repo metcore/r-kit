@@ -11,7 +11,7 @@ export interface TextEditorProps {
   required?: boolean;
   errorMessages?: string | string[];
   size?: 'sm' | 'md' | 'lg';
-  height?: number;
+  height?: 'fit-content' | number;
   disabled?: boolean;
   value?: string;
   placeholder?: string;
