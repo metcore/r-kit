@@ -22,6 +22,7 @@ interface ModalPreviewProps {
     isOpen: boolean;
     isVisible: boolean;
   };
+  hideDownloadButton?: boolean;
 }
 
 const ModalPreviewAttachment = ({
@@ -34,6 +35,7 @@ const ModalPreviewAttachment = ({
   audioProps,
   videoProps,
   onDownload,
+  hideDownloadButton = false,
 }: ModalPreviewProps) => {
   const [mounted, setMounted] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -185,6 +187,7 @@ const ModalPreviewAttachment = ({
               maxZoom={MAX_ZOOM}
               minZoom={MIN_ZOOM}
               zoom={zoom}
+              hideDownloadButton={hideDownloadButton}
             />
           )}
         </div>
@@ -277,6 +280,7 @@ const ZoomController = ({
   onDownload,
   maxZoom,
   minZoom,
+  hideDownloadButton,
 }: {
   zoom: number;
   onZoomIn: () => void;
@@ -284,6 +288,7 @@ const ZoomController = ({
   onDownload: () => void;
   maxZoom: number;
   minZoom: number;
+  hideDownloadButton?: boolean;
 }) => {
   return (
     <div className="flex items-center gap-2">
@@ -300,15 +305,17 @@ const ZoomController = ({
         type="button"
       />
 
-      <Button color="secondary" onClick={onDownload} type="button">
-        <Icon name="download" />
-        <Text
-          as={'span'}
-          value={'Download'}
-          weight="medium"
-          className="text-primary-1000!"
-        />
-      </Button>
+      {hideDownloadButton === false && (
+        <Button color="secondary" onClick={onDownload} type="button">
+          <Icon name="download" />
+          <Text
+            as={'span'}
+            value={'Download'}
+            weight="medium"
+            className="text-primary-1000!"
+          />
+        </Button>
+      )}
     </div>
   );
 };

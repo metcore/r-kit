@@ -38,7 +38,7 @@ export function DropdownContent({
       <DropdownMenu.Content
         sideOffset={sideOffset}
         className={cn(
-          'shadow-dropdown flex flex-col gap-1 rounded-xl border border-gray-200 bg-white p-3',
+          'shadow-dropdown flex flex-col gap-1 rounded-xl border border-gray-200 bg-white p-2',
           className
         )}
         {...props}
@@ -58,7 +58,7 @@ export function DropdownItem({
     <DropdownMenu.Item asChild>
       <BaseButton
         className={cn(
-          'flex flex-wrap items-center gap-2 px-3 py-2 outline-0 transition-all',
+          'flex flex-wrap items-center gap-2 px-2 py-2 outline-0 transition-all',
           className
         )}
         {...props}

@@ -162,12 +162,9 @@ export interface ApiTableColumn<T extends RowLike = RowLike> {
 
 export interface RowOption<T extends RowLike = RowLike> {
   label: ReactNode;
-  /** Icon name forwarded to your `<Icon>` component. */
   icon?: string;
   onClick: (row: T, index: number) => void;
-  /** When true the item is rendered but not clickable. */
   disabled?: (row: T) => boolean;
-  /** When true the item is omitted from the menu entirely. */
   hidden?: (row: T) => boolean;
   variant?: 'default' | 'danger';
 }

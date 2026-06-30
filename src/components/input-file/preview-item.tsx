@@ -26,6 +26,7 @@ const PreviewItem = ({
   videoPlayerProps,
   onDownload,
   progress,
+  hideDownloadButton = false,
 }: PreviewItemProps) => {
   const [previewShow, setPreviewShow] = useState({
     isOpen: false,
@@ -63,7 +64,7 @@ const PreviewItem = ({
             className={clsx(
               'relative flex size-15 items-center justify-center overflow-hidden rounded-lg border bg-gray-50',
               data?.uploadStatus === 'error'
-                ? 'text-grat-200 border-1'
+                ? 'text-grat-200 border'
                 : 'border-gray-200'
             )}
           >
@@ -249,6 +250,7 @@ const PreviewItem = ({
         audioProps={audioPlayerProps}
         videoProps={videoPlayerProps}
         iframeProps={pdfViewerProps}
+        hideDownloadButton={hideDownloadButton}
       />
     </>
   );

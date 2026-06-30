@@ -1,22 +1,34 @@
 import { Editor, useEditorState } from '@tiptap/react';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../../dropdown';
 import { Icon, type IconNameProps } from '../../icons';
-import type { TextAlignValue } from '../type';
+import type { BaseInputAlignment, TextAlignValue } from '../type';
 import SelectItem from './select-item';
 import ToolbarButton from './toolbar-button';
 import ToolbarGroup from './toolbar-group';
+
+interface Alignment {
+  label?: string;
+  align: TextAlignValue;
+  icon: IconNameProps;
+}
+
+interface Props extends BaseInputAlignment {
+  editor: Editor;
+  disabled?: boolean;
+  isAlignmentActive?: boolean;
+  isListActive?: boolean;
+}
 
 export default function AlignmentGroup({
   editor,
   disabled = false,
   isAlignmentActive = true,
   isListActive = true,
-}: {
-  editor: Editor;
-  disabled?: boolean;
-  isAlignmentActive?: boolean;
-  isListActive?: boolean;
-}) {
+  labelCenter,
+  labelJustify,
+  labelLeft,
+  labelRight,
+}: Props) {
   const activeState = useEditorState({
     editor,
     selector: ({ editor }) => ({
@@ -31,11 +43,19 @@ export default function AlignmentGroup({
     }),
   });
 
-  const alignments: { align: TextAlignValue; icon: IconNameProps }[] = [
-    { align: 'left', icon: 'align-left' },
-    { align: 'center', icon: 'align-center' },
-    { align: 'justify', icon: 'align-justify' },
-    { align: 'right', icon: 'align-right' },
+  const alignments: Alignment[] = [
+    { align: 'left', icon: 'align-left', label: labelLeft },
+    {
+      align: 'center',
+      icon: 'align-center',
+      label: labelCenter,
+    },
+    {
+      align: 'justify',
+      icon: 'align-justify',
+      label: labelJustify,
+    },
+    { align: 'right', icon: 'align-right', label: labelRight },
   ];
 
   const getIcon = (state: typeof activeState) => {
@@ -67,14 +87,14 @@ export default function AlignmentGroup({
             </div>
           </DropdownTrigger>
           <DropdownContent sideOffset={3} className="z-30 p-1" align="start">
-            {alignments.map((align, index) => (
+            {alignments.map((item, index) => (
               <SelectItem
                 key={index}
-                label={align.align}
-                icon={align.icon}
-                active={activeState[align.align]}
+                label={item?.label ?? item.align}
+                icon={item.icon}
+                active={activeState[item.align]}
                 onClick={() =>
-                  editor.chain().focus().setTextAlign(align.align).run()
+                  editor.chain().focus().setTextAlign(item.align).run()
                 }
               />
             ))}
@@ -88,19 +108,19 @@ export default function AlignmentGroup({
             title="Bullet List"
             icon="dot-points"
             active={activeState.ul}
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
             disabled={
               disabled || activeState.isInYoutube || activeState.isInImage
             }
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
           />
           <ToolbarButton
             title="Numbering"
             icon="dot-number"
             active={activeState.ol}
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
             disabled={
               disabled || activeState.isInYoutube || activeState.isInImage
             }
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
           />
         </>
       )}

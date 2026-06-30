@@ -1,5 +1,6 @@
 import { Editor, useEditorState } from '@tiptap/react';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 import {
   Dropdown,
   DropdownContent,
@@ -7,14 +8,19 @@ import {
   DropdownTrigger,
 } from '../../dropdown';
 import { Icon } from '../../icons';
+import { Input } from '../../input';
 import { Text } from '../../text/text';
 import { type HeadingLevel } from '../type';
-import ToolbarButton from './toolbar-button';
-import ToolbarGroup from './toolbar-group';
-import { useEffect, useState } from 'react';
-import { Input } from '../../input';
 import ColorPickerButton from './color-picker-button';
 import SelectItem from './select-item';
+import ToolbarButton from './toolbar-button';
+import ToolbarGroup from './toolbar-group';
+
+interface Props {
+  editor: Editor;
+  disabled?: boolean;
+  paragrapghLabel?: string;
+}
 
 const headings: { level: HeadingLevel; title: string; fontSize: number }[] = [
   { level: 1, title: 'H1', fontSize: 24 },
@@ -31,10 +37,8 @@ const lineHeights: number[] = [0.5, 1, 1.5, 1.8, 2, 3, 4, 5];
 export default function FormattingGroup({
   editor,
   disabled = false,
-}: {
-  editor: Editor;
-  disabled?: boolean;
-}) {
+  paragrapghLabel,
+}: Props) {
   const [customFontSize, setCustomFontSize] = useState(16);
   const [customLineHeight, setCustomLineHeight] = useState(1.5);
 
@@ -196,7 +200,7 @@ export default function FormattingGroup({
               }}
             >
               <Text weight="medium" className="text-gray-900">
-                Paragraph
+                {paragrapghLabel ?? 'Paragraph'}
               </Text>
             </DropdownItem>
             {headings.map((head, index) => (
@@ -375,7 +379,6 @@ export default function FormattingGroup({
         />
 
         <ColorPickerButton
-          id="text-highlight"
           icon="stabilo"
           color={activeState.activeHighlight ?? '#ffffff'}
           disabled={
@@ -387,7 +390,6 @@ export default function FormattingGroup({
         />
 
         <ColorPickerButton
-          id="text-color"
           icon="letter-a"
           color={activeState.activeColor ?? '#000000'}
           disabled={

@@ -37,5 +37,7 @@ export * from './components/collor-picker';
 export * from './components/time-picker';
 export * from './components/year-picker';
 export * from './components/month-picker';
+export * from './components/day-picker';
+export * from './components/day-of-month-picker';
 export * from './types/api-response';
 export * from './components/drawing';

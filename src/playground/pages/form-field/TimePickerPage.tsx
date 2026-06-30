@@ -1,4 +1,4 @@
-import { TimePicker } from '../../../components/time-picker/time-picker';
+import { TimePicker } from '../../../clients';
 import GridWrapper from '../../components/GridWrapper';
 import MainSection from '../../components/MainSection';
 

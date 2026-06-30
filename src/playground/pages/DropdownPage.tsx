@@ -36,7 +36,16 @@ export default function DropdownPage() {
                 <Button color="primary">Primary</Button>
               </DropdownTrigger>
               <DropdownContent>
-                <DropdownItem> Action</DropdownItem>
+                <DropdownItem>
+                  <Button
+                    color="primary"
+                    variant="outline"
+                    block
+                    className="text-left"
+                  >
+                    Form
+                  </Button>
+                </DropdownItem>
                 <DropdownItem>
                   <div className="flex flex-wrap items-center gap-2">
                     <Icon name="user" />
@@ -132,7 +141,7 @@ export default function DropdownPage() {
                 </Button>
               </DropdownTrigger>
               <DropdownContent>
-                <DropdownItem> Action</DropdownItem>
+                <DropdownItem> Action </DropdownItem>
                 <DropdownItem onClick={() => alert('d')}>
                   <Icon name="user" />
                   Another Action

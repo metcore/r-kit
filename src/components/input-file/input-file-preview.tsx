@@ -18,6 +18,7 @@ export function InputFilePreview({
   hasMore = false,
   isLoadingMore = false,
   maxHeight = 320,
+  hideDownloadButton = false,
 }: InputFilePreviewProps) {
   const {
     files,
@@ -89,6 +90,7 @@ export function InputFilePreview({
                 ? (e) => setCustomName(item.id!, e.target.value)
                 : undefined
             }
+            hideDownloadButton={hideDownloadButton}
           />
         );
       })}

@@ -1,97 +1,97 @@
 import dedent from 'dedent';
-import { MonthPicker } from '../../../components/month-picker';
 import GridWrapper from '../../components/GridWrapper';
 import MainSection from '../../components/MainSection';
+import { DayOfMonthPicker } from '../../../components/day-of-month-picker/day-of-month-picker';
 
 const exampleDefault = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
+    <DayOfMonthPicker
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleMultiple = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <DayOfMonthPicker
       mode="multiple"
-      label="Month"
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleRange = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <DayOfMonthPicker
       mode="range"
-      label="Month"
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleSize = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
     <>
-      <MonthPicker tooltip="title" label="Small" size="sm" />
-      <MonthPicker tooltip="title" label="Medium" size="md" />
-      <MonthPicker tooltip="title" label="Large" size="lg" />
+      <DayOfMonthPicker tooltip="title" label="Small" size="sm" />
+      <DayOfMonthPicker tooltip="title" label="Medium" size="md" />
+      <DayOfMonthPicker tooltip="title" label="Large" size="lg" />
     </>
   )
 `);
 
 const exampleRequired = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <DayOfMonthPicker
       required
-      label="Month"
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleHint = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      hint="Select a month"
-      label="Month"
+    <DayOfMonthPicker
+      hint="Select a day"
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleTooltip = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <DayOfMonthPicker
       tooltip="Additional information"
-      label="Month"
+      label="Day of Month"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleError = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
+    <DayOfMonthPicker
+      label="Day of Month"
       errorMessages="This field is required"
       onChange={(e) => console.log(e)}
     />
@@ -99,36 +99,36 @@ const exampleError = dedent(`
 `);
 
 const exampleDisabled = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <DayOfMonthPicker
       disabled
-      label="Month"
+      label="Day of Month"
     />
   )
 `);
 
 const exampleDefaultValue = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
     <>
-      <MonthPicker
+      <DayOfMonthPicker
         label="Single"
-        defaultValue={[3]}
+        defaultValue={[15]}
         onChange={(e) => console.log(e)}
       />
-      <MonthPicker
+      <DayOfMonthPicker
         mode="range"
         label="Range"
-        defaultValue={{ startDate: 2, endDate: 6 }}
+        defaultValue={{ startDate: 1, endDate: 15 }}
         onChange={(e) => console.log(e)}
       />
-      <MonthPicker
+      <DayOfMonthPicker
         mode="multiple"
         label="Multiple"
-        defaultValue={[1, 4, 7, 10]}
+        defaultValue={[1, 8, 15, 22]}
         onChange={(e) => console.log(e)}
       />
     </>
@@ -136,11 +136,11 @@ const exampleDefaultValue = dedent(`
 `);
 
 const exampleCustomLabel = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { DayOfMonthPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
+    <DayOfMonthPicker
+      label="Day of Month"
       cancelLabel="Cancel"
       confirmLabel="Apply"
       onChange={(e) => console.log(e)}
@@ -148,95 +148,98 @@ const exampleCustomLabel = dedent(`
   )
 `);
 
-export default function MonthPickerPage() {
+export default function DayOfMonthPickerPage() {
   return (
     <>
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
-          <MonthPicker label="Month" onChange={(e) => console.log(e)} />
+          <DayOfMonthPicker
+            label="Day of Month"
+            onChange={(e) => console.log(e)}
+          />
         </MainSection>
 
         <MainSection title="Multiple" code={exampleMultiple}>
-          <MonthPicker
+          <DayOfMonthPicker
             mode="multiple"
-            label="Month"
+            label="Day of Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Range" code={exampleRange}>
-          <MonthPicker
+          <DayOfMonthPicker
             mode="range"
-            label="Month"
+            label="Day of Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Size" code={exampleSize}>
-          <MonthPicker tooltip="title" label="Small" size="sm" />
-          <MonthPicker tooltip="title" label="Medium" size="md" />
-          <MonthPicker tooltip="title" label="Large" size="lg" />
+          <DayOfMonthPicker tooltip="title" label="Small" size="sm" />
+          <DayOfMonthPicker tooltip="title" label="Medium" size="md" />
+          <DayOfMonthPicker tooltip="title" label="Large" size="lg" />
         </MainSection>
 
         <MainSection title="Required" code={exampleRequired}>
-          <MonthPicker
+          <DayOfMonthPicker
             required
-            label="Month"
+            label="Day of Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Hint" code={exampleHint}>
-          <MonthPicker
-            hint="Select a month"
-            label="Month"
+          <DayOfMonthPicker
+            hint="Select a day"
+            label="Day of Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Tooltip" code={exampleTooltip}>
-          <MonthPicker
+          <DayOfMonthPicker
             tooltip="Additional information"
-            label="Month"
+            label="Day of Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Error" code={exampleError}>
-          <MonthPicker
-            label="Month"
+          <DayOfMonthPicker
+            label="Day of Month"
             errorMessages="This field is required"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Disabled" code={exampleDisabled}>
-          <MonthPicker disabled label="Month" />
+          <DayOfMonthPicker disabled label="Day of Month" />
         </MainSection>
 
         <MainSection title="Default Value" code={exampleDefaultValue}>
-          <MonthPicker
+          <DayOfMonthPicker
             label="Single"
-            defaultValue={[3]}
+            defaultValue={[15]}
             onChange={(e) => console.log(e)}
           />
-          <MonthPicker
+          <DayOfMonthPicker
             mode="range"
             label="Range"
-            defaultValue={{ startDate: 2, endDate: 6 }}
+            defaultValue={{ startDate: 1, endDate: 15 }}
             onChange={(e) => console.log(e)}
           />
-          <MonthPicker
+          <DayOfMonthPicker
             mode="multiple"
             label="Multiple"
-            defaultValue={[1, 4, 7, 10]}
+            defaultValue={[1, 8, 15, 22]}
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Custom Label" code={exampleCustomLabel}>
-          <MonthPicker
-            label="Month"
+          <DayOfMonthPicker
+            label="Day of Month"
             cancelLabel="Cancel"
             confirmLabel="Apply"
             onChange={(e) => console.log(e)}

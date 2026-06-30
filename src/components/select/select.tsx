@@ -447,7 +447,7 @@ export function Select<Extra extends object = object>({
       return (
         <span
           className={cn(
-            'text-gray-800',
+            'text-gray-500',
             isDisabledMode && value != null && 'text-gray-600',
             isDisabledMode && 'text-gray-500'
           )}
@@ -494,7 +494,7 @@ export function Select<Extra extends object = object>({
         <Text
           variant={getFontSize(size, multiple)}
           weight="semibold"
-          className={cn('text-gray-900', isDisabledMode && 'text-gray-600')}
+          className={cn('text-gray-800', isDisabledMode && 'text-gray-600')}
         >
           {selected.label}
         </Text>

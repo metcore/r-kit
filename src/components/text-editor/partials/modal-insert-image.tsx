@@ -10,15 +10,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../tabs';
 import { Text } from '../../text/text';
 import objectfitOptions from '../constants/object-fit-options';
 import targetOptions from '../constants/target-link-options';
-import type { AttachmentField, ImageForm } from '../type';
+import type { AttachmentField, BaseInputFile, ImageForm } from '../type';
 
-interface Props {
+interface Props extends BaseInputFile {
   isOpen: boolean;
   onClose: (open: boolean) => void;
   onSubmit: (form: ImageForm | null) => void;
   initialValues?: ImageForm | null;
-  attachmentField?: AttachmentField;
   onDownload?: (data: { src?: string; name?: string }) => void;
+
+  /**
+   * @deprecated Use top-level `upload` instead
+   */
+  attachmentField?: AttachmentField;
 }
 
 const createDefaultImageForm = (): ImageForm => ({
@@ -37,6 +41,11 @@ export default function ModalInsertImage({
   onClose,
   onSubmit,
   initialValues,
+  imageDetail,
+  link,
+  modal,
+  upload,
+  onDownload,
   attachmentField = {
     label: 'Send File To Server',
     accept: 'jpg, png, webp, jpeg',
@@ -54,8 +63,13 @@ export default function ModalInsertImage({
       };
     },
   },
-  onDownload,
 }: Props) {
+  const resolvedUpladLabel = upload?.label ?? attachmentField.label;
+  const resolvedAccept = upload?.config?.accept ?? attachmentField.accept;
+  const resolvedMaxSize = upload?.config?.maxSize ?? attachmentField.maxSize;
+  const resolvedHint = upload?.hint ?? attachmentField.hint;
+  const resolvedUploadConfig = upload?.config ?? attachmentField?.uploadConfig;
+
   const [currentTabImage, setCurrentTabImage] = useState('0');
   const [uploadInputKey, setUploadInputKey] = useState(0);
   const [uploadFiles, setUploadFiles] = useState<FileItem[]>([]);
@@ -104,6 +118,10 @@ export default function ModalInsertImage({
     return Object.keys(newErrors).length === 0;
   };
 
+  const isValidValue = (value: string | null | undefined) => {
+    return value !== null && value !== undefined && value !== '';
+  };
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -124,7 +142,7 @@ export default function ModalInsertImage({
     <Modal isOpen={isOpen} onClose={() => onClose(false)} closable={false}>
       <ModalHeader className="flex-row! items-center justify-between border-b border-gray-200">
         <Text variant="t1" weight="medium" className="mb-0! text-gray-900">
-          Image Properties
+          {modal?.title ?? 'Image Properties'}
         </Text>
         <Button
           size={'xs'}
@@ -140,7 +158,12 @@ export default function ModalInsertImage({
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          if (!validate()) return;
+          if (!validate()) {
+            if (isValidValue(errors?.altText) || isValidValue(errors?.source)) {
+              setCurrentTabImage('0');
+            }
+            return;
+          }
 
           onSubmit(imageForm);
           onClose(false);
@@ -157,15 +180,20 @@ export default function ModalInsertImage({
             id="modal-insert-image-tabs"
           >
             <TabsList className="w-full">
-              <TabsTrigger value="0">Image Detail</TabsTrigger>
-              <TabsTrigger value="1">Link</TabsTrigger>
-              <TabsTrigger value="2">Upload</TabsTrigger>
+              <TabsTrigger value="0">
+                {imageDetail?.label ?? 'Image Detail'}
+              </TabsTrigger>
+              <TabsTrigger value="1">{link?.label ?? 'Link'}</TabsTrigger>
+              <TabsTrigger value="2">{upload?.label ?? 'Upload'}</TabsTrigger>
             </TabsList>
             <TabsContent value="0" className="space-y-3">
               <Input
                 required
-                label="URI"
-                placeholder="e.g https://www.herca.id/xxxx"
+                label={imageDetail?.uri?.label ?? 'Image Properties'}
+                placeholder={
+                  imageDetail?.uri?.placeholder ??
+                  'e.g https://www.herca.id/xxxx'
+                }
                 className="w-full"
                 errorMessages={errors.source}
                 value={imageForm?.image?.source}
@@ -185,8 +213,10 @@ export default function ModalInsertImage({
               />
               <Input
                 required
-                label="Image Alt Text"
-                placeholder="Image Alternative Text"
+                label={imageDetail?.altText?.label ?? 'Image Alt Text'}
+                placeholder={
+                  imageDetail?.altText?.placeholder ?? 'Image Alternative Text'
+                }
                 className="w-full"
                 value={imageForm?.image?.altText}
                 errorMessages={errors.altText}
@@ -206,9 +236,9 @@ export default function ModalInsertImage({
               />
               <div className="flex items-center gap-3 *:flex-1">
                 <Input
-                  label="Width"
+                  label={imageDetail?.width?.label ?? 'Width'}
                   type="number"
-                  placeholder="0"
+                  placeholder={imageDetail?.width?.placeholder ?? '0'}
                   rightAddon={<Text>px</Text>}
                   value={imageForm?.image?.width}
                   onChange={(e) =>
@@ -226,9 +256,9 @@ export default function ModalInsertImage({
                   }
                 />
                 <Input
-                  label="Height"
+                  label={imageDetail?.height?.label ?? 'Height'}
                   type="number"
-                  placeholder="0"
+                  placeholder={imageDetail?.height?.placeholder ?? '0'}
                   value={imageForm?.image?.height}
                   rightAddon={<Text>px</Text>}
                   onChange={(e) =>
@@ -246,8 +276,11 @@ export default function ModalInsertImage({
                   }
                 />
                 <Select
-                  label="Object Fit"
+                  label={imageDetail?.objectFit?.label ?? 'Object Fit'}
                   options={objectfitOptions}
+                  placeholder={
+                    imageDetail?.objectFit?.placeholder ?? 'Select Object Fit'
+                  }
                   value={imageForm?.image?.objectFit}
                   onChange={(value) =>
                     setImageForm((prev) => {
@@ -288,8 +321,8 @@ export default function ModalInsertImage({
             </TabsContent>
             <TabsContent value="1" className="space-y-3">
               <Input
-                label="URL"
-                placeholder="https://google.com"
+                label={link?.url?.label ?? 'URL'}
+                placeholder={link?.url?.placeholder ?? 'https://google.com'}
                 value={imageForm?.url?.source ?? ''}
                 onChange={(e) =>
                   setImageForm((prev) => {
@@ -305,8 +338,10 @@ export default function ModalInsertImage({
                 }
               />
               <Select
-                label="Target"
-                placeholder="Select target URL..."
+                label={link?.target?.label ?? 'Target'}
+                placeholder={
+                  link?.target?.placeholder ?? 'Select target URL...'
+                }
                 options={targetOptions}
                 value={imageForm?.url?.target}
                 onChange={(value) =>
@@ -327,17 +362,18 @@ export default function ModalInsertImage({
             <TabsContent value="2">
               <InputFile
                 key={uploadInputKey}
-                label={attachmentField?.label}
-                accept={attachmentField?.accept}
-                hint={attachmentField?.hint}
-                maxSize={(attachmentField?.maxSize ?? 0) * 1024 * 1024}
+                label={resolvedUpladLabel}
+                accept={resolvedAccept}
+                hint={resolvedHint}
+                buttonLabel={upload?.labelButtonChooseFile ?? 'Choose File'}
+                maxSize={(resolvedMaxSize ?? 0) * 1024 * 1024}
                 variant={attachmentField?.variant ?? 'medium'}
-                uploadConfig={attachmentField?.uploadConfig}
+                value={uploadFiles}
+                uploadConfig={resolvedUploadConfig}
                 onChange={(files) => {
                   setUploadFiles(files);
                   attachmentField?.onChange?.(files);
                 }}
-                value={uploadFiles}
                 onUploadSuccess={(results) => {
                   const { url, altText } =
                     attachmentField.extractUploadResult(results);
@@ -372,9 +408,9 @@ export default function ModalInsertImage({
               resetFormState();
             }}
           >
-            Cancel
+            {modal?.labelButtonCancel ?? 'Cancel'}
           </Button>
-          <Button color="primary">Submit</Button>
+          <Button color="primary">{modal?.labelButtonSave ?? 'Save'}</Button>
         </ModalFooter>
       </form>
     </Modal>

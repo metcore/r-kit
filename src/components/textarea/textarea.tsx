@@ -36,7 +36,7 @@ function Textarea({
         required={false}
         id={props?.id ?? generatedId}
         className={cn(
-          'aria-invalid:ring-danger-500 aria-invalid:border-danger-500 focus-visible:ring-primary-300 flex field-sizing-content min-h-30 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-medium text-gray-800 shadow-xs transition-[color,box-shadow] outline-none placeholder:text-gray-500 focus-visible:border-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:border-gray-400 disabled:bg-gray-300 md:text-sm',
+          'aria-invalid:ring-danger-500 aria-invalid:border-danger-500 focus-visible:ring-primary-300 flex field-sizing-content min-h-30 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-medium text-gray-800 outline-none placeholder:text-gray-500 focus-visible:border-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:border-gray-400 disabled:bg-gray-300 md:text-sm',
           hasError ? 'ring-danger-500 border-danger-500' : '',
           className
         )}

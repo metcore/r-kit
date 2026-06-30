@@ -1,6 +1,6 @@
 import { Chip } from '../chip';
 import { type InputSize } from '../input';
-import { generateMonthOptions } from './helpers';
+import { dayOptions } from '../base/helpers/date';
 import {
   PickerBase,
   PickerFooter,
@@ -11,14 +11,14 @@ import {
   type PickerValue,
 } from '../base/components/picker-base';
 
-type MonthPickerMode = PickerMode;
-type MonthPickerValue = PickerValue;
+type DayOfMonthPickerMode = PickerMode;
+type DayOfMonthPickerValue = PickerValue;
 
-interface MonthPickerProps {
-  mode?: MonthPickerMode;
-  defaultValue?: MonthPickerValue;
-  onChange?: (value: MonthPickerValue) => void;
-  onApply?: (value: MonthPickerValue) => void;
+interface DayOfMonthPickerProps {
+  mode?: DayOfMonthPickerMode;
+  defaultValue?: DayOfMonthPickerValue;
+  onChange?: (value: DayOfMonthPickerValue) => void;
+  onApply?: (value: DayOfMonthPickerValue) => void;
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -34,13 +34,13 @@ interface MonthPickerProps {
   title?: string;
 }
 
-const MONTH_OPTIONS = generateMonthOptions();
+const DAY_OPTIONS = dayOptions();
 
-const MONTH_LABEL: Record<number, string> = Object.fromEntries(
-  MONTH_OPTIONS.map(({ value, label }) => [value, label])
+const DAY_LABEL: Record<number, string> = Object.fromEntries(
+  DAY_OPTIONS.map(({ value, label }) => [value, label])
 );
 
-export const MonthPicker: React.FC<MonthPickerProps> = ({
+export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
   mode = 'single',
   defaultValue,
   onChange,
@@ -75,7 +75,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
     committedSingle,
     committedRange,
     committedMultiple,
-    (v) => MONTH_LABEL[v] ?? ''
+    (v) => DAY_LABEL[v] ?? ''
   );
 
   return (
@@ -92,19 +92,22 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
       hint={hint}
       errorMessages={errorMessages}
       tooltip={tooltip}
-      renderHeader={title == null ? <PickerHeader title="Month" /> : undefined}
+      renderHeader={title == null ? <PickerHeader title="Day" /> : undefined}
       renderOptions={
-        <div className="grid grid-cols-3 gap-2">
-          {MONTH_OPTIONS.map(({ value: monthVal, label: monthLabel }) => (
-            <Chip
-              key={monthVal}
-              onClick={() => handleSelect(monthVal)}
-              className="px-6"
-              selected={isSelected(monthVal)}
-            >
-              {monthLabel}
-            </Chip>
-          ))}
+        <div className="flex max-h-64 flex-col gap-2 overflow-y-auto">
+          {Array.from({ length: 31 }, (_, index) => {
+            const dayVal = index + 1;
+            return (
+              <Chip
+                key={dayVal}
+                onClick={() => handleSelect(dayVal)}
+                className="px-6"
+                selected={isSelected(dayVal)}
+              >
+                {dayVal}
+              </Chip>
+            );
+          })}
         </div>
       }
       renderFooter={
