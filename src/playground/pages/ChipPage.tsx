@@ -90,6 +90,7 @@ export default function ChipPage() {
               <Chip color="purple">Purple</Chip>
               <Chip color="gray">Gray</Chip>
               <Chip color="warning">Warning</Chip>
+              <Chip color="secondary">Secondary</Chip>
             </div>
           </CardBody>
         </Card>

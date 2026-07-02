@@ -14,7 +14,7 @@ import {
 import { ButtonIcon } from '../button-icon';
 import { Icon, type IconNameProps } from '../icons';
 import { Text } from '../text';
-import type { ButtonColor } from '../button';
+import type { BaseColor } from '../base/type/base-color';
 
 export type { AlertVariantProps };
 
@@ -29,6 +29,7 @@ export interface AlertProps
   description?: ReactNode;
   dismissible?: boolean;
   onDismiss?: () => void;
+  color?: BaseColor;
 }
 
 const ASSERTIVE_COLORS: ReadonlySet<AlertColor> = new Set([
@@ -101,7 +102,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
           icon="times"
           variant="tertiary"
           size="sm"
-          color={color as ButtonColor}
+          color={color as BaseColor}
           onClick={handleDismiss}
         />
       ) : null}

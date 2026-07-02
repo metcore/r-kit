@@ -23,6 +23,21 @@ import {
 } from './url-state';
 import { appendQuery } from './utils';
 
+function cancellableSleep(ms: number, signal: AbortSignal): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    if (signal.aborted) {
+      reject(new DOMException('Aborted', 'AbortError'));
+      return;
+    }
+    const timer = setTimeout(resolve, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(new DOMException('Aborted', 'AbortError'));
+    };
+    signal.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
 export function useApiTable<
   T extends RowLike = RowLike,
   F extends Record<keyof F, string> = Filters,
@@ -37,13 +52,18 @@ export function useApiTable<
     dataPath,
     totalPath,
     totalHeader,
+    enabled = true,
+    keepPreviousData = true,
+    retry = 0,
+    retryDelay = 500,
   } = cfg;
 
-  // Filter keys + URL-sync config are fixed for the lifetime of the hook.
+  const maxRetries =
+    typeof retry === 'boolean' ? (retry ? 3 : 0) : Math.max(0, retry);
+
   const [filterKeys] = useState(() => Object.keys(cfg.defaultFilters ?? {}));
   const [urlSync] = useState(() => normalizeUrlSync(cfg.urlSync));
 
-  // Seed initial state from the URL when sync is on, so the first fetch matches the link.
   const [initial] = useState<TableUrlState>(() =>
     urlSync.enabled
       ? readTableUrlState(urlSync, { pageSize: defaultPageSize, filterKeys })
@@ -68,7 +88,7 @@ export function useApiTable<
 
   const [data, setData] = useState<T[]>([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(enabled);
   const [error, setError] = useState<Error | null>(null);
   const [lastUrl, setLastUrl] = useState('');
 
@@ -77,7 +97,6 @@ export function useApiTable<
     cfgRef.current = cfg;
   });
 
-  // Debounce search inside the setter so URL/back-forward updates never reset the page.
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(
     () => () => {
@@ -122,7 +141,7 @@ export function useApiTable<
     setPage(1);
   }, []);
 
-  const refetch = useCallback(() => setReloadToken((token) => token + 1), []);
+  const refetch = useCallback(() => setReloadToken((n) => n + 1), []);
 
   useEffect(() => {
     if (!urlSync.enabled) return;
@@ -142,7 +161,7 @@ export function useApiTable<
   ]);
 
   useEffect(() => {
-    const subscribe = urlSync.adapter.subscribe;
+    const { subscribe } = urlSync.adapter;
     if (!urlSync.enabled || subscribe == null) return;
     return subscribe(() => {
       const next = readTableUrlState(urlSync, {
@@ -162,11 +181,22 @@ export function useApiTable<
   const extraKey = JSON.stringify(extraParams ?? {});
 
   useEffect(() => {
+    if (!enabled) {
+      setIsFetching(false);
+      return;
+    }
+
     const c = cfgRef.current;
     const controller = new AbortController();
     let active = true;
-    setLoading(true);
+
+    setIsFetching(true);
     setError(null);
+
+    if (!keepPreviousData) {
+      setData([]);
+      setTotal(0);
+    }
 
     const offset = (page - 1) * pageSize;
     const ctx: BuildUrlContext = {
@@ -182,6 +212,7 @@ export function useApiTable<
 
     let requestUrl: string;
     let requestParams: QueryParams;
+
     if (typeof c.buildUrl === 'function') {
       requestUrl = c.buildUrl(ctx);
       requestParams = {};
@@ -189,18 +220,25 @@ export function useApiTable<
       requestUrl = url;
       const p = c.params ?? {};
       const qp: QueryParams = {};
+
       if (pageMode === 'offset') qp[p.offset ?? 'offset'] = offset;
       else qp[p.page ?? 'page'] = page;
+
       qp[p.pageSize ?? 'limit'] = pageSize;
+
       if (debouncedSearch !== '') qp[p.search ?? 'search'] = debouncedSearch;
+
       if (sort.by != null && sort.order != null) {
         qp[p.sortBy ?? 'sortBy'] = sort.by;
         qp[p.sortOrder ?? 'order'] = sort.order;
       }
+
       Object.assign(qp, c.extraParams ?? {});
+
       for (const [fk, fv] of Object.entries(filters)) {
         if (fv !== '') qp[fk] = fv;
       }
+
       requestParams =
         c.transformParams != null ? c.transformParams(qp, ctx) : qp;
     }
@@ -215,7 +253,7 @@ export function useApiTable<
         ? createAxiosAdapter(c.axiosInstance)
         : createFetchAdapter(c.fetcher));
 
-    const run = async (): Promise<void> => {
+    const run = async (attempt: number): Promise<void> => {
       try {
         const res = await adapter({
           url: requestUrl,
@@ -223,34 +261,55 @@ export function useApiTable<
           headers: c.headers,
           signal: controller.signal,
         });
+
         if (!active) return;
+
         const parsed = parseResponse<T>(res, c, {
           dataPath,
           totalPath,
           totalHeader,
         });
+
         setData(parsed.rows);
         setTotal(parsed.total);
+        setIsFetching(false);
+
         const pages = Math.max(1, Math.ceil(parsed.total / pageSize));
         setPage((prev) => (prev > pages ? pages : prev));
+
+        c.onSuccess?.(parsed.rows, parsed.total);
       } catch (err: unknown) {
         if (isAbortError(err) || !active) return;
-        setData([]);
-        setTotal(0);
-        setError(err instanceof Error ? err : new Error(String(err)));
-      } finally {
-        if (active) setLoading(false);
+
+        if (attempt < maxRetries) {
+          const delay = retryDelay * Math.pow(2, attempt);
+          try {
+            await cancellableSleep(delay, controller.signal);
+          } catch {
+            return;
+          }
+          if (!active) return;
+          return run(attempt + 1);
+        }
+
+        if (!keepPreviousData) {
+          setData([]);
+          setTotal(0);
+        }
+
+        const finalError = err instanceof Error ? err : new Error(String(err));
+        setError(finalError);
+        setIsFetching(false);
+        c.onError?.(finalError);
       }
     };
 
-    void run();
+    void run(0);
 
     return () => {
       active = false;
       controller.abort();
     };
-    // params/extraParams tracked via serialised keys; the rest comes from cfgRef.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     url,
     page,
@@ -266,14 +325,20 @@ export function useApiTable<
     totalPath,
     totalHeader,
     reloadToken,
+    enabled,
+    keepPreviousData,
+    maxRetries,
+    retryDelay,
   ]);
 
+  const loading = isFetching && data.length === 0 && error == null;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return {
     data,
     total,
     loading,
+    isFetching,
     error,
     lastUrl,
     page,

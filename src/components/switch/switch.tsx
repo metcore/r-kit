@@ -94,6 +94,7 @@ export const Switch: React.FC<
   size = 'md',
   direction = 'horizontal',
   errorMessages,
+  tooltip,
   ...props
 }) => {
   const generatedId = useId();
@@ -110,7 +111,12 @@ export const Switch: React.FC<
   const resolvedSize = size ?? group?.size;
 
   return (
-    <FormField hint={hint} errorMessages={errorMessages} className={className}>
+    <FormField
+      hint={hint}
+      errorMessages={errorMessages}
+      className={className}
+      tooltip={tooltip}
+    >
       <div
         className={cn(
           'flex flex-col items-center gap-2',

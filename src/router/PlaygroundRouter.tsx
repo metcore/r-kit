@@ -53,6 +53,9 @@ import { SliderPage } from '../playground/pages/form-field/SliderPage';
 import { DrawingPage } from '../playground/pages/form-field/DrawingPage';
 import TimePickerpage from '../playground/pages/form-field/TimePickerPage';
 import MonthPickerPage from '../playground/pages/form-field/MonthPickerPage';
+import YearPickerPage from '../playground/pages/form-field/YearPickerPage';
+import DayPickerPage from '../playground/pages/form-field/DayPickerPage';
+import DayOfMonthPickerPage from '../playground/pages/form-field/DayOfMonthPickerPage';
 
 export default function PlaygroundRouter() {
   return (
@@ -108,6 +111,9 @@ export default function PlaygroundRouter() {
         <Route path="/alert" element={<AlertPage />} />
         <Route path="/time-picker" element={<TimePickerpage />} />
         <Route path="/month-picker" element={<MonthPickerPage />} />
+        <Route path="/year-picker" element={<YearPickerPage />} />
+        <Route path="/day-picker" element={<DayPickerPage />} />
+        <Route path="/day-of-month-picker" element={<DayOfMonthPickerPage />} />
 
         <Route path="/example/invoice" element={<InvoicePage />} />
         <Route path="/example/profile" element={<ProfilePage />} />

@@ -11,6 +11,7 @@ export const chipVariants = cva(
       },
       color: {
         primary: '',
+        secondary: '',
         success: '',
         danger: '',
         warning: '',
@@ -171,6 +172,24 @@ export const chipVariants = cva(
         state: 'disabled',
         className:
           'cursor-not-allowed border-orange-200 bg-orange-100 text-orange-300',
+      },
+      // Orange color secondary
+      {
+        color: 'secondary',
+        state: 'default',
+        className:
+          'bg-primary-1000 hover:border-primary-200 hover:text-primary-1000 border-white text-white hover:bg-white',
+      },
+      {
+        color: 'secondary',
+        state: 'selected',
+        className: 'border-primary-200 text-primary-1000 bg-white',
+      },
+      {
+        color: 'secondary',
+        state: 'disabled',
+        className:
+          'border-primary-200 text-primary-200 cursor-not-allowed bg-white',
       },
     ],
     defaultVariants: {

@@ -8,21 +8,11 @@ import { RoundedSpinner } from '../loading';
 import { BaseButton } from './base-button';
 import { useInputGroup } from '../input-group/';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip';
-
-export type ButtonColor =
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'danger'
-  | 'warning'
-  | 'info'
-  | 'orange'
-  | 'purple'
-  | 'gray';
+import type { BaseColor } from '../base/type/base-color';
 
 interface ButtonBaseProps extends ButtonVariantProps {
   active?: boolean;
-  color?: ButtonColor;
+  color?: BaseColor;
   block?: boolean;
   asChild?: boolean;
   disabled?: boolean;

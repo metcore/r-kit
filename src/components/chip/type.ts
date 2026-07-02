@@ -1,23 +1,14 @@
 import type { VariantProps } from 'class-variance-authority';
 import type { ReactNode } from 'react';
 import type { chipVariants } from './chip-variants';
+import type { BaseColor } from '../base/type/base-color';
 
 export type ChipValue = string | number;
-
-export type ColorVariantType =
-  | 'gray'
-  | 'primary'
-  | 'success'
-  | 'danger'
-  | 'warning'
-  | 'info'
-  | 'purple'
-  | 'orange';
 
 export interface ChipContextValue {
   selectedValues: ChipValue[];
   toggleSelection: (value: ChipValue) => void;
-  color?: ColorVariantType;
+  color?: BaseColor | null;
   hexColor?: string;
   size?: 'sm' | 'md' | 'lg';
   block?: boolean;
@@ -56,7 +47,7 @@ export interface ChipArrayProps {
   selected?: ChipSelectedProps;
   onSelect?: (selected: ChipValue[]) => void;
   direction?: 'horizontal' | 'vertical';
-  color?: ColorVariantType;
+  color?: BaseColor | null;
   hexColor?: string;
   multiple?: boolean;
   scrollable?: boolean;

@@ -1,97 +1,122 @@
 import dedent from 'dedent';
-import { MonthPicker } from '../../../components/month-picker';
+import { YearPicker } from '../../../components/year-picker';
 import GridWrapper from '../../components/GridWrapper';
 import MainSection from '../../components/MainSection';
 
 const exampleDefault = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
+    <YearPicker
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleMultiple = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <YearPicker
       mode="multiple"
-      label="Month"
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleRange = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <YearPicker
       mode="range"
-      label="Month"
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
-const exampleSize = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+const exampleMinMax = dedent(`
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
     <>
-      <MonthPicker tooltip="title" label="Small" size="sm" />
-      <MonthPicker tooltip="title" label="Medium" size="md" />
-      <MonthPicker tooltip="title" label="Large" size="lg" />
+      <YearPicker
+        label="Min Year"
+        minYear={2020}
+        onChange={(e) => console.log(e)}
+      />
+      <YearPicker
+        label="Max Year"
+        maxYear={2026}
+        onChange={(e) => console.log(e)}
+      />
+      <YearPicker
+        label="Min & Max Year"
+        minYear={2020}
+        maxYear={2026}
+        onChange={(e) => console.log(e)}
+      />
+    </>
+  )
+`);
+
+const exampleSize = dedent(`
+  import { YearPicker } from '@herca/r-kit/clients';
+
+  return (
+    <>
+      <YearPicker tooltip="title" label="Small" size="sm" />
+      <YearPicker tooltip="title" label="Medium" size="md" />
+      <YearPicker tooltip="title" label="Large" size="lg" />
     </>
   )
 `);
 
 const exampleRequired = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <YearPicker
       required
-      label="Month"
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleHint = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      hint="Select a month"
-      label="Month"
+    <YearPicker
+      hint="Select a year"
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleTooltip = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <YearPicker
       tooltip="Additional information"
-      label="Month"
+      label="Year"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
 const exampleError = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
+    <YearPicker
+      label="Year"
       errorMessages="This field is required"
       onChange={(e) => console.log(e)}
     />
@@ -99,36 +124,36 @@ const exampleError = dedent(`
 `);
 
 const exampleDisabled = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
+    <YearPicker
       disabled
-      label="Month"
+      label="Year"
     />
   )
 `);
 
 const exampleDefaultValue = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
     <>
-      <MonthPicker
+      <YearPicker
         label="Single"
-        defaultValue={[3]}
+        defaultValue={[2024]}
         onChange={(e) => console.log(e)}
       />
-      <MonthPicker
+      <YearPicker
         mode="range"
         label="Range"
-        defaultValue={{ startDate: 2, endDate: 6 }}
+        defaultValue={{ startDate: 2020, endDate: 2024 }}
         onChange={(e) => console.log(e)}
       />
-      <MonthPicker
+      <YearPicker
         mode="multiple"
         label="Multiple"
-        defaultValue={[1, 4, 7, 10]}
+        defaultValue={[2022, 2023, 2024]}
         onChange={(e) => console.log(e)}
       />
     </>
@@ -136,108 +161,121 @@ const exampleDefaultValue = dedent(`
 `);
 
 const exampleCustomLabel = dedent(`
-  import { MonthPicker } from '@herca/r-kit/clients';
+  import { YearPicker } from '@herca/r-kit/clients';
 
   return (
-    <MonthPicker
-      label="Month"
-      cancelLabel="Cancel"
+    <YearPicker
+      label="Year"
       confirmLabel="Apply"
       onChange={(e) => console.log(e)}
     />
   )
 `);
 
-export default function MonthPickerPage() {
+export default function YearPickerPage() {
   return (
     <>
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
-          <MonthPicker label="Month" onChange={(e) => console.log(e)} />
+          <YearPicker label="Year" onChange={(e) => console.log(e)} />
         </MainSection>
 
         <MainSection title="Multiple" code={exampleMultiple}>
-          <MonthPicker
+          <YearPicker
             mode="multiple"
-            label="Month"
+            label="Year"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Range" code={exampleRange}>
-          <MonthPicker
+          <YearPicker
             mode="range"
-            label="Month"
+            label="Year"
+            onChange={(e) => console.log(e)}
+          />
+        </MainSection>
+
+        <MainSection title="Min Max Year" code={exampleMinMax}>
+          <YearPicker
+            label="Min Year"
+            minYear={2020}
+            onChange={(e) => console.log(e)}
+          />
+          <YearPicker
+            label="Max Year"
+            maxYear={2026}
+            onChange={(e) => console.log(e)}
+          />
+          <YearPicker
+            label="Min & Max Year"
+            minYear={2020}
+            maxYear={2026}
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Size" code={exampleSize}>
-          <MonthPicker tooltip="title" label="Small" size="sm" />
-          <MonthPicker tooltip="title" label="Medium" size="md" />
-          <MonthPicker tooltip="title" label="Large" size="lg" />
+          <YearPicker tooltip="title" label="Small" size="sm" />
+          <YearPicker tooltip="title" label="Medium" size="md" />
+          <YearPicker tooltip="title" label="Large" size="lg" />
         </MainSection>
 
         <MainSection title="Required" code={exampleRequired}>
-          <MonthPicker
-            required
-            label="Month"
-            onChange={(e) => console.log(e)}
-          />
+          <YearPicker required label="Year" onChange={(e) => console.log(e)} />
         </MainSection>
 
         <MainSection title="Hint" code={exampleHint}>
-          <MonthPicker
-            hint="Select a month"
-            label="Month"
+          <YearPicker
+            hint="Select a year"
+            label="Year"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Tooltip" code={exampleTooltip}>
-          <MonthPicker
+          <YearPicker
             tooltip="Additional information"
-            label="Month"
+            label="Year"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Error" code={exampleError}>
-          <MonthPicker
-            label="Month"
+          <YearPicker
+            label="Year"
             errorMessages="This field is required"
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Disabled" code={exampleDisabled}>
-          <MonthPicker disabled label="Month" />
+          <YearPicker disabled label="Year" />
         </MainSection>
 
         <MainSection title="Default Value" code={exampleDefaultValue}>
-          <MonthPicker
+          <YearPicker
             label="Single"
-            defaultValue={[3]}
+            defaultValue={[2024]}
             onChange={(e) => console.log(e)}
           />
-          <MonthPicker
+          <YearPicker
             mode="range"
             label="Range"
-            defaultValue={{ startDate: 2, endDate: 6 }}
+            defaultValue={{ startDate: 2020, endDate: 2024 }}
             onChange={(e) => console.log(e)}
           />
-          <MonthPicker
+          <YearPicker
             mode="multiple"
             label="Multiple"
-            defaultValue={[1, 4, 7, 10]}
+            defaultValue={[2022, 2023, 2024]}
             onChange={(e) => console.log(e)}
           />
         </MainSection>
 
         <MainSection title="Custom Label" code={exampleCustomLabel}>
-          <MonthPicker
-            label="Month"
-            cancelLabel="Cancel"
+          <YearPicker
+            label="Year"
             confirmLabel="Apply"
             onChange={(e) => console.log(e)}
           />

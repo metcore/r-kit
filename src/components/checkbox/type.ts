@@ -1,14 +1,6 @@
+import type { BaseColor } from '../base/type/base-color';
+
 export type SizeType = 'sm' | 'md' | 'lg';
-export type ColorType =
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'danger'
-  | 'warning'
-  | 'info'
-  | 'orange'
-  | 'purple'
-  | 'gray';
 
 export type IconType = 'check' | 'minus';
 
@@ -21,7 +13,7 @@ export interface CheckboxProps {
   disabled?: boolean;
   required?: boolean;
   size?: SizeType;
-  color?: ColorType;
+  color?: BaseColor;
   icon?: IconType;
   /**
    * @deprecated Gunakan onChange
@@ -44,7 +36,7 @@ export interface CheckboxGroupProps {
   required?: boolean;
   name?: string;
   size?: SizeType;
-  color?: ColorType;
+  color?: BaseColor;
   icon?: IconType;
   className?: string;
   children?: React.ReactNode;
@@ -56,6 +48,6 @@ export interface CheckboxGroupContextValue {
   disabled?: boolean;
   name?: string;
   size?: SizeType;
-  color?: ColorType;
+  color?: BaseColor;
   icon?: 'check' | 'minus';
 }

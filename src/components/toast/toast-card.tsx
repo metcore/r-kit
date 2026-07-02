@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import { Icon } from '../icons';
 import { Text } from '../text';
 import { ToastVariants } from './toast-variants';
-import type { ColorVariant, ToastProps } from './type';
+import type { ToastProps } from './type';
 import { Button } from '../button';
+import type { BaseColor } from '../base';
 
 export default function ToastCard({
   color = 'secondary',
@@ -16,7 +17,7 @@ export default function ToastCard({
   iconSize = 20,
   variant,
 }: ToastProps) {
-  const invertColor = (color: ColorVariant) => {
+  const invertColor = (color: BaseColor) => {
     if (color === 'primary' && variant !== 'outline') return 'secondary';
     if (color === 'secondary' && variant !== 'outline') return 'primary';
 

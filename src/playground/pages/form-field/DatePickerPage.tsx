@@ -116,6 +116,7 @@ export default function DatePickerPage() {
             <div className="flex flex-col gap-3">
               <DatePicker
                 autoWidth
+                label="Label"
                 isClearable
                 format="DD-MM-YYYY"
                 value={singleValue}
