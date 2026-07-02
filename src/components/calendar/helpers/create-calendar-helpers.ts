@@ -53,7 +53,7 @@ export const createCalendarHelpers = ({
   const isDateSelected = (day: CalendarDay): boolean => {
     if (mode === 'range') return false;
     if (!value) return false;
-    return value.getTime() === day.fullDate.getTime();
+    return isSameDay(value, day.fullDate);
   };
 
   /**
