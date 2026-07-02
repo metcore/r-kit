@@ -139,6 +139,7 @@ export default function DatePickerPage() {
                 format="DD MMM YYYY"
                 value={singleMonthNameValue}
                 onChange={setSingleMonthNameValue}
+                isClearable={true}
               />
               <p className="text-xs text-gray-500">
                 Selected:{' '}

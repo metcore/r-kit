@@ -14,3 +14,4 @@ export * from './components/breadcrumbs';
 export * from './components/timeline';
 export * from './components/list';
 export * from './components/base';
+export * from './components/devider';

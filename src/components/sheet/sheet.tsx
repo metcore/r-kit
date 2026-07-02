@@ -200,7 +200,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-header"
-      className={cn('flex flex-col gap-1.5 p-4', className)}
+      className={cn('flex shrink-0 flex-col gap-1.5 p-4', className)}
       {...props}
     />
   );
@@ -210,7 +210,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-footer"
-      className={cn('mt-auto flex flex-col gap-2 p-4', className)}
+      className={cn('mt-auto flex shrink-0 flex-col gap-2 p-4', className)}
       {...props}
     />
   );
@@ -242,15 +242,14 @@ function SheetDescription({
   );
 }
 
-// SheetBody adalah container konten biasa — bukan Dialog.Description.
-// Dialog.Description merender <p>, jadi menaruh <div>/<Select>/<Button> di
-// dalamnya = HTML invalid (p tidak boleh membungkus block element) dan
-// browser akan memecah strukturnya.
 function SheetBody({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sheet-body"
-      className={cn('flex flex-col gap-1.5 p-4', className)}
+      className={cn(
+        'flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto p-4',
+        className
+      )}
       {...props}
     />
   );
