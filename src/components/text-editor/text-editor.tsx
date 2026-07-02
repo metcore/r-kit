@@ -121,6 +121,7 @@ export function TextEditor({
     content: undefined,
     editable: !resolvedDisabled,
     immediatelyRender: true,
+    autofocus: false,
     extensions: [
       StarterKit.configure({
         underline: false,
@@ -223,7 +224,7 @@ export function TextEditor({
       >
         <div
           className={clsx(
-            'sticky top-0 rounded-t-xl bg-white',
+            'sticky top-0 z-1 rounded-t-xl bg-white',
             toolbarClassName
           )}
         >
