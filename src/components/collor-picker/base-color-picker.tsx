@@ -46,13 +46,21 @@ export function BaseColorPicker({
   }, [onChange]);
 
   const didMountRef = useRef(false);
+  const lastEmittedRef = useRef<{ hex: string; alpha: number } | null>(null);
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      if (!hasValue) return;
-    }
     const rgbNow = hsvToRgb(hsv.h, hsv.s, hsv.v);
     const hexNow = rgbToHex(rgbNow.r, rgbNow.g, rgbNow.b);
+    const isUnchanged =
+      lastEmittedRef.current?.hex === hexNow &&
+      lastEmittedRef.current?.alpha === alpha;
+    lastEmittedRef.current = { hex: hexNow, alpha };
+
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+    if (isUnchanged) return;
+
     onChangeRef.current?.({ hex: hexNow, rgb: rgbNow, alpha, hsv });
   }, [hsv, alpha, hasValue]);
 

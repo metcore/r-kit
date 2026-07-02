@@ -32,9 +32,6 @@ export default function DatePickerPage() {
     start: addDays(new Date(), -6),
     end: new Date(),
   });
-  console.log({
-    rangeValue: formatDateToString(rangeValue?.start, 'YYYY-MM-DD'),
-  });
   const [open, setOpen] = useState(false);
 
   const minDate = new Date();

@@ -415,6 +415,7 @@ const DatePicker = ({
           <DropdownContent
             align={align}
             sideOffset={5}
+            alignOffset={-40}
             className={clsx('z-10 overflow-hidden p-0', wrapperClassName)}
           >
             <div className="top-full z-10">
