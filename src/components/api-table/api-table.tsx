@@ -14,6 +14,7 @@ import { Text } from '../text';
 import type { ApiTableProps, Filters, HideBelow, RowLike } from './types';
 import { getPath } from './utils';
 import { cn } from '../../lib/utils';
+import { Card, CardBody } from '../card';
 
 function defaultRowKey(row: RowLike, index: number): Key {
   const rowId = (row as { id?: Key }).id;
@@ -71,7 +72,7 @@ export const ApiTable = <
         <div
           aria-label="Loading"
           role="status"
-          className="pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-full border border-slate-100 bg-white px-3 py-1 shadow-sm"
+          className="pointer-events-none absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-full border border-slate-100 bg-white px-3 py-1"
         >
           <div className="h-3 w-3 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
           <span className="text-xs text-slate-500">Loading…</span>
@@ -259,7 +260,7 @@ export const ApiTable = <
         Array.from({ length: skeletonCount }).map((_, ri) => (
           <div
             key={`csk-${ri}`}
-            className="rounded-lg border border-slate-100 bg-white p-4 shadow-sm"
+            className="rounded-lg border border-slate-100 bg-white p-4"
             aria-hidden="true"
           >
             {columns.map((col) => (
@@ -286,12 +287,10 @@ export const ApiTable = <
           const resolvedKey =
             rowKey != null ? rowKey(row, ri) : defaultRowKey(row, ri);
           const rowOpts = rowOptions?.(row, resolvedKey, ri);
-
           return (
-            <div
+            <Card
               key={resolvedKey}
               className={cn(
-                'rounded-lg border border-slate-200 bg-white p-4 shadow-sm',
                 onRowClick != null ? 'cursor-pointer' : undefined,
                 rowOpts?.className
               )}
@@ -299,29 +298,31 @@ export const ApiTable = <
                 onRowClick != null ? () => onRowClick(row, ri) : undefined
               }
             >
-              {columns.map((col) => {
-                const value = getPath(row, col.key);
-                return (
-                  <div
-                    key={col.key}
-                    className="flex items-start justify-between border-b border-slate-50 py-1.5 last:border-0"
-                  >
-                    <span className="text-xs font-medium text-slate-500">
-                      {col.header ?? col.key}
-                    </span>
-                    <span className="ml-4 text-right text-sm text-slate-800">
-                      {col.render != null ? (
-                        col.render(value, row, ri)
-                      ) : value == null || value === '' ? (
-                        <span className="text-slate-300">—</span>
-                      ) : (
-                        String(value)
-                      )}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+              <CardBody>
+                {columns.map((col) => {
+                  const value = getPath(row, col.key);
+                  return (
+                    <div
+                      key={col.key}
+                      className="flex items-start justify-between border-b border-slate-50 py-1.5 last:border-0"
+                    >
+                      <span className="text-xs font-medium text-slate-500">
+                        {col.header ?? col.key}
+                      </span>
+                      <span className="ml-4 text-right text-sm text-slate-800">
+                        {col.render != null ? (
+                          col.render(value, row, ri)
+                        ) : value == null || value === '' ? (
+                          <span className="text-slate-300">—</span>
+                        ) : (
+                          String(value)
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+              </CardBody>
+            </Card>
           );
         })}
     </div>

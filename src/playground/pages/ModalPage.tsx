@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { Modal, ModalBody, ModalFooter } from '../../components/modal';
+import {
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from '../../components/modal';
 import { Button } from '../../components/button';
 import { Hero } from '../../components/hero';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { Input } from '../../components/input';
 import { Select, type SelectOption } from '../../clients';
+import { Text } from '../../components/text';
 
 export default function ModalPage() {
   const [modalCenter, setModalCenter] = useState<boolean>(false);
@@ -48,6 +54,9 @@ export default function ModalPage() {
               title="Modal Top Title"
               description="modal top description"
             >
+              <ModalHeader>
+                <Text> This is Header The Modal </Text>
+              </ModalHeader>
               <ModalBody>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. In
                 culpa, provident nihil, accusamus praesentium quo asperiores
