@@ -498,7 +498,10 @@ export function Select<Extra extends object = object>({
         <Text
           variant={getFontSize(size, multiple)}
           weight="semibold"
-          className={cn('text-gray-800', isDisabledMode && 'text-gray-600')}
+          className={cn(
+            'truncate text-gray-800',
+            isDisabledMode && 'text-gray-600'
+          )}
         >
           {selected.label}
         </Text>
