@@ -373,7 +373,7 @@ function SelectPage() {
               label="Team members"
               options={dataSingle}
               size="md"
-              value={selectedUserMultiple}
+              value={[2, 1]}
               onChange={(v) => {
                 setSelectedUserMultiple(v as SelectOption[]);
               }}

@@ -398,6 +398,7 @@ import GridSquarePlusIcon from './icons/GridSquareplusIcon';
 import FlagIcon from './icons/FlagIcon';
 import BadgeDiscountAltIcon from './icons/BadgeDiscountAltIcon';
 import DoorClosedIcon from './icons/DoorClosedIcon';
+import CheckCircleIcon from './icons/CheckCircle';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -522,6 +523,7 @@ export const iconRegistry = {
   'chart-pie': ChartPieIcon,
   'chart-trend-up': ChartTrendUpIcon,
   'check-square': CheckSquareIcon,
+  'check-circle': CheckCircleIcon,
   'circle-and-square': CircleAndSquareIcon,
   'clipboard-edit': ClipboardEditIcon,
   'clipboard-list-check2': ClipboardListCheck2Icon,

@@ -113,6 +113,19 @@ const MIME_BY_EXT: Record<string, string> = {
   txt: 'text/plain',
 };
 
+const EXT_BY_MIME: Record<string, string> = Object.entries(MIME_BY_EXT).reduce<
+  Record<string, string>
+>((acc, [ext, mime]) => {
+  if (!(mime in acc)) acc[mime] = ext;
+  return acc;
+}, {});
+
+interface DataUrlInfo {
+  mime: string;
+  isBase64: boolean;
+  byteLength?: number;
+}
+
 function getExtension(name: string): string {
   const dotIndex = name.lastIndexOf('.');
   return dotIndex === -1 ? '' : name.slice(dotIndex + 1).toLowerCase();
@@ -120,6 +133,30 @@ function getExtension(name: string): string {
 
 function inferKind(name: string): FileKind {
   return EXTENSION_KIND_MAP[getExtension(name)] ?? 'unknown';
+}
+
+function kindFromMime(mime: string): FileKind | undefined {
+  if (!mime) return undefined;
+  if (mime.startsWith('image/')) return 'image';
+  if (mime.startsWith('audio/')) return 'audio';
+  if (mime.startsWith('video/')) return 'video';
+  if (mime === 'application/pdf') return 'pdf';
+  if (mime === 'text/csv') return 'csv';
+  if (
+    mime === 'application/vnd.ms-excel' ||
+    mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ) {
+    return 'spreadsheet';
+  }
+  if (
+    mime === 'application/msword' ||
+    mime ===
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    mime === 'text/plain'
+  ) {
+    return 'document';
+  }
+  return undefined;
 }
 
 function deriveNameFromUrl(url: string): string {
@@ -130,6 +167,29 @@ function deriveNameFromUrl(url: string): string {
   } catch {
     return last || url;
   }
+}
+
+function deriveNameFromMime(mime: string): string {
+  const ext = EXT_BY_MIME[mime];
+  return ext != null ? `file.${ext}` : 'file';
+}
+
+function parseDataUrl(src: string): DataUrlInfo | null {
+  if (!src.startsWith('data:')) return null;
+  const commaIndex = src.indexOf(',');
+  if (commaIndex === -1) return null;
+
+  const header = src.slice(5, commaIndex);
+  const isBase64 = /;base64/i.test(header);
+  const mime = header.split(';')[0].trim().toLowerCase() || 'text/plain';
+
+  let byteLength: number | undefined;
+  if (isBase64) {
+    const encodedLength = src.length - commaIndex - 1;
+    const padding = src.endsWith('==') ? 2 : src.endsWith('=') ? 1 : 0;
+    byteLength = Math.max(0, Math.floor((encodedLength * 3) / 4) - padding);
+  }
+  return { mime, isBase64, byteLength };
 }
 
 export function formatFileSize(bytes: number): string {
@@ -214,21 +274,36 @@ export const FileView: FC<FileViewProps> = ({
     };
   }, [objectUrl]);
 
+  const dataUrl = useMemo(
+    () => (typeof src === 'string' ? parseDataUrl(src) : null),
+    [src]
+  );
+
   const fileName =
-    typeof src === 'string' ? deriveNameFromUrl(src) : (src?.name ?? '');
+    typeof src !== 'string'
+      ? (src?.name ?? '')
+      : dataUrl
+        ? deriveNameFromMime(dataUrl.mime)
+        : src
+          ? deriveNameFromUrl(src)
+          : '';
+
   const resolvedUrl = typeof src === 'string' ? src : (objectUrl ?? '');
+
+  const explicitMime =
+    dataUrl?.mime ??
+    (typeof src !== 'string' ? src?.type != null || undefined : undefined);
+  const mimeType = explicitMime ?? MIME_BY_EXT[getExtension(fileName)] ?? '';
+
   const sourceSize = typeof src !== 'string' ? src?.size : undefined;
-  const effectiveSize = size ?? sourceSize;
-  const mimeType =
-    (typeof src !== 'string' && src?.type != null
-      ? src.type
-      : MIME_BY_EXT[getExtension(fileName)]) ?? '';
+  const effectiveSize = size ?? sourceSize ?? dataUrl?.byteLength;
 
   const hasSource =
     typeof src === 'string' ? src.trim().length > 0 : Boolean(src);
   const isCorrupt = !hasSource || effectiveSize === 0;
 
-  const resolvedKind = kind ?? inferKind(fileName);
+  const resolvedKind =
+    kind ?? kindFromMime(String(mimeType)) ?? inferKind(fileName);
   const iconName: FileIconName = isCorrupt
     ? 'file-ban'
     : KIND_ICON[resolvedKind];
@@ -352,7 +427,7 @@ export const FileView: FC<FileViewProps> = ({
           onClose={closePreview}
           src={resolvedUrl}
           name={fileName}
-          type={mimeType}
+          type={String(mimeType)}
           hideDownloadButton={hideDownloadButton}
         />
       ) : null}
