@@ -41,6 +41,7 @@ export interface FileViewProps extends Omit<
   name?: string;
   className?: string;
   hideDownloadButton?: boolean;
+  onDownload?: () => void;
 }
 
 type FileIconName =
@@ -194,6 +195,7 @@ export const FileView: FC<FileViewProps> = ({
   className,
   name,
   hideDownloadButton,
+  onDownload,
 }) => {
   const [preview, setPreview] = useState<PreviewState>({
     isOpen: false,
@@ -354,6 +356,7 @@ export const FileView: FC<FileViewProps> = ({
           name={fileName}
           type={mimeType}
           hideDownloadButton={hideDownloadButton}
+          onDownload={onDownload}
         />
       ) : null}
     </div>
