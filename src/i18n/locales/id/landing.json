@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "badge": "{{version}} · {{count}} component",
+    "badgeFallback": "Terbaru · {{count}} component",
+    "title": "Component React yang siap dipakai",
+    "subtitle": "Component library open source yang dibangun dengan Tailwind v4, Radix UI, dan TypeScript. Bebas dipakai di project apa pun.",
+    "specimenLabel": "Preview + kode"
+  },
+  "preview": {
+    "title": "Dirender langsung dari package-nya",
+    "description": "Semua contoh di bawah memakai component yang sama seperti yang akan kamu import."
+  },
+  "tech": {
+    "title": "Dibangun dengan"
+  },
+  "catalog": {
+    "title": "{{count}} component",
+    "description": "Tekan ⌘K di mana saja untuk langsung lompat ke component-nya.",
+    "foundation": "Foundation",
+    "form": "Form",
+    "components": "Components",
+    "navigation": "Navigation",
+    "feedback": "Feedback",
+    "dataDisplay": "Data Display",
+    "examples": "Examples"
+  },
+  "install": {
+    "title": "Instalasi",
+    "description": "Install package-nya, import stylesheet-nya sekali di entry point, lalu tinggal pakai component-nya.",
+    "credit": "Dibuat dan dirawat oleh tim produk <herca>Herca</herca>.",
+    "stepInstall": "01 · Install",
+    "stepImport": "02 · Import"
+  },
+  "spec": {
+    "title": "Ringkasan teknis",
+    "description": "Setiap baris di bawah bisa diverifikasi dari package.json dan tsup.config.ts — tidak ada angka yang dikarang.",
+    "caption": "Spesifikasi teknis @herca/r-kit",
+    "components": {
+      "label": "Component",
+      "note": "tersebar di {{categories}} kategori"
+    },
+    "peer": {
+      "label": "Peer dependency",
+      "note": "react & react-dom ^19.1.1"
+    },
+    "styling": {
+      "label": "Styling",
+      "note": "peer dependency ^4.0.0"
+    },
+    "language": {
+      "label": "Bahasa",
+      "note": "type definition ikut dibundel"
+    },
+    "primitives": {
+      "label": "Primitive",
+      "note": "dialog, dropdown, tooltip, collapsible"
+    },
+    "bundle": {
+      "label": "Format bundle",
+      "note": "dibangun dengan tsup, sourcemap disertakan"
+    },
+    "tokens": {
+      "label": "Design token",
+      "note": "satu blok di src/index.css"
+    },
+    "license": {
+      "label": "Lisensi",
+      "note": "bebas dipakai di project apa pun"
+    },
+    "version": {
+      "label": "Versi terbaru",
+      "note": "diambil langsung dari registry npm"
+    }
+  }
+}

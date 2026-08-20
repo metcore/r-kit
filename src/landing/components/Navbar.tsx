@@ -1,61 +1,131 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, NavLink } from 'react-router-dom';
 
-const Navbar = (): React.ReactElement => {
-  const navItems: Array<{ id: string; label: string; to: string }> = [
-    { id: 'home', label: 'Home', to: '/' },
-    { id: 'playground', label: 'Playground', to: '/playground' },
-    { id: 'documentation', label: 'Documentation', to: '/docs' },
-  ];
+import { Icon } from '../../components/icons';
+import { cn } from '../../lib/utils';
+import { navItems, NPM_URL, REPO_URL } from '../data/site';
+import { useLatestVersion } from '../hooks/useLatestVersion';
+import BrandMark from './BrandMark';
+import MobileNav from './MobileNav';
+
+export interface NavbarProps {
+  onOpenSearch: () => void;
+}
+
+const GithubIcon = () => (
+  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
+/**
+ * Di bawah `lg`, rail link horizontal turun ke `MobileNav` bersama GitHub dan
+ * pemilih bahasa, supaya di 320px kontrol yang tersisa masih muat 44px.
+ */
+export default function Navbar({ onOpenSearch }: NavbarProps) {
+  const { t } = useTranslation();
+  const version = useLatestVersion();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const railItems = navItems.filter((item) => item.key !== 'docs');
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 font-bold text-white shadow-md shadow-indigo-500/30">
-            R
-          </div>
-          <div className="flex flex-col items-start leading-tight">
-            <span className="text-base font-bold text-slate-900">
-              React Kit
-            </span>
-            <span className="text-xs text-slate-500">v1.0.0</span>
-          </div>
+    <header
+      className="sticky top-0 z-50 w-full border-b bg-[var(--rk-paper-blur)] backdrop-blur-xl"
+      style={{ borderColor: 'var(--rk-rule)' }}
+    >
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:gap-4 sm:px-6">
+        <Link
+          to="/"
+          className="rk-nav-control flex shrink-0 items-center gap-2.5"
+          aria-label="r-kit"
+        >
+          <BrandMark size={24} className="text-[var(--rk-accent)]" />
+          <span className="rk-display text-[15px] leading-none">r-kit</span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.id}
-              type="button"
-              to={item.to}
-              className={`rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+        <button
+          type="button"
+          onClick={onOpenSearch}
+          aria-label={t('search.trigger')}
+          className="rk-nav-control flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-[var(--rk-radius-control)] border border-[var(--rk-rule-2)] bg-[var(--rk-paper-2)] px-2 text-[var(--rk-muted)] transition-colors duration-[var(--rk-dur-micro)] hover:border-[var(--rk-rule-strong)] hover:text-[var(--rk-ink)] sm:w-56 sm:pr-1.5 sm:pl-2.5"
+        >
+          <span aria-hidden className="flex">
+            <Icon name="search" size={14} />
+          </span>
+          <span className="hidden flex-1 text-left text-[13px] whitespace-nowrap sm:inline">
+            {t('search.trigger')}
+          </span>
+          <span
+            aria-hidden
+            className="rk-mono hidden rounded-[4px] border border-[var(--rk-rule-2)] bg-[var(--rk-paper)] px-1.5 py-px text-[10px] text-[var(--rk-muted)] sm:inline"
+          >
+            ⌘K
+          </span>
+        </button>
 
-        <div className="flex items-center gap-3">
+        <nav className="hidden items-center gap-5 lg:flex">
+          {railItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                cn(
+                  'rk-nav-control flex items-center text-[13px] whitespace-nowrap transition-colors duration-[var(--rk-dur-micro)]',
+                  isActive
+                    ? 'font-medium text-[var(--rk-accent)]'
+                    : 'text-[var(--rk-ink-2)] hover:text-[var(--rk-ink)]'
+                )
+              }
+            >
+              {t(`nav.${item.key}`)}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="ml-auto flex items-center gap-2">
+          {version != null && (
+            <a
+              href={NPM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={t('version.npmTitle')}
+              className="rk-nav-control rk-mono hidden h-8 items-center rounded-[var(--rk-radius-control)] border border-[var(--rk-rule)] px-2.5 text-[11px] whitespace-nowrap text-[var(--rk-muted)] transition-colors duration-[var(--rk-dur-micro)] hover:border-[var(--rk-rule-2)] hover:text-[var(--rk-ink)] lg:flex"
+            >
+              v{version}
+            </a>
+          )}
+
           <a
-            href="https://github.com/metcore/r-kit"
+            href={REPO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 sm:flex"
+            aria-label={t('actions.github')}
+            className="rk-nav-control hidden h-8 w-8 items-center justify-center rounded-[var(--rk-radius-control)] text-[var(--rk-ink-2)] transition-colors duration-[var(--rk-dur-micro)] hover:bg-[var(--rk-paper-3)] hover:text-[var(--rk-ink)] lg:flex"
           >
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-            GitHub
+            <GithubIcon />
           </a>
+
+          <Link to="/docs" className="rk-btn rk-btn--ghost rk-btn--sm">
+            {t('nav.docs')}
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label={t('nav.menu')}
+            aria-expanded={menuOpen}
+            className="rk-nav-control -mr-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-[var(--rk-radius-control)] text-[var(--rk-ink-2)] transition-colors duration-[var(--rk-dur-micro)] hover:bg-[var(--rk-paper-3)] hover:text-[var(--rk-ink)] lg:hidden"
+          >
+            <span aria-hidden className="flex">
+              <Icon name="menu-left" size={18} />
+            </span>
+          </button>
         </div>
-      </nav>
+      </div>
+
+      <MobileNav open={menuOpen} onOpenChange={setMenuOpen} version={version} />
     </header>
   );
-};
-
-export default Navbar;
+}

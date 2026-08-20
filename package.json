@@ -1,7 +1,7 @@
 {
   "name": "@herca/r-kit",
   "version": "0.0.113",
-  "description": "UI Kit untuk pengembangan adplikasi internal HerCa.",
+  "description": "Open source React UI kit dari tim Herca — Tailwind v4, Radix UI, TypeScript.",
   "keywords": [
     "React",
     "Kit"
@@ -104,9 +104,12 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.5.0",
+    "i18next": "^26.3.6",
+    "i18next-browser-languagedetector": "^8.2.1",
     "next": "^15.5.15",
     "prettier": "^3.8.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
+    "react-i18next": "^17.0.11",
     "react-router-dom": "^7.9.6",
     "shiki": "^3.21.0",
     "tsup": "^8.5.1",

@@ -72,6 +72,7 @@ export default defineConfig([
     ignores: [
       'node_modules/',
       'dist/',
+      'dist-docs/',
       'eslint.config.ts',
       'commitlint.config.js',
       'tsup.config.ts',
