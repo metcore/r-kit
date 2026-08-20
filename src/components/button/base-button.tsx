@@ -52,6 +52,7 @@ export const BaseButton = forwardRef<
       rel,
       children,
       disabled: disabled,
+      loading: isLoading,
       ...anchorProps
     } = props;
 
@@ -60,6 +61,7 @@ export const BaseButton = forwardRef<
         {...anchorProps}
         ref={ref as React.Ref<HTMLAnchorElement>}
         data-active={active}
+        data-loading={isLoading}
         href={disabled == true ? undefined : href}
         aria-disabled={disabled}
         tabIndex={disabled == true ? -1 : undefined}
@@ -72,7 +74,7 @@ export const BaseButton = forwardRef<
     );
   }
 
-  const { children, active, ...buttonProps } = props;
+  const { children, active, loading: isLoading, ...buttonProps } = props;
 
   return (
     <button
@@ -81,6 +83,7 @@ export const BaseButton = forwardRef<
       disabled={disabled}
       className={classes}
       data-active={active}
+      data-loading={isLoading}
     >
       {children}
     </button>
