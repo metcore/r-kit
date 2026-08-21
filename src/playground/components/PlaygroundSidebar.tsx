@@ -27,9 +27,10 @@ type RouteType = {
 function PlaygroundSidebar() {
   const location = useLocation();
   const { state, isHovered } = useSidebar();
+  const isExpanded = state === 'expanded' || Boolean(isHovered);
 
   const menuItems: RouteType[] = [
-    { path: '/', label: 'Overview', icon: 'grid-square' },
+    { path: '/playground', label: 'Overview', icon: 'grid-square' },
     {
       path: '/foundation',
       label: 'Foundation',
@@ -141,12 +142,15 @@ function PlaygroundSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="h-19 flex-row items-center justify-between pl-5">
-        <BrandLogo name="Playground" brandLogo={brandLogo} />
+        <BrandLogo
+          name={isExpanded ? 'Playground' : undefined}
+          brandLogo={brandLogo}
+        />
 
         <div
           className={cn(
-            state === 'collapsed' && 'hidden',
-            Boolean(isHovered) && 'block'
+            'hidden',
+            state === 'collapsed' && Boolean(isHovered) && 'block'
           )}
         >
           <SidebarTrigger />

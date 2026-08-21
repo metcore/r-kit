@@ -1,0 +1,12 @@
+<svg width="570" height="200" viewBox="0 0 570 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.5" filter="url(#swooshBlur)">
+<path d="M-21 321.5L88 86L369.5 321.5H-21Z" fill="white"/>
+</g>
+<defs>
+<filter id="swooshBlur" x="-220.7" y="-113.7" width="789.9" height="634.9" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="99.85" result="effect1_foregroundBlur"/>
+</filter>
+</defs>
+</svg>

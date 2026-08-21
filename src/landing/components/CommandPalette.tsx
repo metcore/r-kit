@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../components/icons';
 import { Kbd } from '../../components/kbd';
 import { cn } from '../../lib/utils';
+import { useIsMac } from '../../hooks/use-is-mac';
 import { componentCategories, navItems } from '../data/site';
 
 interface CommandItem {
@@ -230,6 +231,46 @@ export default function CommandPalette({
         </div>
       </div>
     </div>
+  );
+}
+
+export interface CommandPaletteTriggerProps {
+  onClick: () => void;
+  className?: string;
+}
+
+/** Tombol pemicu palette. Dipakai bersama oleh navbar landing dan header playground. */
+export function CommandPaletteTrigger({
+  onClick,
+  className,
+}: CommandPaletteTriggerProps): React.ReactElement {
+  const { t } = useTranslation('common');
+  const isMac = useIsMac();
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={t('search.trigger')}
+      className={cn(
+        'rk-nav-control flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-[var(--rk-radius-control)] border border-[var(--rk-rule-2)] bg-[var(--rk-paper-2)] px-2 text-[var(--rk-muted)] transition-colors duration-[var(--rk-dur-micro)] hover:border-[var(--rk-rule-strong)] hover:text-[var(--rk-ink)] sm:w-56 sm:pr-1.5 sm:pl-2.5',
+        className
+      )}
+    >
+      <span aria-hidden className="flex">
+        <Icon name="search" size={14} />
+      </span>
+      <span className="hidden flex-1 text-left text-[13px] whitespace-nowrap sm:inline">
+        {t('search.trigger')}
+      </span>
+      <span
+        aria-hidden
+        className="rk-mono hidden items-center gap-0.5 rounded-[4px] border border-[var(--rk-rule-2)] bg-[var(--rk-paper)] px-1.5 py-px text-[10px] text-[var(--rk-muted)] sm:inline-flex"
+      >
+        {isMac ? <Icon name="command" size={10} /> : 'Ctrl'}
+        <span>K</span>
+      </span>
+    </button>
   );
 }
 

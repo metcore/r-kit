@@ -7,12 +7,17 @@ import {
   HeaderRight,
   HeaderTitle,
   HeaderDivider,
-  HeaderSearch,
-  HeaderAction,
 } from '../../components/header/header';
-import { Icon } from '../../components/icons';
+import CommandPalette, {
+  CommandPaletteTrigger,
+  useCommandPalette,
+} from '../../landing/components/CommandPalette';
+import HeaderNotifications from '../components/HeaderNotifications';
+import HeaderProfile from '../components/HeaderProfile';
 
 export default function PlaygroundLayout() {
+  const { open: isSearchOpen, setOpen: setSearchOpen } = useCommandPalette();
+
   return (
     <SidebarProvider>
       <PlaygroundSidebar />
@@ -24,14 +29,10 @@ export default function PlaygroundLayout() {
             <HeaderTitle subtitle="Eksplorasi komponen">Playground</HeaderTitle>
           </HeaderLeft>
           <HeaderRight>
-            <HeaderSearch placeholder="Cari komponen..." />
+            <CommandPaletteTrigger onClick={() => setSearchOpen(true)} />
             <HeaderDivider className="hidden sm:block" />
-            <HeaderAction label="Notifikasi" badge={3}>
-              <Icon name="bell" size={18} />
-            </HeaderAction>
-            <HeaderAction label="Akun">
-              <Icon name="user" size={18} />
-            </HeaderAction>
+            <HeaderNotifications />
+            <HeaderProfile />
           </HeaderRight>
         </Header>
 
@@ -39,6 +40,8 @@ export default function PlaygroundLayout() {
           <Outlet />
         </div>
       </SidebarInset>
+
+      <CommandPalette open={isSearchOpen} onOpenChange={setSearchOpen} />
     </SidebarProvider>
   );
 }

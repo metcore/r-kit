@@ -7,6 +7,7 @@ import { cn } from '../../lib/utils';
 import { navItems, NPM_URL, REPO_URL } from '../data/site';
 import { useLatestVersion } from '../hooks/useLatestVersion';
 import BrandMark from './BrandMark';
+import { CommandPaletteTrigger } from './CommandPalette';
 import MobileNav from './MobileNav';
 
 export interface NavbarProps {
@@ -45,25 +46,7 @@ export default function Navbar({ onOpenSearch }: NavbarProps) {
           <span className="rk-display text-[15px] leading-none">r-kit</span>
         </Link>
 
-        <button
-          type="button"
-          onClick={onOpenSearch}
-          aria-label={t('search.trigger')}
-          className="rk-nav-control flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-[var(--rk-radius-control)] border border-[var(--rk-rule-2)] bg-[var(--rk-paper-2)] px-2 text-[var(--rk-muted)] transition-colors duration-[var(--rk-dur-micro)] hover:border-[var(--rk-rule-strong)] hover:text-[var(--rk-ink)] sm:w-56 sm:pr-1.5 sm:pl-2.5"
-        >
-          <span aria-hidden className="flex">
-            <Icon name="search" size={14} />
-          </span>
-          <span className="hidden flex-1 text-left text-[13px] whitespace-nowrap sm:inline">
-            {t('search.trigger')}
-          </span>
-          <span
-            aria-hidden
-            className="rk-mono hidden rounded-[4px] border border-[var(--rk-rule-2)] bg-[var(--rk-paper)] px-1.5 py-px text-[10px] text-[var(--rk-muted)] sm:inline"
-          >
-            ⌘K
-          </span>
-        </button>
+        <CommandPaletteTrigger onClick={onOpenSearch} />
 
         <nav className="hidden items-center gap-5 lg:flex">
           {railItems.map((item) => (
