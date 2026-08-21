@@ -7,7 +7,11 @@ import { Input } from '../input';
 import { formatDateToString, getFormatConfig, parseMonthName } from './helpers';
 import { Button } from '../button';
 import { ChipGroup, type ChipOptionProps, type ChipValue } from '../chip';
-import type { DatePickerProps } from './type';
+import {
+  DATE_PICKER_SHORTCUT_ORDER,
+  DEFAULT_DATE_PICKER_SHORTCUT_LABELS,
+  type DatePickerProps,
+} from './type';
 import clsx from 'clsx';
 import { FormField } from '../form';
 
@@ -41,6 +45,12 @@ const DatePicker = ({
   description,
   errorMessages,
   required,
+  resetLabel = 'Reset',
+  cancelLabel = 'Cancel',
+  confirmLabel = 'Apply',
+  startDatePlaceholder = 'Start Date',
+  endDatePlaceholder = 'End Date',
+  shortcutLabels,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     controlledValue || null
@@ -54,28 +64,14 @@ const DatePicker = ({
   const [selectedFilter, setSelectedFilter] = useState<ChipValue[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filterCalendar: ChipOptionProps[] = [
-    {
-      label: 'Last Week',
-      value: 0,
-    },
-    {
-      label: 'Last 7 Days',
-      value: 1,
-    },
-    {
-      label: 'Last 30 Days',
-      value: 2,
-    },
-    {
-      label: 'Current Month',
-      value: 3,
-    },
-    {
-      label: 'Last Year',
-      value: 4,
-    },
-  ];
+  const filterCalendar: ChipOptionProps[] = DATE_PICKER_SHORTCUT_ORDER.map(
+    (shortcut, index) => ({
+      label:
+        shortcutLabels?.[shortcut] ??
+        DEFAULT_DATE_PICKER_SHORTCUT_LABELS[shortcut],
+      value: index,
+    })
+  );
 
   // Check if format uses month names
   const usesMonthName = format.includes('MMM');
@@ -539,7 +535,7 @@ const DatePicker = ({
                           setSelectedFilter([]);
                         }}
                       >
-                        Reset
+                        {resetLabel}
                       </Button>
                     </div>
                   )}
@@ -605,7 +601,7 @@ const DatePicker = ({
                           size={size}
                           readOnly
                           className="w-30 truncate"
-                          placeholder="Start Date"
+                          placeholder={startDatePlaceholder}
                           value={formatDateToString(
                             dateRange.start,
                             'DD MMM YYYY'
@@ -615,7 +611,7 @@ const DatePicker = ({
                         <Input
                           size={size}
                           readOnly
-                          placeholder="End Date"
+                          placeholder={endDatePlaceholder}
                           className="w-30 truncate"
                           value={formatDateToString(
                             dateRange.end,
@@ -629,7 +625,7 @@ const DatePicker = ({
                           onClick={() => setIsCalendarShow(false)}
                           variant={'tertiary'}
                         >
-                          Cancel
+                          {cancelLabel}
                         </Button>
                         <Button
                           onClick={handleApplyDateRange}
@@ -638,7 +634,7 @@ const DatePicker = ({
                             Boolean(dateRange.end) === false
                           }
                         >
-                          Apply
+                          {confirmLabel}
                         </Button>
                       </div>
                     </div>

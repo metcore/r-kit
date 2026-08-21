@@ -33,6 +33,7 @@ interface YearPickerProps {
   errorMessages?: string | string[];
   direction?: 'horizontal' | 'vertical';
   tooltip?: string;
+  nowLabel?: string;
   confirmLabel?: string;
   title?: string;
 }
@@ -59,6 +60,7 @@ export const YearPicker: React.FC<YearPickerProps> = ({
   hint,
   errorMessages,
   tooltip,
+  nowLabel = 'Now',
   confirmLabel = 'Terapkan',
   title = 'Year',
 }) => {
@@ -200,7 +202,7 @@ export const YearPicker: React.FC<YearPickerProps> = ({
             block
             disabled={isYearDisabled(CURRENT_YEAR)}
           >
-            Now
+            {nowLabel}
           </Button>
           <Button block onClick={handleApply}>
             {confirmLabel}

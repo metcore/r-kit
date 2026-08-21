@@ -55,7 +55,7 @@ export const DayPicker: React.FC<DayPickerProps> = ({
   tooltip,
   cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
-  title,
+  title = 'Day',
 }) => {
   const {
     open,
@@ -92,7 +92,7 @@ export const DayPicker: React.FC<DayPickerProps> = ({
       hint={hint}
       errorMessages={errorMessages}
       tooltip={tooltip}
-      renderHeader={title == null ? <PickerHeader title="Day" /> : undefined}
+      renderHeader={title == null ? <PickerHeader title={title} /> : undefined}
       renderOptions={
         <div className="grid grid-cols-2 gap-2">
           {DAY_OPTIONS.map(({ value: dayVal, label: dayLabel }) => (
