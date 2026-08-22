@@ -10,7 +10,7 @@ import { useState } from 'react';
 const DESCRIPTION =
   'Lorem ipsum dolor sit amet contortuor sit amet lorem ipsum';
 
-export default function ListPage() {
+export default function AccordionPage() {
   const [isOpen, setIsOpen] = useState<boolean>();
   const renderHeader = () => (
     <div className="flex items-center justify-between">

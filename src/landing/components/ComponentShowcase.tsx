@@ -221,10 +221,10 @@ export default function ComponentShowcase(): React.ReactElement {
       <PlaygroundBlock
         name="Avatar"
         to="/playground/avatar"
-        code={`<Avatar name="Dafi Rahman" color="success" />`}
+        code={`<Avatar name="Herca Pratama" color="success" />`}
       >
         <Avatar name="Herca Carman" />
-        <Avatar name="Dafi Rahman" color="success" />
+        <Avatar name="Herca Pratama" color="success" />
         <Avatar name="Mamet Putra" color="orange" variant="rounded" />
         <Avatar name="Hambali" color="purple" variant="square" />
       </PlaygroundBlock>

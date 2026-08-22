@@ -76,10 +76,10 @@ export default function ListPage() {
                 <Icon name="user" size={20} className="text-gray-700" />
                 <div className="flex flex-col">
                   <Text variant="t2" className="text-gray-900">
-                    Push Notificiation
+                    Push Notification
                   </Text>
                   <Text variant="t2" className="text-gray-700">
-                    Push Notificiation
+                    Push Notification
                   </Text>
                 </div>
               </div>
@@ -87,11 +87,9 @@ export default function ListPage() {
             <ListItem>
               <div className="flex items-center justify-between">
                 <Text variant="t2" className="text-gray-900">
-                  Push Notificiation
+                  Push Notification
                 </Text>
-                <Text variant="t2" className="text-gray-700">
-                  <Switch />
-                </Text>
+                <Switch />
               </div>
             </ListItem>
             <ListItem>

@@ -10,7 +10,7 @@ import {
 } from '../../../components/input/input-phone-number';
 import { useState } from 'react';
 
-export default function InputPasswordPage() {
+export default function InputPhoneNumberPage() {
   const [value, setValue] = useState<PhoneNumberValue>();
 
   const exampleBasic = dedent(`
