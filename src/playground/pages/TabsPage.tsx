@@ -1,272 +1,276 @@
 import { useState } from 'react';
+import dedent from 'dedent';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '../../components/tabs';
-import { Hero } from '../../components/hero';
-import { Card, CardBody, CardHeader } from '../../components/card';
-import { Input } from '../../components/input';
-import { Checkbox, CheckboxGroup } from '../../components/checkbox/checkbox';
 import { Icon } from '../../components/icons';
+import { Text } from '../../components/text';
+import { Button } from '../../components/button';
+import illust from '../../assets/images/navigation.png';
+import GridWrapper from '../components/GridWrapper';
+import HeroSection from '../components/HeroSection';
+import MainSection from '../components/MainSection';
+import Footer from '../components/Footer';
 
-const TabsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('account');
+const exampleBasic = dedent(`
+  import { Tabs, TabsList, TabsTrigger, TabsContent } from '@herca/r-kit';
+
+  // id wajib diisi dan harus unik dalam satu halaman.
+  <Tabs id="pengaturan" defaultValue="akun">
+    <TabsList>
+      <TabsTrigger value="akun">Akun</TabsTrigger>
+      <TabsTrigger value="notifikasi">Notifikasi</TabsTrigger>
+    </TabsList>
+
+    <TabsContent value="akun">Isi tab akun</TabsContent>
+    <TabsContent value="notifikasi">Isi tab notifikasi</TabsContent>
+  </Tabs>
+`);
+
+const exampleIcon = dedent(`
+  <TabsTrigger value="akun">
+    <Icon name="user" size={16} className="mr-2" />
+    Akun
+  </TabsTrigger>
+`);
+
+const exampleVertical = dedent(`
+  // orientation="vertical" menaruh daftar tab di sisi kiri.
+  <Tabs id="laporan" defaultValue="ringkasan" orientation="vertical">
+    <TabsList>
+      <TabsTrigger value="ringkasan">Ringkasan</TabsTrigger>
+      <TabsTrigger value="rincian">Rincian</TabsTrigger>
+    </TabsList>
+
+    <TabsContent value="ringkasan">...</TabsContent>
+    <TabsContent value="rincian">...</TabsContent>
+  </Tabs>
+`);
+
+const exampleDisabled = dedent(`
+  <TabsTrigger value="arsip" disabled>
+    Arsip
+  </TabsTrigger>
+`);
+
+const exampleControlled = dedent(`
+  const [tab, setTab] = useState('akun');
+
+  // Kendalikan dari luar lewat value + onValueChange,
+  // sehingga tab bisa dipindah dari tombol mana pun.
+  <Tabs id="terkendali" value={tab} onValueChange={setTab}>
+    ...
+  </Tabs>
+`);
+
+const exampleUrlReplace = dedent(`
+  // Setiap Tabs tak-terkendali menyimpan tab aktifnya ke query
+  // string sebagai ?tab-{id}, jadi tautannya bisa dibagikan dan
+  // tahan refresh. Karena itulah id wajib unik per halaman.
+  //
+  // urlReplace hanya menentukan cara riwayat browser ditulis:
+  //   urlReplace (bawaan) -> history.replace, tombol Back
+  //                          langsung keluar dari halaman
+  //   urlReplace={false}  -> history.push, tiap pergantian tab
+  //                          menambah satu langkah riwayat
+  <Tabs id="tagihan" defaultValue="belum-bayar" urlReplace={false}>
+    ...
+  </Tabs>
+`);
+
+function Panel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-md border border-gray-200 p-4">
+      <Text variant="t1" className="text-gray-800">
+        {children}
+      </Text>
+    </div>
+  );
+}
+
+export default function TabsPage() {
+  const [tab, setTab] = useState('akun');
 
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-sm font-semibold text-gray-900">Navigation</p>
-        <h1 className="text-3xl font-semibold text-gray-900">Tabs</h1>
-        <p className="text-sm text-gray-800">
-          Membagi konten sederajat ke beberapa panel dan menampilkan satu panel
-          pada satu waktu.
-        </p>
-      </Hero>
-      <div className="grid grid-cols-1 gap-4">
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">Basic Tabs</h2>
+      <HeroSection
+        illust={illust}
+        title="Navigation"
+        subtitle="Tabs"
+        description="Membagi konten sederajat ke beberapa panel dan menampilkan satu panel pada satu waktu."
+      />
 
-        <Tabs id="profile" defaultValue="account" orientation="horizontal">
-          <TabsList>
-            <TabsTrigger value="account">
-              <Icon name="user" size={16} className="mr-2" />
-              Account
-            </TabsTrigger>
-            <TabsTrigger value="password">
-              <Icon name="lock" size={16} className="mr-2" /> Password
-            </TabsTrigger>
-            <TabsTrigger value="settings">
-              <Icon name="settings" size={16} className="mr-2" /> Settings
-            </TabsTrigger>
-            <TabsTrigger value="disabled" disabled>
-              Disabled
-            </TabsTrigger>
-          </TabsList>
+      <div className="flex flex-col gap-4">
+        <GridWrapper>
+          <MainSection title="Basic" code={exampleBasic}>
+            <Tabs id="tabs-basic" defaultValue="akun">
+              <TabsList>
+                <TabsTrigger value="akun">Akun</TabsTrigger>
+                <TabsTrigger value="notifikasi">Notifikasi</TabsTrigger>
+                <TabsTrigger value="keamanan">Keamanan</TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="account">
-            <Card size={'lg'}>
-              <CardHeader divider>Account Information</CardHeader>
-              <CardBody className="space-y-4">
-                <p className="text-gray-700">
-                  Manage your account settings and preferences here. You can
-                  update your profile information, email address, and other
-                  personal details.
-                </p>
-                <div className="grid grid-cols-2 gap-4">
-                  <Input label="Name" placeholder="Enter your name" />
-                  <Input
-                    label="Email"
-                    type="email"
-                    placeholder="Enter your email"
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </TabsContent>
+              <TabsContent value="akun">
+                <Panel>Ubah nama, email, dan foto profil di sini.</Panel>
+              </TabsContent>
+              <TabsContent value="notifikasi">
+                <Panel>Atur email dan notifikasi yang ingin diterima.</Panel>
+              </TabsContent>
+              <TabsContent value="keamanan">
+                <Panel>Ganti kata sandi dan kelola perangkat aktif.</Panel>
+              </TabsContent>
+            </Tabs>
+          </MainSection>
 
-          <TabsContent value="password">
-            <Card size={'lg'}>
-              <CardHeader divider>Password Settings</CardHeader>
-              <CardBody className="space-y-4">
-                <p className="text-gray-700">
-                  Update your password to keep your account secure. Make sure to
-                  use a strong password with a mix of letters, numbers, and
-                  symbols.
-                </p>
-                <div className="space-y-3">
-                  <Input
-                    label="Current Password"
-                    type="password"
-                    placeholder="••••••••"
-                  />
-                  <Input
-                    label="New Password"
-                    type="password"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </TabsContent>
+          <MainSection title="Dengan Ikon" code={exampleIcon}>
+            <Tabs id="tabs-ikon" defaultValue="akun">
+              <TabsList>
+                <TabsTrigger value="akun">
+                  <Icon name="user" size={16} className="mr-2" />
+                  Akun
+                </TabsTrigger>
+                <TabsTrigger value="notifikasi">
+                  <Icon name="bell" size={16} className="mr-2" />
+                  Notifikasi
+                </TabsTrigger>
+                <TabsTrigger value="dokumen">
+                  <Icon name="document" size={16} className="mr-2" />
+                  Dokumen
+                </TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="settings">
-            <Card size={'lg'}>
-              <CardHeader divider>General Settings</CardHeader>
-              <CardBody className="space-y-4">
-                <p className="text-gray-700">
-                  Customize your experience with these general settings and
-                  preferences.
-                </p>
-                <CheckboxGroup>
-                  <Checkbox
-                    value="notifications"
-                    label="Enable notifications"
-                  />
-                  <Checkbox value="autosave" label="Auto-save changes" />
-                  <Checkbox value="darkmode" label="Dark mode" />
-                </CheckboxGroup>
-              </CardBody>
-            </Card>
-          </TabsContent>
-        </Tabs>
+              <TabsContent value="akun">
+                <Panel>Profil dan data pribadi.</Panel>
+              </TabsContent>
+              <TabsContent value="notifikasi">
+                <Panel>Preferensi notifikasi.</Panel>
+              </TabsContent>
+              <TabsContent value="dokumen">
+                <Panel>Berkas yang pernah diunggah.</Panel>
+              </TabsContent>
+            </Tabs>
+          </MainSection>
+        </GridWrapper>
 
-        {/* Vertical Tabs Example */}
-
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Vertical Tabs
-        </h2>
-
-        <Tabs id="vertical" defaultValue="overview" orientation="vertical">
-          <div className="flex gap-6">
-            <TabsList className="w-48">
-              <TabsTrigger value="overview" className="w-full justify-start">
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="analytics" className="w-full justify-start">
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" className="w-full justify-start">
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="export" className="w-full justify-start">
-                Export
-              </TabsTrigger>
+        <MainSection title="Orientasi Vertikal" code={exampleVertical}>
+          <Tabs
+            id="tabs-vertikal"
+            defaultValue="ringkasan"
+            orientation="vertical"
+          >
+            <TabsList>
+              <TabsTrigger value="ringkasan">Ringkasan</TabsTrigger>
+              <TabsTrigger value="rincian">Rincian</TabsTrigger>
+              <TabsTrigger value="lampiran">Lampiran</TabsTrigger>
             </TabsList>
 
-            <div className="flex-1">
-              <TabsContent value="overview" className="mt-0">
-                <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Dashboard Overview
-                  </h3>
-                  <p className="text-gray-700">
-                    Welcome to your dashboard. Here you can see a summary of
-                    your recent activity and important metrics at a glance.
-                  </p>
-                  <div className="mt-4 grid grid-cols-3 gap-4">
-                    <div className="rounded-lg bg-blue-50 p-4">
-                      <div className="text-2xl font-bold text-blue-600">
-                        2,543
-                      </div>
-                      <div className="text-sm text-gray-700">Total Users</div>
-                    </div>
-                    <div className="rounded-lg bg-green-50 p-4">
-                      <div className="text-2xl font-bold text-green-600">
-                        $12,345
-                      </div>
-                      <div className="text-sm text-gray-700">Revenue</div>
-                    </div>
-                    <div className="rounded-lg bg-purple-50 p-4">
-                      <div className="text-2xl font-bold text-purple-600">
-                        89%
-                      </div>
-                      <div className="text-sm text-gray-700">Satisfaction</div>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
+            <TabsContent value="ringkasan">
+              <Panel>Angka utama laporan bulan ini.</Panel>
+            </TabsContent>
+            <TabsContent value="rincian">
+              <Panel>Rincian transaksi baris per baris.</Panel>
+            </TabsContent>
+            <TabsContent value="lampiran">
+              <Panel>Berkas pendukung laporan.</Panel>
+            </TabsContent>
+          </Tabs>
+        </MainSection>
 
-              <TabsContent value="analytics" className="mt-0">
-                <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Analytics Dashboard
-                  </h3>
-                  <p className="text-gray-700">
-                    Deep dive into your analytics data and track performance
-                    metrics over time.
-                  </p>
-                </div>
-              </TabsContent>
+        <GridWrapper>
+          <MainSection title="Tab Nonaktif" code={exampleDisabled}>
+            <Tabs id="tabs-disabled" defaultValue="aktif">
+              <TabsList>
+                <TabsTrigger value="aktif">Aktif</TabsTrigger>
+                <TabsTrigger value="selesai">Selesai</TabsTrigger>
+                <TabsTrigger value="arsip" disabled>
+                  Arsip
+                </TabsTrigger>
+              </TabsList>
 
-              <TabsContent value="reports" className="mt-0">
-                <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Reports Center
-                  </h3>
-                  <p className="text-gray-700">
-                    Generate and view detailed reports about your business
-                    operations.
-                  </p>
-                </div>
+              <TabsContent value="aktif">
+                <Panel>Pekerjaan yang sedang berjalan.</Panel>
               </TabsContent>
+              <TabsContent value="selesai">
+                <Panel>Pekerjaan yang sudah selesai.</Panel>
+              </TabsContent>
+              <TabsContent value="arsip">
+                <Panel>Arsip.</Panel>
+              </TabsContent>
+            </Tabs>
+          </MainSection>
 
-              <TabsContent value="export" className="mt-0">
-                <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Export Data
-                  </h3>
-                  <p className="text-gray-700">
-                    Export your data in various formats for external analysis or
-                    backup.
-                  </p>
-                </div>
-              </TabsContent>
+          <MainSection title="Terkendali dari Luar" code={exampleControlled}>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap gap-2">
+                {['akun', 'notifikasi', 'keamanan'].map((item) => (
+                  <Button
+                    key={item}
+                    size="sm"
+                    color={tab === item ? 'primary' : 'gray'}
+                    variant={tab === item ? 'default' : 'outline'}
+                    onClick={() => setTab(item)}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </div>
+
+              <Tabs id="tabs-terkendali" value={tab} onValueChange={setTab}>
+                <TabsList>
+                  <TabsTrigger value="akun">Akun</TabsTrigger>
+                  <TabsTrigger value="notifikasi">Notifikasi</TabsTrigger>
+                  <TabsTrigger value="keamanan">Keamanan</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="akun">
+                  <Panel>Tab aktif: akun</Panel>
+                </TabsContent>
+                <TabsContent value="notifikasi">
+                  <Panel>Tab aktif: notifikasi</Panel>
+                </TabsContent>
+                <TabsContent value="keamanan">
+                  <Panel>Tab aktif: keamanan</Panel>
+                </TabsContent>
+              </Tabs>
             </div>
-          </div>
-        </Tabs>
+          </MainSection>
+        </GridWrapper>
 
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Controlled Tabs
-        </h2>
-        <p className="mb-4 text-sm text-gray-700">
-          Active tab:{' '}
-          <span className="font-mono font-semibold text-blue-600">
-            {activeTab}
-          </span>
-        </p>
+        <MainSection title="Tersimpan di URL" code={exampleUrlReplace}>
+          <Tabs id="tabs-url" defaultValue="belum-bayar" urlReplace={false}>
+            <TabsList>
+              <TabsTrigger value="belum-bayar">Belum Bayar</TabsTrigger>
+              <TabsTrigger value="lunas">Lunas</TabsTrigger>
+              <TabsTrigger value="jatuh-tempo">Jatuh Tempo</TabsTrigger>
+            </TabsList>
 
-        <Tabs
-          id="billing"
-          defaultValue={activeTab}
-          onValueChange={setActiveTab}
-        >
-          <TabsList>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="billing">Billing</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          </TabsList>
+            <TabsContent value="belum-bayar">
+              <Panel>
+                Perhatikan alamat browser saat tab diganti: muncul
+                ?tab-tabs-url. Karena urlReplace={false}, tombol Back
+                mengembalikan tab ke pilihan sebelumnya.
+              </Panel>
+            </TabsContent>
+            <TabsContent value="lunas">
+              <Panel>Tagihan yang sudah dibayar.</Panel>
+            </TabsContent>
+            <TabsContent value="jatuh-tempo">
+              <Panel>Tagihan yang melewati tanggal jatuh tempo.</Panel>
+            </TabsContent>
+          </Tabs>
+        </MainSection>
 
-          <TabsContent value="account">
-            <p className="text-gray-700">
-              Controlled account content - state managed externally
-            </p>
-          </TabsContent>
-          <TabsContent value="billing">
-            <p className="text-gray-700">
-              Controlled billing content - state managed externally
-            </p>
-          </TabsContent>
-          <TabsContent value="notifications">
-            <p className="text-gray-700">
-              Controlled notifications content - state managed externally
-            </p>
-          </TabsContent>
-        </Tabs>
-
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={() => setActiveTab('account')}
-            className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
-          >
-            External: Account
-          </button>
-          <button
-            onClick={() => setActiveTab('billing')}
-            className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
-          >
-            External: Billing
-          </button>
-          <button
-            onClick={() => setActiveTab('notifications')}
-            className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
-          >
-            External: Notifications
-          </button>
-        </div>
+        <Footer
+          title="Tabs"
+          backTo="/playground/image"
+          backToTitle="Image"
+          nextTo="/playground/sheet"
+          nextToTitle="Sheet"
+        />
       </div>
     </>
   );
-};
-
-export default TabsPage;
+}
