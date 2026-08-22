@@ -417,7 +417,13 @@ export default function CardPage() {
             </div>
           </div>
         </MainSection>
-        <Footer title="Typography" nextTo="/colors" nextToTitle="Colors" />
+        <Footer
+          title="Card"
+          backTo="/playground/button-group"
+          backToTitle="Button Group"
+          nextTo="/playground/chip"
+          nextToTitle="Chip"
+        />
       </div>
     </>
   );

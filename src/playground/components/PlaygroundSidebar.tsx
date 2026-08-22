@@ -67,7 +67,7 @@ function PlaygroundSidebar() {
         { path: '/playground/time-picker', label: 'Time Picker' },
         { path: '/playground/input-otp', label: 'Input OTP' },
         { path: '/playground/color-picker', label: 'Color Picker' },
-        { path: '/playground/input-password', label: 'Input Passowrd' },
+        { path: '/playground/input-password', label: 'Input Password' },
         { path: '/playground/input-phone-number', label: 'Input Phone Number' },
         { path: '/playground/drawing', label: 'Drawing' },
       ],
@@ -100,10 +100,9 @@ function PlaygroundSidebar() {
         { path: '/playground/tabs', label: 'Tabs' },
         { path: '/playground/sheet', label: 'Sheet' },
         { path: '/playground/dropdown', label: 'Dropdown' },
-        { path: '/playground/breadcrumb', label: 'BreadCrumb' },
+        { path: '/playground/breadcrumb', label: 'Breadcrumb' },
         { path: '/playground/pagination', label: 'Pagination' },
         { path: '/playground/sidebar', label: 'Sidebar' },
-        { path: '/playground/header', label: 'Header' },
       ],
     },
     {
@@ -122,13 +121,12 @@ function PlaygroundSidebar() {
         { path: '/playground/accordion', label: 'Accordion' },
         { path: '/playground/list', label: 'List' },
         { path: '/playground/table', label: 'Table' },
-        { path: '/playground/api-table', label: 'Api Table' },
-        { path: '/playground/timeline', label: 'timeline' },
+        { path: '/playground/api-table', label: 'API Table' },
+        { path: '/playground/dnd', label: 'Drag and Drop' },
         { path: '/playground/file-view', label: 'File View' },
       ],
     },
     {
-      path: '/playground/pages',
       label: 'Example',
       icon: 'cpu',
       children: [
@@ -136,7 +134,6 @@ function PlaygroundSidebar() {
         { path: '/playground/example/invoice', label: 'Invoice' },
       ],
     },
-    { path: '/playground/auth', label: 'Authentication', icon: 'lock' },
   ];
 
   return (

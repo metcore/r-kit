@@ -394,10 +394,10 @@ export default function DndPage() {
 
       <Footer
         title="Drag and Drop"
-        backTo="/timeline"
-        backToTitle="Timeline"
-        nextTo="/calendar"
-        nextToTitle="Calendar"
+        backTo="/playground/api-table"
+        backToTitle="API Table"
+        nextTo="/playground/file-view"
+        nextToTitle="File View"
       />
     </>
   );

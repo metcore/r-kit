@@ -185,10 +185,10 @@ export default function InputFieldPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/checkbox"
-          backToTitle="Checkbox"
-          nextTo="/input-group"
           title="Input Field"
+          backTo="/playground/checkbox"
+          backToTitle="Checkbox"
+          nextTo="/playground/input-group"
           nextToTitle="Input Group"
         />
       </div>

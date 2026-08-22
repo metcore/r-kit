@@ -362,7 +362,11 @@ export default function TypographyPage() {
           </div>
         </MainSection>
 
-        <Footer title="Typography" nextTo="/colors" nextToTitle="Colors" />
+        <Footer
+          title="Typography"
+          nextTo="/playground/colors"
+          nextToTitle="Color"
+        />
       </div>
     </>
   );

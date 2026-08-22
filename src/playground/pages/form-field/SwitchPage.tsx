@@ -233,11 +233,11 @@ export const SwitchPage = () => {
           </MainSection>
         </GridWrapper>
         <Footer
-          backTo="/radio-button"
-          backToTitle="Radio Button"
-          nextTo="/color-picker"
           title="Switches"
-          nextToTitle="Color Picker"
+          backTo="/playground/radio-button"
+          backToTitle="Radio Button"
+          nextTo="/playground/select"
+          nextToTitle="Select"
         />
       </div>
     </>

@@ -44,11 +44,11 @@ import ColorPickerPage from '../playground/pages/form-field/ColorPickerPage';
 import InputPasswordPage from '../playground/pages/form-field/InputPasswordPage';
 import InputPhoneNumberPage from '../playground/pages/form-field/InputPhoneNumberPage';
 import FileViewPage from '../playground/pages/FileViewPage';
+import DndPage from '../playground/pages/DndPage';
 import AlertPage from '../playground/pages/AlertPage';
 import TextAreaPage from '../playground/pages/form-field/TextAreaPage';
 import ListPage from '../playground/pages/data-display/ListPage';
 import AccordionPage from '../playground/pages/data-display/AccordionPage';
-import StepPage from '../playground/pages/data-display/StepPage';
 import { SliderPage } from '../playground/pages/form-field/SliderPage';
 import { DrawingPage } from '../playground/pages/form-field/DrawingPage';
 import TimePickerpage from '../playground/pages/form-field/TimePickerPage';
@@ -103,10 +103,10 @@ export default function PlaygroundRouter() {
         <Route path="/list" element={<ListPage />} />
         <Route path="/accordion" element={<AccordionPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
-        <Route path="/step" element={<StepPage />} />
         <Route path="/slider" element={<SliderPage />} />
         <Route path="/drawing" element={<DrawingPage />} />
         <Route path="/badge" element={<BadgePage />} />
+        <Route path="/dnd" element={<DndPage />} />
         <Route path="/file-view" element={<FileViewPage />} />
         <Route path="/alert" element={<AlertPage />} />
         <Route path="/time-picker" element={<TimePickerpage />} />

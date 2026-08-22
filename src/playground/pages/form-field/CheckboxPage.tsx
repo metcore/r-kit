@@ -234,7 +234,9 @@ export default function CheckboxPage() {
         {/* footer */}
         <Footer
           title="Checkbox"
-          nextTo="/input-field"
+          backTo="/playground/colors"
+          backToTitle="Color"
+          nextTo="/playground/input-field"
           nextToTitle="Input Field"
         />
       </div>

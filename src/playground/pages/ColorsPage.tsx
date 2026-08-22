@@ -159,7 +159,13 @@ export default function ColorsPage() {
           ))}
         </div>
 
-        <Footer title="Colors" backTo="/typography" backToTitle="Typography" />
+        <Footer
+          title="Color"
+          backTo="/playground/typography"
+          backToTitle="Typography"
+          nextTo="/playground/checkbox"
+          nextToTitle="Checkbox"
+        />
       </div>
     </>
   );

@@ -175,10 +175,10 @@ export default function TimePickerPage() {
         </GridWrapper>
 
         <Footer
+          title="Time Picker"
           backTo="/playground/day-of-month-picker"
           backToTitle="Day Of Month Picker"
           nextTo="/playground/input-otp"
-          title="Time Picker"
           nextToTitle="Input OTP"
         />
       </div>

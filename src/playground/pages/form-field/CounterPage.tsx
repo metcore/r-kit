@@ -336,9 +336,9 @@ export default function CounterPage() {
 
       <Footer
         title="Counter"
-        backTo="/input-group"
+        backTo="/playground/input-group"
         backToTitle="Input Group"
-        nextTo="/input-file"
+        nextTo="/playground/input-file"
         nextToTitle="Input File"
       />
     </>

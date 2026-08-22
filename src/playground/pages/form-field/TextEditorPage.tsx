@@ -239,11 +239,11 @@ export default function TextEditorPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/color-picker"
-          backToTitle="Color Picker"
-          nextTo="/[next-page]"
           title="Text Editor"
-          nextToTitle="[Next Page]"
+          backTo="/playground/slider"
+          backToTitle="Slider"
+          nextTo="/playground/text-area"
+          nextToTitle="Text Area"
         />
       </div>
     </>

@@ -772,10 +772,10 @@ export default function InputGroupPage() {
           </ModalFooter>
         </Modal>
         <Footer
-          backTo="/input-field"
-          backToTitle="Input Field"
-          nextTo="/counter"
           title="Input Group"
+          backTo="/playground/input-field"
+          backToTitle="Input Field"
+          nextTo="/playground/counter"
           nextToTitle="Counter"
         />
       </div>

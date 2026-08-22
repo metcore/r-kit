@@ -282,11 +282,11 @@ export default function InputOtpPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/input-password"
-          backToTitle="Input Password"
-          nextTo="/input-group"
           title="Input OTP"
-          nextToTitle="Input Group"
+          backTo="/playground/time-picker"
+          backToTitle="Time Picker"
+          nextTo="/playground/color-picker"
+          nextToTitle="Color Picker"
         />
       </div>
     </>

@@ -243,11 +243,11 @@ export default function InputPasswordPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/checkbox"
-          backToTitle="Checkbox"
-          nextTo="/input-group"
-          title="Input Field"
-          nextToTitle="Input Group"
+          title="Input Phone Number"
+          backTo="/playground/input-password"
+          backToTitle="Input Password"
+          nextTo="/playground/drawing"
+          nextToTitle="Drawing"
         />
       </div>
     </>

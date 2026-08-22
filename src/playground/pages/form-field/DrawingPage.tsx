@@ -137,11 +137,11 @@ export const DrawingPage = () => {
         </GridWrapper>
 
         <Footer
-          backTo="/slider"
-          backToTitle="Slider"
-          nextTo="/color-picker"
           title="Drawing"
-          nextToTitle="Color Picker"
+          backTo="/playground/input-phone-number"
+          backToTitle="Input Phone Number"
+          nextTo="/playground/avatar"
+          nextToTitle="Avatar"
         />
       </div>
     </>

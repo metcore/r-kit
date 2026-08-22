@@ -203,9 +203,11 @@ export default function ColorPickerPage() {
         </GridWrapper>
 
         <Footer
-          title="Checkbox"
-          nextTo="/input-field"
-          nextToTitle="Input Field"
+          title="Color Picker"
+          backTo="/playground/input-otp"
+          backToTitle="Input OTP"
+          nextTo="/playground/input-password"
+          nextToTitle="Input Password"
         />
       </div>
     </>

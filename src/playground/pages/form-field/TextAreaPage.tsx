@@ -269,10 +269,10 @@ export default function TextAreaPage() {
         </GridWrapper>
 
         <Footer
+          title="Text Area"
           backTo="/playground/text-editor"
           backToTitle="Text Editor"
           nextTo="/playground/month-picker"
-          title="Text Area"
           nextToTitle="Month Picker"
         />
       </div>

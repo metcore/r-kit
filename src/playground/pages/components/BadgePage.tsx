@@ -195,11 +195,11 @@ export default function BadgePage() {
       </MainSection>
 
       <Footer
-        title="Chip"
-        backTo="/card"
-        backToTitle="Card"
-        nextTo="/avatar"
-        nextToTitle="Avatar"
+        title="Badge"
+        backTo="/playground/calendar"
+        backToTitle="Calendar"
+        nextTo="/playground/button"
+        nextToTitle="Button"
       />
     </div>
   );

@@ -186,11 +186,11 @@ export default function InputFilePage() {
       </form>
 
       <Footer
-        nextTo="/date-picker"
         title="Input File"
-        nextToTitle="Date Picker"
-        backTo="/counter"
+        backTo="/playground/counter"
         backToTitle="Counter"
+        nextTo="/playground/date-picker"
+        nextToTitle="Date Picker"
       />
     </>
   );

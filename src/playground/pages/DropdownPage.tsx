@@ -203,7 +203,13 @@ export default function DropdownPage() {
           </MainSection>
         </GridWrapper>
 
-        <Footer title="Colors" backTo="/typography" backToTitle="Typography" />
+        <Footer
+          title="Dropdown"
+          backTo="/playground/sheet"
+          backToTitle="Sheet"
+          nextTo="/playground/breadcrumb"
+          nextToTitle="Breadcrumb"
+        />
       </div>
     </>
   );

@@ -64,7 +64,13 @@ export default function FileViewPage() {
           </div>
         </MainSection>
 
-        <Footer title="Colors" backTo="/typography" backToTitle="Typography" />
+        <Footer
+          title="File View"
+          backTo="/playground/dnd"
+          backToTitle="Drag and Drop"
+          nextTo="/playground/example/profile"
+          nextToTitle="Profile"
+        />
       </div>
     </>
   );

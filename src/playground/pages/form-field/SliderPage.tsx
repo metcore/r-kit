@@ -117,11 +117,11 @@ export const SliderPage = () => {
         </GridWrapper>
 
         <Footer
-          backTo="/radio-button"
-          backToTitle="Radio Button"
-          nextTo="/color-picker"
-          title="Sliders"
-          nextToTitle="Color Picker"
+          title="Slider"
+          backTo="/playground/select"
+          backToTitle="Select"
+          nextTo="/playground/text-editor"
+          nextToTitle="Text Editor"
         />
       </div>
     </>

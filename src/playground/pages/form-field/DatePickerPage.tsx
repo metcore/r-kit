@@ -218,10 +218,10 @@ export default function DatePickerPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/input-file"
-          backToTitle="Input File"
           title="Date Picker"
-          nextTo="/radio-button"
+          backTo="/playground/input-file"
+          backToTitle="Input File"
+          nextTo="/playground/radio-button"
           nextToTitle="Radio Button"
         />
       </div>

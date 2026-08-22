@@ -373,11 +373,11 @@ export default function RadioButtonPage() {
       </GridWrapper>
 
       <Footer
-        backTo="/checkbox"
-        backToTitle="Checkbox"
-        nextTo="/input-field"
-        nextToTitle="Input Field"
         title="Radio Button"
+        backTo="/playground/date-picker"
+        backToTitle="Date Picker"
+        nextTo="/playground/switch"
+        nextToTitle="Switches"
       />
     </>
   );
