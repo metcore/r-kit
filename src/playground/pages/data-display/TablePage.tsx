@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
+import dedent from 'dedent';
 import {
   Table,
   TableBody,
@@ -12,9 +13,100 @@ import {
 } from '../../../clients';
 import { Badge } from '../../../components/badge';
 import { Text } from '../../../components/text';
-import illust from '../../../assets/images/forms.png';
+import illust from '../../../assets/images/data-display.png';
 import MainSection from '../../components/MainSection';
 import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
+
+const exampleBasic = dedent(`
+  import {
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCellHead,
+    TableCell,
+  } from '@herca/r-kit/clients';
+
+  <Table variant="row-bordered" className="w-full table-auto">
+    <TableHead>
+      <TableRow>
+        <TableCellHead value="Nama" />
+        <TableCellHead value="Status" />
+      </TableRow>
+    </TableHead>
+
+    <TableBody>
+      {data.map((item, index) => (
+        <TableRow key={item.username} isLast={index === data.length - 1}>
+          <TableCell value={item.name} />
+          <TableCell>
+            <Badge color={statusMap[item.status]}>{item.status}</Badge>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+`);
+
+const exampleHeaded = dedent(`
+  // variant="headed" memberi latar abu pada baris kepala.
+  // Tandai barisnya dengan isHeader agar gayanya ikut menyesuaikan.
+  <Table variant="headed">
+    <TableHead>
+      <TableRow isHeader>...</TableRow>
+    </TableHead>
+    ...
+  </Table>
+`);
+
+const exampleBordered = dedent(`
+  // variant="bordered" memberi garis pada seluruh sisi sel.
+  <Table variant="bordered">...</Table>
+`);
+
+const exampleStripped = dedent(`
+  // variant="stripped" memberi latar belang-seling per baris,
+  // memudahkan mata mengikuti baris yang panjang.
+  <Table variant="stripped">...</Table>
+`);
+
+const exampleHovered = dedent(`
+  // variant="hovered" menyorot baris yang sedang disentuh kursor.
+  <Table variant="hovered">...</Table>
+`);
+
+const exampleAdvanced = dedent(`
+  // TableFooter menampung paginasi agar menyatu dengan tabel.
+  <Table variant="wrapped-row-bordered">
+    <TableHead>...</TableHead>
+    <TableBody>...</TableBody>
+
+    <TableFooter colSpan={6}>
+      <TablePagination
+        currentPage={page}
+        totalPage={lastPage}
+        numberOnClick={setPage}
+      />
+    </TableFooter>
+  </Table>
+`);
+
+const examplePagination = dedent(`
+  // TablePagination juga bisa berdiri sendiri di luar tabel.
+  <TablePagination
+    currentPage={page}
+    totalPage={lastPage}
+    selectedPerpage={perPage}
+    onChangePerpage={(val) => {
+      setPerPage(val);
+      setPage(1); // kembali ke halaman awal saat jumlah baris berubah
+    }}
+    numberOnClick={setPage}
+    prevOnClick={() => setPage((p) => Math.max(p - 1, 1))}
+    nextOnClick={() => setPage((p) => Math.min(p + 1, lastPage))}
+  />
+`);
 
 export default function TablePage() {
   const [page, setPage] = useState(1);
@@ -27,7 +119,7 @@ export default function TablePage() {
       name: 'Cody Fisher',
       username: 'codex',
       status: 'active',
-      phone: '62xxxx',
+      phone: '6281298765432',
       divisi: 'SuperAdmin',
     },
     {
@@ -106,7 +198,11 @@ export default function TablePage() {
       />
 
       <div className="flex flex-col gap-4">
-        <MainSection title="Table Basic" className="overflow-auto">
+        <MainSection
+          title="Table Basic"
+          code={exampleBasic}
+          className="overflow-auto"
+        >
           <Table variant="row-bordered" className="w-full table-auto">
             <TableHead>
               <TableRow>
@@ -120,10 +216,7 @@ export default function TablePage() {
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow
-                  key={index}
-                  isLast={index === sample_data.length - index}
-                >
+                <TableRow key={index} isLast={index === sample_data.length - 1}>
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
@@ -147,7 +240,11 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection title="Table Head" className="overflow-auto">
+        <MainSection
+          title="Table Head"
+          code={exampleHeaded}
+          className="overflow-auto"
+        >
           <Table variant="headed" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
@@ -161,10 +258,7 @@ export default function TablePage() {
             </TableHead>
             <TableBody>
               {sample_data.map((item, index) => (
-                <TableRow
-                  key={index}
-                  isLast={index === sample_data.length - index}
-                >
+                <TableRow key={index} isLast={index === sample_data.length - 1}>
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell textClassName="text-gray-800">
                     <a href="#">
@@ -192,7 +286,11 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection title="Bordered Table" className="overflow-auto">
+        <MainSection
+          title="Bordered Table"
+          code={exampleBordered}
+          className="overflow-auto"
+        >
           <Table variant="bordered" className="w-full table-auto">
             <TableHead>
               <TableRow>
@@ -230,7 +328,11 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection title="Stripped Rows" className="overflow-auto">
+        <MainSection
+          title="Stripped Rows"
+          code={exampleStripped}
+          className="overflow-auto"
+        >
           <Table variant="stripped" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
@@ -268,7 +370,11 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection title="Hovered" className="overflow-auto">
+        <MainSection
+          title="Hovered"
+          code={exampleHovered}
+          className="overflow-auto"
+        >
           <Table variant="hovered" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
@@ -306,7 +412,11 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection title="Advanced Table" className="overflow-auto">
+        <MainSection
+          title="Advanced Table"
+          code={exampleAdvanced}
+          className="overflow-auto"
+        >
           <Table variant="wrapped-row-bordered" className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
@@ -352,7 +462,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
 
-        <MainSection title="pagination">
+        <MainSection title="Pagination" code={examplePagination}>
           <TablePagination
             currentPage={page}
             totalPage={lastPage}
@@ -366,6 +476,14 @@ export default function TablePage() {
             nextOnClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
           />
         </MainSection>
+
+        <Footer
+          title="Table"
+          backTo="/playground/list"
+          backToTitle="List"
+          nextTo="/playground/api-table"
+          nextToTitle="API Table"
+        />
       </div>
     </>
   );

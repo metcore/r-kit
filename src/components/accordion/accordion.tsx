@@ -28,7 +28,7 @@ export function Accordion({
 
   return (
     <div>
-      <List variant={variant} className="overflow-hidden">
+      <List variant={variant}>
         {renderHeader != null && (
           <button
             type="button"
