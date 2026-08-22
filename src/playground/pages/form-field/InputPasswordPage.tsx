@@ -1,8 +1,5 @@
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import { useMarkdown } from '../../hooks/useMarkdown';
-import { Card, CardBody } from '../../../components/card';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
@@ -10,8 +7,6 @@ import Footer from '../../components/Footer';
 import { InputPassword } from '../../../components/input/input-password';
 
 export default function InputPasswordPage() {
-  const { doc } = useMarkdown(`/docs/input-field.md`);
-
   const exampleBasic = dedent(`
     import { InputPassword } from '@herca/r-kit/input-password';
 
@@ -253,18 +248,12 @@ export default function InputPasswordPage() {
           </MainSection>
         </GridWrapper>
 
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
-
         <Footer
-          backTo="/checkbox"
-          backToTitle="Checkbox"
-          nextTo="/input-group"
           title="Input Password"
-          nextToTitle="Input Group"
+          backTo="/playground/color-picker"
+          backToTitle="Color Picker"
+          nextTo="/playground/input-phone-number"
+          nextToTitle="Input Phone Number"
         />
       </div>
     </>

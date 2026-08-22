@@ -40,6 +40,8 @@ interface TimePickerProps {
   errorMessages?: string;
   required?: boolean;
   size?: InputSize;
+  nowLabel?: string;
+  confirmLabel?: string;
 }
 
 export function TimePicker({
@@ -60,6 +62,8 @@ export function TimePicker({
   errorMessages,
   required,
   size,
+  nowLabel = 'Sekarang',
+  confirmLabel = 'Terapkan',
 }: TimePickerProps) {
   const hourOpts = use12Hour ? HOURS_12 : HOURS_24;
 
@@ -105,7 +109,7 @@ export function TimePicker({
     const ap = h >= 12 ? 'PM' : 'AM';
     if (use12Hour) h = h % 12 || 12;
     setDraft({
-      h: String(h),
+      h: use12Hour ? String(h) : pad2(h),
       m: pad2(now.getMinutes()),
       s: pad2(now.getSeconds()),
       ap: ap as 'AM' | 'PM',
@@ -195,9 +199,9 @@ export function TimePicker({
 
         <div className="flex items-center justify-between gap-2 border-t border-gray-100 px-5 py-3">
           <Button onClick={handleNow} variant="tertiary">
-            Batalkan
+            {nowLabel}
           </Button>
-          <Button onClick={handleApply}>Terapkan</Button>
+          <Button onClick={handleApply}>{confirmLabel}</Button>
         </div>
       </DropdownContent>
     </Dropdown>

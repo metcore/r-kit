@@ -1,6 +1,8 @@
 import { ButtonIcon } from '../../../components/button-icon/button-icon';
-import { Hero } from '../../../components/hero';
+import illust from '../../../assets/images/data-display.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 import dedent from 'dedent';
 
@@ -127,21 +129,25 @@ export default function Example() {
 }
 `);
 
+const exampleIndicator = dedent(`
+  // indicatorProps menempelkan lencana kecil di sudut tombol,
+  // biasanya untuk jumlah notifikasi yang belum dibaca.
+  <ButtonIcon
+    color="gray"
+    icon="bell"
+    indicatorProps={{ color: 'danger', value: '22+', size: 'sm' }}
+  />
+`);
+
 function ButtonIconPage() {
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">
-          Button Icon
-        </h1>
-
-        <p className="text-sm text-gray-800">
-          Tombol berbentuk ikon yang digunakan untuk aksi cepat dengan ruang
-          yang lebih hemat dibanding button biasa.
-        </p>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Components"
+        subtitle="Button Icon"
+        description="Tombol berbentuk ikon untuk aksi cepat, hemat ruang dibanding button bertulisan."
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
@@ -203,7 +209,7 @@ function ButtonIconPage() {
           <MainSection title="bulat" code={codeExampleActive}>
             <ButtonIcon icon="user" rounded color="primary" />
           </MainSection>
-          <MainSection title="Indicator">
+          <MainSection title="Indicator" code={exampleIndicator}>
             <ButtonIcon
               indicatorProps={{
                 color: 'danger',
@@ -216,6 +222,14 @@ function ButtonIconPage() {
             />
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Button Icon"
+          backTo="/playground/button"
+          backToTitle="Button"
+          nextTo="/playground/button-group"
+          nextToTitle="Button Group"
+        />
       </div>
     </>
   );

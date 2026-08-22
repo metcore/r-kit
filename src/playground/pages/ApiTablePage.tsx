@@ -3,6 +3,7 @@ import { Badge } from '../../components/badge';
 import HeroSection from '../components/HeroSection';
 import illust from '../../assets/images/forms.png';
 import MainSection from '../components/MainSection';
+import Footer from '../components/Footer';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { Text } from '../../components/text';
 import {
@@ -534,8 +535,8 @@ export default function ApiTablePage() {
       <HeroSection
         illust={illust}
         title="Data Display"
-        subtitle="Table"
-        description="Struktur data yang menampilkan informasi dalam format baris dan kolom untuk mendukung pemahaman dan interaksi user."
+        subtitle="API Table"
+        description="Tabel yang mengambil data langsung dari API, lengkap dengan paginasi, pengurutan, dan pengaturan kolom di sisi server."
       />
       <div className="flex flex-wrap gap-2">
         <MainSection
@@ -557,9 +558,10 @@ export default function ApiTablePage() {
                   value={t.filters.category}
                   className="w-50"
                   onChange={(value) => {
+                    const dipilih = Array.isArray(value) ? value[0] : value;
                     t.setFilter(
                       'category',
-                      value != null ? String(value?.value) : ''
+                      dipilih != null ? String(dipilih.value) : ''
                     );
                   }}
                   placeholder="Cari & Kategori"
@@ -668,6 +670,14 @@ export default function ApiTablePage() {
             </CardBody>
           </Card>
         </MainSection>
+
+        <Footer
+          title="API Table"
+          backTo="/playground/table"
+          backToTitle="Table"
+          nextTo="/playground/dnd"
+          nextToTitle="Drag and Drop"
+        />
       </div>
     </div>
   );

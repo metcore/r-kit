@@ -1,4 +1,5 @@
 import User from './icons/User';
+import Command from './icons/Command';
 import Eye from './icons/Eye';
 import XCircle from './icons/XCircle';
 import ArrowRight from './icons/ArrowRight';
@@ -398,6 +399,7 @@ import GridSquarePlusIcon from './icons/GridSquareplusIcon';
 import FlagIcon from './icons/FlagIcon';
 import BadgeDiscountAltIcon from './icons/BadgeDiscountAltIcon';
 import DoorClosedIcon from './icons/DoorClosedIcon';
+import ColorPicker from './icons/ColorPicker';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -800,4 +802,6 @@ export const iconRegistry = {
   'flag': FlagIcon,
   'badge-discount-alt': BadgeDiscountAltIcon,
   'door-closed': DoorClosedIcon,
+  'color-picker': ColorPicker,
+  'command': Command,
 };

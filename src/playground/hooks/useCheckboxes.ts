@@ -1,10 +1,11 @@
 import dedent from 'dedent';
-import type { ColorType, SizeType } from '../../components/checkbox/type';
+import type { SizeType } from '../../components/checkbox/type';
+import type { BaseColor } from '../../components/base/type/base-color';
 
 export default function useCheckboxes() {
   const CHECKBOXES: {
     id: string;
-    color: ColorType;
+    color: BaseColor;
     disabled?: boolean;
     label?: string;
     description?: string;
@@ -30,11 +31,10 @@ export default function useCheckboxes() {
 
   const SIZE_CHECKBOXES: {
     id: string;
-    color: ColorType;
+    color: BaseColor;
     size: SizeType;
     disabled?: boolean;
     label?: string;
-    label2?: string;
     description?: string;
     checked?: boolean;
   }[] = [
@@ -42,8 +42,7 @@ export default function useCheckboxes() {
       id: '1',
       color: 'primary',
       size: 'sm',
-      label: 'Small Horizontal',
-      label2: 'Small Vertical',
+      label: 'Small',
       description: 'Deskripsi',
       checked: true,
     },
@@ -51,119 +50,165 @@ export default function useCheckboxes() {
       id: '2',
       color: 'success',
       size: 'md',
-      label: 'Medium Horizontal',
-      label2: 'Medium Vertical',
+      label: 'Medium',
       description: 'Deskripsi',
     },
     {
       id: '3',
       color: 'danger',
       size: 'lg',
-      label: 'Large Horizontal',
-      label2: 'Large Vertical',
+      label: 'Large',
       description: 'Deskripsi',
     },
   ] as const;
 
   const exampleDefault = dedent(`
-    const [selected, setSelected] = useState({});
-
-    {CHECKBOXES.map(({ id, color, disabled }) => (
-      <Checkbox
-        label={chekedBasic ? 'cheked' : 'UnCheked'}
-        onChange={setSelected}
-      />
-    ))}
-  `);
-
-  const exampleHorizontal = dedent(`
     const [checked, setChecked] = useState(false);
 
     <Checkbox
-      color="primary"
-      checked={checked}
-      onCheckedChange={setChecked}
+      onChange={setChecked}
+      label={checked ? 'Checked' : 'Unchecked'}
     />
   `);
 
-  const exampleHorizontal2 = dedent(`
+  const exampleIndeterminate = dedent(`
     const [checked, setChecked] = useState(false);
 
     <Checkbox
+      value={1}
       icon="minus"
-      color="primary"
-      checked={checked}
-      onCheckedChange={setChecked}
+      onChange={setChecked}
+      label={checked ? 'Checked' : 'Unchecked'}
     />
   `);
 
-  const exampleDescription = dedent(`
-    const [checked, setChecked] = useState(false);
-
-    <Checkbox
-      color="primary"
-      description="Deskripsi"
-      checked={checked}
-      onCheckedChange={setChecked}
-    />
+  const exampleWithText = dedent(`
+    <CheckboxGroup direction="horizontal" defaultValue={['3', '4']}>
+      {CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          label={item.label}
+          color={item.color}
+          disabled={item.disabled}
+        />
+      ))}
+    </CheckboxGroup>
   `);
 
-  const exampleVerticalActive = dedent(`
-    const [checked, setChecked] = useState(true);
-
-    <Checkbox
-      vertical
-      color="primary"
-      checked={checked}
-      onCheckedChange={setChecked}
-    />
+  const exampleWithDescription = dedent(`
+    <CheckboxGroup direction="horizontal" defaultValue={['1', '2', '3', '4']}>
+      {CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          label={item.label}
+          color={item.color}
+          disabled={item.disabled}
+          description={item.description}
+        />
+      ))}
+    </CheckboxGroup>
   `);
 
-  const exampleVerticalMinus = dedent(`
-    const [checked, setChecked] = useState(true);
-
-    <Checkbox
-      vertical
-      icon="minus"
-      color="primary"
-      checked={checked}
-      onCheckedChange={setChecked}
-    />
+  const exampleValidation = dedent(`
+    <CheckboxGroup direction="horizontal" defaultValue={['1', '2', '3', '4']}>
+      {SIZE_CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          size={item.size}
+          label={item.label}
+          description={item.description}
+          color={item.color}
+          disabled={item.disabled}
+          errorMessages="Invalid Text"
+        />
+      ))}
+    </CheckboxGroup>
   `);
 
-  const exampleVerticalUnActive = dedent(`
-    const [checked, setChecked] = useState(false);
-
-    <Checkbox
-      vertical
-      color="primary"
-      checked={checked}
-      onCheckedChange={setChecked}
-    />
+  const exampleSize = dedent(`
+    <CheckboxGroup direction="horizontal" defaultValue={['1', '2', '3', '4']}>
+      {SIZE_CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          size={item.size}
+          label={item.label}
+          description={item.description}
+          color={item.color}
+          disabled={item.disabled}
+        />
+      ))}
+    </CheckboxGroup>
   `);
 
-  const exampleVerticalDescription = dedent(`
-    const [checked, setChecked] = useState(false);
+  const exampleVertical = dedent(`
+    <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+      {SIZE_CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          size={item.size}
+          label={item.label}
+          description={item.description}
+          color={item.color}
+          disabled={item.disabled}
+        />
+      ))}
+    </CheckboxGroup>
+  `);
 
-    <Checkbox
-      vertical
-      color="primary"
-      description="Helper text messages"
-      checked={checked}
-      onCheckedChange={setChecked}
-    />
+  const exampleTooltip = dedent(`
+    <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+      {SIZE_CHECKBOXES.map((item) => (
+        <Checkbox
+          key={item.id}
+          value={item.id}
+          size={item.size}
+          label={item.label}
+          description={item.description}
+          tooltip="Tooltip Text"
+          color={item.color}
+          disabled={item.disabled}
+        />
+      ))}
+    </CheckboxGroup>
+  `);
+
+  const exampleGrouping = dedent(`
+    <div className="flex flex-col gap-4">
+      <Checkbox label="Parent" onChange={handleOnCheckedParent} />
+
+      <div className="ml-6 flex flex-col">
+        <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
+          {SIZE_CHECKBOXES.map((item) => (
+            <Checkbox
+              key={item.id}
+              label={item.label}
+              description={item.description}
+              color={item.color}
+              checked={true}
+              disabled={item.disabled}
+            />
+          ))}
+        </CheckboxGroup>
+      </div>
+    </div>
   `);
 
   return {
     CHECKBOXES,
     SIZE_CHECKBOXES,
     exampleDefault,
-    exampleHorizontal,
-    exampleHorizontal2,
-    exampleDescription,
-    exampleVerticalActive,
-    exampleVerticalMinus,
-    exampleVerticalUnActive,
-    exampleVerticalDescription,
+    exampleIndeterminate,
+    exampleWithText,
+    exampleWithDescription,
+    exampleValidation,
+    exampleSize,
+    exampleVertical,
+    exampleTooltip,
+    exampleGrouping,
   };
 }

@@ -1,27 +1,28 @@
-import { Card, CardBody } from '../../../components/card';
 import { Checkbox, CheckboxGroup } from '../../../components/checkbox/checkbox';
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import useCheckboxes from '../../hooks/useCheckboxes';
-import { useMarkdown } from '../../hooks/useMarkdown';
 import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 import HeroSection from '../../components/HeroSection';
 import { useState } from 'react';
 
 export default function CheckboxPage() {
-  const [chekedBasic, setChekedBasic] = useState<boolean>(false);
-  const [chekedIndeminate, setChekedIndeminate] = useState<boolean>(false);
-  const { doc } = useMarkdown(`/docs/checkbox.md`);
+  const [checkedBasic, setCheckedBasic] = useState<boolean>(false);
+  const [checkedIndeterminate, setCheckedIndeterminate] =
+    useState<boolean>(false);
   const {
     CHECKBOXES,
     SIZE_CHECKBOXES,
     exampleDefault,
-    exampleHorizontal,
-    exampleHorizontal2,
-    exampleVerticalMinus,
-    exampleVerticalDescription,
+    exampleIndeterminate,
+    exampleWithText,
+    exampleWithDescription,
+    exampleValidation,
+    exampleSize,
+    exampleVertical,
+    exampleTooltip,
+    exampleGrouping,
   } = useCheckboxes();
 
   const handleOnCheckedParent = () => {};
@@ -39,24 +40,27 @@ export default function CheckboxPage() {
         <GridWrapper>
           <MainSection title="Checkbox Default" code={exampleDefault}>
             <Checkbox
-              onChange={setChekedBasic}
-              label={chekedBasic ? 'cheked' : 'UnCheked'}
+              onChange={setCheckedBasic}
+              label={checkedBasic ? 'Checked' : 'Unchecked'}
             />
           </MainSection>
-          <MainSection title="Checkbox Inderminate" code={exampleDefault}>
+          <MainSection
+            title="Checkbox Indeterminate"
+            code={exampleIndeterminate}
+          >
             <Checkbox
               value={1}
               icon="minus"
-              onChange={setChekedIndeminate}
-              label={chekedIndeminate ? 'cheked' : 'UnCheked'}
+              onChange={setCheckedIndeterminate}
+              label={checkedIndeterminate ? 'Checked' : 'Unchecked'}
             />
           </MainSection>
         </GridWrapper>
 
         <GridWrapper>
           <MainSection
-            title="Checkbox with Text"
-            code={exampleHorizontal}
+            title="Checkbox With Text"
+            code={exampleWithText}
             className="flex-1"
           >
             <CheckboxGroup direction="horizontal" defaultValue={['3', '4']}>
@@ -73,8 +77,8 @@ export default function CheckboxPage() {
           </MainSection>
 
           <MainSection
-            title="Checbox With Description"
-            code={exampleHorizontal2}
+            title="Checkbox With Description"
+            code={exampleWithDescription}
             className="flex-1"
           >
             <CheckboxGroup
@@ -98,7 +102,7 @@ export default function CheckboxPage() {
         <GridWrapper>
           <MainSection
             title="Checkbox Validation"
-            code={exampleVerticalMinus}
+            code={exampleValidation}
             className="flex-1"
           >
             <CheckboxGroup
@@ -122,7 +126,7 @@ export default function CheckboxPage() {
 
           <MainSection
             title="Checkbox Size"
-            code={exampleVerticalDescription}
+            code={exampleSize}
             className="flex-1"
           >
             <CheckboxGroup
@@ -147,7 +151,7 @@ export default function CheckboxPage() {
         <GridWrapper>
           <MainSection
             title="Vertical"
-            code={exampleVerticalMinus}
+            code={exampleVertical}
             className="flex-1"
           >
             <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
@@ -166,7 +170,7 @@ export default function CheckboxPage() {
           </MainSection>
           <MainSection
             title="Checkbox With Tooltip"
-            code={exampleVerticalMinus}
+            code={exampleTooltip}
             className="flex-1"
           >
             <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
@@ -189,14 +193,11 @@ export default function CheckboxPage() {
         <GridWrapper>
           <MainSection
             title="Grouping"
-            code={exampleVerticalMinus}
+            code={exampleGrouping}
             className="flex-1"
           >
             <div className="flex flex-col gap-4">
-              <Checkbox
-                label="Parent"
-                onCheckedChange={handleOnCheckedParent}
-              />
+              <Checkbox label="Parent" onChange={handleOnCheckedParent} />
               <div className="ml-6 flex flex-col">
                 <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
                   {SIZE_CHECKBOXES.map((item) => (
@@ -213,38 +214,13 @@ export default function CheckboxPage() {
               </div>
             </div>
           </MainSection>
-          <MainSection
-            title="Checkbox With Tooltip"
-            code={exampleVerticalMinus}
-            className="flex-1"
-          >
-            <CheckboxGroup defaultValue={['1', '2', '3', '4']}>
-              {SIZE_CHECKBOXES.map((item) => (
-                <Checkbox
-                  key={item.id}
-                  value={item.id}
-                  size={item.size}
-                  label={item.label}
-                  description={item.description}
-                  tooltip="Tooltip Text"
-                  color={item.color}
-                  disabled={item.disabled}
-                />
-              ))}
-            </CheckboxGroup>
-          </MainSection>
         </GridWrapper>
 
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
-
-        {/* footer */}
         <Footer
           title="Checkbox"
-          nextTo="/input-field"
+          backTo="/playground/colors"
+          backToTitle="Color"
+          nextTo="/playground/input-field"
           nextToTitle="Input Field"
         />
       </div>

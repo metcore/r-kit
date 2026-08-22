@@ -1,5 +1,8 @@
 import dedent from 'dedent';
+import illust from '../../../assets/images/forms.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 import { DayPicker } from '../../../components/day-picker/day-picker';
 
@@ -151,6 +154,13 @@ const exampleCustomLabel = dedent(`
 export default function DayPickerPage() {
   return (
     <>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Day Picker"
+        description="Memilih satu atau beberapa hari dalam seminggu, misalnya untuk mengatur jadwal berulang."
+      />
+
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
           <DayPicker label="Day" onChange={(e) => console.log(e)} />
@@ -239,6 +249,14 @@ export default function DayPickerPage() {
           />
         </MainSection>
       </GridWrapper>
+
+      <Footer
+        title="Day Picker"
+        backTo="/playground/year-picker"
+        backToTitle="Year Picker"
+        nextTo="/playground/day-of-month-picker"
+        nextToTitle="Day Of Month Picker"
+      />
     </>
   );
 }

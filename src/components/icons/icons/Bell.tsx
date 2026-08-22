@@ -22,8 +22,8 @@ const Bell: React.FC<BaseIconProps> = ({
     <defs>
       <clipPath id="clip0_9105_4207">
         <rect
-          width={size}
-          height={size}
+          width={24}
+          height={25}
           fill={color}
           transform="translate(0 0.923096)"
         />

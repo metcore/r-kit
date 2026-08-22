@@ -1,8 +1,10 @@
-import { Hero } from '../../components/hero';
-import Alert, { type AlertColor } from '../../components/alert/alert';
-import GridWrapper from '../components/GridWrapper';
-import MainSection from '../components/MainSection';
 import dedent from 'dedent';
+import Alert, { type AlertColor } from '../../components/alert/alert';
+import illust from '../../assets/images/feedback.png';
+import GridWrapper from '../components/GridWrapper';
+import HeroSection from '../components/HeroSection';
+import MainSection from '../components/MainSection';
+import Footer from '../components/Footer';
 
 const TONES: AlertColor[] = [
   'info',
@@ -17,9 +19,9 @@ const TONES: AlertColor[] = [
 ];
 
 const DESCRIPTION =
-  'Lorem ipsum dolor sit amet contortuor sit amet lorem ipsum';
+  'Perubahan tersimpan, tetapi ada dua baris yang dilewati karena formatnya tidak dikenali.';
 
-const TITLE = 'Title alert';
+const TITLE = 'Sebagian data dilewati';
 
 const exampleCodeAlertDefault = dedent(`
   import { Alert } from '@herca/r-kit/alert';
@@ -29,7 +31,7 @@ const exampleCodeAlertDefault = dedent(`
       <Alert
         color="primary"
         dismissible
-        title="Body alert"
+        title="Perubahan tersimpan"
       />
     );
   }
@@ -44,7 +46,7 @@ const exampleCodeAlertIcon = dedent(`
         color="primary"
         dismissible
         icon="exclamation-mark"
-        title="Title alert"
+        title="Sebagian data dilewati"
       />
     );
   }
@@ -59,8 +61,8 @@ const exampleCodeAlertDescription = dedent(`
         color="primary"
         dismissible
         icon="exclamation-mark"
-        title="Title alert"
-        description="Lorem ipsum dolor sit amet contortuor sit amet lorem ipsum"
+        title="Sebagian data dilewati"
+        description="Perubahan tersimpan, tetapi ada dua baris yang dilewati."
       />
     );
   }
@@ -76,8 +78,8 @@ const exampleCodeAlertOutline = dedent(`
         color="primary"
         dismissible
         icon="exclamation-mark"
-        title="Title alert"
-        description="Lorem ipsum dolor sit amet contortuor sit amet lorem ipsum"
+        title="Sebagian data dilewati"
+        description="Perubahan tersimpan, tetapi ada dua baris yang dilewati."
       />
     );
   }
@@ -86,17 +88,25 @@ const exampleCodeAlertOutline = dedent(`
 export default function AlertPage() {
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-sm font-semibold text-gray-900">Feedback</p>
-        <h1 className="text-3xl font-semibold text-gray-900">Alert</h1>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Feedback"
+        subtitle="Alert"
+        description="Menyampaikan pesan status yang penting bagi user, mulai dari informasi biasa hingga peringatan kesalahan."
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
           <MainSection title="Default" code={exampleCodeAlertDefault}>
             <div className="flex flex-wrap gap-4">
               {TONES.map((t) => (
-                <Alert key={t} title="body" block color={t} dismissible />
+                <Alert
+                  key={t}
+                  title="Perubahan tersimpan"
+                  block
+                  color={t}
+                  dismissible
+                />
               ))}
             </div>
           </MainSection>
@@ -153,6 +163,14 @@ export default function AlertPage() {
             </div>
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Alert"
+          backTo="/playground/sidebar"
+          backToTitle="Sidebar"
+          nextTo="/playground/toast"
+          nextToTitle="Snackbar/Toast"
+        />
       </div>
     </>
   );

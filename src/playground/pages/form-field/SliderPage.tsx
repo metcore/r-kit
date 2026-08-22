@@ -61,7 +61,7 @@ export const SliderPage = () => {
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Sliders" // Diubah ke Sliders agar sesuai konteks komponen
+        subtitle="Slider"
         description="Komponen input yang memungkinkan pengguna memilih nilai tunggal atau rentang nilai dari batas yang ditentukan."
       />
 
@@ -117,11 +117,11 @@ export const SliderPage = () => {
         </GridWrapper>
 
         <Footer
-          backTo="/radio-button"
-          backToTitle="Radio Button"
-          nextTo="/color-picker"
-          title="Sliders"
-          nextToTitle="Color Picker"
+          title="Slider"
+          backTo="/playground/select"
+          backToTitle="Select"
+          nextTo="/playground/text-editor"
+          nextToTitle="Text Editor"
         />
       </div>
     </>

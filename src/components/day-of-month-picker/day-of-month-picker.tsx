@@ -55,7 +55,7 @@ export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
   tooltip,
   cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
-  title,
+  title = 'Day',
 }) => {
   const {
     open,
@@ -92,7 +92,7 @@ export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
       hint={hint}
       errorMessages={errorMessages}
       tooltip={tooltip}
-      renderHeader={title == null ? <PickerHeader title="Day" /> : undefined}
+      renderHeader={title == null ? <PickerHeader title={title} /> : undefined}
       renderOptions={
         <div className="flex max-h-64 flex-col gap-2 overflow-y-auto">
           {Array.from({ length: 31 }, (_, index) => {

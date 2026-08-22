@@ -1,8 +1,5 @@
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import { useMarkdown } from '../../hooks/useMarkdown';
-import { Card, CardBody } from '../../../components/card';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
@@ -10,8 +7,6 @@ import Footer from '../../components/Footer';
 import { InputOTP } from '../../../clients';
 
 export default function InputOtpPage() {
-  const { doc } = useMarkdown(`/docs/input-field.md`);
-
   const exampleBasic = dedent(`
     import { InputOTP } from '@your-library/components';
 
@@ -286,18 +281,12 @@ export default function InputOtpPage() {
           </MainSection>
         </GridWrapper>
 
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
-
         <Footer
-          backTo="/input-password"
-          backToTitle="Input Password"
-          nextTo="/input-group"
           title="Input OTP"
-          nextToTitle="Input Group"
+          backTo="/playground/time-picker"
+          backToTitle="Time Picker"
+          nextTo="/playground/color-picker"
+          nextToTitle="Color Picker"
         />
       </div>
     </>

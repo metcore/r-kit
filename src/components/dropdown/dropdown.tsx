@@ -38,7 +38,7 @@ export function DropdownContent({
       <DropdownMenu.Content
         sideOffset={sideOffset}
         className={cn(
-          'shadow-dropdown flex flex-col gap-1 rounded-xl border border-gray-200 bg-white p-2',
+          'shadow-dropdown z-[1100] flex flex-col gap-1 rounded-xl border border-gray-200 bg-white p-2',
           className
         )}
         {...props}

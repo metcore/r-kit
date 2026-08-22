@@ -759,10 +759,8 @@ export default function InputGroupPage() {
           onClose={() => setModal(false)}
         >
           <ModalBody>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. In culpa,
-            provident nihil, accusamus praesentium quo asperiores eaque porro
-            distinctio odio nobis, molestiae aliquam aperiam iusto rem aut sunt
-            sint explicabo.
+            Input group tetap berfungsi normal di dalam modal, termasuk addon di
+            kiri maupun kanan serta pesan kesalahannya.
           </ModalBody>
           <ModalFooter className="justify-between">
             <Button variant="outline" onClick={() => setModal(false)}>
@@ -772,10 +770,10 @@ export default function InputGroupPage() {
           </ModalFooter>
         </Modal>
         <Footer
-          backTo="/input-field"
-          backToTitle="Input Field"
-          nextTo="/counter"
           title="Input Group"
+          backTo="/playground/input-field"
+          backToTitle="Input Field"
+          nextTo="/playground/counter"
           nextToTitle="Counter"
         />
       </div>

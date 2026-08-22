@@ -29,6 +29,32 @@ export type CalendarRangeOverrideProps = Omit<
   | 'mode'
 >;
 
+export type DatePickerShortcut =
+  | 'lastWeek'
+  | 'last7Days'
+  | 'last30Days'
+  | 'currentMonth'
+  | 'lastYear';
+
+export const DATE_PICKER_SHORTCUT_ORDER: DatePickerShortcut[] = [
+  'lastWeek',
+  'last7Days',
+  'last30Days',
+  'currentMonth',
+  'lastYear',
+];
+
+export const DEFAULT_DATE_PICKER_SHORTCUT_LABELS: Record<
+  DatePickerShortcut,
+  string
+> = {
+  lastWeek: 'Last Week',
+  last7Days: 'Last 7 Days',
+  last30Days: 'Last 30 Days',
+  currentMonth: 'Current Month',
+  lastYear: 'Last Year',
+};
+
 export interface DatePickerProps {
   format?: DateFormat;
   mode?: DatePickerMode;
@@ -62,6 +88,13 @@ export interface DatePickerProps {
   tooltip?: string;
   description?: string;
   errorMessages?: string;
+
+  resetLabel?: string;
+  cancelLabel?: string;
+  confirmLabel?: string;
+  startDatePlaceholder?: string;
+  endDatePlaceholder?: string;
+  shortcutLabels?: Partial<Record<DatePickerShortcut, string>>;
 }
 
 export type DateFormat =

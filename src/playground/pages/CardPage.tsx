@@ -1,13 +1,24 @@
 import dedent from 'dedent';
 import { Card, CardBody, CardHeader, CardMedia } from '../../components/card';
 import { Text } from '../../components/text';
-import illust from '../../assets/images/typography.png';
+import illust from '../../assets/images/data-display.png';
 import MainSection from '../components/MainSection';
 import HeroSection from '../components/HeroSection';
 import Footer from '../components/Footer';
 import { Button } from '../../components/button';
 
 export default function CardPage() {
+  const exampleCodeBasic = dedent(`
+    import { Card, CardHeader, CardBody } from '@herca/r-kit';
+
+    <Card>
+      <CardHeader>Ringkasan Pengajuan</CardHeader>
+      <CardBody>
+        Tiga pengajuan menunggu persetujuan Anda hari ini.
+      </CardBody>
+    </Card>
+  `);
+
   const exampleCodeCard = dedent(`
     import { Card, CardBody, CardMedia } from '../../components/card';
     import { Text } from '../../components/text';
@@ -104,14 +115,12 @@ export default function CardPage() {
       />
 
       <div className="flex flex-col gap-4">
-        <MainSection title="Basic">
+        <MainSection title="Basic" code={exampleCodeBasic}>
           <Card>
-            <CardHeader>Header Card</CardHeader>
+            <CardHeader>Ringkasan Pengajuan</CardHeader>
             <CardBody>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius
-              quae doloremque ab dolore ipsum accusamus impedit dolorem unde ad
-              a autem quod possimus exercitationem cumque, quisquam placeat,
-              minus, tenetu
+              Tiga pengajuan menunggu persetujuan Anda hari ini. Dua di
+              antaranya sudah melewati batas respons dua hari kerja.
             </CardBody>
           </Card>
         </MainSection>
@@ -417,7 +426,13 @@ export default function CardPage() {
             </div>
           </div>
         </MainSection>
-        <Footer title="Typography" nextTo="/colors" nextToTitle="Colors" />
+        <Footer
+          title="Card"
+          backTo="/playground/button-group"
+          backToTitle="Button Group"
+          nextTo="/playground/chip"
+          nextToTitle="Chip"
+        />
       </div>
     </>
   );

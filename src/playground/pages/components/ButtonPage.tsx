@@ -1,7 +1,9 @@
 import { Button } from '../../../components/button';
 import { Icon } from '../../../components/icons';
-import { Hero } from '../../../components/hero';
+import illust from '../../../assets/images/data-display.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 import dedent from 'dedent';
 const codeExampleButtonBasic = dedent(`
@@ -51,31 +53,31 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading color="primary">
+      <Button color="primary">
         Primary
       </Button>
-      <Button loading color="secondary">
+      <Button color="secondary">
         Secondary
       </Button>
-      <Button loading color="success">
+      <Button color="success">
         Success
       </Button>
-      <Button loading color="danger">
+      <Button color="danger">
         Danger
       </Button>
-      <Button loading color="warning">
+      <Button color="warning">
         Warning
       </Button>
-      <Button loading color="info">
+      <Button color="info">
         Info
       </Button>
-      <Button loading color="orang">
-        Orang
+      <Button color="orange">
+        Orange
       </Button>
-      <Button loading color="purple">
+      <Button color="purple">
         Purple
       </Button>
-      <Button loading color="gray">
+      <Button color="gray">
         Gray
       </Button>
     </>
@@ -89,13 +91,13 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading variant="default">
+      <Button color="primary">
         Default
       </Button>
-      <Button loading variant="outline">
+      <Button variant="outline" color="primary">
         Outline
       </Button>
-      <Button loading variant="tertiary">
+      <Button variant="tertiary" color="primary">
         Tertiary
       </Button>
     </>
@@ -109,13 +111,13 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading size="sm">
+      <Button size="sm">
         Small
       </Button>
-      <Button loading size="md">
+      <Button size="md">
         Medium
       </Button>
-      <Button loading size="lg">
+      <Button size="lg">
         Large
       </Button>
     </>
@@ -153,14 +155,12 @@ export default function Example() {
 function ButtonPage() {
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900"> Button</h1>
-        <p className="text-sm text-gray-800">
-          Elemen interaktif utama yang digunakan untuk menjalankan aksi,
-          mengirim form, atau berpindah halaman.
-        </p>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Components"
+        subtitle="Button"
+        description="Elemen interaktif utama yang digunakan untuk menjalankan aksi, mengirim form, atau berpindah halaman."
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
@@ -245,6 +245,14 @@ function ButtonPage() {
             </Button>
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Button"
+          backTo="/playground/badge"
+          backToTitle="Badge"
+          nextTo="/playground/button-icon"
+          nextToTitle="Button Icon"
+        />
       </div>
     </>
   );

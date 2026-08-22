@@ -1,7 +1,11 @@
 import React from 'react';
 import dedent from 'dedent';
 
-import { RadioGroup, Radio } from '../../components/radio';
+import {
+  RadioGroup,
+  Radio,
+  type RadioButtonValue,
+} from '../../components/radio';
 import { CheckboxGroup } from '../../clients';
 
 import HeroSection from '../components/HeroSection';
@@ -12,7 +16,7 @@ import Footer from '../components/Footer';
 import illust from '../../assets/images/forms.png';
 
 export default function RadioButtonPage() {
-  const [value1, setValue1] = React.useState('option1');
+  const [value1, setValue1] = React.useState<RadioButtonValue>('option1');
 
   const codeBasic = dedent(`
     import { useState } from 'react';
@@ -373,11 +377,11 @@ export default function RadioButtonPage() {
       </GridWrapper>
 
       <Footer
-        backTo="/checkbox"
-        backToTitle="Checkbox"
-        nextTo="/input-field"
-        nextToTitle="Input Field"
         title="Radio Button"
+        backTo="/playground/date-picker"
+        backToTitle="Date Picker"
+        nextTo="/playground/switch"
+        nextToTitle="Switches"
       />
     </>
   );

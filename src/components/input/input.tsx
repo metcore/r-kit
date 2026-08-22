@@ -194,7 +194,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         />
 
-        {clearAble && disabled == false && (
+        {clearAble && !isDisabled && (
           <Button
             variant="tertiary"
             onClick={handleClear}

@@ -3,11 +3,26 @@ import dedent from 'dedent';
 
 import HeroSection from '../components/HeroSection';
 import MainSection from '../components/MainSection';
-import illust from '../../assets/images/typography.png';
+import Footer from '../components/Footer';
+import illust from '../../assets/images/navigation.png';
 
 import { Button } from '../../components/button';
 import { Text } from '../../components/text';
 import {
+  Checkbox,
+  CheckboxGroup,
+  type CheckboxValue,
+  Counter,
+  DatePicker,
+  DayOfMonthPicker,
+  DayPicker,
+  Input,
+  InputGroup,
+  InputGroupControl,
+  InputGroupText,
+  MonthPicker,
+  Radio,
+  RadioGroup,
   Select,
   Sheet,
   SheetBody,
@@ -18,8 +33,29 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  Slider,
+  Switch,
+  Textarea,
+  TimePicker,
+  YearPicker,
+  type DateRange,
+  type RadioButtonValue,
   type SelectOption,
 } from '../../clients';
+
+const CATEGORY_OPTIONS: SelectOption[] = [
+  { value: 'invoice', label: 'Invoice' },
+  { value: 'purchase-order', label: 'Purchase Order' },
+  { value: 'delivery-note', label: 'Delivery Note' },
+  { value: 'receipt', label: 'Receipt' },
+];
+
+const STATUS_OPTIONS: SelectOption[] = [
+  { value: 'draft', label: 'Draft' },
+  { value: 'waiting', label: 'Menunggu Approval' },
+  { value: 'approved', label: 'Disetujui' },
+  { value: 'rejected', label: 'Ditolak' },
+];
 
 const SHEET_SIDES = ['top', 'right', 'bottom', 'left'] as const;
 const SHEET_SIZES = ['sm', 'md', 'lg', 'xl', 'full'] as const;
@@ -184,9 +220,196 @@ const sheetControlledCode = dedent(`
   );
 `);
 
+const sheetAdvancedSearchCode = dedent(`
+  import { useState } from 'react';
+  import {
+    Sheet,
+    SheetTrigger,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+    SheetBody,
+    SheetFooter,
+    SheetClose,
+    Input,
+    Select,
+    DatePicker,
+    TimePicker,
+    Textarea,
+    RadioGroup,
+    Radio,
+    Switch,
+    Checkbox,
+    CheckboxGroup,
+    Counter,
+    MonthPicker,
+    YearPicker,
+    DayPicker,
+    DayOfMonthPicker,
+    InputGroup,
+    InputGroupText,
+    InputGroupControl,
+    Slider,
+    Button,
+  } from '@herca/r-kit/clients';
+
+  export default function AdvancedSearch() {
+    const [keyword, setKeyword] = useState('');
+    const [category, setCategory] = useState(null);
+    const [range, setRange] = useState({ start: null, end: null });
+    const [sort, setSort] = useState('newest');
+    const [sources, setSources] = useState(['internal']);
+    const [amount, setAmount] = useState([0, 50]);
+    const [minItem, setMinItem] = useState('1');
+    const [onlyMine, setOnlyMine] = useState(false);
+
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline">Advanced Search</Button>
+        </SheetTrigger>
+
+        {/* Body-nya scroll, footer aksi tetap menempel di bawah. */}
+        <SheetContent side="right" size="md">
+          <SheetHeader>
+            <SheetTitle>Advanced Search</SheetTitle>
+            <SheetDescription>
+              Persempit hasil pencarian lewat filter di bawah.
+            </SheetDescription>
+          </SheetHeader>
+
+          <SheetBody className="gap-4">
+            <Input
+              label="Kata Kunci"
+              icon="search"
+              placeholder="Nomor dokumen, nama, atau catatan"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+
+            <Select
+              label="Kategori"
+              className="w-full"
+              options={CATEGORY_OPTIONS}
+              value={category}
+              onChange={setCategory}
+              placeholder="Semua kategori"
+            />
+
+            <CheckboxGroup
+              label="Sumber Data"
+              direction="horizontal"
+              value={sources}
+              onValueChange={setSources}
+            >
+              <Checkbox value="internal" label="Internal" />
+              <Checkbox value="vendor" label="Vendor" />
+              <Checkbox value="import" label="Import" />
+            </CheckboxGroup>
+
+            <DatePicker
+              label="Rentang Tanggal"
+              mode="range"
+              format="DD-MM-YYYY"
+              isClearable
+              rangeValue={range}
+              onRangeChange={setRange}
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <TimePicker label="Jam Mulai" placeholder="00:00" />
+              <TimePicker label="Jam Selesai" placeholder="23:59" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <MonthPicker label="Periode Bulan" placeholder="Bulan" />
+              <YearPicker label="Tahun Anggaran" placeholder="Tahun" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <DayPicker label="Hari Transaksi" placeholder="Hari" />
+              <DayOfMonthPicker
+                label="Tanggal Jatuh Tempo"
+                placeholder="Tanggal"
+              />
+            </div>
+
+            <InputGroup label="Nilai Minimum">
+              <InputGroupText>Rp</InputGroupText>
+              <InputGroupControl>
+                <Input placeholder="0" inputMode="numeric" />
+              </InputGroupControl>
+            </InputGroup>
+
+            <Slider
+              range
+              label="Rentang Nilai (juta)"
+              min={0}
+              max={100}
+              step={5}
+              value={amount}
+              onChange={setAmount}
+            />
+
+            <Counter value={minItem} onChange={setMinItem} />
+
+            <RadioGroup label="Urutkan" value={sort} onValueChange={setSort}>
+              <Radio value="newest" label="Terbaru" />
+              <Radio value="oldest" label="Terlama" />
+              <Radio value="amount" label="Nilai terbesar" />
+            </RadioGroup>
+
+            <Textarea
+              clearAble
+              label="Catatan"
+              placeholder="Kata kunci tambahan pada catatan dokumen"
+              hint="Opsional. Dicocokkan sebagian."
+            />
+
+            <Switch
+              label="Hanya dokumen milik saya"
+              checked={onlyMine}
+              onCheckedChange={setOnlyMine}
+            />
+          </SheetBody>
+
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">Reset</Button>
+            </SheetClose>
+            <Button>Terapkan Filter</Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+`);
+
 export default function SheetPage() {
   const [selectedUser, setSelectedUser] = useState<SelectOption | null>(null);
   const [controlledOpen, setControlledOpen] = useState(false);
+
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchCategory, setSearchCategory] = useState<SelectOption | null>(
+    null
+  );
+  const [searchStatus, setSearchStatus] = useState<SelectOption | null>(null);
+  const [searchRange, setSearchRange] = useState<DateRange>({
+    start: null,
+    end: null,
+  });
+  const [searchSort, setSearchSort] = useState<RadioButtonValue>('newest');
+  const [searchSources, setSearchSources] = useState<CheckboxValue[]>([
+    'internal',
+  ]);
+  const [searchMonth, setSearchMonth] = useState<number[]>([]);
+  const [searchYear, setSearchYear] = useState<number[]>([]);
+  const [searchDay, setSearchDay] = useState<number[]>([]);
+  const [searchDueDate, setSearchDueDate] = useState<number[]>([]);
+  const [searchAmount, setSearchAmount] = useState<[number, number]>([0, 50]);
+  const [minItem, setMinItem] = useState('1');
+  const [onlyMine, setOnlyMine] = useState(false);
 
   return (
     <>
@@ -210,8 +433,8 @@ export default function SheetPage() {
               </SheetHeader>
               <SheetBody>
                 <Text>
-                  Lorem ipsum, or lipsum as it is sometimes known, is dummy text
-                  used in laying out print, graphic or web designs.
+                  Panel ini muncul dari sisi layar tanpa memindahkan user dari
+                  halaman yang sedang dibuka.
                 </Text>
               </SheetBody>
               <SheetFooter>
@@ -305,8 +528,8 @@ export default function SheetPage() {
                 />
                 {Array.from({ length: 12 }).map((_, i) => (
                   <Text key={i}>
-                    {i + 1}. Lorem ipsum, or lipsum as it is sometimes known, is
-                    dummy text used in laying out print, graphic or web designs.
+                    {i + 1}. Baris konten tambahan untuk menunjukkan bahwa isi
+                    sheet dapat digulir secara mandiri.
                   </Text>
                 ))}
               </SheetBody>
@@ -375,6 +598,173 @@ export default function SheetPage() {
           </div>
         </MainSection>
 
+        {/* 7. Advanced Search */}
+        <MainSection title="Advanced Search" code={sheetAdvancedSearchCode}>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">Advanced Search</Button>
+            </SheetTrigger>
+
+            <SheetContent side="right" size="md">
+              <SheetHeader>
+                <SheetTitle>Advanced Search</SheetTitle>
+                <SheetDescription>
+                  Persempit hasil pencarian lewat filter di bawah.
+                </SheetDescription>
+              </SheetHeader>
+
+              <SheetBody className="gap-4">
+                <Input
+                  label="Kata Kunci"
+                  icon="search"
+                  placeholder="Nomor dokumen, nama, atau catatan"
+                  value={searchKeyword}
+                  onChange={(event) => setSearchKeyword(event.target.value)}
+                />
+
+                <Select
+                  label="Kategori"
+                  className="w-full"
+                  options={CATEGORY_OPTIONS}
+                  value={searchCategory}
+                  onChange={(v) => setSearchCategory(v as SelectOption | null)}
+                  placeholder="Semua kategori"
+                />
+
+                <Select
+                  label="Status"
+                  className="w-full"
+                  options={STATUS_OPTIONS}
+                  value={searchStatus}
+                  onChange={(v) => setSearchStatus(v as SelectOption | null)}
+                  placeholder="Semua status"
+                />
+
+                <CheckboxGroup
+                  label="Sumber Data"
+                  direction="horizontal"
+                  value={searchSources}
+                  onValueChange={setSearchSources}
+                >
+                  <Checkbox value="internal" label="Internal" />
+                  <Checkbox value="vendor" label="Vendor" />
+                  <Checkbox value="import" label="Import" />
+                </CheckboxGroup>
+
+                <DatePicker
+                  label="Rentang Tanggal"
+                  mode="range"
+                  format="DD-MM-YYYY"
+                  isClearable
+                  rangeValue={searchRange}
+                  onRangeChange={setSearchRange}
+                />
+
+                <div className="grid grid-cols-2 gap-3">
+                  <TimePicker label="Jam Mulai" placeholder="00:00" />
+                  <TimePicker label="Jam Selesai" placeholder="23:59" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <MonthPicker
+                    label="Periode Bulan"
+                    placeholder="Bulan"
+                    defaultValue={searchMonth}
+                    onChange={(value) =>
+                      setSearchMonth(Array.isArray(value) ? value : [])
+                    }
+                  />
+                  <YearPicker
+                    label="Tahun Anggaran"
+                    placeholder="Tahun"
+                    defaultValue={searchYear}
+                    onChange={(value) =>
+                      setSearchYear(Array.isArray(value) ? value : [])
+                    }
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <DayPicker
+                    label="Hari Transaksi"
+                    placeholder="Hari"
+                    defaultValue={searchDay}
+                    onChange={(value) =>
+                      setSearchDay(Array.isArray(value) ? value : [])
+                    }
+                  />
+                  <DayOfMonthPicker
+                    label="Tanggal Jatuh Tempo"
+                    placeholder="Tanggal"
+                    defaultValue={searchDueDate}
+                    onChange={(value) =>
+                      setSearchDueDate(Array.isArray(value) ? value : [])
+                    }
+                  />
+                </div>
+
+                <InputGroup label="Nilai Minimum">
+                  <InputGroupText>Rp</InputGroupText>
+                  <InputGroupControl>
+                    <Input placeholder="0" inputMode="numeric" />
+                  </InputGroupControl>
+                </InputGroup>
+
+                <Slider
+                  range
+                  label="Rentang Nilai (juta)"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={searchAmount}
+                  onChange={setSearchAmount}
+                  hint={`Rp${searchAmount[0]} jt - Rp${searchAmount[1]} jt`}
+                />
+
+                <div className="flex flex-col gap-1">
+                  <Text
+                    variant="t2"
+                    weight="semibold"
+                    className="text-gray-900"
+                    value="Minimal Jumlah Item"
+                  />
+                  <Counter value={minItem} onChange={setMinItem} />
+                </div>
+
+                <RadioGroup
+                  label="Urutkan"
+                  value={searchSort}
+                  onValueChange={setSearchSort}
+                >
+                  <Radio value="newest" label="Terbaru" />
+                  <Radio value="oldest" label="Terlama" />
+                  <Radio value="amount" label="Nilai terbesar" />
+                </RadioGroup>
+
+                <Textarea
+                  clearAble
+                  label="Catatan"
+                  placeholder="Kata kunci tambahan pada catatan dokumen"
+                  hint="Opsional. Dicocokkan sebagian."
+                />
+
+                <Switch
+                  label="Hanya dokumen milik saya"
+                  checked={onlyMine}
+                  onCheckedChange={setOnlyMine}
+                />
+              </SheetBody>
+
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button variant="outline">Reset</Button>
+                </SheetClose>
+                <Button>Terapkan Filter</Button>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </MainSection>
+
         {/* 6. Controlled */}
         <MainSection title="Controlled" code={sheetControlledCode}>
           <div className="flex flex-wrap gap-4">
@@ -402,6 +792,14 @@ export default function SheetPage() {
             </SheetContent>
           </Sheet>
         </MainSection>
+
+        <Footer
+          title="Sheet"
+          backTo="/playground/tabs"
+          backToTitle="Tabs"
+          nextTo="/playground/dropdown"
+          nextToTitle="Dropdown"
+        />
       </div>
     </>
   );

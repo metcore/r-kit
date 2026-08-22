@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 
+import { BrandLogo } from '../../components/brand-logo';
 import { Icon, type IconNameProps } from '../../components/icons';
 import {
   Sidebar,
@@ -10,100 +11,44 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from '../../components/sidebar/sidebar';
-
 import { useSidebar } from '../../components/sidebar';
-import { BrandLogo } from '../../components/brand-logo';
 import { cn } from '../../lib/utils';
-
 import brandLogo from '../../assets/images/brand-logo.png';
+import { docHome, docSections, type DocGroup } from '../lib/content';
 
-type RouteType = {
-  path?: string;
-  label: string;
-  icon?: IconNameProps;
-  children?: RouteType[];
+const IKON_GRUP: Record<DocGroup, IconNameProps> = {
+  'Memulai': 'grid-square',
+  'Konsep Inti': 'circle-and-square',
+  'Panduan': 'book-open-text',
+  'Foundation': 'circle-and-square',
+  'Form': 'clipboard-edit',
+  'Components': 'book-open-text',
+  'Navigation': 'cursor',
+  'Feedback': 'message-text-notification',
+  'Data Display': 'desktop',
+  'Hooks': 'cpu',
 };
 
-function DocSidebar() {
-  const location = useLocation();
+export default function DocSidebar() {
+  const { pathname } = useLocation();
   const { state, isHovered } = useSidebar();
 
-  const menuItems: RouteType[] = [
-    { path: '/', label: 'Overview', icon: 'grid-square' },
-    {
-      path: '/foundation',
-      label: 'Foundation',
-      icon: 'circle-and-square',
-      children: [
-        { path: '/typography', label: 'Typography' },
-        { path: '/colors', label: 'Color' },
-      ],
-    },
-    {
-      path: '/form',
-      label: 'Form',
-      icon: 'clipboard-edit',
-      children: [
-        { path: '/checkbox', label: 'Checkbox' },
-        { path: '/input-field', label: 'Input Field' },
-        { path: '/input-group', label: 'Input Group' },
-        { path: '/counter', label: 'Counter' },
-        { path: '/input-file', label: 'Input File' },
-        { path: '/date-picker', label: 'Date Picker' },
-        { path: '/radio-button', label: 'Radio Button' },
-        { path: '/switch', label: 'Switches' },
-        { path: '/select', label: 'Select' },
-        { path: '/text-editor', label: 'Text Editor' },
-      ],
-    },
-    {
-      label: 'Components',
-      icon: 'book-open-text',
-      children: [
-        { path: '/icons', label: 'Icon' },
-        { path: '/timeline', label: 'Timeline' },
-        { path: '/calendar', label: 'Calendar' },
-        { path: '/progress-bar', label: 'Progress Bar' },
-        { path: '/input', label: 'Input' },
-        { path: '/button', label: 'Button' },
-        { path: '/button-group', label: 'Button Group' },
-        { path: '/card', label: 'Card' },
-        { path: '/chip', label: 'Chip' },
-        { path: '/avatar', label: 'Avatar' },
-        { path: '/modal', label: 'Modal' },
-      ],
-    },
-
-    {
-      path: '/navigation',
-      label: 'Navigation',
-      icon: 'cursor',
-      children: [{ path: '/tabs', label: 'Tabs' }],
-    },
-    {
-      path: '/feedback',
-      label: 'Feedback',
-      icon: 'message-text-notification',
-      children: [{ label: 'Snackbar/Toast', path: '/toast' }],
-    },
-    {
-      label: 'Data Display',
-      icon: 'desktop',
-      children: [{ path: '/table', label: 'Table' }],
-    },
-    { path: '/pages', label: 'Pages', icon: 'cpu' },
-    { path: '/auth', label: 'Authentication', icon: 'lock' },
-  ];
+  // '/docs' menampilkan entri pertama, jadi perlakukan sama dengan
+  // '/docs/<slug entri pertama>' supaya grupnya ikut terbuka.
+  const aktif =
+    pathname === '/docs' || pathname === '/docs/'
+      ? `/docs/${docHome.slug}`
+      : pathname;
+  const terbuka = state === 'expanded' || Boolean(isHovered);
 
   return (
     <Sidebar>
       <SidebarHeader className="h-19 flex-row items-center justify-between pl-5">
-        <BrandLogo name="Playground" brandLogo={brandLogo} />
-
+        <BrandLogo name={terbuka ? 'Docs' : undefined} brandLogo={brandLogo} />
         <div
           className={cn(
-            state === 'collapsed' && 'hidden',
-            Boolean(isHovered) && 'block'
+            'hidden',
+            state === 'collapsed' && Boolean(isHovered) && 'block'
           )}
         >
           <SidebarTrigger />
@@ -112,43 +57,28 @@ function DocSidebar() {
 
       <SidebarContent className="scrollbar-hide">
         <SidebarMenu>
-          {menuItems.map((item, index) => {
-            if (item.children) {
-              const isAnyChildActive = item.children.some(
-                (child) => child.path === location.pathname
-              );
-
-              return (
-                <SidebarMenuGroup
-                  key={index}
-                  label={item.label}
-                  active={isAnyChildActive}
-                  icon={item.icon && <Icon size={18} name={item.icon} />}
-                >
-                  {item.children.map((child, childIndex) => (
-                    <SidebarMenuItem
-                      key={childIndex}
-                      asChild
-                      active={child.path === location.pathname}
-                    >
-                      <Link to={child.path ?? '/'}> {child.label} </Link>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenuGroup>
-              );
-            }
+          {docSections.map((section) => {
+            const adaYangAktif = section.entries.some(
+              (e) => aktif === `/docs/${e.slug}`
+            );
 
             return (
-              <SidebarMenuItem
-                key={index}
-                asChild
-                active={item.path === location.pathname}
-                icon={item.icon && <Icon size={18} name={item.icon} />}
+              <SidebarMenuGroup
+                key={section.group}
+                label={section.group}
+                active={adaYangAktif}
+                icon={<Icon size={18} name={IKON_GRUP[section.group]} />}
               >
-                <Link className="text-nowrap" to={item.path ?? '/'}>
-                  {item.label}
-                </Link>
-              </SidebarMenuItem>
+                {section.entries.map((entry) => (
+                  <SidebarMenuItem
+                    key={entry.slug}
+                    asChild
+                    active={aktif === `/docs/${entry.slug}`}
+                  >
+                    <Link to={`/docs/${entry.slug}`}> {entry.title} </Link>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenuGroup>
             );
           })}
         </SidebarMenu>
@@ -156,5 +86,3 @@ function DocSidebar() {
     </Sidebar>
   );
 }
-
-export default DocSidebar;
