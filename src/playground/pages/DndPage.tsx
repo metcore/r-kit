@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { DndBoard, DndColumn, DndItem } from '../../components/dnd';
 
-import illust from '../assets/images/navigation.png';
+import illust from '../../assets/images/navigation.png';
 import { Text } from '../../components/text';
 import { Icon } from '../../components/icons';
 import Footer from '../components/Footer';

@@ -1,10 +1,11 @@
 import dedent from 'dedent';
-import type { ColorType, SizeType } from '../../components/checkbox/type';
+import type { SizeType } from '../../components/checkbox/type';
+import type { BaseColor } from '../../components/base/type/base-color';
 
 export default function useCheckboxes() {
   const CHECKBOXES: {
     id: string;
-    color: ColorType;
+    color: BaseColor;
     disabled?: boolean;
     label?: string;
     description?: string;
@@ -30,11 +31,10 @@ export default function useCheckboxes() {
 
   const SIZE_CHECKBOXES: {
     id: string;
-    color: ColorType;
+    color: BaseColor;
     size: SizeType;
     disabled?: boolean;
     label?: string;
-    label2?: string;
     description?: string;
     checked?: boolean;
   }[] = [
@@ -42,8 +42,7 @@ export default function useCheckboxes() {
       id: '1',
       color: 'primary',
       size: 'sm',
-      label: 'Small Horizontal',
-      label2: 'Small Vertical',
+      label: 'Small',
       description: 'Deskripsi',
       checked: true,
     },
@@ -51,16 +50,14 @@ export default function useCheckboxes() {
       id: '2',
       color: 'success',
       size: 'md',
-      label: 'Medium Horizontal',
-      label2: 'Medium Vertical',
+      label: 'Medium',
       description: 'Deskripsi',
     },
     {
       id: '3',
       color: 'danger',
       size: 'lg',
-      label: 'Large Horizontal',
-      label2: 'Large Vertical',
+      label: 'Large',
       description: 'Deskripsi',
     },
   ] as const;

@@ -99,7 +99,7 @@ const exampleHeaderFooter = dedent(`
     <SidebarContent>
       <SidebarMenu>{/* ...menu */}</SidebarMenu>
     </SidebarContent>
-    <SidebarFooter>Masuk sebagai Dafi</SidebarFooter>
+    <SidebarFooter>Masuk sebagai Herca</SidebarFooter>
   </Sidebar>
 `);
 
@@ -227,7 +227,7 @@ export default function SidebarPage() {
                 <Text
                   variant="t2"
                   className="text-gray-800"
-                  value="Masuk sebagai Dafi"
+                  value="Masuk sebagai Herca"
                 />
               </SidebarFooter>
             </DemoFrame>
