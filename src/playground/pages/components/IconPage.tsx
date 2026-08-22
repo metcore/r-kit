@@ -45,13 +45,22 @@ const exampleInline = dedent(`
 `);
 
 const exampleRegistry = dedent(`
-  import { iconRegistry, type IconNameProps } from '@herca/r-kit';
+  import { Icon, type IconNameProps } from '@herca/r-kit';
 
-  // Seluruh nama ikon tersedia sebagai kunci iconRegistry,
-  // sehingga daftarnya bisa dibangun dan disaring sendiri.
-  const NAMA_IKON = Object.keys(iconRegistry) as IconNameProps[];
+  // Nama ikon diketik sebagai IconNameProps, jadi TypeScript
+  // menolak nama yang tidak ada sebelum kode dijalankan.
+  const AKSI: { nama: IconNameProps; label: string }[] = [
+    { nama: 'pencil', label: 'Ubah' },
+    { nama: 'download', label: 'Unduh' },
+    { nama: 'share', label: 'Bagikan' },
+  ];
 
-  const hasil = NAMA_IKON.filter((n) => n.includes(kataKunci));
+  {AKSI.map((aksi) => (
+    <button key={aksi.nama}>
+      <Icon name={aksi.nama} size={16} />
+      {aksi.label}
+    </button>
+  ))}
 `);
 
 const SIZES = [16, 24, 32, 48];

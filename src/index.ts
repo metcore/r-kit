@@ -15,3 +15,5 @@ export * from './components/timeline';
 export * from './components/list';
 export * from './components/base';
 export * from './components/devider';
+// Header tidak memakai hook React, jadi aman di entry point utama.
+export * from './components/header';

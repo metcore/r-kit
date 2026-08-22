@@ -43,3 +43,5 @@ export * from './components/day-picker';
 export * from './components/day-of-month-picker';
 export * from './types/api-response';
 export * from './components/drawing';
+export * from './components/image';
+export { usePickerState } from './components/base/components/picker-base';
