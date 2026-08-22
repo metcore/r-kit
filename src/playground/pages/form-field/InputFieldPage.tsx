@@ -2,16 +2,12 @@ import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
 import { Input } from '../../../components/input';
 import { useState } from 'react';
-import { useMarkdown } from '../../hooks/useMarkdown';
-import { Card, CardBody } from '../../../components/card';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 
 export default function InputFieldPage() {
-  const { doc } = useMarkdown(`/docs/input-field.md`);
   const [filledInput, setFilledInput] = useState('Maman_alkatiri23');
   const exampleBasic = dedent(`
     <Input />
@@ -187,12 +183,6 @@ export default function InputFieldPage() {
             <Input placeholder="Search..." icon="search" />
           </MainSection>
         </GridWrapper>
-
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
           backTo="/checkbox"

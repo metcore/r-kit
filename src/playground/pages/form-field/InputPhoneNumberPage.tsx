@@ -1,8 +1,5 @@
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import { useMarkdown } from '../../hooks/useMarkdown';
-import { Card, CardBody } from '../../../components/card';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
@@ -14,7 +11,6 @@ import {
 import { useState } from 'react';
 
 export default function InputPasswordPage() {
-  const { doc } = useMarkdown(`/docs/input-field.md`);
   const [value, setValue] = useState<PhoneNumberValue>();
 
   const exampleBasic = dedent(`
@@ -245,11 +241,6 @@ export default function InputPasswordPage() {
             <InputPhoneNumber label="Large" size="lg" required />
           </MainSection>
         </GridWrapper>
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
           backTo="/checkbox"

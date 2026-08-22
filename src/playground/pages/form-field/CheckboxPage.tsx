@@ -1,10 +1,7 @@
-import { Card, CardBody } from '../../../components/card';
 import { Checkbox, CheckboxGroup } from '../../../components/checkbox/checkbox';
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import useCheckboxes from '../../hooks/useCheckboxes';
-import { useMarkdown } from '../../hooks/useMarkdown';
 import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 import HeroSection from '../../components/HeroSection';
@@ -13,7 +10,6 @@ import { useState } from 'react';
 export default function CheckboxPage() {
   const [chekedBasic, setChekedBasic] = useState<boolean>(false);
   const [chekedIndeminate, setChekedIndeminate] = useState<boolean>(false);
-  const { doc } = useMarkdown(`/docs/checkbox.md`);
   const {
     CHECKBOXES,
     SIZE_CHECKBOXES,
@@ -234,12 +230,6 @@ export default function CheckboxPage() {
             </CheckboxGroup>
           </MainSection>
         </GridWrapper>
-
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         {/* footer */}
         <Footer

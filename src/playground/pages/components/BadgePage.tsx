@@ -1,15 +1,10 @@
 import { Badge } from '../../../components/badge';
-import { Card, CardBody } from '../../../components/card';
 
 import { Icon } from '../../../components/icons';
 import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
-import { useMarkdown } from '../../hooks/useMarkdown';
 
 export default function BadgePage() {
-  const { doc } = useMarkdown('/docs/badge.md');
-
   const example = `<div>
     <Badge color="primary">Primary</Badge>
     <Badge color="secondary">Secondary</Badge>
@@ -198,12 +193,6 @@ export default function BadgePage() {
         <Badge hexColor="#121358">#121358</Badge>
         <Badge hexColor="#744577">#744577</Badge>
       </MainSection>
-
-      <Card>
-        <CardBody>
-          <MarkdownRenderer content={doc?.content ?? ''} />
-        </CardBody>
-      </Card>
 
       <Footer
         title="Chip"

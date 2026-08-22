@@ -2,17 +2,13 @@ import { useState } from 'react';
 import dedent from 'dedent';
 import illust from '../../../assets/images/forms.png';
 import { Textarea } from '../../../components/textarea';
-import { Card, CardBody } from '../../../components/card';
 import { Text } from '../../../components/text';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import Footer from '../../components/Footer';
-import { useMarkdown } from '../../hooks/useMarkdown';
 
 export default function TextAreaPage() {
-  const { doc } = useMarkdown(`/docs/text-area.md`);
   const [clearableValue, setClearableValue] = useState(
     'Tombol clear muncul ketika textarea ada isinya.'
   );
@@ -271,12 +267,6 @@ export default function TextAreaPage() {
             </div>
           </MainSection>
         </GridWrapper>
-
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
           backTo="/playground/text-editor"

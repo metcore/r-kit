@@ -1,7 +1,6 @@
 import dedent from 'dedent';
 import { useState } from 'react';
 import { Button } from '../../../components/button';
-import { Card, CardBody } from '../../../components/card';
 import {
   DatePicker,
   formatDateToString,
@@ -13,8 +12,6 @@ import Footer from '../../components/Footer';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
-import { useMarkdown } from '../../hooks/useMarkdown';
 
 const addDays = (date: Date, days: number) => {
   const next = new Date(date);
@@ -23,7 +20,6 @@ const addDays = (date: Date, days: number) => {
 };
 
 export default function DatePickerPage() {
-  const { doc } = useMarkdown(`/docs/date-picker.md`);
   const [singleValue, setSingleValue] = useState<Date | null>(new Date());
   const [singleMonthNameValue, setSingleMonthNameValue] = useState<Date | null>(
     null
@@ -220,12 +216,6 @@ export default function DatePickerPage() {
             </div>
           </MainSection>
         </GridWrapper>
-
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
           backTo="/input-file"

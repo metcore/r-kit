@@ -2,17 +2,13 @@ import { useState } from 'react';
 import dedent from 'dedent';
 import illust from '../../../assets/images/forms.png';
 import { TimePicker } from '../../../components/time-picker';
-import { Card, CardBody } from '../../../components/card';
 import { Text } from '../../../components/text';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import Footer from '../../components/Footer';
-import { useMarkdown } from '../../hooks/useMarkdown';
 
 export default function TimePickerPage() {
-  const { doc } = useMarkdown(`/docs/time-picker.md`);
   const [value, setValue] = useState<string>('');
 
   const defaultExample = dedent(`
@@ -177,12 +173,6 @@ export default function TimePickerPage() {
             </div>
           </MainSection>
         </GridWrapper>
-
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
           backTo="/playground/day-of-month-picker"

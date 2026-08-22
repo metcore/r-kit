@@ -9,8 +9,6 @@ import { Icon } from '../../components/icons';
 import Footer from '../components/Footer';
 import HeroSection from '../components/HeroSection';
 import MainSection from '../components/MainSection';
-import MarkdownRenderer from '../components/MarkdownRenderer';
-import { useMarkdown } from '../hooks/useMarkdown';
 
 type FormField = {
   id: string;
@@ -199,8 +197,6 @@ const formConfigurationCode = `const [formFields, setFormFields] = useState({
 </DndBoard>`;
 
 export default function DndPage() {
-  const { doc } = useMarkdown('/docs/dnd.md');
-
   const sections: FormSection[] = useMemo(() => {
     return [
       ...formConfiguration.sections.map((section) => ({
@@ -395,12 +391,6 @@ export default function DndPage() {
           </div>
         </DndBoard>
       </MainSection>
-
-      <Card className="mt-4">
-        <CardBody>
-          <MarkdownRenderer content={doc?.content ?? ''} />
-        </CardBody>
-      </Card>
 
       <Footer
         title="Drag and Drop"
