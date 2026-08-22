@@ -57,7 +57,9 @@ const RIWAYAT = [
 const exampleBasic = dedent(`
   import { Timeline } from '@herca/r-kit';
 
-  // isFirst menghilangkan garis penghubung di atas titik pertama.
+  // Garis putus-putus digambar turun dari titik setiap item.
+  // isFirst membuang garis itu, jadi pasang di item TERAKHIR
+  // supaya rantainya tidak menjuntai. Item tunggal juga memakainya.
   <Timeline
     isFirst
     value={{
@@ -103,10 +105,12 @@ const exampleAdvanced = dedent(`
 
 const exampleRiwayat = dedent(`
   // Rangkai beberapa Timeline untuk membentuk satu alur riwayat.
+  // Hanya item terakhir yang diberi isFirst agar garisnya berhenti
+  // di titik terakhir.
   {RIWAYAT.map((item, index) => (
     <Timeline
       key={item.title}
-      isFirst={index === 0}
+      isFirst={index === RIWAYAT.length - 1}
       color={item.color}
       value={item}
     />
@@ -128,7 +132,7 @@ export default function TimelinePage() {
           {RIWAYAT.map((item, index) => (
             <Timeline
               key={item.title}
-              isFirst={index === 0}
+              isFirst={index === RIWAYAT.length - 1}
               color={item.color}
               value={item}
             />
@@ -164,15 +168,11 @@ export default function TimelinePage() {
           </MainSection>
         </GridWrapper>
 
-        <MainSection
-          title="Warna"
-          code={exampleColor}
-          contentClassName="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
-        >
+        <MainSection title="Warna" code={exampleColor}>
           {COLORS.map((color, index) => (
             <Timeline
               key={color}
-              isFirst={index === 0 || index === 4}
+              isFirst={index === COLORS.length - 1}
               color={color}
               badge={{ value: color, color, size: 'sm' }}
               value={{
@@ -185,7 +185,6 @@ export default function TimelinePage() {
 
         <MainSection title="Konten Tambahan" code={exampleAdvanced}>
           <Timeline
-            isFirst
             color="info"
             value={{
               label: '10:22',
@@ -211,6 +210,7 @@ export default function TimelinePage() {
             }}
           />
           <Timeline
+            isFirst
             color="gray"
             value={{
               label: '10:25',
@@ -222,7 +222,6 @@ export default function TimelinePage() {
 
         <MainSection title="Tanpa Deskripsi" contentClassName="max-w-md">
           <Timeline
-            isFirst
             color="success"
             value={{ label: '07:00', title: 'Absen masuk' }}
           />
@@ -231,6 +230,7 @@ export default function TimelinePage() {
             value={{ label: '12:00', title: 'Istirahat' }}
           />
           <Timeline
+            isFirst
             color="success"
             value={{ label: '16:00', title: 'Absen pulang' }}
           />
