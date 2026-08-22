@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Hero } from '../../../components/hero';
 import { AsyncSelect, Select } from '../../../components/select';
 import type {
   SelectGroup,
@@ -7,8 +6,11 @@ import type {
   SelectOption,
 } from '../../../components/select/type';
 import useGetUsers from '../../hooks/useGetUsers';
+import illust from '../../../assets/images/forms.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
+import Footer from '../../components/Footer';
 import {
   codeExampleAsyncSelecBasic,
   codeExampleSelectBasic,
@@ -193,14 +195,12 @@ function SelectPage() {
 
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Form</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Select</h1>
-        <p className="text-sm text-gray-800">
-          Memilih satu atau beberapa opsi dari daftar, termasuk daftar panjang
-          yang dimuat bertahap dari API.
-        </p>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Select"
+        description="Memilih satu atau beberapa opsi dari daftar, termasuk daftar panjang yang dimuat bertahap dari API."
+      />
 
       <div className="flex flex-col gap-4">
         <GridWrapper>
@@ -256,8 +256,8 @@ function SelectPage() {
               isLoadingMore={users.isLoadingMore}
             />
             <Select
-              options={[{ label: 'Tes user', value: 1 }]}
-              value={{ label: 'Tes user', value: 1 }}
+              options={[{ label: 'Herca Pratama', value: 1 }]}
+              value={{ label: 'Herca Pratama', value: 1 }}
               onChange={(v) =>
                 setSelectedUser(v as SelectOption<ExtraUser> | null)
               }
@@ -463,6 +463,14 @@ function SelectPage() {
             />
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Select"
+          backTo="/playground/switch"
+          backToTitle="Switches"
+          nextTo="/playground/slider"
+          nextToTitle="Slider"
+        />
       </div>
     </>
   );
