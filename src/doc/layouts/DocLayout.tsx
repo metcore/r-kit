@@ -32,7 +32,7 @@ export default function DocLayout() {
     // ikut hilang ketika Radix mengunci scroll lewat body overflow:hidden.
     <SidebarProvider className="h-svh min-h-0">
       <DocSidebar />
-      <SidebarInset className="h-svh min-h-0 overflow-hidden">
+      <SidebarInset className="h-svh min-h-0 overflow-hidden bg-white">
         <Header>
           <HeaderLeft>
             <SidebarTrigger />
