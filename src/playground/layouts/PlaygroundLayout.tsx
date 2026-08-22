@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import PlaygroundSidebar from '../components/PlaygroundSidebar';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '../../clients';
 import {
@@ -17,11 +18,19 @@ import HeaderProfile from '../components/HeaderProfile';
 
 export default function PlaygroundLayout() {
   const { open: isSearchOpen, setOpen: setSearchOpen } = useCommandPalette();
+  const { pathname } = useLocation();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Yang men-scroll adalah div di bawah, bukan window, jadi React Router
+  // tidak bisa mengembalikan posisinya sendiri saat pindah halaman.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [pathname]);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh min-h-0">
       <PlaygroundSidebar />
-      <SidebarInset>
+      <SidebarInset className="h-svh min-h-0 overflow-hidden">
         <Header>
           <HeaderLeft>
             <SidebarTrigger />
@@ -36,7 +45,7 @@ export default function PlaygroundLayout() {
           </HeaderRight>
         </Header>
 
-        <div className="flex-1 overflow-auto p-5">
+        <div ref={scrollRef} className="min-h-0 flex-1 overflow-auto p-5">
           <Outlet />
         </div>
       </SidebarInset>
