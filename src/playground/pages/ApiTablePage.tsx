@@ -557,9 +557,10 @@ export default function ApiTablePage() {
                   value={t.filters.category}
                   className="w-50"
                   onChange={(value) => {
+                    const dipilih = Array.isArray(value) ? value[0] : value;
                     t.setFilter(
                       'category',
-                      value != null ? String(value?.value) : ''
+                      dipilih != null ? String(dipilih.value) : ''
                     );
                   }}
                   placeholder="Cari & Kategori"
