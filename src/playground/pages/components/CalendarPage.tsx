@@ -1,170 +1,269 @@
 import { useState } from 'react';
+import dedent from 'dedent';
+import { Calendar } from '../../../components/calendar';
 import type {
   CalendarDayConfig,
   CalendarEvent,
   CalendarStyleConfig,
 } from '../../../components/calendar';
-import { Calendar } from '../../../components/calendar';
-import illust from '../../../assets/images/forms.png';
 import type { DateRange } from '../../../clients';
+import { Text } from '../../../components/text';
+import illust from '../../../assets/images/forms.png';
+import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
+import MainSection from '../../components/MainSection';
+import Footer from '../../components/Footer';
+
+// Bulan di JavaScript dihitung dari 0, jadi 2 = Maret.
+const HARI_LIBUR = [
+  new Date(2026, 2, 14),
+  new Date(2026, 2, 15),
+  new Date(2026, 2, 21),
+];
+
+const PENANDA: CalendarDayConfig[] = [
+  {
+    date: new Date(2026, 2, 10),
+    dots: [{ color: '#3b82f6' }, { color: '#ef4444' }],
+  },
+  { date: new Date(2026, 2, 12), dots: [{ color: '#10b981' }] },
+];
+
+const GAYA_LIBUR: CalendarStyleConfig = {
+  disabled: { background: '#fee4e2', text: '#f04438' },
+};
+
+const AGENDA: CalendarEvent[] = [
+  {
+    title: 'Sprint Planning',
+    subtitle: 'Tim Produk',
+    color: 'primary',
+    startDate: '2026-03-02',
+    endDate: '2026-03-06',
+  },
+  {
+    title: 'Audit Internal',
+    subtitle: 'Divisi Keuangan',
+    color: 'warning',
+    startDate: '2026-03-09',
+    endDate: '2026-03-13',
+  },
+  {
+    title: 'Rilis v2.0',
+    subtitle: 'Seharian',
+    color: 'danger',
+    startDate: '2026-03-20',
+    endDate: '2026-03-20',
+  },
+];
+
+const exampleBasic = dedent(`
+  import { Calendar } from '@herca/r-kit';
+
+  const [tanggal, setTanggal] = useState<Date | null>(new Date());
+
+  <Calendar variant="compact" value={tanggal} onChange={setTanggal} />
+`);
+
+const exampleRange = dedent(`
+  const [rentang, setRentang] = useState<DateRange>({ start: null, end: null });
+
+  const pilihTanggal = (date: Date) => {
+    // Klik pertama menetapkan awal; klik kedua menutup rentang.
+    setRentang((prev) =>
+      prev.start === null || prev.end !== null
+        ? { start: date, end: null }
+        : date < prev.start
+          ? { start: date, end: prev.start }
+          : { start: prev.start, end: date }
+    );
+  };
+
+  <Calendar
+    mode="range"
+    variant="compact"
+    value={rentang.start}
+    rangeValue={rentang}
+    onChange={pilihTanggal}
+  />
+`);
+
+const exampleDisabled = dedent(`
+  // disabledDates mematikan tanggal tertentu,
+  // styleConfig mengatur tampilannya.
+  const HARI_LIBUR = [new Date(2026, 2, 14), new Date(2026, 2, 15)];
+
+  <Calendar
+    variant="compact"
+    disabledDates={HARI_LIBUR}
+    styleConfig={{ disabled: { background: '#fee4e2', text: '#f04438' } }}
+  />
+`);
+
+const exampleDots = dedent(`
+  // dayConfigs menaruh titik penanda di bawah tanggal,
+  // berguna untuk menunjukkan ada aktivitas di hari itu.
+  <Calendar
+    variant="compact"
+    dayConfigs={[
+      { date: new Date(2026, 2, 10), dots: [{ color: '#3b82f6' }, { color: '#ef4444' }] },
+      { date: new Date(2026, 2, 12), dots: [{ color: '#10b981' }] },
+    ]}
+  />
+`);
+
+const exampleEvents = dedent(`
+  // Varian penuh menampilkan agenda sebagai bilah lintas hari.
+  const AGENDA: CalendarEvent[] = [
+    {
+      title: 'Sprint Planning',
+      subtitle: 'Tim Produk',
+      color: 'primary',
+      startDate: '2026-03-02',
+      endDate: '2026-03-06',
+    },
+  ];
+
+  <Calendar events={AGENDA} useLimitEvent={false} onEventClick={handleClick} />
+`);
+
+const formatTanggal = (date: Date | null | undefined) =>
+  date != null
+    ? date.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : '—';
 
 export default function CalendarPage() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    new Date('2026-3-01')
+  const [tanggal, setTanggal] = useState<Date | null>(new Date(2026, 2, 1));
+  const [rentang, setRentang] = useState<DateRange>({ start: null, end: null });
+  const [agendaTerpilih, setAgendaTerpilih] = useState<CalendarEvent | null>(
+    null
   );
 
-  const [rangeValue, setRangeValue] = useState<DateRange>({
-    start: null,
-    end: null,
-  });
-
-  const handleRangeCalendarChange = (date: Date) => {
-    let newRange: DateRange;
-
-    if (!rangeValue.start || (rangeValue.start !== null && rangeValue.end)) {
-      // Start new range
-      newRange = { start: date, end: null };
-    } else {
-      // Complete the range
-      if (date < rangeValue.start) {
-        newRange = { start: date, end: rangeValue.start };
-      } else {
-        newRange = { start: rangeValue.start, end: date };
-      }
-    }
-
-    setRangeValue(newRange);
+  const pilihRentang = (date: Date) => {
+    setRentang((prev) =>
+      prev.start === null || prev.end !== null
+        ? { start: date, end: null }
+        : date < prev.start
+          ? { start: date, end: prev.start }
+          : { start: prev.start, end: date }
+    );
   };
-
-  // Disable weekend dates
-  const disabledDates = [
-    new Date(2026, 1, 14), // 14 Feb 2026
-    new Date(2026, 1, 15), // 15 Feb 2026
-    new Date(2026, 1, 21), // 21 Feb 2026
-  ];
-
-  // Configure specific days with dots
-  const dayConfigs: CalendarDayConfig[] = [
-    {
-      date: new Date(2026, 1, 10),
-      dots: [
-        { color: '#3b82f6' }, // blue
-        { color: '#ef4444' }, // red
-      ],
-    },
-    {
-      date: new Date(2026, 1, 12),
-      dots: [
-        { color: '#10b981' }, // green
-      ],
-    },
-  ];
-
-  // Custom styling
-  const styleConfig: CalendarStyleConfig = {
-    disabled: {
-      background: '#fee4e2', // red-500/30
-      text: '#f04438', // red-500
-    },
-  };
-
-  const dummyEvents: CalendarEvent[] = [
-    {
-      title: 'Sprint Planning',
-      subtitle: 'Full Week',
-      color: 'primary',
-      startDate: '2026-03-30',
-      endDate: '2026-04-11',
-      tooltip: {
-        title: 'In',
-        subtitle: 'jir',
-      },
-    },
-    {
-      title: 'Sprint Planning',
-      subtitle: 'Full Week',
-      color: 'primary',
-      startDate: '2026-03-30',
-      endDate: '2026-04-11',
-    },
-    {
-      title: 'Sprint Planning',
-      subtitle: 'Full Week',
-      color: 'danger',
-      startDate: '2026-06-01',
-      endDate: '2026-06-11',
-    },
-  ];
 
   return (
     <>
       <HeroSection
-        title="Components"
-        description="Menampilkan tanggal dalam tampilan bulanan untuk melihat, memilih, dan menandai tanggal secara langsung."
-        subtitle="Calendar"
         illust={illust}
+        title="Components"
+        subtitle="Calendar"
+        description="Menampilkan tanggal dalam tampilan bulanan untuk melihat, memilih, dan menandai tanggal secara langsung."
       />
 
-      <div className="flex flex-col gap-2">
-        <Calendar
-          variant="compact"
-          value={selectedDate}
-          onChange={setSelectedDate}
-          disabledDates={disabledDates}
-          dayConfigs={dayConfigs}
-          styleConfig={styleConfig}
-          showNavigator={true}
-          showHeader={true}
-        />
-        {selectedDate && (
-          <div className="mt-4 text-center">
-            <p>Selected: {selectedDate.toLocaleDateString('id-ID')}</p>
-          </div>
-        )}
-      </div>
+      <div className="flex flex-col gap-4">
+        <GridWrapper>
+          <MainSection
+            title="Basic"
+            code={exampleBasic}
+            contentClassName="flex flex-col gap-3"
+          >
+            <Calendar
+              variant="compact"
+              value={tanggal}
+              onChange={setTanggal}
+              showNavigator
+              showHeader
+            />
+            <Text
+              variant="t1"
+              className="text-gray-800"
+              value={`Terpilih: ${formatTanggal(tanggal)}`}
+            />
+          </MainSection>
 
-      <div className="flex flex-col gap-2">
-        <Calendar
-          variant="compact"
-          mode="range"
-          value={rangeValue.start}
-          rangeValue={rangeValue}
-          onChange={handleRangeCalendarChange}
-          disabledDates={disabledDates}
-          dayConfigs={dayConfigs}
-          styleConfig={styleConfig}
-          showNavigator={true}
-          showHeader={true}
-        />
-        {selectedDate && (
-          <div className="mt-4 text-center">
-            <p>
-              Selected: {rangeValue.start?.toLocaleDateString('id-ID')} -{' '}
-              {rangeValue.end?.toLocaleDateString('id-ID')}
-            </p>
-          </div>
-        )}
-      </div>
+          <MainSection
+            title="Mode Rentang"
+            code={exampleRange}
+            contentClassName="flex flex-col gap-3"
+          >
+            <Calendar
+              mode="range"
+              variant="compact"
+              value={rentang.start}
+              rangeValue={rentang}
+              onChange={pilihRentang}
+              showNavigator
+              showHeader
+            />
+            <Text
+              variant="t1"
+              className="text-gray-800"
+              value={`${formatTanggal(rentang.start)} — ${formatTanggal(rentang.end)}`}
+            />
+          </MainSection>
+        </GridWrapper>
 
-      <div className="mt-10 flex flex-col gap-2">
-        <Calendar
-          value={selectedDate}
-          onChange={setSelectedDate}
-          disabledDates={disabledDates}
-          dayConfigs={dayConfigs}
-          styleConfig={styleConfig}
-          showNavigator={true}
-          showHeader={true}
-          events={dummyEvents}
-          useLimitEvent={false}
-          onEventClick={(event?: CalendarEvent) => console.log(event)}
+        <GridWrapper>
+          <MainSection title="Tanggal Dinonaktifkan" code={exampleDisabled}>
+            <Calendar
+              variant="compact"
+              defaultMonth={2}
+              defaultYear={2026}
+              disabledDates={HARI_LIBUR}
+              styleConfig={GAYA_LIBUR}
+              showNavigator
+              showHeader
+            />
+          </MainSection>
+
+          <MainSection title="Penanda Titik" code={exampleDots}>
+            <Calendar
+              variant="compact"
+              defaultMonth={2}
+              defaultYear={2026}
+              dayConfigs={PENANDA}
+              showNavigator
+              showHeader
+            />
+          </MainSection>
+        </GridWrapper>
+
+        <MainSection
+          title="Dengan Agenda"
+          code={exampleEvents}
+          contentClassName="flex flex-col gap-3"
+        >
+          <Calendar
+            defaultMonth={2}
+            defaultYear={2026}
+            value={tanggal}
+            onChange={setTanggal}
+            events={AGENDA}
+            useLimitEvent={false}
+            onEventClick={(event) => setAgendaTerpilih(event ?? null)}
+            showNavigator
+            showHeader
+          />
+          <Text
+            variant="t1"
+            className="text-gray-800"
+            value={
+              agendaTerpilih != null
+                ? `Agenda dipilih: ${agendaTerpilih.title}`
+                : 'Klik salah satu bilah agenda untuk melihat detailnya.'
+            }
+          />
+        </MainSection>
+
+        <Footer
+          title="Calendar"
+          backTo="/playground/timeline"
+          backToTitle="Timeline"
+          nextTo="/playground/badge"
+          nextToTitle="Badge"
         />
-        {selectedDate && (
-          <div className="mt-4 text-center">
-            <p>Selected: {selectedDate.toLocaleDateString('id-ID')}</p>
-          </div>
-        )}
       </div>
     </>
   );
