@@ -1,6 +1,9 @@
 import dedent from 'dedent';
 import { MonthPicker } from '../../../components/month-picker';
+import illust from '../../../assets/images/forms.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 
 const exampleDefault = dedent(`
@@ -151,6 +154,13 @@ const exampleCustomLabel = dedent(`
 export default function MonthPickerPage() {
   return (
     <>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Month Picker"
+        description="Memilih bulan beserta tahunnya tanpa harus menelusuri kalender harian."
+      />
+
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
           <MonthPicker label="Month" onChange={(e) => console.log(e)} />
@@ -243,6 +253,14 @@ export default function MonthPickerPage() {
           />
         </MainSection>
       </GridWrapper>
+
+      <Footer
+        title="Month Picker"
+        backTo="/playground/text-area"
+        backToTitle="Text Area"
+        nextTo="/playground/year-picker"
+        nextToTitle="Year Picker"
+      />
     </>
   );
 }
