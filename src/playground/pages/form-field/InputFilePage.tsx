@@ -45,6 +45,67 @@ export default function InputFilePage() {
     />
   `);
 
+  const exampleMedium = dedent(`
+    // variant="medium" menampilkan area unggah berukuran sedang.
+    <InputFile variant="medium" value={files} onChange={setFiles} accept="*" />
+  `);
+
+  const exampleValidasi = dedent(`
+    // errorMessage memberi tanda merah beserta pesannya.
+    <InputFile
+      variant="medium"
+      value={files}
+      onChange={setFiles}
+      errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
+    />
+  `);
+
+  const exampleLarge = dedent(`
+    // variant="large" memberi area seret-dan-lepas yang lebih lapang.
+    <InputFile variant="large" value={files} onChange={setFiles} />
+  `);
+
+  const exampleCustomName = dedent(`
+    // useCustomName menambahkan kolom teks di tiap berkas,
+    // sehingga user bisa memberi nama tampilan sendiri.
+    <InputFile
+      useCustomName
+      variant="medium"
+      value={files}
+      onChange={setFiles}
+    />
+  `);
+
+  const exampleServer = dedent(`
+    // uploadConfig mengunggah berkas segera setelah dipilih,
+    // lengkap dengan indikator progres per berkas.
+    <InputFile
+      accept=".png"
+      variant="medium"
+      uploadConfig={{ url: '/api/upload', fieldName: 'file' }}
+      onUploadSuccess={(results) => simpan(results)}
+    />
+  `);
+
+  const exampleHooks = dedent(`
+    import { useInputFile, InputFilePreview } from '@herca/r-kit/clients';
+
+    // useInputFile memisahkan kendali berkas dari tampilannya,
+    // sehingga area unggah dan daftar pratinjau bisa diletakkan terpisah.
+    const fileInput = useInputFile({
+      accept: 'image/*,.pdf',
+      maxSize: 5 * 1024 * 1024,
+    });
+
+    <InputFile inputFile={fileInput} label="Upload dokumen" multiple />
+    <InputFilePreview inputFile={fileInput} mode="compact" />
+  `);
+
+  const exampleButtonVariant = dedent(`
+    // buttonVariant mengganti gaya tombol pilih berkas.
+    <InputFile inputFile={fileInput} buttonVariant="outline" variant="large" />
+  `);
+
   const fileInput = useInputFile({
     accept: 'image/*,.pdf',
     maxSize: 5 * 1024 * 1024,
@@ -90,7 +151,7 @@ export default function InputFilePage() {
           <MainSection title="Multiple Select" code={multipleSelect}>
             <InputFile multiple value={files} onChange={setFiles} />
           </MainSection>
-          <MainSection title="Input File Medium">
+          <MainSection title="Input File Medium" code={exampleMedium}>
             <InputFile
               variant="medium"
               value={files}
@@ -98,7 +159,10 @@ export default function InputFilePage() {
               accept="*"
             />
           </MainSection>
-          <MainSection title="Input File Medium Validasi">
+          <MainSection
+            title="Input File Medium Validasi"
+            code={exampleValidasi}
+          >
             <InputFile
               variant="medium"
               value={files}
@@ -107,10 +171,13 @@ export default function InputFilePage() {
               errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
             />
           </MainSection>
-          <MainSection title="Input File Large">
+          <MainSection title="Input File Large" code={exampleLarge}>
             <InputFile variant="large" value={files} onChange={setFiles} />
           </MainSection>
-          <MainSection title="Input File Large With Validasi">
+          <MainSection
+            title="Input File Large With Validasi"
+            code={exampleValidasi}
+          >
             <InputFile
               variant="large"
               value={files}
@@ -118,7 +185,10 @@ export default function InputFilePage() {
               errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
             />
           </MainSection>
-          <MainSection title="Input File Medium With Input Field">
+          <MainSection
+            title="Input File Medium With Input Field"
+            code={exampleCustomName}
+          >
             <InputFile
               ref={fileRef}
               useCustomName
@@ -128,7 +198,10 @@ export default function InputFilePage() {
               accept="*"
             />
           </MainSection>
-          <MainSection title="Input File Large With Input Field">
+          <MainSection
+            title="Input File Large With Input Field"
+            code={exampleCustomName}
+          >
             <InputFile
               ref={fileRef}
               useCustomName
@@ -138,7 +211,7 @@ export default function InputFilePage() {
               selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"
             />
           </MainSection>
-          <MainSection title="Input File Mode Server">
+          <MainSection title="Input File Mode Server" code={exampleServer}>
             <InputFile
               accept=".png"
               variant="medium"
@@ -149,7 +222,7 @@ export default function InputFilePage() {
               onUploadSuccess={(results) => console.log(results)}
             />
           </MainSection>
-          <MainSection title="Menggunakan Hooks">
+          <MainSection title="Menggunakan Hooks" code={exampleHooks}>
             <div className="flex flex-col gap-6">
               <InputFile
                 inputFile={fileInput}
@@ -159,7 +232,7 @@ export default function InputFilePage() {
               <InputFilePreview inputFile={fileInput} mode="compact" />
             </div>
           </MainSection>
-          <MainSection title="Large Menggunakan Hooks">
+          <MainSection title="Large Menggunakan Hooks" code={exampleHooks}>
             <div className="flex flex-col gap-6">
               <InputFile
                 inputFile={fileInput}
@@ -170,7 +243,10 @@ export default function InputFilePage() {
               <InputFilePreview inputFile={fileInput} mode="compact" />
             </div>
           </MainSection>
-          <MainSection title="Color & Variant Button">
+          <MainSection
+            title="Color & Variant Button"
+            code={exampleButtonVariant}
+          >
             <div className="flex flex-col gap-6">
               <InputFile
                 inputFile={fileInput}
