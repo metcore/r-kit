@@ -39,11 +39,10 @@ export default function Navbar({ onOpenSearch }: NavbarProps) {
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:gap-4 sm:px-6">
         <Link
           to="/"
-          className="rk-nav-control flex shrink-0 items-center gap-2.5"
+          className="rk-nav-control flex shrink-0 -translate-y-1 items-center"
           aria-label="r-kit"
         >
-          <BrandMark size={24} className="text-[var(--rk-accent)]" />
-          <span className="rk-display text-[15px] leading-none">r-kit</span>
+          <BrandMark size={40} className="text-[var(--rk-accent)]" />
         </Link>
 
         <CommandPaletteTrigger onClick={onOpenSearch} />
