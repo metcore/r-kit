@@ -15,6 +15,7 @@ import CommandPalette, {
 } from '../../landing/components/CommandPalette';
 import HeaderNotifications from '../components/HeaderNotifications';
 import HeaderProfile from '../components/HeaderProfile';
+import SectionNav from '../../shared/SectionNav';
 
 export default function PlaygroundLayout() {
   const { open: isSearchOpen, setOpen: setSearchOpen } = useCommandPalette();
@@ -38,6 +39,8 @@ export default function PlaygroundLayout() {
             <HeaderTitle subtitle="Eksplorasi komponen">Playground</HeaderTitle>
           </HeaderLeft>
           <HeaderRight>
+            <SectionNav />
+            <HeaderDivider className="hidden sm:block" />
             <CommandPaletteTrigger onClick={() => setSearchOpen(true)} />
             <HeaderDivider className="hidden sm:block" />
             <HeaderNotifications />

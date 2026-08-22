@@ -14,6 +14,7 @@ import CommandPalette, {
   useCommandPalette,
 } from '../../landing/components/CommandPalette';
 import DocSidebar from '../components/DocSidebar';
+import SectionNav from '../../shared/SectionNav';
 
 export default function DocLayout() {
   const { open: cariTerbuka, setOpen: setCariTerbuka } = useCommandPalette();
@@ -40,6 +41,8 @@ export default function DocLayout() {
             <HeaderTitle subtitle="Panduan penggunaan">Docs</HeaderTitle>
           </HeaderLeft>
           <HeaderRight>
+            <SectionNav />
+            <HeaderDivider className="hidden sm:block" />
             <CommandPaletteTrigger onClick={() => setCariTerbuka(true)} />
           </HeaderRight>
         </Header>
