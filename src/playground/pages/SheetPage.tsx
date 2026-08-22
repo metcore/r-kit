@@ -3,7 +3,8 @@ import dedent from 'dedent';
 
 import HeroSection from '../components/HeroSection';
 import MainSection from '../components/MainSection';
-import illust from '../../assets/images/typography.png';
+import Footer from '../components/Footer';
+import illust from '../../assets/images/navigation.png';
 
 import { Button } from '../../components/button';
 import { Text } from '../../components/text';
@@ -432,8 +433,8 @@ export default function SheetPage() {
               </SheetHeader>
               <SheetBody>
                 <Text>
-                  Lorem ipsum, or lipsum as it is sometimes known, is dummy text
-                  used in laying out print, graphic or web designs.
+                  Panel ini muncul dari sisi layar tanpa memindahkan user dari
+                  halaman yang sedang dibuka.
                 </Text>
               </SheetBody>
               <SheetFooter>
@@ -527,8 +528,8 @@ export default function SheetPage() {
                 />
                 {Array.from({ length: 12 }).map((_, i) => (
                   <Text key={i}>
-                    {i + 1}. Lorem ipsum, or lipsum as it is sometimes known, is
-                    dummy text used in laying out print, graphic or web designs.
+                    {i + 1}. Baris konten tambahan untuk menunjukkan bahwa isi
+                    sheet dapat digulir secara mandiri.
                   </Text>
                 ))}
               </SheetBody>
@@ -791,6 +792,14 @@ export default function SheetPage() {
             </SheetContent>
           </Sheet>
         </MainSection>
+
+        <Footer
+          title="Sheet"
+          backTo="/playground/tabs"
+          backToTitle="Tabs"
+          nextTo="/playground/dropdown"
+          nextToTitle="Dropdown"
+        />
       </div>
     </>
   );
