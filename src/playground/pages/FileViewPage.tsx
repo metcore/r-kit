@@ -8,6 +8,13 @@ import HeroSection from '../components/HeroSection';
 import MainSection from '../components/MainSection';
 import Footer from '../components/Footer';
 
+// Akar FileView memakai rounded-lg tanpa overflow-hidden, sedangkan isian
+// warnanya (dan gambar pratinjau) bersudut siku. Akibatnya warna menonjol
+// keluar lengkung di keempat sudut. FileView adalah komponen library yang
+// sudah rilis, tetapi ia meneruskan className ke akarnya, jadi cukup dikurung
+// dari sisi playground.
+const KURUNG_SUDUT = 'overflow-hidden';
+
 const MB = 1024 * 1024;
 
 const exampleBasic = dedent(`
@@ -15,34 +22,58 @@ const exampleBasic = dedent(`
 
   // Jenis berkas ditebak dari ekstensi src, jadi ikon dan
   // pratinjaunya menyesuaikan sendiri.
-  <FileView src="laporan-tahunan.pdf" size={2411724} />
+  <FileView src="laporan-tahunan.pdf" size={2411724}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleKinds = dedent(`
-  <FileView src="laporan-tahunan.pdf" size={2411724} />
-  <FileView src="rekap-absensi.xlsx" size={845000} />
-  <FileView src="data-mentah.csv" size={102400} />
-  <FileView src="notulen-rapat.docx" size={68000} />
-  <FileView src="rekaman-rapat.mp3" size={7340032} />
-  <FileView src="demo-produk.mp4" size={24117248} />
+  <FileView src="laporan-tahunan.pdf" size={2411724}
+              className={KURUNG_SUDUT}
+            />
+  <FileView src="rekap-absensi.xlsx" size={845000}
+              className={KURUNG_SUDUT}
+            />
+  <FileView src="data-mentah.csv" size={102400}
+              className={KURUNG_SUDUT}
+            />
+  <FileView src="notulen-rapat.docx" size={68000}
+              className={KURUNG_SUDUT}
+            />
+  <FileView src="rekaman-rapat.mp3" size={7340032}
+              className={KURUNG_SUDUT}
+            />
+  <FileView src="demo-produk.mp4" size={24117248}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleImage = dedent(`
   // Berkas gambar menampilkan pratinjaunya langsung.
-  <FileView src={fotoProduk} size={1258291} />
+  <FileView src={fotoProduk} size={1258291}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleSmall = dedent(`
   // variant="small" untuk daftar berkas yang padat.
-  <FileView variant="small" src="laporan-tahunan.pdf" size={2411724} />
+  <FileView variant="small" src="laporan-tahunan.pdf" size={2411724}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleColor = dedent(`
   // color mengubah aksen kartu, berguna untuk menandai
   // kategori atau status berkas.
-  <FileView color="primary" src="kontrak.pdf" size={512000} />
-  <FileView color="danger" src="kontrak.pdf" size={512000} />
-  <FileView color="success" src="kontrak.pdf" size={512000} />
+  <FileView color="primary" src="kontrak.pdf" size={512000}
+              className={KURUNG_SUDUT}
+            />
+  <FileView color="danger" src="kontrak.pdf" size={512000}
+              className={KURUNG_SUDUT}
+            />
+  <FileView color="success" src="kontrak.pdf" size={512000}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleCustomName = dedent(`
@@ -51,12 +82,15 @@ const exampleCustomName = dedent(`
     name="Kontrak Kerja Sama 2026"
     src="a8f3c1e9-kontrak-final-v3.pdf"
     size={512000}
-  />
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const exampleNoDownload = dedent(`
   // Sembunyikan tombol unduh bila berkas hanya boleh dilihat.
-  <FileView hideDownloadButton src="slip-gaji.pdf" size={128000} />
+  <FileView hideDownloadButton src="slip-gaji.pdf" size={128000}
+              className={KURUNG_SUDUT}
+            />
 `);
 
 const DOCUMENTS = [
@@ -91,7 +125,11 @@ export default function FileViewPage() {
         <GridWrapper>
           <MainSection title="Basic" code={exampleBasic}>
             <div className="max-w-60">
-              <FileView src="laporan-tahunan.pdf" size={2.3 * MB} />
+              <FileView
+                src="laporan-tahunan.pdf"
+                size={2.3 * MB}
+                className={KURUNG_SUDUT}
+              />
             </div>
           </MainSection>
 
@@ -101,6 +139,7 @@ export default function FileViewPage() {
                 src={sampleImage}
                 name="foto-produk.jpg"
                 size={1.2 * MB}
+                className={KURUNG_SUDUT}
               />
             </div>
           </MainSection>
@@ -112,7 +151,12 @@ export default function FileViewPage() {
           contentClassName="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
         >
           {DOCUMENTS.map((doc) => (
-            <FileView key={doc.src} src={doc.src} size={doc.size} />
+            <FileView
+              key={doc.src}
+              src={doc.src}
+              size={doc.size}
+              className={KURUNG_SUDUT}
+            />
           ))}
         </MainSection>
 
@@ -127,6 +171,7 @@ export default function FileViewPage() {
               variant="small"
               src={doc.src}
               size={doc.size}
+              className={KURUNG_SUDUT}
             />
           ))}
         </MainSection>
@@ -143,6 +188,7 @@ export default function FileViewPage() {
               color={color}
               src="kontrak.pdf"
               size={0.5 * MB}
+              className={KURUNG_SUDUT}
             />
           ))}
         </MainSection>
@@ -154,6 +200,7 @@ export default function FileViewPage() {
                 name="Kontrak Kerja Sama 2026"
                 src={samplePdf}
                 size={0.5 * MB}
+                className={KURUNG_SUDUT}
               />
             </div>
           </MainSection>
@@ -164,6 +211,7 @@ export default function FileViewPage() {
                 hideDownloadButton
                 src="slip-gaji.pdf"
                 size={0.12 * MB}
+                className={KURUNG_SUDUT}
               />
             </div>
           </MainSection>

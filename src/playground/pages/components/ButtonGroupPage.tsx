@@ -32,6 +32,26 @@ const buttonData = [
 const codeExampleButtonGroupBasic = dedent(`
   import { ButtonGroup } from '@herca/r-kit';
 `);
+const exampleVariant = dedent(`
+  // variant: default | outline | tertiary
+  <ButtonGroup variant="outline">
+    <ButtonGroupItem>Harian</ButtonGroupItem>
+    <ButtonGroupItem>Mingguan</ButtonGroupItem>
+    <ButtonGroupItem>
+      <Icon name="plus" size={12} />
+    </ButtonGroupItem>
+  </ButtonGroup>
+`);
+
+const exampleVertical = dedent(`
+  // direction="vertical" menumpuk tombol ke bawah,
+  // berguna di sidebar atau panel sempit.
+  <ButtonGroup variant="default" direction="vertical">
+    <ButtonGroupItem>Harian</ButtonGroupItem>
+    <ButtonGroupItem>Mingguan</ButtonGroupItem>
+  </ButtonGroup>
+`);
+
 export default function ButtonGroupPage() {
   return (
     <>
@@ -178,7 +198,7 @@ export default function ButtonGroupPage() {
           </div>
         </MainSection>
         <GridWrapper>
-          <MainSection title="Button Group variant">
+          <MainSection title="Button Group variant" code={exampleVariant}>
             <div className="flex flex-wrap gap-4">
               <ButtonGroup variant="default">
                 {buttonData.map(({ id, label }) => (
@@ -206,7 +226,7 @@ export default function ButtonGroupPage() {
               </ButtonGroup>
             </div>
           </MainSection>
-          <MainSection title="Button Group Vertical">
+          <MainSection title="Button Group Vertical" code={exampleVertical}>
             <div className="flex flex-wrap gap-4">
               <ButtonGroup variant="default" direction="vertical">
                 {buttonData.map(({ id, label }) => (

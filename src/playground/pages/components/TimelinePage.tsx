@@ -117,6 +117,13 @@ const exampleRiwayat = dedent(`
   ))}
 `);
 
+const exampleMinimal = dedent(`
+  // Hanya title yang wajib; label, subtitle, dan description opsional.
+  <Timeline color="success" value={{ label: '07:00', title: 'Absen masuk' }} />
+  <Timeline color="success" value={{ label: '12:00', title: 'Istirahat' }} />
+  <Timeline isFirst color="success" value={{ label: '16:00', title: 'Absen pulang' }} />
+`);
+
 export default function TimelinePage() {
   return (
     <>
@@ -220,7 +227,11 @@ export default function TimelinePage() {
           />
         </MainSection>
 
-        <MainSection title="Tanpa Deskripsi" contentClassName="max-w-md">
+        <MainSection
+          title="Tanpa Deskripsi"
+          code={exampleMinimal}
+          contentClassName="max-w-md"
+        >
           <Timeline
             color="success"
             value={{ label: '07:00', title: 'Absen masuk' }}

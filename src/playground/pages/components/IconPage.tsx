@@ -44,6 +44,16 @@ const exampleInline = dedent(`
   </Button>
 `);
 
+const exampleRegistry = dedent(`
+  import { iconRegistry, type IconNameProps } from '@herca/r-kit';
+
+  // Seluruh nama ikon tersedia sebagai kunci iconRegistry,
+  // sehingga daftarnya bisa dibangun dan disaring sendiri.
+  const NAMA_IKON = Object.keys(iconRegistry) as IconNameProps[];
+
+  const hasil = NAMA_IKON.filter((n) => n.includes(kataKunci));
+`);
+
 const SIZES = [16, 24, 32, 48];
 
 export default function IconPage() {
@@ -125,6 +135,7 @@ export default function IconPage() {
 
         <MainSection
           title={`Daftar Ikon (${filteredIcons.length} dari ${ICON_NAMES.length})`}
+          code={exampleRegistry}
           contentClassName="flex flex-col gap-4"
         >
           <Input

@@ -3,6 +3,7 @@ import { Badge } from '../../components/badge';
 import HeroSection from '../components/HeroSection';
 import illust from '../../assets/images/forms.png';
 import MainSection from '../components/MainSection';
+import Footer from '../components/Footer';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { Text } from '../../components/text';
 import {
@@ -669,6 +670,14 @@ export default function ApiTablePage() {
             </CardBody>
           </Card>
         </MainSection>
+
+        <Footer
+          title="API Table"
+          backTo="/playground/table"
+          backToTitle="Table"
+          nextTo="/playground/dnd"
+          nextToTitle="Drag and Drop"
+        />
       </div>
     </div>
   );

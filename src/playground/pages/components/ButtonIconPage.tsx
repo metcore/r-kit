@@ -129,6 +129,16 @@ export default function Example() {
 }
 `);
 
+const exampleIndicator = dedent(`
+  // indicatorProps menempelkan lencana kecil di sudut tombol,
+  // biasanya untuk jumlah notifikasi yang belum dibaca.
+  <ButtonIcon
+    color="gray"
+    icon="bell"
+    indicatorProps={{ color: 'danger', value: '22+', size: 'sm' }}
+  />
+`);
+
 function ButtonIconPage() {
   return (
     <>
@@ -199,7 +209,7 @@ function ButtonIconPage() {
           <MainSection title="bulat" code={codeExampleActive}>
             <ButtonIcon icon="user" rounded color="primary" />
           </MainSection>
-          <MainSection title="Indicator">
+          <MainSection title="Indicator" code={exampleIndicator}>
             <ButtonIcon
               indicatorProps={{
                 color: 'danger',
