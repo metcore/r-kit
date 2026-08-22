@@ -1,8 +1,10 @@
 import dedent from 'dedent';
 import { ButtonGroup, ButtonGroupItem } from '../../../components/button-group';
-import { Hero } from '../../../components/hero';
 import { Icon } from '../../../components/icons';
+import illust from '../../../assets/images/data-display.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 
 const buttonData = [
@@ -33,16 +35,12 @@ const codeExampleButtonGroupBasic = dedent(`
 export default function ButtonGroupPage() {
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">
-          Button Group
-        </h1>
-        <p className="text-sm text-gray-800">
-          Menyatukan beberapa button yang saling berkaitan menjadi satu kesatuan
-          agar hubungan antar aksinya terbaca jelas.
-        </p>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Components"
+        subtitle="Button Group"
+        description="Menyatukan beberapa button yang saling berkaitan menjadi satu kesatuan agar hubungan antar aksinya terbaca jelas."
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
@@ -237,6 +235,14 @@ export default function ButtonGroupPage() {
             </div>
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Button Group"
+          backTo="/playground/button-icon"
+          backToTitle="Button Icon"
+          nextTo="/playground/card"
+          nextToTitle="Card"
+        />
       </div>
     </>
   );

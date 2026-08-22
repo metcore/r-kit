@@ -1,7 +1,9 @@
 import { Button } from '../../../components/button';
 import { Icon } from '../../../components/icons';
-import { Hero } from '../../../components/hero';
+import illust from '../../../assets/images/data-display.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 import dedent from 'dedent';
 const codeExampleButtonBasic = dedent(`
@@ -153,14 +155,12 @@ export default function Example() {
 function ButtonPage() {
   return (
     <>
-      <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900"> Button</h1>
-        <p className="text-sm text-gray-800">
-          Elemen interaktif utama yang digunakan untuk menjalankan aksi,
-          mengirim form, atau berpindah halaman.
-        </p>
-      </Hero>
+      <HeroSection
+        illust={illust}
+        title="Components"
+        subtitle="Button"
+        description="Elemen interaktif utama yang digunakan untuk menjalankan aksi, mengirim form, atau berpindah halaman."
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <GridWrapper>
@@ -245,6 +245,14 @@ function ButtonPage() {
             </Button>
           </MainSection>
         </GridWrapper>
+
+        <Footer
+          title="Button"
+          backTo="/playground/badge"
+          backToTitle="Badge"
+          nextTo="/playground/button-icon"
+          nextToTitle="Button Icon"
+        />
       </div>
     </>
   );
