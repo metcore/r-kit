@@ -28,10 +28,8 @@ export default function ModalPage() {
         <p className="text-xs text-gray-800">Components</p>
         <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Modal</h1>
         <p className="text-sm text-gray-800">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius quae
-          doloremque ab dolore ipsum accusamus impedit dolorem unde ad a autem
-          quod possimus exercitationem cumque, quisquam placeat, minus, tenetur
-          hic.
+          Jendela yang muncul di atas halaman untuk memusatkan perhatian user
+          pada satu tugas atau konfirmasi sebelum melanjutkan.
         </p>
       </Hero>
 

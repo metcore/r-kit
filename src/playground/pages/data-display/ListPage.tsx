@@ -13,10 +13,11 @@ export default function ListPage() {
   return (
     <>
       <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
+        <p className="text-xs text-gray-800">Data Display</p>
         <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">List</h1>
         <p className="text-sm text-gray-800">
-          Elemen icon utama yang digunakan untuk menampilkan gambar.
+          Menyusun sekumpulan item sejenis secara berurutan agar mudah dipindai
+          dari atas ke bawah.
         </p>
       </Hero>
       <GridWrapper>

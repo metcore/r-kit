@@ -534,8 +534,8 @@ export default function ApiTablePage() {
       <HeroSection
         illust={illust}
         title="Data Display"
-        subtitle="Table"
-        description="Struktur data yang menampilkan informasi dalam format baris dan kolom untuk mendukung pemahaman dan interaksi user."
+        subtitle="API Table"
+        description="Tabel yang mengambil data langsung dari API, lengkap dengan paginasi, pengurutan, dan pengaturan kolom di sisi server."
       />
       <div className="flex flex-wrap gap-2">
         <MainSection

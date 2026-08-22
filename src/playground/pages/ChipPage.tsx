@@ -26,8 +26,8 @@ export default function ChipPage() {
         <p className="text-sm font-semibold text-gray-900">Components</p>
         <h1 className="text-3xl font-semibold text-gray-900">Chip</h1>
         <p>
-          Elemen interaktif utama yang digunakan untuk mengeksekusi perintah
-          atau memulai alur tindakan.
+          Label ringkas yang dapat dipilih untuk menyaring, menandai, atau
+          mewakili sebuah pilihan.
         </p>
       </Hero>
       <div className="grid grid-cols-1 gap-4">

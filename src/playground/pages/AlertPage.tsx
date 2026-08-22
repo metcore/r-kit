@@ -89,6 +89,10 @@ export default function AlertPage() {
       <Hero className="mb-4">
         <p className="text-sm font-semibold text-gray-900">Feedback</p>
         <h1 className="text-3xl font-semibold text-gray-900">Alert</h1>
+        <p className="text-sm text-gray-800">
+          Menyampaikan pesan status yang penting bagi user, mulai dari informasi
+          biasa hingga peringatan kesalahan.
+        </p>
       </Hero>
 
       <div className="grid grid-cols-1 gap-4">

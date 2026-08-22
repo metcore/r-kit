@@ -109,8 +109,8 @@ export default function ColorPickerPage() {
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Checkbox"
-        description="Memungkinkan user memilih satu, beberapa, atau tidak memilih opsi sama sekali dari daftar pilihan."
+        subtitle="Color Picker"
+        description="Memungkinkan user memilih warna melalui panel pemilih maupun dengan memasukkan nilai heksadesimal secara langsung."
       />
 
       <div className="flex flex-1 flex-col gap-4">

@@ -20,9 +20,10 @@ export default function IconPage() {
     <>
       <Hero className="mb-4">
         <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Icons</h1>
+        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Icon</h1>
         <p className="text-sm text-gray-800">
-          Elemen icon utama yang digunakan untuk menampilkan gambar.
+          Simbol ringkas yang memperkuat makna sebuah aksi atau label tanpa
+          menambah banyak teks.
         </p>
       </Hero>
 

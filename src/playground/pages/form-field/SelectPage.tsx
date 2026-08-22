@@ -194,13 +194,11 @@ function SelectPage() {
   return (
     <>
       <Hero className="mb-4">
-        <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">
-          Select — Infinite Scroll
-        </h1>
+        <p className="text-xs text-gray-800">Form</p>
+        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Select</h1>
         <p className="text-sm text-gray-800">
-          Contoh penggunaan Select dengan data dari API publik (JSONPlaceholder)
-          dan infinite scroll tanpa library tambahan.
+          Memilih satu atau beberapa opsi dari daftar, termasuk daftar panjang
+          yang dimuat bertahap dari API.
         </p>
       </Hero>
 

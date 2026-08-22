@@ -17,8 +17,12 @@ const TabsPage: React.FC = () => {
   return (
     <>
       <Hero className="mb-4">
-        <p className="text-sm font-semibold text-gray-900">Components</p>
+        <p className="text-sm font-semibold text-gray-900">Navigation</p>
         <h1 className="text-3xl font-semibold text-gray-900">Tabs</h1>
+        <p className="text-sm text-gray-800">
+          Membagi konten sederajat ke beberapa panel dan menampilkan satu panel
+          pada satu waktu.
+        </p>
       </Hero>
       <div className="grid grid-cols-1 gap-4">
         <h2 className="mb-4 text-xl font-semibold text-gray-800">Basic Tabs</h2>

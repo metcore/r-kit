@@ -236,7 +236,7 @@ export default function DndPage() {
     <>
       <HeroSection
         illust={illust}
-        title="Components"
+        title="Data Display"
         subtitle="Drag and Drop"
         description="Board interaktif untuk mengatur item di dalam kolom atau memindahkan
           item ke kolom lain."

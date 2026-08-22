@@ -39,8 +39,8 @@ export default function ButtonGroupPage() {
           Button Group
         </h1>
         <p className="text-sm text-gray-800">
-          Elemen interaktif utama yang digunakan untuk mengeksekusi perintah
-          atau memulai alur tindakan.
+          Menyatukan beberapa button yang saling berkaitan menjadi satu kesatuan
+          agar hubungan antar aksinya terbaca jelas.
         </p>
       </Hero>
 

@@ -11,9 +11,9 @@ export default function ProgressBarPage() {
   return (
     <>
       <HeroSection
-        title="Progress Bar"
-        description="Progress bar component"
-        subtitle="progress bar"
+        title="Components"
+        description="Menampilkan kemajuan sebuah proses, baik yang panjangnya diketahui maupun yang masih berjalan tanpa batas waktu pasti."
+        subtitle="Progress Bar"
         illust={illust}
       />
 

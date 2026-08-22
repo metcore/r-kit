@@ -8,6 +8,10 @@ function AvatarPage() {
       <Hero className="mb-4">
         <p className="text-sm font-semibold text-gray-900">Components</p>
         <h1 className="text-3xl font-semibold text-gray-900">Avatar</h1>
+        <p className="text-sm text-gray-800">
+          Mewakili identitas seseorang atau entitas lewat foto, inisial, maupun
+          ikon pengganti.
+        </p>
       </Hero>
       <div className="grid grid-cols-1 gap-4">
         <Card size={'lg'}>

@@ -51,31 +51,31 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading color="primary">
+      <Button color="primary">
         Primary
       </Button>
-      <Button loading color="secondary">
+      <Button color="secondary">
         Secondary
       </Button>
-      <Button loading color="success">
+      <Button color="success">
         Success
       </Button>
-      <Button loading color="danger">
+      <Button color="danger">
         Danger
       </Button>
-      <Button loading color="warning">
+      <Button color="warning">
         Warning
       </Button>
-      <Button loading color="info">
+      <Button color="info">
         Info
       </Button>
-      <Button loading color="orang">
-        Orang
+      <Button color="orange">
+        Orange
       </Button>
-      <Button loading color="purple">
+      <Button color="purple">
         Purple
       </Button>
-      <Button loading color="gray">
+      <Button color="gray">
         Gray
       </Button>
     </>
@@ -89,13 +89,13 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading variant="default">
+      <Button color="primary">
         Default
       </Button>
-      <Button loading variant="outline">
+      <Button variant="outline" color="primary">
         Outline
       </Button>
-      <Button loading variant="tertiary">
+      <Button variant="tertiary" color="primary">
         Tertiary
       </Button>
     </>
@@ -109,13 +109,13 @@ import { Button } from '@herca/r-kit';
 export default function Example() {
   return (
     <>
-      <Button loading size="sm">
+      <Button size="sm">
         Small
       </Button>
-      <Button loading size="md">
+      <Button size="md">
         Medium
       </Button>
-      <Button loading size="lg">
+      <Button size="lg">
         Large
       </Button>
     </>

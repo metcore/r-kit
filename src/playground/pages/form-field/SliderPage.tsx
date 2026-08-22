@@ -61,7 +61,7 @@ export const SliderPage = () => {
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Sliders" // Diubah ke Sliders agar sesuai konteks komponen
+        subtitle="Slider"
         description="Komponen input yang memungkinkan pengguna memilih nilai tunggal atau rentang nilai dari batas yang ditentukan."
       />
 

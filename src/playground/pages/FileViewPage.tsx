@@ -11,7 +11,7 @@ export default function FileViewPage() {
         illust={illust}
         title="Data Display"
         subtitle="File View"
-        description="Bantu user pilih satu item dari daftar tanpa memenuhi layar."
+        description="Menampilkan berkas terunggah beserta nama, jenis, dan ukurannya, lengkap dengan aksi pratinjau dan unduh."
       />
 
       <div className="flex flex-col gap-4">

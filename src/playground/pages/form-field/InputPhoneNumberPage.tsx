@@ -144,7 +144,7 @@ export default function InputPasswordPage() {
         illust={illust}
         title="Form"
         subtitle="Input Phone Number"
-        description="Komponen input khusus untuk memasukkan memasukkan nomor telepon, termasuk kode negara dan kode identifikasi lainnya."
+        description="Komponen input khusus untuk memasukkan nomor telepon, termasuk kode negara dan kode identifikasi lainnya."
       />
 
       <div className="flex flex-col gap-4">

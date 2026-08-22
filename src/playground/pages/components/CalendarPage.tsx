@@ -100,8 +100,8 @@ export default function CalendarPage() {
   return (
     <>
       <HeroSection
-        title="Calendar"
-        description="Calendar component"
+        title="Components"
+        description="Menampilkan tanggal dalam tampilan bulanan untuk melihat, memilih, dan menandai tanggal secara langsung."
         subtitle="Calendar"
         illust={illust}
       />

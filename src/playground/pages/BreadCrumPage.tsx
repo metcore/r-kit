@@ -6,9 +6,9 @@ export default function BreadcrumbPage() {
   return (
     <>
       <HeroSection
-        title="Breadcrumb"
-        subtitle="navigation"
-        description="Panel yang muncul dari bawah atau samping untuk menampilkan navigasi tambahan tanpa meninggalkan halaman utama."
+        title="Navigation"
+        subtitle="Breadcrumb"
+        description="Menunjukkan posisi halaman saat ini di dalam hierarki situs dan menyediakan jalan kembali ke tingkat di atasnya."
       />
 
       <div className="flex flex-col gap-4">

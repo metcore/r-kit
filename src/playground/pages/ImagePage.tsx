@@ -21,12 +21,10 @@ export default function ImagePage() {
     <>
       <Hero className="mb-4">
         <p className="text-xs text-gray-800">Components</p>
-        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Modal</h1>
+        <h1 className="mb-2.5 text-4xl font-semibold text-gray-900">Image</h1>
         <p className="text-sm text-gray-800">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius quae
-          doloremque ab dolore ipsum accusamus impedit dolorem unde ad a autem
-          quod possimus exercitationem cumque, quisquam placeat, minus, tenetur
-          hic.
+          Menampilkan gambar dengan penanganan rasio, keadaan memuat, dan
+          pratinjau ukuran penuh.
         </p>
       </Hero>
       <GridWrapper>
