@@ -1,6 +1,6 @@
 {
   "name": "@herca/r-kit",
-  "version": "0.0.113",
+  "version": "1.0.0",
   "description": "Open source React UI kit dari tim Herca — Tailwind v4, Radix UI, TypeScript.",
   "keywords": [
     "React",
