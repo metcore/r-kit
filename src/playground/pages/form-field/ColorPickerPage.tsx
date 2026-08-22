@@ -4,7 +4,7 @@ import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 import HeroSection from '../../components/HeroSection';
 import dedent from 'dedent';
-import ColorInput from '../../../components/collor-picker/color-picker';
+import { ColorInput } from '../../../components/collor-picker/color-picker';
 
 export default function ColorPickerPage() {
   const exampleBasic = dedent(`
