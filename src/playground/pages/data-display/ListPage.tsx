@@ -67,6 +67,14 @@ const exampleContent = dedent(`
   </ListItem>
 `);
 
+// Card pembungkus List memakai rounded-xl tanpa overflow-hidden, sedangkan
+// ListItem di dalamnya hanya melengkung di sisi atas (rounded-t-md). Akibatnya
+// sudut ListItem menonjol keluar lengkung Card — paling kelihatan saat
+// accordion tertutup dan hanya menyisakan satu baris. Card/List/Accordion
+// adalah komponen library yang sudah rilis, dan Accordion bahkan membuang
+// prop className, jadi pengurungannya dilakukan dari sisi playground.
+const KURUNG_SUDUT = '[&_.rounded-xl]:overflow-hidden';
+
 export default function ListPage() {
   return (
     <>
@@ -79,7 +87,11 @@ export default function ListPage() {
 
       <div className="flex flex-col gap-4">
         <GridWrapper>
-          <MainSection title="Basic" code={exampleBasic}>
+          <MainSection
+            title="Basic"
+            code={exampleBasic}
+            contentClassName={KURUNG_SUDUT}
+          >
             <List>
               {DOKUMEN.map((item) => (
                 <ListItem key={item}>
@@ -91,7 +103,11 @@ export default function ListPage() {
             </List>
           </MainSection>
 
-          <MainSection title="Belang-seling" code={exampleStriped}>
+          <MainSection
+            title="Belang-seling"
+            code={exampleStriped}
+            contentClassName={KURUNG_SUDUT}
+          >
             <List variant="striped">
               {DOKUMEN.map((item) => (
                 <ListItem key={item}>
@@ -105,7 +121,11 @@ export default function ListPage() {
         </GridWrapper>
 
         <GridWrapper>
-          <MainSection title="Baris Disorot" code={exampleActive}>
+          <MainSection
+            title="Baris Disorot"
+            code={exampleActive}
+            contentClassName={KURUNG_SUDUT}
+          >
             <List>
               {DOKUMEN.map((item, index) => (
                 <ListItem key={item} active={index === 2}>
@@ -117,7 +137,11 @@ export default function ListPage() {
             </List>
           </MainSection>
 
-          <MainSection title="Bisa Diklik" code={exampleClickable}>
+          <MainSection
+            title="Bisa Diklik"
+            code={exampleClickable}
+            contentClassName={KURUNG_SUDUT}
+          >
             <List>
               {DOKUMEN.map((item) => (
                 <ListItem key={item} onClick={() => undefined}>
@@ -137,7 +161,11 @@ export default function ListPage() {
           </MainSection>
         </GridWrapper>
 
-        <MainSection title="Konten Bebas" code={exampleContent}>
+        <MainSection
+          title="Konten Bebas"
+          code={exampleContent}
+          contentClassName={KURUNG_SUDUT}
+        >
           <List>
             {PENGATURAN.map((item) => (
               <ListItem key={item.label}>

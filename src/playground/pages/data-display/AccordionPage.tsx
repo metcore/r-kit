@@ -79,6 +79,14 @@ const exampleContent = dedent(`
   </AccordionItem>
 `);
 
+// Card pembungkus List memakai rounded-xl tanpa overflow-hidden, sedangkan
+// ListItem di dalamnya hanya melengkung di sisi atas (rounded-t-md). Akibatnya
+// sudut ListItem menonjol keluar lengkung Card — paling kelihatan saat
+// accordion tertutup dan hanya menyisakan satu baris. Card/List/Accordion
+// adalah komponen library yang sudah rilis, dan Accordion bahkan membuang
+// prop className, jadi pengurungannya dilakukan dari sisi playground.
+const KURUNG_SUDUT = '[&_.rounded-xl]:overflow-hidden';
+
 export default function AccordionPage() {
   const [terbuka, setTerbuka] = useState(false);
 
@@ -93,7 +101,11 @@ export default function AccordionPage() {
 
       <div className="flex flex-col gap-4">
         <GridWrapper>
-          <MainSection title="Basic" code={exampleBasic}>
+          <MainSection
+            title="Basic"
+            code={exampleBasic}
+            contentClassName={KURUNG_SUDUT}
+          >
             <Accordion
               renderHeader={
                 <Text
@@ -114,7 +126,11 @@ export default function AccordionPage() {
             </Accordion>
           </MainSection>
 
-          <MainSection title="Belang-seling" code={exampleStriped}>
+          <MainSection
+            title="Belang-seling"
+            code={exampleStriped}
+            contentClassName={KURUNG_SUDUT}
+          >
             <Accordion
               variant="striped"
               renderHeader={
@@ -138,7 +154,11 @@ export default function AccordionPage() {
         </GridWrapper>
 
         <GridWrapper>
-          <MainSection title="Terkendali dari Luar" code={exampleControlled}>
+          <MainSection
+            title="Terkendali dari Luar"
+            code={exampleControlled}
+            contentClassName={KURUNG_SUDUT}
+          >
             <Accordion
               isOpen={terbuka}
               onCollapse={setTerbuka}
@@ -168,7 +188,11 @@ export default function AccordionPage() {
             </Accordion>
           </MainSection>
 
-          <MainSection title="Baris Disorot" code={exampleActive}>
+          <MainSection
+            title="Baris Disorot"
+            code={exampleActive}
+            contentClassName={KURUNG_SUDUT}
+          >
             <Accordion
               renderHeader={
                 <Text
@@ -190,7 +214,11 @@ export default function AccordionPage() {
           </MainSection>
         </GridWrapper>
 
-        <MainSection title="Konten Bebas" code={exampleContent}>
+        <MainSection
+          title="Konten Bebas"
+          code={exampleContent}
+          contentClassName={KURUNG_SUDUT}
+        >
           <Accordion
             renderHeader={
               <Text
