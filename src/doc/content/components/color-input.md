@@ -49,15 +49,21 @@ Isi `ColorValue`:
 ## Nilai Awal
 
 ```tsx
-<ColorInput defaultColor="#f04438" />
+const warnaDariDb = '#F04438';
+
+<ColorInput value={warnaDariDb} />
 ```
+
+Jika nilainya berasal dari form atau data hasil fetch, kirim lewat `value`.
+Komponen akan menampilkan warna awal tersebut dan ikut berubah saat `value`
+diperbarui dari parent.
 
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
 | --- | --- | --- | --- |
-| `value` | `string \| RGB \| HSV \| number` | — | Mode terkendali |
-| `defaultColor` | `string` | — | Warna awal |
+| `value` | `string \| RGB \| HSV \| number` | — | Nilai awal dan sinkronisasi dari parent |
+| `defaultColor` | `string` | — | Warna awal internal `BaseColorPicker` |
 | `onChange` | `(color: ColorValue) => void` | — | Dipanggil saat warna berubah |
 | `size` | `InputSize` | `md` | Ukuran isian |
 | `label` | `string` | — | Teks di atas isian |
@@ -68,6 +74,8 @@ Isi `ColorValue`:
 
 Prop `Input` lain diteruskan, kecuali `value`, `onChange`, dan
 `children` yang dipakai ulang dengan makna berbeda.
+
+Untuk kasus umum seperti edit data dari DB, gunakan `value`.
 
 ## Catatan
 

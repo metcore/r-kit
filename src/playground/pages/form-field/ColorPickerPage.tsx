@@ -26,6 +26,21 @@ export default function ColorPickerPage() {
       );
     }
   `);
+  const exampleInitialValue = dedent(`
+    import { ColorInput } from '@herca/r-kit/clients';
+
+    export default function Example() {
+      const brandColorFromDb = '#F04438';
+
+      return (
+        <ColorInput
+          label="Brand color"
+          placeholder="#2563EB"
+          value={brandColorFromDb}
+        />
+      );
+    }
+  `);
   const exampleRequired = dedent(`
     import { ColorInput } from '@herca/r-kit/clients';
 
@@ -117,6 +132,17 @@ export default function ColorPickerPage() {
         <GridWrapper>
           <MainSection title="Color picker default" code={exampleBasic}>
             <ColorInput />
+          </MainSection>
+          <MainSection
+            title="Color picker initial value"
+            code={exampleInitialValue}
+          >
+            <ColorInput
+              onChange={(e) => console.log(e)}
+              placeholder="#2563EB"
+              label="Brand color"
+              value="#F04438"
+            />
           </MainSection>
           <MainSection title="Color picker with label" code={exampleLabel}>
             <ColorInput
