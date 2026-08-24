@@ -216,7 +216,7 @@ function SelectPage() {
               options={dataSingle}
               onSearch={(e) => setSearchValue(e)}
               searchValue={searchValue}
-              value={selectedUserBasic}
+              defaultValue={1}
               onChange={(v) => {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
               }}
@@ -420,6 +420,7 @@ function SelectPage() {
             <AsyncSelect
               label="User"
               value={selectedUser}
+              // defaultValue={2}
               onChange={(v) => {
                 setSelectedUser(v as SelectOption<ExtraUser> | null);
               }}

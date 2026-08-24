@@ -15,7 +15,7 @@ export default function TimePickerpage() {
           />
         </MainSection>
         <MainSection title="default">
-          <TimePicker label="Time" showSeconds={true} />
+          <TimePicker label="Time" value="5:30" showSeconds={true} />
         </MainSection>
         <MainSection title="default">
           <TimePicker disabled label="Time" />

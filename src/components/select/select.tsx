@@ -142,8 +142,7 @@ export function Select<Extra extends object = object>({
 
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
-
-  const isControlled = valueProp !== undefined;
+  const isControlled = valueProp !== undefined && valueProp !== null;
   const [internalValue, setInternalValue] =
     useState<SelectValue<Extra>>(defaultValue);
   const value = isControlled ? valueProp : internalValue;

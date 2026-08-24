@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import {
+  ButtonIcon,
+  Dropdown,
+  DropdownContent,
+  DropdownTrigger,
   Table,
   TableBody,
   TableCell,
@@ -107,7 +111,7 @@ export default function TablePage() {
 
       <div className="flex flex-col gap-4">
         <MainSection title="Table Basic" className="overflow-auto">
-          <Table variant="row-bordered" className="w-full table-auto">
+          <Table responsive={true} className="w-full table-auto">
             <TableHead>
               <TableRow>
                 <TableCellHead value={'No'} />
@@ -115,6 +119,7 @@ export default function TablePage() {
                 <TableCellHead value={'Username'} />
                 <TableCellHead value={'Status'} />
                 <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
                 <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
@@ -124,32 +129,46 @@ export default function TablePage() {
                   key={index}
                   isLast={index === sample_data.length - index}
                 >
-                  <TableCell value={index + 1} textClassName="text-gray-800" />
+                  <TableCell
+                    value={index + 1}
+                    textClassName="text-gray-800"
+                    className="hidden md:table-cell"
+                  />
                   <TableCell
                     value={item.name}
-                    textClassName="text-gray-800"
-                    className="min-w-30"
+                    textClassName="text-gray-800 "
+                    className="max-md:flex max-md:items-center"
                   />
                   <TableCell
                     value={item.username}
                     textClassName="text-gray-800"
+                    className="col-span-2"
                   />
-                  <TableCell>
+                  <TableCell className="col-span-2">
                     <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
                     value={item.divisi}
+                    className="col-span-2"
                     textClassName="text-gray-800"
                   />
+                  <TableCell className="max-md:col-start-2 max-md:row-start-1 max-md:flex max-md:min-w-0 max-md:flex-col max-md:items-end">
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <ButtonIcon variant="tertiary" icon="more-horizontal" />
+                      </DropdownTrigger>
+                      <DropdownContent>dd</DropdownContent>
+                    </Dropdown>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </MainSection>
         <MainSection title="Table Head" className="overflow-auto">
-          <Table variant="headed" className="w-full table-auto">
-            <TableHead>
+          <Table responsive className="w-full table-auto">
+            <TableHead className="bg-gray-100">
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
                 <TableCellHead value={'Nama'} />
@@ -193,7 +212,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
         <MainSection title="Bordered Table" className="overflow-auto">
-          <Table variant="bordered" className="w-full table-auto">
+          <Table bordered className="w-full table-auto">
             <TableHead>
               <TableRow>
                 <TableCellHead value={'No'} />
@@ -231,7 +250,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
         <MainSection title="Stripped Rows" className="overflow-auto">
-          <Table variant="stripped" className="w-full table-auto">
+          <Table striped bordered responsive className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
@@ -269,7 +288,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
         <MainSection title="Hovered" className="overflow-auto">
-          <Table variant="hovered" className="w-full table-auto">
+          <Table striped bordered hoverable className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
@@ -307,7 +326,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
         <MainSection title="Advanced Table" className="overflow-auto">
-          <Table variant="wrapped-row-bordered" className="w-full table-auto">
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />

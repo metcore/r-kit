@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../button';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
 import { Icon } from '../icons';
@@ -27,7 +27,7 @@ interface TimePickerProps {
   showSeconds?: boolean;
   showAmPm?: boolean;
   use12Hour?: boolean;
-  value?: string;
+  value?: string | null;
   defaultValue?: string;
   initialPosition?: string;
   onChange?: (val: string) => void;
@@ -37,7 +37,7 @@ interface TimePickerProps {
   label?: string;
   hint?: string;
   tooltip?: string;
-  errorMessages?: string;
+  errorMessages?: string | string[];
   required?: boolean;
   size?: InputSize;
 }
@@ -49,6 +49,7 @@ export function TimePicker({
   showAmPm = false,
   use12Hour = false,
   defaultValue,
+  value,
   initialPosition,
   onChange,
   onApply,
@@ -63,32 +64,84 @@ export function TimePicker({
 }: TimePickerProps) {
   const hourOpts = use12Hour ? HOURS_12 : HOURS_24;
 
-  const parseVal = (val?: string): TimeState => {
-    if (val == null)
-      return { h: use12Hour ? '10' : '00', m: '00', s: '00', ap: 'AM' };
+  const parseVal = (val?: string | null): TimeState => {
+    if (val == null || val === '') {
+      return {
+        h: use12Hour ? '10' : '00',
+        m: '00',
+        s: '00',
+        ap: 'AM',
+      };
+    }
 
     const [rawH = '00', rawM = '00', rawS = '00'] = val.split(':');
+
     let s = rawS;
     let ap: 'AM' | 'PM' = 'AM';
-    if (s.includes(' ')) [s, ap] = s.split(' ') as [string, 'AM' | 'PM'];
 
-    const h = use12Hour ? String(Number(rawH)) : rawH;
-    return { h, m: rawM, s, ap };
+    if (s.includes(' ')) {
+      [s, ap] = s.split(' ') as [string, 'AM' | 'PM'];
+    }
+
+    const h = use12Hour ? String(Number(rawH)) : pad2(Number(rawH));
+
+    return {
+      h,
+      m: pad2(Number(rawM)),
+      s: pad2(Number(s)),
+      ap,
+    };
   };
 
-  const [committed, setCommitted] = useState<TimeState | null>(
-    defaultValue != null ? parseVal(defaultValue) : null
-  );
-  const [draft, setDraft] = useState<TimeState>(
-    () => committed ?? parseVal(initialPosition)
-  );
+  const [committed, setCommitted] = useState<TimeState | null>(() => {
+    if (value != null && value !== '') {
+      return parseVal(value);
+    }
+
+    if (defaultValue != null && defaultValue !== '') {
+      return parseVal(defaultValue);
+    }
+
+    return null;
+  });
+
+  const [draft, setDraft] = useState<TimeState>(() => {
+    if (value != null && value !== '') {
+      return parseVal(value);
+    }
+
+    if (defaultValue != null && defaultValue !== '') {
+      return parseVal(defaultValue);
+    }
+
+    return parseVal(initialPosition);
+  });
+
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (value == null || value === '') {
+      setCommitted(null);
+      return;
+    }
+
+    const parsed = parseVal(value);
+
+    setCommitted(parsed);
+
+    // Optional: supaya roller juga langsung mengikuti
+    if (!open) {
+      setDraft(parsed);
+    }
+  }, [value, use12Hour]);
 
   const buildTime = ({ h, m, s, ap }: TimeState) => {
     const parts: string[] = [];
+
     if (showHours) parts.push(h);
     if (showMinutes) parts.push(m);
     if (showSeconds) parts.push(s);
+
     return showAmPm ? `${parts.join(':')} ${ap}` : parts.join(':');
   };
 
@@ -101,19 +154,25 @@ export function TimePicker({
 
   const handleNow = () => {
     const now = new Date();
+
     let h = now.getHours();
-    const ap = h >= 12 ? 'PM' : 'AM';
-    if (use12Hour) h = h % 12 || 12;
+    const ap: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
+
+    if (use12Hour) {
+      h = h % 12 || 12;
+    }
+
     setDraft({
-      h: String(h),
+      h: use12Hour ? String(h) : pad2(h),
       m: pad2(now.getMinutes()),
       s: pad2(now.getSeconds()),
-      ap: ap as 'AM' | 'PM',
+      ap,
     });
   };
 
   const handleApply = () => {
     const timeStr = buildTime(draft);
+
     setCommitted({ ...draft });
     onChange?.(timeStr);
     onApply?.(timeStr);

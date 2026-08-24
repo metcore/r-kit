@@ -368,6 +368,7 @@ export default function ApiTablePage() {
         render: (_value, row) => (
           <span className="font-mono text-xs text-slate-400">#{row.id}</span>
         ),
+        className: 'hidden md:table-cell',
       },
       {
         key: 'firstName',
@@ -378,20 +379,34 @@ export default function ApiTablePage() {
             {row.firstName} {row.lastName}
           </span>
         ),
+        className: 'max-md:flex max-md:items-center',
       },
-      { key: 'birthDate', header: 'Birth Date', sortable: true }, // dulu: 'birthDate' OK, tapi interface-nya 'birthday'
+      { key: 'birthDate', header: 'Birth Date', sortable: true },
       {
         key: 'age',
         header: 'Age',
         sortable: true,
         render: (_value, row) => <Badge>{row.age}</Badge>,
+        className: 'col-span-2',
       },
-      { key: 'university', header: 'University', sortable: true },
-      { key: 'role', header: 'Role', sortable: true },
+      {
+        key: 'university',
+        header: 'University',
+        sortable: true,
+        className: 'col-span-2',
+      },
+      {
+        key: 'role',
+        header: 'Role',
+        sortable: true,
+        className: 'col-span-2',
+      },
       {
         key: 'action',
         header: 'Action',
         align: 'right',
+        className:
+          'max-md:col-start-2 max-md:row-start-1 max-md:flex max-md:min-w-0 max-md:flex-col max-md:items-end',
         render: () => (
           <Dropdown>
             <DropdownTrigger>
@@ -609,7 +624,7 @@ export default function ApiTablePage() {
             <CardBody>
               <ApiTable
                 t={t}
-                responsive="cards"
+                responsive={true}
                 columns={columns}
                 onRowClick={(row) => console.log('row clicked:', row)}
                 // rowOptions={(data, key, index) => {
@@ -664,7 +679,7 @@ export default function ApiTablePage() {
             </CardHeader>
 
             <CardBody>
-              <ApiTable t={tDynamic} columns={visibility.visibleColumns} />
+              <ApiTable t={tDynamic} columns={visibility.visibleColumns} res />
             </CardBody>
           </Card>
         </MainSection>

@@ -169,7 +169,6 @@ export interface RowOption<T extends RowLike = RowLike> {
   variant?: 'default' | 'danger';
 }
 
-export type ResponsiveMode = 'scroll' | 'cards';
 export interface RowOptionResult {
   className?: string;
 }
@@ -187,7 +186,7 @@ export interface ApiTableProps<
   loadingRowCount?: number;
   rowOptions?: (data: T, key: Key, index: number) => RowOptionResult;
   rowOptionsLabel?: ReactNode;
-  responsive?: boolean | ResponsiveMode;
+  responsive?: boolean;
   showPagination?: boolean;
   showFooter?: boolean;
 }

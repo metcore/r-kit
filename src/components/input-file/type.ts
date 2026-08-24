@@ -5,9 +5,16 @@ import type { BaseColor } from '../base/type/base-color';
 
 export type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
-export interface FileItem {
-  id?: string;
-  file: File;
+export interface RemoteFile {
+  id?: string | number;
+  url: string;
+  name?: string;
+  size?: number;
+  type?: string;
+}
+
+interface FileItemBase {
+  id: string;
 
   label?: string;
   hint?: string;
@@ -18,10 +25,37 @@ export interface FileItem {
 
   uploadStatus?: UploadStatus;
   uploadedUrl?: string;
+
+  name: string;
+  type: string;
+  size?: number;
 }
 
+export interface LocalFileItem extends FileItemBase {
+  source: 'local';
+  file: File;
+  url?: undefined;
+  remoteId?: undefined;
+}
+
+export interface RemoteFileItem extends FileItemBase {
+  source: 'remote';
+  url: string;
+  remoteId?: string | number;
+  file?: undefined;
+}
+
+export type FileItem = LocalFileItem | RemoteFileItem;
+
+export const isLocalFile = (i: FileItem): i is LocalFileItem =>
+  i.source === 'local';
+export const isRemoteFile = (i: FileItem): i is RemoteFileItem =>
+  i.source === 'remote';
+
+export type InputFileValue = File | RemoteFile | FileItem;
+
 export interface InputFileProps extends PlayerProps {
-  value?: FileItem[];
+  value?: InputFileValue[];
   onChange?: (files: FileItem[]) => void;
   multiple?: boolean;
   accept?: string;
@@ -38,7 +72,12 @@ export interface InputFileProps extends PlayerProps {
   maxSizeErrorMessage?: string;
   customNamePlaceholder?: string;
   maxFilesErrorMessage?: string;
+
+  /** New, clearer name. Defaults to off; explicit `false` disables. */
+  allowCustomName?: boolean;
+  /** @deprecated Use `allowCustomName`. Kept for backward compatibility. */
   useCustomName?: boolean;
+
   onDownload?: (data: { src?: string; name?: string }) => void;
   uploadConfig?: UploadConfig;
   onUploadSuccess?: (results: UploadedFile<unknown>[]) => void;
@@ -83,7 +122,7 @@ export interface UploadConfig {
   method?: 'POST' | 'PUT' | 'PATCH';
   fieldName?: string;
   headers?: Record<string, string>;
-  extractUrl?: (response: unknown) => string; // default: (res) => res.url
+  extractUrl?: (response: unknown) => string;
   onError?: (fileItem: FileItem, error: string) => void;
   errorMessage?: string;
 }

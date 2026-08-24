@@ -9,8 +9,6 @@ import { getIconName } from './helpers';
 import type { PreviewItemProps } from './type';
 import clsx from 'clsx';
 
-// man... i love using display flex :)
-
 const PreviewItem = ({
   data,
   onRemove,
@@ -33,14 +31,17 @@ const PreviewItem = ({
     isVisible: false,
   });
 
-  const isImage = data?.file?.type?.startsWith('image/');
-  const isMp3 = data?.file?.type?.startsWith('audio/');
-  const isVideo = data?.file?.type?.startsWith('video/');
-  const isPdf = data?.file?.type === 'application/pdf';
+  // Read normalized fields (works for BOTH local File items and remote items).
+  // For a local file these resolve exactly as before; for a remote file there is
+  // no `data.file`, so reading `data.file.*` here would crash.
+  const isImage = data.type?.startsWith('image/');
+  const isMp3 = data.type?.startsWith('audio/');
+  const isVideo = data.type?.startsWith('video/');
+  const isPdf = data.type === 'application/pdf';
 
   const isNotViewable = !isImage && !isMp3 && !isVideo && !isPdf;
 
-  const iconName = getIconName({ file: data.file });
+  const iconName = getIconName({ fileType: data.type });
 
   const handleOpenPreview = () => {
     setPreviewShow({ isOpen: true, isVisible: false });
@@ -71,7 +72,7 @@ const PreviewItem = ({
             {isImage ? (
               <img
                 src={data.preview}
-                alt={data.file.name}
+                alt={data.name}
                 className="size-full object-cover"
               />
             ) : (
@@ -141,10 +142,10 @@ const PreviewItem = ({
                   onClick={handleOpenPreview}
                   disabled={isNotViewable}
                 >
-                  {data.file.type.startsWith('image/') ? (
+                  {data.type?.startsWith('image/') ? (
                     <img
                       src={data.preview}
-                      alt={data.file.name}
+                      alt={data.name}
                       className="size-11 rounded-md object-cover"
                     />
                   ) : (
@@ -154,19 +155,22 @@ const PreviewItem = ({
                 <div className="flex flex-1 flex-col overflow-hidden">
                   <Text
                     as="h3"
-                    value={data.file.name}
+                    value={data.name}
                     variant="t1"
                     weight="semibold"
                     className="truncate"
                   />
                   <div className="flex flex-wrap items-center gap-1">
-                    <Text
-                      value={`${(data.file.size / 1024 / 1024).toFixed(2)} MB`}
-                      className="truncate text-gray-700!"
-                    />
-                    {(Boolean(data?.hint) || Boolean(data?.errorMessage)) && (
-                      <Text value={'•'} className="truncate text-gray-700!" />
+                    {data.size !== undefined && (
+                      <Text
+                        value={`${(data.size / 1024 / 1024).toFixed(2)} MB`}
+                        className="truncate text-gray-700!"
+                      />
                     )}
+                    {data.size !== undefined &&
+                      (Boolean(data?.hint) || Boolean(data?.errorMessage)) && (
+                        <Text value={'•'} className="truncate text-gray-700!" />
+                      )}
                     {Boolean(data?.hint) && (
                       <Text
                         value={data?.hint ?? ''}
@@ -239,13 +243,11 @@ const PreviewItem = ({
       )}
 
       <ModalPreviewAttachment
-        type={data?.file?.type}
-        name={data?.customName ?? data?.file?.name}
+        type={data.type}
+        name={data?.customName ?? data.name}
         src={data?.preview}
         open={previewShow}
-        onDownload={() =>
-          onDownload?.({ src: data?.preview, name: data?.file?.name })
-        }
+        onDownload={() => onDownload?.({ src: data?.preview, name: data.name })}
         onClose={() => handleClosePreview()}
         audioProps={audioPlayerProps}
         videoProps={videoPlayerProps}

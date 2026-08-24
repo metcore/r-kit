@@ -16,6 +16,12 @@ export interface TextEditorProps {
   value?: string;
   placeholder?: string;
   onChange?: (value: Editor) => void;
+  /**
+   * Dipanggil sekali saat instance editor siap.
+   * Berguna untuk menyimpan instance editor di state parent,
+   * misalnya untuk menyisipkan konten dari tombol di luar editor.
+   */
+  onCreate?: (editor: Editor) => void;
   plugins?: Plugins;
 
   /**
@@ -58,6 +64,17 @@ export interface TextEditorProps {
   toolbar?: BaseToolbar;
 
   onDownload?: (data: { src?: string; name?: string }) => void;
+}
+
+export interface TextEditorRef {
+  /** Instance tiptap editor, `null` selama editor belum siap. */
+  editor: Editor | null;
+  /** Fokuskan editor ke posisi kursor terakhir. */
+  focus: () => void;
+  /** Sisipkan teks polos pada posisi kursor terakhir. */
+  insertText: (text: string) => void;
+  /** Sisipkan konten (HTML / JSON node tiptap) pada posisi kursor terakhir. */
+  insertContent: (content: Parameters<Editor['commands']['insertContent']>[0]) => void; //prettier-ignore
 }
 
 export type BaseModal = {

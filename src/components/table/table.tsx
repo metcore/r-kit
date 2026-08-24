@@ -10,7 +10,14 @@ import {
 import { Icon } from '../icons';
 import { Input } from '../input';
 import { Text } from '../text';
-import { TableVariants } from './table-variants';
+import {
+  tableBodyVariants,
+  tableCellHeadVariants,
+  tableCellVariants,
+  tableHeadVariants,
+  tableRowVariants,
+  tableVariants,
+} from './table-variants';
 import type {
   TableBodyProps,
   TableCellHeadProps,
@@ -24,7 +31,10 @@ import type {
 import { generatePages } from './helpers';
 
 type TableContextType = {
-  variant?: TableRootProps['variant'];
+  bordered?: boolean;
+  striped?: boolean;
+  responsive?: boolean;
+  hoverable?: boolean;
 };
 
 type TableRowContextType = {
@@ -36,22 +46,18 @@ const TableRowContext = createContext<TableRowContextType>({});
 
 export function Table({
   children,
-  variant = 'basic',
+  responsive,
   className,
+  bordered,
+  striped,
+  hoverable,
 }: TableRootProps) {
   return (
-    <TableContext.Provider value={{ variant }}>
+    <TableContext.Provider value={{ bordered, responsive, striped, hoverable }}>
       <table
         className={clsx(
-          className,
-          'overflow-hidden',
-          (variant === 'bordered' ||
-            variant == 'stripped' ||
-            variant == 'hovered' ||
-            variant === 'wrapped-row-bordered') &&
-            'border-separate border-spacing-0',
-          variant === 'wrapped-row-bordered' &&
-            'rounded-lg border border-gray-300'
+          tableVariants({ bordered, responsive: responsive }),
+          className
         )}
       >
         {children}
@@ -61,22 +67,25 @@ export function Table({
 }
 
 export function TableHead({ children, className }: TableHeadProps) {
-  return <thead className={className}>{children}</thead>;
+  const { responsive } = useContext(TableContext);
+  return (
+    <thead
+      className={cn(
+        tableHeadVariants({ responsive: responsive === true }),
+        className
+      )}
+    >
+      {children}
+    </thead>
+  );
 }
 
 export function TableBody({ children, className }: TableBodyProps) {
-  const { variant } = useContext(TableContext);
-  const isBordered = variant === 'bordered';
-  const isStripped = variant === 'stripped';
-  const isHovered = variant === 'hovered';
-  const isWrapped = variant === 'wrapped-row-bordered';
-
+  const { responsive } = useContext(TableContext);
   return (
     <tbody
       className={clsx(
-        (isBordered || isStripped || isHovered) &&
-          '[&>tr:last-child>td:first-child]:rounded-bl-lg [&>tr:last-child>td:last-child]:rounded-br-lg',
-        isWrapped && '[&>tr>td:first-child]:border-l-0!',
+        tableBodyVariants({ responsive: responsive === true }),
         className
       )}
     >
@@ -92,36 +101,21 @@ export function TableRow({
   className,
   onClick,
 }: TableRowProps) {
-  const { variant } = useContext(TableContext);
-  const isBordered = variant === 'bordered';
-  const isHeaded = variant === 'headed';
-  const isStripped = variant === 'stripped';
-  const isHovered = variant === 'hovered';
-  const isWrapped = variant === 'wrapped-row-bordered';
+  const { hoverable, striped, responsive } = useContext(TableContext);
+  const role = isHeader != null ? 'header' : 'body';
 
   return (
     <TableRowContext.Provider value={{ isLast }}>
       <tr
         onClick={onClick}
         className={clsx(
-          TableVariants({ tableRow: variant }),
-          '[&>th:first-child]:rounded-tl-lg [&>th:last-child]:rounded-tr-lg',
-          Boolean(isLast) && 'border-b-0!',
-          (isHeaded || isWrapped) &&
-            Boolean(isHeader) &&
-            'border-b border-b-gray-300! *:bg-gray-50',
-          (isBordered || isStripped || isHovered) &&
-            '*:border-gray-300 [&>td:last-child]:border-r [&>th]:border-t [&>th]:border-b [&>th]:border-l [&>th:last-child]:border-r',
-          Boolean(isHeader) && isStripped && 'bg-gray-50',
-          (isHeader === undefined || isHeader === false) &&
-            isHovered &&
-            'hover:bg-primary-50 transition-colors',
-          (isHeader === undefined || isHeader === false) &&
-            isStripped &&
-            'even:bg-gray-50',
-          Boolean(isHeader) &&
-            isWrapped &&
-            '[&>th]:border-l [&>th]:border-gray-300 [&>th:first-child]:border-l-0',
+          tableRowVariants({
+            role,
+            last: Boolean(isLast),
+            responsive: responsive === true,
+            striped: striped,
+            hoverable: hoverable,
+          }),
           className
         )}
       >
@@ -137,8 +131,17 @@ export function TableCellHead({
   className,
   onClick,
 }: TableCellHeadProps) {
+  const { bordered, responsive } = useContext(TableContext);
   return (
-    <th className={cn(className, 'px-4 py-3')}>
+    <th
+      className={cn(
+        tableCellHeadVariants({
+          responsive: responsive === true,
+          bordered: bordered,
+        }),
+        className
+      )}
+    >
       {value !== undefined ? (
         <button
           className={clsx(
@@ -167,36 +170,40 @@ export function TableCell({
   onClick,
   className,
   children,
-  variant: variantText = 't2',
   textClassName,
   ...props
 }: TableCellProps) {
-  const { variant } = useContext(TableContext);
+  const { bordered, responsive } = useContext(TableContext);
   const { isLast } = useContext(TableRowContext);
 
-  const isBordered = variant === 'bordered';
-  const isStripped = variant === 'stripped';
-  const isHovered = variant === 'hovered';
-  const isWrapped = variant === 'wrapped-row-bordered';
+  const content =
+    value !== undefined ? (
+      <Text as={'span'} variant="t2" className={cn(textClassName)}>
+        {value}
+      </Text>
+    ) : (
+      children
+    );
 
   return (
     <td
       className={cn(
-        className,
-        'border-gray-300 px-4 py-3',
-        (isBordered || isStripped || isHovered || isWrapped) &&
-          'border-b border-l',
-        isLast === true && 'border-b-0!'
+        tableCellVariants({
+          last: isLast === true,
+          responsive: responsive === true,
+          bordered: bordered,
+        }),
+        className
       )}
       onClick={onClick}
       {...props}
     >
-      {value !== undefined ? (
-        <Text as={'span'} variant={variantText} className={textClassName}>
-          {value}
-        </Text>
+      {responsive === true ? (
+        <div className="max-md:flex max-md:min-w-0 max-md:flex-1 max-md:flex-col max-md:gap-0.5">
+          {content}
+        </div>
       ) : (
-        children
+        content
       )}
     </td>
   );
@@ -292,7 +299,7 @@ export function TablePagination({
 
             <DropdownContent
               className={clsx(
-                'w-19 gap-0 rounded-lg p-1 shadow-sm',
+                'w-19 gap-0 rounded-lg p-1',
                 dropdownContentClassName
               )}
               sideOffset={8}

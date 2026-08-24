@@ -1,6 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, DragEvent } from 'react';
-import type { FileItem, InputFileProps, UploadedFile } from './type';
+import { isLocalFile } from './type';
+import type {
+  FileItem,
+  InputFileProps,
+  InputFileValue,
+  UploadedFile,
+} from './type';
+import { genId, guessType, normalizeEntry, normalizeValue } from './normalize';
 
 export type FileUploadState = Pick<
   FileItem,
@@ -22,6 +29,7 @@ export type UseInputFileOptions = Pick<
   | 'maxSizeErrorMessage'
   | 'maxFilesErrorMessage'
   | 'useCustomName'
+  | 'allowCustomName'
 >;
 
 const defaultExtractUrl = (res: unknown): string => {
@@ -52,11 +60,16 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     maxSizeErrorMessage,
     maxFilesErrorMessage,
     useCustomName,
+    allowCustomName,
   } = opts;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const replaceInputRef = useRef<HTMLInputElement | null>(null);
   const uploadedFilesRef = useRef<UploadedFile<unknown>[]>([]);
+
+  const fileIdCache = useRef<WeakMap<File, string>>(new WeakMap());
+  const fileUrlCache = useRef<WeakMap<File, string>>(new WeakMap());
+  const caches = { id: fileIdCache.current, url: fileUrlCache.current };
 
   const [internalFiles, setInternalFiles] = useState<FileItem[]>([]);
   const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
@@ -73,9 +86,14 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     Record<string, FileUploadState>
   >({});
 
-  const customNameEnabled = useCustomName !== undefined;
+  const customNameEnabled = (allowCustomName ?? useCustomName) === true;
 
-  const files = value ?? internalFiles;
+  const normalizedFromValue = useMemo<FileItem[] | null>(
+    () => (value ? normalizeValue(value as InputFileValue[], caches) : null),
+    [value]
+  );
+
+  const files = normalizedFromValue ?? internalFiles;
   const filesRef = useRef<FileItem[]>(files);
   filesRef.current = files;
 
@@ -92,6 +110,15 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     }
   };
 
+  const revokeLocal = (item: FileItem) => {
+    if (!isLocalFile(item)) return;
+    const url = fileUrlCache.current.get(item.file);
+    if (url != null) {
+      URL.revokeObjectURL(url);
+      fileUrlCache.current.delete(item.file);
+    }
+  };
+
   const patchUploadState = (id: string, patch: FileUploadState) =>
     setUploadState((prev) => ({ ...prev, [id]: { ...prev[id], ...patch } }));
 
@@ -103,6 +130,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
 
   const uploadFile = (fileItem: FileItem) => {
     if (!uploadConfig) return;
+    if (!isLocalFile(fileItem)) return;
 
     const {
       url,
@@ -115,24 +143,24 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const formData = new FormData();
     formData.append(fieldName, fileItem.file);
 
-    patchUploadState(fileItem.id!, {
+    patchUploadState(fileItem.id, {
       uploadStatus: 'uploading',
       errorMessage: undefined,
       hint: undefined,
     });
-    setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: 0 }));
+    setUploadProgress((prev) => ({ ...prev, [fileItem.id]: 0 }));
 
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
         const percent = event.loaded / event.total; // 0–1
-        patchUploadState(fileItem.id!, { hint: 'Uploading...' });
-        setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: percent }));
+        patchUploadState(fileItem.id, { hint: 'Uploading...' });
+        setUploadProgress((prev) => ({ ...prev, [fileItem.id]: percent }));
       }
     };
 
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
-        setUploadProgress((prev) => ({ ...prev, [fileItem.id!]: 1 }));
+        setUploadProgress((prev) => ({ ...prev, [fileItem.id]: 1 }));
 
         let parsed: unknown = null;
         try {
@@ -144,18 +172,18 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
         const extractUrl = uploadConfig.extractUrl ?? defaultExtractUrl;
         const uploadedUrl = extractUrl(parsed);
 
-        patchUploadState(fileItem.id!, {
+        patchUploadState(fileItem.id, {
           uploadStatus: 'success',
           hint: 'Completed',
           uploadedUrl,
         });
 
         setTimeout(() => {
-          setUploadProgress((prev) => dropKey(prev, fileItem.id!));
+          setUploadProgress((prev) => dropKey(prev, fileItem.id));
         }, 800);
 
         const result: UploadedFile<unknown> = {
-          id: fileItem.id!,
+          id: fileItem.id,
           originalName: fileItem.file.name,
           customName: fileItem.customName,
           uploadedData: parsed,
@@ -177,7 +205,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       handleUploadError(fileItem, message);
       uploadConfig.onError?.(fileItem, message);
       setTimeout(() => {
-        setUploadProgress((prev) => dropKey(prev, fileItem.id!));
+        setUploadProgress((prev) => dropKey(prev, fileItem.id));
       }, 800);
     };
 
@@ -189,7 +217,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
   };
 
   const handleUploadError = (fileItem: FileItem, message: string) => {
-    patchUploadState(fileItem.id!, {
+    patchUploadState(fileItem.id, {
       uploadStatus: 'error',
       errorMessage: message,
       hint: undefined,
@@ -218,12 +246,22 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
 
     setInternalError(undefined);
 
-    const mapped: FileItem[] = selectedFiles.map((file) => ({
-      id: crypto.randomUUID(),
-      file,
-      customName: file.name,
-      preview: URL.createObjectURL(file),
-    }));
+    const mapped: FileItem[] = selectedFiles.map((file) => {
+      const id = genId();
+      const preview = URL.createObjectURL(file);
+      fileIdCache.current.set(file, id);
+      fileUrlCache.current.set(file, preview);
+      return {
+        source: 'local',
+        id,
+        file,
+        customName: file.name,
+        preview,
+        name: file.name,
+        type: file.type || guessType(file.name),
+        size: file.size,
+      };
+    });
 
     updateFiles([...files, ...mapped]);
 
@@ -263,25 +301,27 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       return;
     }
 
-    URL.revokeObjectURL(target.preview);
+    revokeLocal(target);
 
+    const base = normalizeEntry(selected, caches) as FileItem;
     const newFileItem: FileItem = {
-      ...target,
-      file: selected,
+      ...base,
+      id: target.id,
+      label: target.label,
       customName: selected.name,
-      preview: URL.createObjectURL(selected),
       uploadStatus: undefined,
       uploadedUrl: undefined,
       errorMessage: undefined,
       hint: undefined,
     };
+    fileIdCache.current.set(selected, target.id);
 
     const newFiles = [...files];
     newFiles[replaceIndex] = newFileItem;
     updateFiles(newFiles);
 
-    setUploadState((prev) => dropKey(prev, newFileItem.id!));
-    setUploadProgress((prev) => dropKey(prev, newFileItem.id!));
+    setUploadState((prev) => dropKey(prev, newFileItem.id));
+    setUploadProgress((prev) => dropKey(prev, newFileItem.id));
     uploadedFilesRef.current = uploadedFilesRef.current.filter(
       (f) => f.id !== newFileItem.id
     );
@@ -296,21 +336,21 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const removed = files[index];
     if (!removed) return;
 
-    URL.revokeObjectURL(removed.preview);
+    revokeLocal(removed);
     updateFiles(files.filter((_, i) => i !== index));
 
     uploadedFilesRef.current = uploadedFilesRef.current.filter(
       (f) => f.id !== removed.id
     );
-    onRemoveFile?.(removed.id!);
+    onRemoveFile?.(removed.id);
 
-    setUploadProgress((prev) => dropKey(prev, removed.id!));
-    setUploadState((prev) => dropKey(prev, removed.id!));
-    setCustomNames((prev) => dropKey(prev, removed.id!));
+    setUploadProgress((prev) => dropKey(prev, removed.id));
+    setUploadState((prev) => dropKey(prev, removed.id));
+    setCustomNames((prev) => dropKey(prev, removed.id));
   };
 
   const clearAll = () => {
-    files.forEach((f) => URL.revokeObjectURL(f.preview));
+    files.forEach((f) => revokeLocal(f));
     updateFiles([]);
     onClear?.();
     uploadedFilesRef.current = [];
@@ -339,13 +379,12 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       if (customNameEnabled) {
         return {
           ...f,
-          customName: customNames[f.id!] ?? f.customName ?? f.file.name,
+          customName: customNames[f.id] ?? f.customName ?? f.name,
         };
       }
       return { ...f };
     });
 
-  // ---- drag & drop ----
   const handleDragEnter = (e: DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -414,9 +453,30 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     processFiles(filteredFiles);
   };
 
+  const prevFilesRef = useRef<FileItem[]>([]);
+  useEffect(() => {
+    const prev = prevFilesRef.current;
+    const currentIds = new Set(files.map((f) => f.id));
+    prev.forEach((f) => {
+      if (isLocalFile(f) && !currentIds.has(f.id)) {
+        const u = fileUrlCache.current.get(f.file);
+        if (u != null) {
+          URL.revokeObjectURL(u);
+          fileUrlCache.current.delete(f.file);
+        }
+      }
+    });
+    prevFilesRef.current = files;
+  }, [files]);
+
   useEffect(() => {
     return () => {
-      filesRef.current.forEach((f) => URL.revokeObjectURL(f.preview));
+      filesRef.current.forEach((f) => {
+        if (isLocalFile(f)) {
+          const u = fileUrlCache.current.get(f.file);
+          if (u != null) URL.revokeObjectURL(u);
+        }
+      });
     };
   }, []);
 

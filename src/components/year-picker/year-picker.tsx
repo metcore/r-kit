@@ -9,18 +9,11 @@ import {
   PickerBase,
   buildDisplayValue,
   usePickerState,
-  type PickerMode,
+  type PickerModeValueProps,
   type PickerValue,
 } from '../base/components/picker-base';
 
-type YearPickerMode = PickerMode;
-type YearPickerValue = PickerValue;
-
-interface YearPickerProps {
-  mode?: YearPickerMode;
-  defaultValue?: YearPickerValue;
-  onChange?: (value: YearPickerValue) => void;
-  onApply?: (value: YearPickerValue) => void;
+type YearPickerProps = PickerModeValueProps & {
   minYear?: number;
   maxYear?: number;
   placeholder?: string;
@@ -35,7 +28,7 @@ interface YearPickerProps {
   tooltip?: string;
   confirmLabel?: string;
   title?: string;
-}
+};
 
 const PAGE_SIZE = 12;
 const CURRENT_YEAR = new Date().getFullYear();
@@ -46,6 +39,7 @@ function getPageStart(year: number): number {
 
 export const YearPicker: React.FC<YearPickerProps> = ({
   mode = 'single',
+  value,
   defaultValue,
   onChange,
   onApply,
@@ -88,9 +82,10 @@ export const YearPicker: React.FC<YearPickerProps> = ({
     handleApply,
   } = usePickerState({
     mode,
+    value,
     defaultValue,
-    onChange,
-    onApply,
+    onChange: onChange as ((value: PickerValue) => void) | undefined,
+    onApply: onApply as ((value: PickerValue) => void) | undefined,
     disabled,
     isValueDisabled: isYearDisabled,
   });

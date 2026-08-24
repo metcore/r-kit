@@ -34,6 +34,7 @@ export type SelectValue<Extra extends object = object> =
 type BaseSelectProps<Extra extends object = object> = {
   options?: (SelectOption<Extra> | SelectGroup<Extra>)[];
   value?: SelectValue<Extra>;
+  defaultValue?: SelectValue<Extra>;
   getOptionByValue?: (value: SelectRawValue) => SelectOption<Extra> | undefined;
 
   isClearable?: boolean;

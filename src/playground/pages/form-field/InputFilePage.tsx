@@ -16,8 +16,14 @@ import { useInputFile } from '../../../components/input-file/use-input-file';
 
 export default function InputFilePage() {
   const fileRef = useRef<InputFileRef>(null);
-
-  const [files, setFiles] = useState<FileItem[]>([]);
+  const [files, setFiles] = useState([
+    {
+      id: 1,
+      url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+      name: 'a.png',
+      type: 'png',
+    },
+  ]);
   const [defaultFiles, setDefaultFiles] = useState<FileItem[]>([
     createMockFile({
       name: 'example-photo.jpg',
@@ -70,8 +76,15 @@ export default function InputFilePage() {
             code={basicInput}
           >
             <InputFile
-              value={files}
-              onChange={setFiles}
+              value={[
+                {
+                  id: 1,
+                  url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+                  name: 'a.png',
+                  type: 'png',
+                },
+              ]}
+              onChange={(e) => console.log(e)}
               accept="image/*,.pdf"
             />
             <InputFile
@@ -142,11 +155,15 @@ export default function InputFilePage() {
             <InputFile
               accept=".png"
               variant="medium"
+              value={files}
               uploadConfig={{
                 url: 'https://httpbin.org/post',
                 fieldName: 'file',
               }}
-              onUploadSuccess={(results) => console.log(results)}
+              onUploadSuccess={(results) => {
+                console.log(results);
+                console.log(files);
+              }}
             />
           </MainSection>
           <MainSection title="Menggunakan Hooks">
