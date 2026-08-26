@@ -16,7 +16,7 @@ interface Props {
   }) => void;
 }
 
-const bg_color_map = {
+export const bg_color_map = {
   info: '#F1FDFF',
   purple: '#EEEBFF',
   orange: '#FFFBED',
@@ -26,7 +26,7 @@ const bg_color_map = {
   primary: '#F1F2FF',
 } as const;
 
-const ribbon_color_map = {
+export const ribbon_color_map = {
   info: '#6CD8FF',
   purple: '#A6A6FB',
   orange: '#FFDA71',
@@ -37,6 +37,30 @@ const ribbon_color_map = {
 } as const;
 
 type PresetColor = keyof typeof bg_color_map;
+
+export const getBgColor = (color?: string) => {
+  if (color == null) return bg_color_map.info;
+
+  if (color in bg_color_map) {
+    return bg_color_map[color as PresetColor];
+  }
+
+  if (/^#([A-Fa-f0-9]{6})$/.test(color)) {
+    return `${color}30`;
+  }
+
+  if (/^#([A-Fa-f0-9]{3})$/.test(color)) {
+    const hex = color.slice(1);
+    return `#${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}30`;
+  }
+
+  return color;
+};
+
+export const getRibbonColor = (color?: string) => {
+  if (color === undefined || color === null) return ribbon_color_map.info;
+  return color in ribbon_color_map ? ribbon_color_map[color as PresetColor] : color; //prettier-ignore
+};
 
 export default function EventBar({
   segment,
@@ -51,29 +75,6 @@ export default function EventBar({
     setPos({ x: e.clientX, y: e.clientY });
   };
 
-  const getBgColor = (color?: string) => {
-    if (color == null) return bg_color_map.info;
-
-    if (color in bg_color_map) {
-      return bg_color_map[color as PresetColor];
-    }
-
-    if (/^#([A-Fa-f0-9]{6})$/.test(color)) {
-      return `${color}30`;
-    }
-
-    if (/^#([A-Fa-f0-9]{3})$/.test(color)) {
-      const hex = color.slice(1);
-      return `#${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}30`;
-    }
-
-    return color;
-  };
-
-  const getRibbonColor = (color?: string) => {
-    if (color === undefined || color === null) return ribbon_color_map.info;
-    return color in ribbon_color_map ? ribbon_color_map[color as PresetColor] : color; //prettier-ignore
-  };
   return (
     <>
       <button

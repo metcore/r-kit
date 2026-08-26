@@ -33,19 +33,9 @@ export default function DaysOfWeek({
         variant === 'compact' && 'calendar-cols mb-3 gap-x-1 *:text-center!',
         variant === 'default' && 'w-full bg-gray-100 *:p-3 *:w-full *:text-start! *:border-r *:border-gray-300 *:last:border-r-0', //prettier-ignore
         variant === 'default' && type === 'month' && 'grid-cols-7',
-        variant === 'default' && type === 'week' && 'grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr_1fr]', //prettier-ignore
         wrapperClassName
       )}
     >
-      {type === 'week' && variant === 'default' && renderItem === undefined && (
-        <>
-          <div></div>
-          {daysOfWeek.map((day) => (
-            <Text as="h5" key={day} value={day} variant="t1" />
-          ))}
-        </>
-      )}
-
       {type === 'month' &&
         renderItem === undefined &&
         daysOfWeek.map((day) => (

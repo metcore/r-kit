@@ -82,6 +82,40 @@ Varian penuh menampilkan agenda sebagai bilah lintas hari:
 
 Tanggal agenda berupa string `YYYY-MM-DD`, bukan objek `Date`.
 
+## Tampilan Minggu
+
+```tsx
+const AGENDA_MINGGU: CalendarEvent[] = [
+  {
+    title: 'Kultim di GBK',
+    color: 'info',
+    startDate: '2026-03-01',
+    endDate: '2026-03-03',
+  },
+  {
+    title: 'Sprint Planning',
+    color: 'success',
+    startDate: '2026-03-02',
+    endDate: '2026-03-02',
+    startDateTime: new Date(2026, 2, 2, 9, 0),
+    endDateTime: new Date(2026, 2, 2, 10, 0),
+  },
+];
+
+<Calendar type="week" events={AGENDA_MINGGU} showDefaultController />;
+```
+
+`type="week"` menampilkan grid per jam (00:00–23:00) untuk tujuh hari.
+Agenda dengan `startDateTime` dan `endDateTime` — dan `startDate` sama dengan
+`endDate` — ditempatkan di jam yang tepat pada grid tersebut. Agenda lain
+(lintas hari, atau tanpa keduanya) tetap tampil di baris "All Day" paling
+atas, sama seperti bilah agenda pada tampilan bulan.
+
+Klik area kosong pada grid memanggil `backdropOnClick` dengan `fullDate`
+yang sudah termasuk jam slot yang diklik — berguna untuk mengisi waktu awal
+saat membuka form tambah jadwal. Tampilan minggu hanya berlaku untuk
+`variant="default"`.
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -99,6 +133,10 @@ Tanggal agenda berupa string `YYYY-MM-DD`, bukan objek `Date`.
 | `events` | `CalendarEvent[]` | — | Agenda yang ditampilkan |
 | `useLimitEvent` | `boolean` | — | Membatasi jumlah agenda per hari |
 | `onEventClick` | `(event) => void` | — | Dipanggil saat agenda diklik |
+| `backdropOnClick` | `(day) => void` | — | Dipanggil saat area kosong tanggal/slot diklik |
+| `type` | `week \| month \| year \| day \| agenda` | `month` | Tampilan aktif; saat ini `week` dan `month` yang terimplementasi |
+| `onTypeChange` | `(type) => void` | — | Dipanggil saat tampilan berpindah lewat dropdown bawaan |
+| `showDefaultController` | `boolean` | — | Menampilkan tombol "Today" dan dropdown pemilih tampilan |
 | `defaultMonth`, `defaultYear` | `number` | — | Bulan dan tahun awal |
 | `showNavigator` | `boolean` | — | Menampilkan tombol pindah bulan |
 | `showHeader` | `boolean` | — | Menampilkan kepala kalender |

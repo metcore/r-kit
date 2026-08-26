@@ -57,6 +57,67 @@ const AGENDA: CalendarEvent[] = [
   },
 ];
 
+// Minggu berjalan (bukan tanggal tetap) supaya contoh selalu terlihat
+// begitu halaman dibuka, tanpa perlu klik navigasi minggu dulu.
+const AWAL_MINGGU_INI = (() => {
+  const hariIni = new Date();
+  const awal = new Date(hariIni);
+  awal.setDate(hariIni.getDate() - hariIni.getDay());
+  awal.setHours(0, 0, 0, 0);
+  return awal;
+})();
+
+const tanggalMinggu = (offsetHari: number, jam = 0, menit = 0) => {
+  const tanggal = new Date(AWAL_MINGGU_INI);
+  tanggal.setDate(tanggal.getDate() + offsetHari);
+  tanggal.setHours(jam, menit, 0, 0);
+  return tanggal;
+};
+
+const keStringTanggal = (tanggal: Date) => {
+  const tahun = tanggal.getFullYear();
+  const bulan = String(tanggal.getMonth() + 1).padStart(2, '0');
+  const hari = String(tanggal.getDate()).padStart(2, '0');
+  return `${tahun}-${bulan}-${hari}`;
+};
+
+const AGENDA_MINGGU: CalendarEvent[] = [
+  {
+    title: 'Kultim di GBK',
+    subtitle: 'Divisi Marketing',
+    color: 'info',
+    startDate: keStringTanggal(tanggalMinggu(0)),
+    endDate: keStringTanggal(tanggalMinggu(2)),
+  },
+  {
+    title: 'Sprint Planning',
+    subtitle: 'Tim Produk',
+    color: 'success',
+    startDate: keStringTanggal(tanggalMinggu(1)),
+    endDate: keStringTanggal(tanggalMinggu(1)),
+    startDateTime: tanggalMinggu(1, 9, 0),
+    endDateTime: tanggalMinggu(1, 10, 0),
+  },
+  {
+    title: 'Review Desain',
+    subtitle: 'Tim Produk',
+    color: 'warning',
+    startDate: keStringTanggal(tanggalMinggu(1)),
+    endDate: keStringTanggal(tanggalMinggu(1)),
+    startDateTime: tanggalMinggu(1, 9, 30),
+    endDateTime: tanggalMinggu(1, 10, 30),
+  },
+  {
+    title: 'Audit Internal',
+    subtitle: 'Divisi Keuangan',
+    color: 'danger',
+    startDate: keStringTanggal(tanggalMinggu(3)),
+    endDate: keStringTanggal(tanggalMinggu(3)),
+    startDateTime: tanggalMinggu(3, 13, 0),
+    endDateTime: tanggalMinggu(3, 15, 0),
+  },
+];
+
 const exampleBasic = dedent(`
   import { Calendar } from '@herca/r-kit';
 
@@ -127,6 +188,35 @@ const exampleEvents = dedent(`
   <Calendar events={AGENDA} useLimitEvent={false} onEventClick={handleClick} />
 `);
 
+const exampleWeek = dedent(`
+  // startDateTime / endDateTime menempatkan agenda di grid per jam.
+  // Tanpa keduanya (atau lintas hari), agenda tampil di baris "All Day".
+  const AGENDA_MINGGU: CalendarEvent[] = [
+    {
+      title: 'Kultim di GBK',
+      color: 'info',
+      startDate: '2026-03-01',
+      endDate: '2026-03-03',
+    },
+    {
+      title: 'Sprint Planning',
+      color: 'success',
+      startDate: '2026-03-02',
+      endDate: '2026-03-02',
+      startDateTime: new Date(2026, 2, 2, 9, 0),
+      endDateTime: new Date(2026, 2, 2, 10, 0),
+    },
+  ];
+
+  <Calendar
+    type="week"
+    events={AGENDA_MINGGU}
+    showDefaultController
+    backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
+    onEventClick={(event) => setJadwalTerpilih(event ?? null)}
+  />
+`);
+
 const formatTanggal = (date: Date | null | undefined) =>
   date != null
     ? date.toLocaleDateString('id-ID', {
@@ -136,12 +226,26 @@ const formatTanggal = (date: Date | null | undefined) =>
       })
     : '—';
 
+const formatTanggalJam = (date: Date | null | undefined) =>
+  date != null
+    ? date.toLocaleString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : '—';
+
 export default function CalendarPage() {
   const [tanggal, setTanggal] = useState<Date | null>(new Date(2026, 2, 1));
   const [rentang, setRentang] = useState<DateRange>({ start: null, end: null });
   const [agendaTerpilih, setAgendaTerpilih] = useState<CalendarEvent | null>(
     null
   );
+  const [jadwalTerpilih, setJadwalTerpilih] = useState<CalendarEvent | null>(
+    null
+  );
+  const [slotTerpilih, setSlotTerpilih] = useState<Date | null>(null);
 
   const pilihRentang = (date: Date) => {
     setRentang((prev) =>
@@ -253,6 +357,31 @@ export default function CalendarPage() {
               agendaTerpilih != null
                 ? `Agenda dipilih: ${agendaTerpilih.title}`
                 : 'Klik salah satu bilah agenda untuk melihat detailnya.'
+            }
+          />
+        </MainSection>
+
+        <MainSection
+          title="Tampilan Minggu"
+          code={exampleWeek}
+          contentClassName="flex flex-col gap-3"
+        >
+          <Calendar
+            type="week"
+            events={AGENDA_MINGGU}
+            showDefaultController
+            backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
+            onEventClick={(event) => setJadwalTerpilih(event ?? null)}
+          />
+          <Text
+            variant="t1"
+            className="text-gray-800"
+            value={
+              jadwalTerpilih != null
+                ? `Agenda dipilih: ${jadwalTerpilih.title}`
+                : slotTerpilih != null
+                  ? `Slot kosong diklik: ${formatTanggalJam(slotTerpilih)}`
+                  : 'Klik agenda atau slot kosong pada grid per jam.'
             }
           />
         </MainSection>

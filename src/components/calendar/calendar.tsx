@@ -7,6 +7,7 @@ import { CalendarGrid } from './partials/calendar-grid';
 import { CalendarHeader } from './partials/calendar-header';
 import DaysOfWeek from './partials/days-of-week';
 import { ButtonDropdown, ItemDropdown } from './partials/dropdown';
+import { WeekGrid } from './partials/week-grid';
 import type { CalendarDay, CalendarProps, CalendarTypes } from './type';
 import clsx from 'clsx';
 import { Icon } from '../icons';
@@ -128,16 +129,6 @@ const Calendar = ({
     onChange?.(day.fullDate);
   };
 
-  const getWeekDaysLabel = (weekStart: Date): string[] => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(weekStart);
-      d.setDate(weekStart.getDate() + i);
-      const dayName = daysOfWeek[d.getDay()]; // "Min", "Sen", dll
-      const date = d.getDate();
-      return `${dayName} ${date}`; // e.g. "Sen 23"
-    });
-  };
-
   const changeWeek = (delta: number) => {
     setCurrentWeekStart((prev) => {
       const next = new Date(prev);
@@ -242,7 +233,18 @@ const Calendar = ({
                   color="gray"
                   variant={'outline'}
                   className="capitalize"
-                  onClick={() => setCurrentMonth(new Date().getMonth())}
+                  onClick={() => {
+                    const today = new Date();
+                    setCurrentMonth(today.getMonth());
+                    setCurrentYear(today.getFullYear());
+
+                    if (selectedType === 'week') {
+                      const start = new Date(today);
+                      start.setDate(today.getDate() - today.getDay());
+                      start.setHours(0, 0, 0, 0);
+                      setCurrentWeekStart(start);
+                    }
+                  }}
                 >
                   Today
                 </Button>
@@ -294,16 +296,17 @@ const Calendar = ({
           )}
         >
           {/* type week */}
-          {selectedType === 'week' && (
-            <div>
-              <DaysOfWeek
-                type="week"
-                size={size}
-                variant={variant}
-                daysOfWeek={getWeekDaysLabel(currentWeekStart)}
-                wrapperClassName={weekWrapperClassname}
-              />
-            </div>
+          {selectedType === 'week' && variant === 'default' && (
+            <WeekGrid
+              weekStart={currentWeekStart}
+              daysOfWeek={daysOfWeek}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+              backdropOnClick={backdropOnClick}
+              onEventClick={onEventClick}
+              useLimitEvent={useLimitEvent}
+              wrapperClassName={weekWrapperClassname}
+            />
           )}
           {/* type month */}
           {selectedType === 'month' && (
