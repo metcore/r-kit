@@ -8,6 +8,7 @@ import { CalendarHeader } from './partials/calendar-header';
 import DaysOfWeek from './partials/days-of-week';
 import { ButtonDropdown, ItemDropdown } from './partials/dropdown';
 import { TimeGrid } from './partials/time-grid';
+import { YearGrid } from './partials/year-grid';
 import type { CalendarDay, CalendarProps, CalendarTypes } from './type';
 import clsx from 'clsx';
 import { Icon } from '../icons';
@@ -205,6 +206,14 @@ const Calendar = ({
         return changeDay(1);
       }
     }
+
+    if (type === 'year') {
+      if (action === 'prev') {
+        return setCurrentYear((prev) => prev - 1);
+      } else {
+        return setCurrentYear((prev) => prev + 1);
+      }
+    }
   };
 
   useEffect(() => {
@@ -247,7 +256,9 @@ const Calendar = ({
                 weight="semibold"
                 className="-translate-y-0.5 text-gray-900"
               >
-                {months[currentMonth]} {currentYear}
+                {selectedType === 'year'
+                  ? currentYear
+                  : `${months[currentMonth]} ${currentYear}`}
               </Text>
             </div>
 
@@ -353,6 +364,20 @@ const Calendar = ({
               onEventClick={onEventClick}
               useLimitEvent={useLimitEvent}
               wrapperClassName={weekWrapperClassname}
+            />
+          )}
+          {/* type year */}
+          {selectedType === 'year' && variant === 'default' && (
+            <YearGrid
+              currentYear={currentYear}
+              months={months}
+              daysOfWeek={daysOfWeek}
+              helpers={calendarHelpers}
+              size={size}
+              mode={mode}
+              styleConfig={styleConfig}
+              onClick={handleDateClick}
+              disabledDateClassName={disabledDateClassName}
             />
           )}
           {/* type month */}

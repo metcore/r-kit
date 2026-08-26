@@ -172,3 +172,15 @@ export interface TimeGridProps {
   useLimitEvent?: boolean;
   wrapperClassName?: string;
 }
+
+export interface YearGridProps {
+  currentYear: number;
+  months: string[];
+  daysOfWeek: string[];
+  helpers: ReturnType<typeof createCalendarHelpers>;
+  size: CalendarProps['size'];
+  mode: CalendarProps['mode'];
+  styleConfig?: CalendarStyleConfig;
+  onClick: (day: CalendarDay) => void;
+  disabledDateClassName?: string;
+}

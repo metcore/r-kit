@@ -287,6 +287,19 @@ const exampleDay = dedent(`
   />
 `);
 
+const exampleYear = dedent(`
+  // 12 kalender bulan (variant="compact") dalam satu grid.
+  // value, dayConfigs, dan styleConfig berlaku untuk semua bulan sekaligus.
+  <Calendar
+    type="year"
+    defaultYear={2026}
+    value={tanggal}
+    onChange={setTanggal}
+    dayConfigs={PENANDA}
+    showDefaultController
+  />
+`);
+
 const formatTanggal = (date: Date | null | undefined) =>
   date != null
     ? date.toLocaleDateString('id-ID', {
@@ -478,6 +491,26 @@ export default function CalendarPage() {
                   ? `Slot kosong diklik: ${formatTanggalJam(slotTerpilih)}`
                   : 'Klik agenda atau slot kosong pada grid per jam.'
             }
+          />
+        </MainSection>
+
+        <MainSection
+          title="Tampilan Tahun"
+          code={exampleYear}
+          contentClassName="flex flex-col gap-3"
+        >
+          <Calendar
+            type="year"
+            defaultYear={2026}
+            value={tanggal}
+            onChange={setTanggal}
+            dayConfigs={PENANDA}
+            showDefaultController
+          />
+          <Text
+            variant="t1"
+            className="text-gray-800"
+            value={`Terpilih: ${formatTanggal(tanggal)}`}
           />
         </MainSection>
 

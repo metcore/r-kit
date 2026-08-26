@@ -130,6 +130,29 @@ Sama seperti `type="week"`, hanya satu kolom hari saja. Aturan
 pengelompokan agenda per jam (termasuk batas dua-lalu-"+more") berlaku sama
 persis — bedanya cuma jumlah kolom hari yang ditampilkan.
 
+## Tampilan Tahun
+
+```tsx
+<Calendar
+  type="year"
+  defaultYear={2026}
+  value={tanggal}
+  onChange={setTanggal}
+  dayConfigs={PENANDA}
+  showDefaultController
+/>;
+```
+
+`type="year"` menampilkan dua belas kalender bulan (Januari–Desember
+`currentYear`) dalam grid, masing-masing memakai tampilan `variant="compact"`
+yang sama seperti `Calendar` biasa. `value`, `dayConfigs`, `disabledDates`,
+dan `styleConfig` berlaku untuk seluruh dua belas bulan sekaligus, jadi
+tanggal terpilih atau penanda titik otomatis muncul di bulan yang sesuai.
+Tidak ada bilah agenda (`events` diabaikan) karena `variant="compact"`
+memang tidak menampilkannya — pakai `type="month"` untuk itu. Sama seperti
+minggu dan hari, tampilan tahun hanya berlaku untuk `variant="default"` pada
+`Calendar` itu sendiri.
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -148,7 +171,7 @@ persis — bedanya cuma jumlah kolom hari yang ditampilkan.
 | `useLimitEvent` | `boolean` | — | Membatasi jumlah agenda per hari |
 | `onEventClick` | `(event) => void` | — | Dipanggil saat agenda diklik |
 | `backdropOnClick` | `(day) => void` | — | Dipanggil saat area kosong tanggal/slot diklik |
-| `type` | `week \| month \| year \| day \| agenda` | `month` | Tampilan aktif; saat ini `month`, `week`, dan `day` yang terimplementasi |
+| `type` | `week \| month \| year \| day \| agenda` | `month` | Tampilan aktif; saat ini `month`, `week`, `day`, dan `year` yang terimplementasi |
 | `onTypeChange` | `(type) => void` | — | Dipanggil saat tampilan berpindah lewat dropdown bawaan |
 | `showDefaultController` | `boolean` | — | Menampilkan tombol "Today" dan dropdown pemilih tampilan |
 | `defaultMonth`, `defaultYear` | `number` | — | Bulan dan tahun awal |
