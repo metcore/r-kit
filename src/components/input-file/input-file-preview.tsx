@@ -66,7 +66,7 @@ export function InputFilePreview({
       className={`flex ${mode == 'compact' ? 'flex-wrap' : 'flex-col'} gap-3`}
     >
       {files.map((item, i) => {
-        const data: FileItem = { ...item, ...(uploadState[item.id!] ?? {}) };
+        const data: FileItem = { ...item, ...(uploadState[item.id] ?? {}) };
         return (
           <PreviewItem
             key={item.id}
@@ -80,14 +80,12 @@ export function InputFilePreview({
             onReplace={() => triggerReplace(i)}
             labelCustomName={item?.label}
             customNamePlaceholder={customNamePlaceholder}
-            progress={uploadProgress[item.id!]}
-            customName={
-              customNames[item.id!] ?? item.customName ?? item.file.name
-            }
+            progress={uploadProgress[item.id]}
+            customName={customNames[item.id] ?? item.customName ?? item.name}
             onDownload={(d) => onDownload?.({ src: d?.src, name: d?.name })}
             onCustomNameChange={
               customNameEnabled
-                ? (e) => setCustomName(item.id!, e.target.value)
+                ? (e) => setCustomName(item.id, e.target.value)
                 : undefined
             }
             hideDownloadButton={hideDownloadButton}

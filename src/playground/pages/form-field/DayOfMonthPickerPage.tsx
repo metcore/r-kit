@@ -165,6 +165,7 @@ export default function DayOfMonthPickerPage() {
         <MainSection title="Default" code={exampleDefault}>
           <DayOfMonthPicker
             label="Day of Month"
+            value={1}
             onChange={(e) => console.log(e)}
           />
         </MainSection>
@@ -230,6 +231,7 @@ export default function DayOfMonthPickerPage() {
         <MainSection title="Default Value" code={exampleDefaultValue}>
           <DayOfMonthPicker
             label="Single"
+            mode="multiple"
             defaultValue={[15]}
             onChange={(e) => console.log(e)}
           />

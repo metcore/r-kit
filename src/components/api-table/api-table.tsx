@@ -14,7 +14,6 @@ import { Text } from '../text';
 import type { ApiTableProps, Filters, HideBelow, RowLike } from './types';
 import { getPath } from './utils';
 import { cn } from '../../lib/utils';
-import { Card, CardBody } from '../card';
 
 function defaultRowKey(row: RowLike, index: number): Key {
   const rowId = (row as { id?: Key }).id;
@@ -45,21 +44,14 @@ export const ApiTable = <
   onRowClick,
   renderEmptyData,
   loadingRowCount,
-  responsive = 'scroll',
   rowOptions,
   showPagination,
+  responsive,
 }: ApiTableProps<T, F>): ReactElement => {
   const colCount = columns.length;
   const skeletonCount = loadingRowCount ?? Math.min(t.pageSize, 8);
 
   const showRefetchBadge = t.isFetching && !t.loading;
-
-  const respMode =
-    responsive === true
-      ? 'scroll'
-      : responsive === false
-        ? undefined
-        : responsive;
 
   const ariaSortValue = (key: string): 'ascending' | 'descending' | 'none' => {
     if (t.sort.by !== key) return 'none';
@@ -81,8 +73,11 @@ export const ApiTable = <
 
       <Table
         className="w-full table-auto"
-        variant="wrapped-row-bordered"
+        // variant={variant}
+        bordered
+        hoverable
         aria-busy={t.isFetching}
+        responsive={responsive}
       >
         <TableHead>
           <TableRow isHeader>
@@ -181,8 +176,8 @@ export const ApiTable = <
             (renderEmptyData !== undefined ? (
               renderEmptyData
             ) : (
-              <TableRow>
-                <TableCell colSpan={colCount} className="px-4 py-12">
+              <TableRow className="max-md:col-start-1 max-md:grid-cols-1">
+                <TableCell colSpan={colCount}>
                   <div className="flex flex-col items-center gap-1 text-center text-slate-400">
                     <Icon name="file-list-search" size={50} />
                     <p className="text-sm">{emptyText}</p>
@@ -253,93 +248,6 @@ export const ApiTable = <
       </Table>
     </div>
   );
-
-  const cardsMarkup = (
-    <div className="space-y-3 md:hidden">
-      {t.loading &&
-        Array.from({ length: skeletonCount }).map((_, ri) => (
-          <div
-            key={`csk-${ri}`}
-            className="rounded-lg border border-slate-100 bg-white p-4"
-            aria-hidden="true"
-          >
-            {columns.map((col) => (
-              <div
-                key={col.key}
-                className="flex items-center justify-between py-1.5"
-              >
-                <div className="h-3 w-20 animate-pulse rounded bg-slate-100" />
-                <div className="h-3 w-28 animate-pulse rounded bg-slate-100" />
-              </div>
-            ))}
-          </div>
-        ))}
-
-      {!t.loading && t.error == null && t.data.length === 0 && (
-        <div className="flex flex-col items-center gap-1 py-10 text-center text-slate-400">
-          <Icon name="file-list-search" size={40} />
-          <p className="text-sm">{emptyText}</p>
-        </div>
-      )}
-
-      {!t.loading &&
-        t.data.map((row, ri) => {
-          const resolvedKey =
-            rowKey != null ? rowKey(row, ri) : defaultRowKey(row, ri);
-          const rowOpts = rowOptions?.(row, resolvedKey, ri);
-          return (
-            <Card
-              key={resolvedKey}
-              className={cn(
-                onRowClick != null ? 'cursor-pointer' : undefined,
-                rowOpts?.className
-              )}
-              onClick={
-                onRowClick != null ? () => onRowClick(row, ri) : undefined
-              }
-            >
-              <CardBody>
-                {columns.map((col) => {
-                  const value = getPath(row, col.key);
-                  return (
-                    <div
-                      key={col.key}
-                      className="flex items-start justify-between border-b border-slate-50 py-1.5 last:border-0"
-                    >
-                      <span className="text-xs font-medium text-slate-500">
-                        {col.header ?? col.key}
-                      </span>
-                      <span className="ml-4 text-right text-sm text-slate-800">
-                        {col.render != null ? (
-                          col.render(value, row, ri)
-                        ) : value == null || value === '' ? (
-                          <span className="text-slate-300">—</span>
-                        ) : (
-                          String(value)
-                        )}
-                      </span>
-                    </div>
-                  );
-                })}
-              </CardBody>
-            </Card>
-          );
-        })}
-    </div>
-  );
-
-  if (respMode === 'cards') {
-    return (
-      <>
-        {cardsMarkup}
-        <div className="hidden md:block">{tableMarkup}</div>
-      </>
-    ) as ReactElement;
-  }
-
-  if (respMode === 'scroll') {
-    return <div className="overflow-x-auto">{tableMarkup}</div>;
-  }
 
   return tableMarkup;
 };

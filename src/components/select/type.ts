@@ -25,15 +25,16 @@ interface RenderOptionState {
 }
 
 export type SelectOnCreateValue = string | number;
-
+export type SelectValue<Extra extends object = object> =
+  | SelectOption<Extra>
+  | SelectOption<Extra>[]
+  | SelectRawValue
+  | SelectRawValue[]
+  | null;
 type BaseSelectProps<Extra extends object = object> = {
   options?: (SelectOption<Extra> | SelectGroup<Extra>)[];
-  value?:
-    | SelectOption<Extra>
-    | SelectOption<Extra>[]
-    | SelectRawValue
-    | SelectRawValue[]
-    | null;
+  value?: SelectValue<Extra>;
+  defaultValue?: SelectValue<Extra>;
   getOptionByValue?: (value: SelectRawValue) => SelectOption<Extra> | undefined;
 
   isClearable?: boolean;

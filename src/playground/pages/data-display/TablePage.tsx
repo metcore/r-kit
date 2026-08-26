@@ -2,6 +2,10 @@
 import { useEffect, useState } from 'react';
 import dedent from 'dedent';
 import {
+  ButtonIcon,
+  Dropdown,
+  DropdownContent,
+  DropdownTrigger,
   Table,
   TableBody,
   TableCell,
@@ -212,6 +216,7 @@ export default function TablePage() {
                 <TableCellHead value={'Status'} />
                 <TableCellHead value={'Phone'} />
                 <TableCellHead value={'Divisi'} />
+                <TableCellHead value={'Divisi'} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -220,21 +225,31 @@ export default function TablePage() {
                   <TableCell value={index + 1} textClassName="text-gray-800" />
                   <TableCell
                     value={item.name}
-                    textClassName="text-gray-800"
-                    className="min-w-30"
+                    textClassName="text-gray-800 "
+                    className="max-md:flex max-md:items-center"
                   />
                   <TableCell
                     value={item.username}
                     textClassName="text-gray-800"
+                    className="col-span-2"
                   />
-                  <TableCell>
+                  <TableCell className="col-span-2">
                     <Badge color={status_map[item.status]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell value={item.phone} textClassName="text-gray-800" />
                   <TableCell
                     value={item.divisi}
+                    className="col-span-2"
                     textClassName="text-gray-800"
                   />
+                  <TableCell className="max-md:col-start-2 max-md:row-start-1 max-md:flex max-md:min-w-0 max-md:flex-col max-md:items-end">
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <ButtonIcon variant="tertiary" icon="more-horizontal" />
+                      </DropdownTrigger>
+                      <DropdownContent>dd</DropdownContent>
+                    </Dropdown>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

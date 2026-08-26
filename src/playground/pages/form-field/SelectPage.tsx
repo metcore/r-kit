@@ -214,7 +214,7 @@ function SelectPage() {
               options={dataSingle}
               onSearch={(e) => setSearchValue(e)}
               searchValue={searchValue}
-              value={selectedUserBasic}
+              defaultValue={1}
               onChange={(v) => {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null);
               }}
@@ -371,7 +371,7 @@ function SelectPage() {
               label="Team members"
               options={dataSingle}
               size="md"
-              value={selectedUserMultiple}
+              value={[2, 1]}
               onChange={(v) => {
                 setSelectedUserMultiple(v as SelectOption[]);
               }}
@@ -418,6 +418,7 @@ function SelectPage() {
             <AsyncSelect
               label="User"
               value={selectedUser}
+              // defaultValue={2}
               onChange={(v) => {
                 setSelectedUser(v as SelectOption<ExtraUser> | null);
               }}

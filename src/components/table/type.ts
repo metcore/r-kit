@@ -1,17 +1,12 @@
 import type { ReactNode } from 'react';
-import type { TextVariant } from '../text';
 
 export interface TableRootProps {
   className?: string;
+  bordered?: boolean;
+  striped?: boolean;
   children: ReactNode;
-  variant?:
-    | 'basic'
-    | 'bordered'
-    | 'stripped'
-    | 'hovered'
-    | 'row-bordered'
-    | 'wrapped-row-bordered'
-    | 'headed';
+  responsive?: boolean;
+  hoverable?: boolean;
 }
 
 export interface TableHeadProps {
@@ -56,7 +51,6 @@ export type TableCellHeadProps = {
 export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
   className?: string;
   onClick?: () => void;
-  variant?: TextVariant;
   textClassName?: string;
 } & (WithChildren | WithValue);
 

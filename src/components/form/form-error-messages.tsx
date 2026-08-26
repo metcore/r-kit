@@ -11,12 +11,10 @@ export const FormErrorMessages: React.FC<FormErrorMessagesProps> = ({
 
   const errorList = Array.isArray(messages) ? messages : [messages];
 
-  if (errorList.length === 0) return null;
-
   return (
     <div className={cn('space-y-0.5', className)}>
-      {errorList.map((msg, i) => (
-        <FormErrorMessage key={i} size={size}>
+      {errorList.map((msg, index) => (
+        <FormErrorMessage key={index} size={size}>
           {msg}
         </FormErrorMessage>
       ))}

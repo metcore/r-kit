@@ -7,18 +7,11 @@ import {
   PickerHeader,
   buildDisplayValue,
   usePickerState,
-  type PickerMode,
+  type PickerModeValueProps,
   type PickerValue,
 } from '../base/components/picker-base';
 
-type MonthPickerMode = PickerMode;
-type MonthPickerValue = PickerValue;
-
-interface MonthPickerProps {
-  mode?: MonthPickerMode;
-  defaultValue?: MonthPickerValue;
-  onChange?: (value: MonthPickerValue) => void;
-  onApply?: (value: MonthPickerValue) => void;
+type MonthPickerProps = PickerModeValueProps & {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -32,7 +25,7 @@ interface MonthPickerProps {
   cancelLabel?: string;
   confirmLabel?: string;
   title?: string;
-}
+};
 
 const MONTH_OPTIONS = generateMonthOptions();
 
@@ -42,6 +35,7 @@ const MONTH_LABEL: Record<number, string> = Object.fromEntries(
 
 export const MonthPicker: React.FC<MonthPickerProps> = ({
   mode = 'single',
+  value,
   defaultValue,
   onChange,
   onApply,
@@ -68,7 +62,14 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
     isSelected,
     handleApply,
     handleCancel,
-  } = usePickerState({ mode, defaultValue, onChange, onApply, disabled });
+  } = usePickerState({
+    mode,
+    value,
+    defaultValue,
+    onChange: onChange as ((value: PickerValue) => void) | undefined,
+    onApply: onApply as ((value: PickerValue) => void) | undefined,
+    disabled,
+  });
 
   const displayValue = buildDisplayValue(
     mode,

@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { SelectOption, SelectProps } from './type';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { SelectOption, SelectProps, SelectRawValue } from './type';
 import { Select } from './select';
+
+const isRawValue = (v: unknown): v is SelectRawValue =>
+  typeof v === 'string' || typeof v === 'number';
 
 export interface AsyncLoadParams {
   search: string;
@@ -196,6 +199,7 @@ export interface AsyncSelectProps<Extra extends object = object> extends Omit<
   | 'renderOptions'
 > {
   loadOptions: LoadOptionsFn<Extra>;
+  resolveValues?: (values: SelectRawValue[]) => Promise<SelectOption<Extra>[]>;
   debounceMs?: number;
   cache?: boolean;
   loadOnMount?: boolean;
@@ -205,6 +209,7 @@ export interface AsyncSelectProps<Extra extends object = object> extends Omit<
 
 export function AsyncSelect<Extra extends object = object>({
   loadOptions,
+  resolveValues,
   debounceMs,
   cache,
   loadOnMount = false,
@@ -214,7 +219,11 @@ export function AsyncSelect<Extra extends object = object>({
   ...selectProps
 }: AsyncSelectProps<Extra>) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { onSearch } = selectProps;
+  const {
+    onSearch,
+    value,
+    getOptionByValue: userGetOptionByValue,
+  } = selectProps;
 
   const enabled = loadOnMount || menuOpen;
 
@@ -227,6 +236,63 @@ export function AsyncSelect<Extra extends object = object>({
       minSearchLength,
       onError,
     });
+
+  const rawIds = useMemo<SelectRawValue[]>(() => {
+    if (value == null) return [];
+    const arr = Array.isArray(value) ? value : [value];
+    return arr.filter(isRawValue);
+  }, [value]);
+
+  const [resolvedMap, setResolvedMap] = useState<
+    Map<SelectRawValue, SelectOption<Extra>>
+  >(() => new Map());
+
+  const attemptedRef = useRef<Set<SelectRawValue>>(new Set());
+  const onErrorRef = useRef(onError);
+  useEffect(() => {
+    onErrorRef.current = onError;
+  });
+
+  useEffect(() => {
+    if (!resolveValues || rawIds.length === 0) return;
+
+    const missing = rawIds.filter(
+      (id) =>
+        !resolvedMap.has(id) &&
+        !attemptedRef.current.has(id) &&
+        !options.some((o) => o.value === id)
+    );
+    if (missing.length === 0) return;
+
+    for (const id of missing) attemptedRef.current.add(id);
+
+    let cancelled = false;
+    resolveValues(missing)
+      .then((resolved) => {
+        if (cancelled) return;
+        setResolvedMap((prev) => {
+          const next = new Map(prev);
+          for (const o of resolved) next.set(o.value, o);
+          return next;
+        });
+      })
+      .catch((err) => {
+        for (const id of missing) attemptedRef.current.delete(id);
+        onErrorRef.current?.(err);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [rawIds, resolveValues, options, resolvedMap]);
+
+  const getOptionByValue = useCallback(
+    (v: SelectRawValue): SelectOption<Extra> | undefined =>
+      userGetOptionByValue?.(v) ??
+      resolvedMap.get(v) ??
+      options.find((o) => o.value === v),
+    [userGetOptionByValue, resolvedMap, options]
+  );
 
   const handleOpenChange = useCallback(
     (open: boolean) => {
@@ -245,6 +311,7 @@ export function AsyncSelect<Extra extends object = object>({
     <Select<Extra>
       {...selectProps}
       options={options}
+      getOptionByValue={getOptionByValue}
       filterOption={false as const}
       isLoading={isLoading}
       isLoadingMore={isLoadingMore}
