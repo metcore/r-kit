@@ -122,6 +122,23 @@ saat membuka form tambah jadwal. Tampilan minggu hanya berlaku untuk
 ## Tampilan Hari
 
 ```tsx
+const AGENDA_HARI: CalendarEvent[] = [
+  {
+    title: 'Kultim di GBK',
+    color: 'info',
+    startDate: '2026-03-02',
+    endDate: '2026-03-02',
+  },
+  {
+    title: 'Sprint Planning',
+    color: 'success',
+    startDate: '2026-03-02',
+    endDate: '2026-03-02',
+    startDateTime: new Date(2026, 2, 2, 9, 0),
+    endDateTime: new Date(2026, 2, 2, 10, 0),
+  },
+];
+
 <Calendar type="day" events={AGENDA_HARI} showDefaultController />;
 ```
 
@@ -133,6 +150,14 @@ persis — bedanya cuma jumlah kolom hari yang ditampilkan.
 ## Tampilan Tahun
 
 ```tsx
+const PENANDA: CalendarDayConfig[] = [
+  {
+    date: new Date(2026, 2, 10),
+    dots: [{ color: '#3b82f6' }, { color: '#ef4444' }],
+  },
+  { date: new Date(2026, 2, 12), dots: [{ color: '#10b981' }] },
+];
+
 <Calendar
   type="year"
   defaultYear={2026}

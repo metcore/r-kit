@@ -278,6 +278,23 @@ const exampleWeek = dedent(`
 
 const exampleDay = dedent(`
   // Sama seperti Minggu, tapi grid per jam hanya untuk satu hari.
+  const AGENDA_HARI: CalendarEvent[] = [
+    {
+      title: 'Kultim di GBK',
+      color: 'info',
+      startDate: '2026-03-02',
+      endDate: '2026-03-02',
+    },
+    {
+      title: 'Sprint Planning',
+      color: 'success',
+      startDate: '2026-03-02',
+      endDate: '2026-03-02',
+      startDateTime: new Date(2026, 2, 2, 9, 0),
+      endDateTime: new Date(2026, 2, 2, 10, 0),
+    },
+  ];
+
   <Calendar
     type="day"
     events={AGENDA_HARI}
@@ -290,6 +307,14 @@ const exampleDay = dedent(`
 const exampleYear = dedent(`
   // 12 kalender bulan (variant="compact") dalam satu grid.
   // value, dayConfigs, dan styleConfig berlaku untuk semua bulan sekaligus.
+  const PENANDA: CalendarDayConfig[] = [
+    {
+      date: new Date(2026, 2, 10),
+      dots: [{ color: '#3b82f6' }, { color: '#ef4444' }],
+    },
+    { date: new Date(2026, 2, 12), dots: [{ color: '#10b981' }] },
+  ];
+
   <Calendar
     type="year"
     defaultYear={2026}
