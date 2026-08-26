@@ -107,14 +107,28 @@ const AGENDA_MINGGU: CalendarEvent[] = [
 
 `type="week"` menampilkan grid per jam (00:00–23:00) untuk tujuh hari.
 Agenda dengan `startDateTime` dan `endDateTime` — dan `startDate` sama dengan
-`endDate` — ditempatkan di jam yang tepat pada grid tersebut. Agenda lain
-(lintas hari, atau tanpa keduanya) tetap tampil di baris "All Day" paling
-atas, sama seperti bilah agenda pada tampilan bulan.
+`endDate` — dikelompokkan ke baris jam mulainya. Agenda yang berada di jam
+yang sama ditumpuk penuh lebar (bukan dibagi kolom), dan baris jam itu
+melebar otomatis untuk menampungnya; kalau lebih dari dua agenda di jam yang
+sama, dua pertama tampil dan sisanya masuk tombol "+N more". Agenda lain
+(lintas hari, atau tanpa `startDateTime`/`endDateTime`) tetap tampil di
+baris "All Day" paling atas, sama seperti bilah agenda pada tampilan bulan.
 
 Klik area kosong pada grid memanggil `backdropOnClick` dengan `fullDate`
 yang sudah termasuk jam slot yang diklik — berguna untuk mengisi waktu awal
 saat membuka form tambah jadwal. Tampilan minggu hanya berlaku untuk
 `variant="default"`.
+
+## Tampilan Hari
+
+```tsx
+<Calendar type="day" events={AGENDA_HARI} showDefaultController />;
+```
+
+Sama seperti `type="week"`, hanya satu kolom hari saja. Aturan
+`startDateTime`/`endDateTime`, baris "All Day", `backdropOnClick`, dan
+pengelompokan agenda per jam (termasuk batas dua-lalu-"+more") berlaku sama
+persis — bedanya cuma jumlah kolom hari yang ditampilkan.
 
 ## Props
 
@@ -134,7 +148,7 @@ saat membuka form tambah jadwal. Tampilan minggu hanya berlaku untuk
 | `useLimitEvent` | `boolean` | — | Membatasi jumlah agenda per hari |
 | `onEventClick` | `(event) => void` | — | Dipanggil saat agenda diklik |
 | `backdropOnClick` | `(day) => void` | — | Dipanggil saat area kosong tanggal/slot diklik |
-| `type` | `week \| month \| year \| day \| agenda` | `month` | Tampilan aktif; saat ini `week` dan `month` yang terimplementasi |
+| `type` | `week \| month \| year \| day \| agenda` | `month` | Tampilan aktif; saat ini `month`, `week`, dan `day` yang terimplementasi |
 | `onTypeChange` | `(type) => void` | — | Dipanggil saat tampilan berpindah lewat dropdown bawaan |
 | `showDefaultController` | `boolean` | — | Menampilkan tombol "Today" dan dropdown pemilih tampilan |
 | `defaultMonth`, `defaultYear` | `number` | — | Bulan dan tahun awal |

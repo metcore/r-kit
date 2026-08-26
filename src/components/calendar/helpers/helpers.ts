@@ -1,9 +1,4 @@
-import type {
-  CalendarDay,
-  CalendarEvent,
-  GetCalendarDaysProps,
-  TimedEventLayout,
-} from '../type';
+import type { CalendarDay, CalendarEvent, GetCalendarDaysProps } from '../type';
 
 const getCalendarDays = ({
   currentYear,
@@ -97,7 +92,7 @@ function getWeekEventSegments({
   }));
 
   const weekStartTs = toDateOnly(week[0].fullDate);
-  const weekEndTs = toDateOnly(week[6].fullDate);
+  const weekEndTs = toDateOnly(week[week.length - 1].fullDate);
 
   const segments = [];
 
@@ -120,7 +115,7 @@ function getWeekEventSegments({
     );
 
     const resolvedStartCol = startCol === -1 ? 0 : startCol;
-    const resolvedEndCol = endCol === -1 ? 6 : endCol;
+    const resolvedEndCol = endCol === -1 ? week.length - 1 : endCol;
 
     segments.push({
       event,
@@ -138,9 +133,11 @@ type PackedEventSegment = EventSegment & { level: number };
 function packEventSegments({
   segments,
   threshold,
+  columns = 7,
 }: {
   segments: EventSegment[];
   threshold: number;
+  columns?: number;
 }) {
   const sortedSegments = [...segments].sort(
     (a, b) => a.startCol - b.startCol || b.span - a.span
@@ -180,7 +177,7 @@ function packEventSegments({
   });
 
   const columnLevelOccupied = Array.from(
-    { length: 7 },
+    { length: columns },
     () => new Array(threshold).fill(false) as boolean[]
   );
 
@@ -189,7 +186,7 @@ function packEventSegments({
     if (level < threshold) {
       for (let i = 0; i < seg.span; i++) {
         const col = seg.startCol + i;
-        if (col >= 0 && col < 7) columnLevelOccupied[col][level] = true;
+        if (col >= 0 && col < columns) columnLevelOccupied[col][level] = true;
       }
     }
   });
@@ -204,7 +201,7 @@ function packEventSegments({
   sortedSegments.forEach((seg) => {
     if ((segmentLevels.get(seg) ?? 0) < threshold) return;
 
-    const segEnd = Math.min(seg.startCol + seg.span - 1, 6);
+    const segEnd = Math.min(seg.startCol + seg.span - 1, columns - 1);
 
     let runStart = -1;
     let runLevel = -1;
@@ -242,7 +239,7 @@ function packEventSegments({
 
     for (let i = 0; i < seg.span; i++) {
       const col = seg.startCol + i;
-      if (col < 0 || col >= 7) {
+      if (col < 0 || col >= columns) {
         flushRun(col);
         continue;
       }
@@ -272,7 +269,7 @@ function packEventSegments({
   });
 
   const columnHiddenSegments: EventSegment[][] = Array.from(
-    { length: 7 },
+    { length: columns },
     () => []
   );
 
@@ -280,7 +277,7 @@ function packEventSegments({
     if ((segmentLevels.get(seg) ?? 0) < threshold) return;
     for (let i = 0; i < seg.span; i++) {
       const col = seg.startCol + i;
-      if (col < 0 || col >= 7) continue;
+      if (col < 0 || col >= columns) continue;
       const rendered = renderSegments.some(
         (rs) =>
           rs.event === seg.event &&
@@ -329,64 +326,38 @@ function isSameLocalDay(a: Date, b: Date): boolean {
   );
 }
 
-function getTimedEventLayouts({
-  weekDays,
+function groupTimedEventsByHour({
+  days,
   events,
 }: {
-  weekDays: CalendarDay[];
+  days: CalendarDay[];
   events: CalendarEvent[];
-}): TimedEventLayout[] {
-  const results: TimedEventLayout[] = [];
+}): Map<string, CalendarEvent[]> {
+  const groups = new Map<string, CalendarEvent[]>();
 
-  weekDays.forEach((day, dayIndex) => {
-    const dayEvents = events.filter((event) =>
-      event.startDateTime != null
-        ? isSameLocalDay(event.startDateTime, day.fullDate)
-        : false
+  events.forEach((event) => {
+    if (event.startDateTime == null) return;
+
+    const dayIndex = days.findIndex((day) =>
+      isSameLocalDay(day.fullDate, event.startDateTime!)
     );
+    if (dayIndex === -1) return;
 
-    const sorted = [...dayEvents].sort(
-      (a, b) => a.startDateTime!.getTime() - b.startDateTime!.getTime()
-    );
-
-    const columnsEnd: number[] = [];
-    const placements: { event: CalendarEvent; col: number }[] = [];
-
-    sorted.forEach((event) => {
-      const start = event.startDateTime!.getTime();
-      let placedCol = columnsEnd.findIndex((end) => end <= start);
-
-      if (placedCol === -1) {
-        placedCol = columnsEnd.length;
-        columnsEnd.push(0);
-      }
-
-      columnsEnd[placedCol] = event.endDateTime!.getTime();
-      placements.push({ event, col: placedCol });
-    });
-
-    const totalCols = columnsEnd.length || 1;
-
-    placements.forEach(({ event, col }) => {
-      const startMinutes =
-        event.startDateTime!.getHours() * 60 + event.startDateTime!.getMinutes(); //prettier-ignore
-      const endMinutes = Math.min(
-        24 * 60,
-        event.endDateTime!.getHours() * 60 + event.endDateTime!.getMinutes()
-      );
-
-      results.push({
-        event,
-        dayIndex,
-        startMinutes,
-        endMinutes: Math.max(endMinutes, startMinutes + 15),
-        col,
-        cols: totalCols,
-      });
-    });
+    const hour = event.startDateTime.getHours();
+    const key = `${dayIndex}-${hour}`;
+    const list = groups.get(key);
+    if (list) {
+      list.push(event);
+    } else {
+      groups.set(key, [event]);
+    }
   });
 
-  return results;
+  groups.forEach((list) =>
+    list.sort((a, b) => a.startDateTime!.getTime() - b.startDateTime!.getTime())
+  );
+
+  return groups;
 }
 
 function formatHourLabel(hour: number): string {
@@ -413,7 +384,7 @@ export {
   packEventSegments,
   getWeekDays,
   isTimedEvent,
-  getTimedEventLayouts,
+  groupTimedEventsByHour,
   formatHourLabel,
   formatClock,
 };

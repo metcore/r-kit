@@ -3,28 +3,22 @@ import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { Text } from '../../text';
 import { formatClock } from '../helpers/helpers';
-import type { TimedEventLayout } from '../type';
+import type { CalendarEvent } from '../type';
 import { getBgColor, getRibbonColor } from './event-bar';
 
 interface Props {
-  layout: TimedEventLayout;
-  hourHeight: number;
+  event: CalendarEvent;
   showTooltip?: boolean;
   onClick?: () => void;
 }
 
-export default function WeekEventBlock({
-  layout,
-  hourHeight,
+export default function TimedEventBlock({
+  event,
   showTooltip = true,
   onClick,
 }: Props) {
   const [hovered, setHovered] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const { event, dayIndex, startMinutes, endMinutes, col, cols } = layout;
-
-  const top = (startMinutes / 60) * hourHeight;
-  const height = ((endMinutes - startMinutes) / 60) * hourHeight;
 
   return (
     <button
@@ -37,16 +31,10 @@ export default function WeekEventBlock({
       onMouseLeave={() => setHovered(false)}
       onMouseMove={(e) => setPos({ x: e.clientX, y: e.clientY })}
       className={clsx(
-        'pointer-events-auto absolute overflow-hidden rounded p-1.5 text-left text-[11px] leading-4 font-medium',
+        'relative mt-1 flex w-full items-center overflow-hidden rounded p-1.5 text-left text-[11px] leading-4 font-medium first:mt-0',
         onClick && 'cursor-pointer'
       )}
-      style={{
-        top,
-        height,
-        left: `calc(${dayIndex} * (100% / 7) + ${col} * (100% / 7 / ${cols}))`,
-        width: `calc(100% / 7 / ${cols})`,
-        backgroundColor: getBgColor(event.color),
-      }}
+      style={{ backgroundColor: getBgColor(event.color) }}
     >
       <span
         className="absolute top-0 left-0 h-full w-1"

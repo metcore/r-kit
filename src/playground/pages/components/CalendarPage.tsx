@@ -188,6 +188,65 @@ const exampleEvents = dedent(`
   <Calendar events={AGENDA} useLimitEvent={false} onEventClick={handleClick} />
 `);
 
+// Hari ini (bukan tanggal tetap) dengan alasan yang sama seperti minggu di atas.
+const HARI_INI = (() => {
+  const tanggal = new Date();
+  tanggal.setHours(0, 0, 0, 0);
+  return tanggal;
+})();
+
+const jamHariIni = (jam = 0, menit = 0) => {
+  const tanggal = new Date(HARI_INI);
+  tanggal.setHours(jam, menit, 0, 0);
+  return tanggal;
+};
+
+const AGENDA_HARI: CalendarEvent[] = [
+  {
+    title: 'Kultim di GBK',
+    subtitle: 'Divisi Marketing',
+    color: 'info',
+    startDate: keStringTanggal(HARI_INI),
+    endDate: keStringTanggal(HARI_INI),
+  },
+  {
+    title: 'Sprint Planning',
+    subtitle: 'Tim Produk',
+    color: 'success',
+    startDate: keStringTanggal(HARI_INI),
+    endDate: keStringTanggal(HARI_INI),
+    startDateTime: jamHariIni(9, 0),
+    endDateTime: jamHariIni(10, 0),
+  },
+  {
+    title: 'Review Desain',
+    subtitle: 'Tim Produk',
+    color: 'warning',
+    startDate: keStringTanggal(HARI_INI),
+    endDate: keStringTanggal(HARI_INI),
+    startDateTime: jamHariIni(9, 30),
+    endDateTime: jamHariIni(10, 30),
+  },
+  {
+    title: 'Sync Backend',
+    subtitle: 'Tim Produk',
+    color: 'purple',
+    startDate: keStringTanggal(HARI_INI),
+    endDate: keStringTanggal(HARI_INI),
+    startDateTime: jamHariIni(9, 15),
+    endDateTime: jamHariIni(9, 45),
+  },
+  {
+    title: 'Audit Internal',
+    subtitle: 'Divisi Keuangan',
+    color: 'danger',
+    startDate: keStringTanggal(HARI_INI),
+    endDate: keStringTanggal(HARI_INI),
+    startDateTime: jamHariIni(13, 0),
+    endDateTime: jamHariIni(15, 0),
+  },
+];
+
 const exampleWeek = dedent(`
   // startDateTime / endDateTime menempatkan agenda di grid per jam.
   // Tanpa keduanya (atau lintas hari), agenda tampil di baris "All Day".
@@ -211,6 +270,17 @@ const exampleWeek = dedent(`
   <Calendar
     type="week"
     events={AGENDA_MINGGU}
+    showDefaultController
+    backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
+    onEventClick={(event) => setJadwalTerpilih(event ?? null)}
+  />
+`);
+
+const exampleDay = dedent(`
+  // Sama seperti Minggu, tapi grid per jam hanya untuk satu hari.
+  <Calendar
+    type="day"
+    events={AGENDA_HARI}
     showDefaultController
     backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
     onEventClick={(event) => setJadwalTerpilih(event ?? null)}
@@ -369,6 +439,31 @@ export default function CalendarPage() {
           <Calendar
             type="week"
             events={AGENDA_MINGGU}
+            showDefaultController
+            backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
+            onEventClick={(event) => setJadwalTerpilih(event ?? null)}
+          />
+          <Text
+            variant="t1"
+            className="text-gray-800"
+            value={
+              jadwalTerpilih != null
+                ? `Agenda dipilih: ${jadwalTerpilih.title}`
+                : slotTerpilih != null
+                  ? `Slot kosong diklik: ${formatTanggalJam(slotTerpilih)}`
+                  : 'Klik agenda atau slot kosong pada grid per jam.'
+            }
+          />
+        </MainSection>
+
+        <MainSection
+          title="Tampilan Hari"
+          code={exampleDay}
+          contentClassName="flex flex-col gap-3"
+        >
+          <Calendar
+            type="day"
+            events={AGENDA_HARI}
             showDefaultController
             backdropOnClick={(day) => setSlotTerpilih(day?.fullDate ?? null)}
             onEventClick={(event) => setJadwalTerpilih(event ?? null)}

@@ -162,8 +162,8 @@ export interface CalendarEvent {
 
 export type CalendarTypes = 'week' | 'month' | 'year' | 'day' | 'agenda';
 
-export interface WeekGridProps {
-  weekStart: Date;
+export interface TimeGridProps {
+  days: CalendarDay[];
   daysOfWeek: string[];
   events?: CalendarEvent[];
   showCalendarTooltip?: boolean;
@@ -171,13 +171,4 @@ export interface WeekGridProps {
   onEventClick?: (event?: CalendarEvent) => void;
   useLimitEvent?: boolean;
   wrapperClassName?: string;
-}
-
-export interface TimedEventLayout {
-  event: CalendarEvent;
-  dayIndex: number;
-  startMinutes: number;
-  endMinutes: number;
-  col: number;
-  cols: number;
 }

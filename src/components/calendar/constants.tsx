@@ -13,10 +13,10 @@ export const typeOptions: { label: string; value: CalendarTypes }[] = [
     label: 'Week',
     value: 'week',
   },
-  // {
-  //   label: 'Day',
-  //   value: 'day',
-  // },
+  {
+    label: 'Day',
+    value: 'day',
+  },
   // {
   //   label: 'Agenda',
   //   value: 'agenda',

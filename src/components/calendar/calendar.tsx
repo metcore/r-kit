@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
 import { createCalendarHelpers } from './helpers/create-calendar-helpers';
-import { getCalendarDays } from './helpers/helpers';
+import { getCalendarDays, getWeekDays } from './helpers/helpers';
 import { ButtonNavigator } from './partials/button-navigator';
 import { CalendarGrid } from './partials/calendar-grid';
 import { CalendarHeader } from './partials/calendar-header';
 import DaysOfWeek from './partials/days-of-week';
 import { ButtonDropdown, ItemDropdown } from './partials/dropdown';
-import { WeekGrid } from './partials/week-grid';
+import { TimeGrid } from './partials/time-grid';
 import type { CalendarDay, CalendarProps, CalendarTypes } from './type';
 import clsx from 'clsx';
 import { Icon } from '../icons';
@@ -93,6 +93,12 @@ const Calendar = ({
     return start;
   });
 
+  const [currentDay, setCurrentDay] = useState<Date>(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
+
   const calendarDays = getCalendarDays({ currentMonth, currentYear });
 
   const calendarHelpers = createCalendarHelpers({
@@ -141,6 +147,18 @@ const Calendar = ({
     });
   };
 
+  const changeDay = (delta: number) => {
+    setCurrentDay((prev) => {
+      const next = new Date(prev);
+      next.setDate(prev.getDate() + delta);
+
+      // sync currentMonth & currentYear ke hari aktif
+      setCurrentMonth(next.getMonth());
+      setCurrentYear(next.getFullYear());
+      return next;
+    });
+  };
+
   const changeMonth = (delta: number) => {
     let newMonth = currentMonth + delta;
     let newYear = currentYear;
@@ -174,9 +192,17 @@ const Calendar = ({
 
     if (type === 'week') {
       if (action === 'prev') {
-        return changeWeek(1);
-      } else {
         return changeWeek(-1);
+      } else {
+        return changeWeek(1);
+      }
+    }
+
+    if (type === 'day') {
+      if (action === 'prev') {
+        return changeDay(-1);
+      } else {
+        return changeDay(1);
       }
     }
   };
@@ -244,6 +270,12 @@ const Calendar = ({
                       start.setHours(0, 0, 0, 0);
                       setCurrentWeekStart(start);
                     }
+
+                    if (selectedType === 'day') {
+                      const start = new Date(today);
+                      start.setHours(0, 0, 0, 0);
+                      setCurrentDay(start);
+                    }
                   }}
                 >
                   Today
@@ -297,8 +329,23 @@ const Calendar = ({
         >
           {/* type week */}
           {selectedType === 'week' && variant === 'default' && (
-            <WeekGrid
-              weekStart={currentWeekStart}
+            <TimeGrid
+              days={getWeekDays(currentWeekStart)}
+              daysOfWeek={daysOfWeek}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+              backdropOnClick={backdropOnClick}
+              onEventClick={onEventClick}
+              useLimitEvent={useLimitEvent}
+              wrapperClassName={weekWrapperClassname}
+            />
+          )}
+          {/* type day */}
+          {selectedType === 'day' && variant === 'default' && (
+            <TimeGrid
+              days={[
+                { date: currentDay.getDate(), month: 'current', fullDate: currentDay }, //prettier-ignore
+              ]}
               daysOfWeek={daysOfWeek}
               events={events}
               showCalendarTooltip={showCalendarTooltip}
