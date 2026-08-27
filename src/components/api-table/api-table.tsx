@@ -106,7 +106,7 @@ export const ApiTable = <
                   {col.sortable === true ? (
                     <div
                       className={`flex flex-wrap items-center gap-1 ${
-                        isActive ? 'text-gray-900' : 'text-gray-800'
+                        isActive ? 'text-gray-900' : 'text-gray-900'
                       }`}
                     >
                       <Text as="h5" variant="t1" weight="semibold">
@@ -116,11 +116,11 @@ export const ApiTable = <
                         name={
                           t.sort.by === sortKey
                             ? t.sort.order === 'asc'
-                              ? 'arrow-up'
-                              : 'arrow-down'
+                              ? 'arrow-up-small'
+                              : 'arrow-down-small'
                             : 'sort-vertical'
                         }
-                        size={16}
+                        size={15}
                       />
                     </div>
                   ) : (

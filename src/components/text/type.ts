@@ -24,6 +24,10 @@ export interface TextBaseProps {
   align?: AlignMent;
   numberOfLines?: 1 | 2 | 3 | 4;
   className?: string;
+  onClick?: () => void;
+  dangerouslySetInnerHTML?: {
+    __html: string;
+  };
 }
 
 export interface TextWithChildren extends TextBaseProps {

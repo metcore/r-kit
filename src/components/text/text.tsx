@@ -12,11 +12,14 @@ export function Text({
   value,
   children,
   className,
+  onClick,
+  dangerouslySetInnerHTML,
 }: TextProps) {
   const content = value ?? children;
 
   return (
     <TextComponent
+      dangerouslySetInnerHTML={dangerouslySetInnerHTML}
       className={cn(
         TextVariants({
           variant,
@@ -27,6 +30,7 @@ export function Text({
         }),
         className
       )}
+      onClick={onClick}
     >
       {content}
     </TextComponent>
