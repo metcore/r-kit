@@ -4,11 +4,11 @@ export const tableVariants = cva(
   'w-full border-separate border-spacing-0 overflow-hidden text-left text-sm',
   {
     variants: {
+      bordered: { true: 'border border-b-0 border-gray-300', false: '' },
       responsive: {
-        true: 'max-md:block max-md:w-full max-md:border-0 max-md:[&>tbody>tr>td]:border-0 max-md:[&>thead>tr>th]:border-0',
+        true: 'max-md:block max-md:w-full max-md:!border-0 max-md:[&>tbody>tr>td]:!border-0 max-md:[&>thead>tr>th]:!border-0',
         false: '',
       },
-      bordered: { true: 'border border-b-0 border-gray-300', false: '' },
       rounded: {
         none: 'rounded-none',
         sm: 'rounded-sm',
