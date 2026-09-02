@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const cardVariants = cva(
-  'flex flex-col rounded-xl border transition-colors',
+  'flex min-w-0 flex-col rounded-xl border transition-colors',
   {
     variants: {
       variant: {

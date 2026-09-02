@@ -5,7 +5,6 @@ import {
   TableBody,
   TableCell,
   TableCellHead,
-  TableFooter,
   TableHead,
   TablePagination,
   TableRow,
@@ -46,10 +45,10 @@ export const ApiTable = <
   loadingRowCount,
   rowOptions,
   showPagination,
-  responsive,
+  responsive = false,
   bordered = true,
-  striped = true,
-  hoverable = true,
+  striped = false,
+  hoverable = false,
 }: ApiTableProps<T, F>): ReactElement => {
   const colCount = columns.length;
   const skeletonCount = loadingRowCount ?? Math.min(t.pageSize, 8);
@@ -74,169 +73,197 @@ export const ApiTable = <
         </div>
       )}
 
-      <Table
-        className="w-full table-auto"
-        bordered={bordered}
-        hoverable={hoverable}
-        striped={striped}
-        aria-busy={t.isFetching}
-        responsive={responsive}
+      <div
+        className={cn(
+          'rounded-lg',
+          responsive ? 'md:overflow-hidden' : 'overflow-hidden',
+          bordered &&
+            (responsive
+              ? 'md:border md:border-gray-300'
+              : 'border border-gray-300')
+        )}
       >
-        <TableHead>
-          <TableRow isHeader>
-            {columns.map((col) => {
-              const sortKey = col.sortKey ?? col.key;
-              const isActive = col.sortable === true && t.sort.by === sortKey;
-              const alignClass =
-                col.align != null ? alignCls[col.align] : 'text-left';
-              const hideClass =
-                col.hideBelow != null ? hideBelowCls[col.hideBelow] : '';
+        <div className={responsive ? undefined : 'overflow-x-auto'}>
+          <Table
+            className="w-full table-auto rounded-none! border-0!"
+            bordered={bordered}
+            hoverable={hoverable}
+            striped={striped}
+            aria-busy={t.isFetching}
+            responsive={responsive}
+          >
+            <TableHead>
+              <TableRow isHeader>
+                {columns.map((col) => {
+                  const sortKey = col.sortKey ?? col.key;
+                  const isActive =
+                    col.sortable === true && t.sort.by === sortKey;
+                  const alignClass =
+                    col.align != null ? alignCls[col.align] : 'text-left';
+                  const hideClass =
+                    col.hideBelow != null ? hideBelowCls[col.hideBelow] : '';
 
-              return (
-                <TableCellHead
-                  key={col.key}
-                  className={[alignClass, hideClass].filter(Boolean).join(' ')}
-                  sortable={col.sortable}
-                  aria-sort={
-                    col.sortable === true ? ariaSortValue(sortKey) : undefined
-                  }
-                  onClick={
-                    col.sortable === true
-                      ? () => t.toggleSort(sortKey)
-                      : undefined
-                  }
-                >
-                  {col.sortable === true ? (
-                    <div
-                      className={`flex flex-wrap items-center gap-1 ${
-                        isActive ? 'text-gray-900' : 'text-gray-900'
-                      }`}
+                  return (
+                    <TableCellHead
+                      key={col.key}
+                      className={[alignClass, hideClass]
+                        .filter(Boolean)
+                        .join(' ')}
+                      sortable={col.sortable}
+                      aria-sort={
+                        col.sortable === true
+                          ? ariaSortValue(sortKey)
+                          : undefined
+                      }
+                      onClick={
+                        col.sortable === true
+                          ? () => t.toggleSort(sortKey)
+                          : undefined
+                      }
                     >
-                      <Text as="h5" variant="t1" weight="semibold">
-                        {col.header != null ? col.header : col.key}
-                      </Text>
-                      <Icon
-                        name={
-                          t.sort.by === sortKey
-                            ? t.sort.order === 'asc'
-                              ? 'arrow-up-small'
-                              : 'arrow-down-small'
-                            : 'sort-vertical'
-                        }
-                        size={15}
-                      />
-                    </div>
-                  ) : (
-                    <Text as="h5" variant="t1" weight="semibold">
-                      {col.header}
-                    </Text>
-                  )}
-                </TableCellHead>
-              );
-            })}
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {t.loading &&
-            Array.from({ length: skeletonCount }).map((_, ri) => (
-              <TableRow key={`sk-${ri}`} aria-hidden="true">
-                {columns.map((col) => (
-                  <TableCell
-                    key={col.key}
-                    className={col.hideBelow ? hideBelowCls[col.hideBelow] : ''}
-                  >
-                    <div className="h-3.5 w-32 animate-pulse rounded bg-slate-100" />
-                  </TableCell>
-                ))}
+                      {col.sortable === true ? (
+                        <div
+                          className={`flex flex-wrap items-center gap-1 ${
+                            isActive ? 'text-gray-900' : 'text-gray-900'
+                          }`}
+                        >
+                          <Text as="h5" variant="t1" weight="semibold">
+                            {col.header != null ? col.header : col.key}
+                          </Text>
+                          <Icon
+                            name={
+                              t.sort.by === sortKey
+                                ? t.sort.order === 'asc'
+                                  ? 'arrow-up-small'
+                                  : 'arrow-down-small'
+                                : 'sort-vertical'
+                            }
+                            size={15}
+                          />
+                        </div>
+                      ) : (
+                        <Text as="h5" variant="t1" weight="semibold">
+                          {col.header}
+                        </Text>
+                      )}
+                    </TableCellHead>
+                  );
+                })}
               </TableRow>
-            ))}
+            </TableHead>
 
-          {t.error != null && (
-            <TableRow>
-              <TableCell colSpan={colCount}>
-                <div className="mx-auto flex max-w-sm flex-col items-center gap-1 py-8 text-center">
-                  <Icon name="info-circle-fill" />
-                  <p className="text-sm font-medium text-slate-700">
-                    Failed to load data
-                  </p>
-                  <p className="text-xs text-slate-500">{t.error.message}</p>
-                  <button
-                    type="button"
-                    onClick={t.refetch}
-                    className="mt-3 rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-slate-700 active:scale-95"
-                  >
-                    Try again
-                  </button>
-                </div>
-              </TableCell>
-            </TableRow>
-          )}
-
-          {!t.loading &&
-            t.error == null &&
-            t.data.length === 0 &&
-            (renderEmptyData !== undefined ? (
-              renderEmptyData
-            ) : (
-              <TableRow className="max-md:col-start-1 max-md:grid-cols-1">
-                <TableCell colSpan={colCount}>
-                  <div className="flex flex-col items-center gap-1 text-center text-slate-400">
-                    <Icon name="file-list-search" size={50} />
-                    <p className="text-sm">{emptyText}</p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-
-          {!t.loading &&
-            t.data.map((row, ri) => {
-              const resolvedKey =
-                rowKey != null ? rowKey(row, ri) : defaultRowKey(row, ri);
-              const rowOpts = rowOptions?.(row, resolvedKey, ri);
-
-              return (
-                <TableRow
-                  key={resolvedKey}
-                  onClick={
-                    onRowClick != null ? () => onRowClick(row, ri) : undefined
-                  }
-                  className={cn(
-                    onRowClick != null ? 'cursor-pointer' : undefined,
-                    rowOpts?.className
-                  )}
-                >
-                  {columns.map((col) => {
-                    const value = getPath(row, col.key);
-                    const alignClass =
-                      col.align != null ? alignCls[col.align] : 'text-left';
-                    const hideClass = col.hideBelow
-                      ? hideBelowCls[col.hideBelow]
-                      : '';
-                    return (
+            <TableBody>
+              {t.loading &&
+                Array.from({ length: skeletonCount }).map((_, ri) => (
+                  <TableRow key={`sk-${ri}`} aria-hidden="true">
+                    {columns.map((col) => (
                       <TableCell
                         key={col.key}
-                        className={[alignClass, hideClass, col.className ?? '']
-                          .filter(Boolean)
-                          .join(' ')}
+                        className={
+                          col.hideBelow ? hideBelowCls[col.hideBelow] : ''
+                        }
                       >
-                        {col.render != null ? (
-                          col.render(value, row, ri)
-                        ) : value == null || value === '' ? (
-                          <span className="text-slate-300">—</span>
-                        ) : (
-                          String(value)
-                        )}
+                        <div className="h-3.5 w-32 animate-pulse rounded bg-slate-100" />
                       </TableCell>
-                    );
-                  })}
+                    ))}
+                  </TableRow>
+                ))}
+
+              {t.error != null && (
+                <TableRow>
+                  <TableCell colSpan={colCount}>
+                    <div className="mx-auto flex max-w-sm flex-col items-center gap-1 py-8 text-center">
+                      <Icon name="info-circle-fill" />
+                      <p className="text-sm font-medium text-slate-700">
+                        Failed to load data
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {t.error.message}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={t.refetch}
+                        className="mt-3 rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-slate-700 active:scale-95"
+                      >
+                        Try again
+                      </button>
+                    </div>
+                  </TableCell>
                 </TableRow>
-              );
-            })}
-        </TableBody>
+              )}
+
+              {!t.loading &&
+                t.error == null &&
+                t.data.length === 0 &&
+                (renderEmptyData !== undefined ? (
+                  renderEmptyData
+                ) : (
+                  <TableRow className="max-md:col-start-1 max-md:grid-cols-1">
+                    <TableCell colSpan={colCount}>
+                      <div className="flex flex-col items-center gap-1 text-center text-slate-400">
+                        <Icon name="file-list-search" size={50} />
+                        <p className="text-sm">{emptyText}</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+
+              {!t.loading &&
+                t.data.map((row, ri) => {
+                  const resolvedKey =
+                    rowKey != null ? rowKey(row, ri) : defaultRowKey(row, ri);
+                  const rowOpts = rowOptions?.(row, resolvedKey, ri);
+
+                  return (
+                    <TableRow
+                      key={resolvedKey}
+                      onClick={
+                        onRowClick != null
+                          ? () => onRowClick(row, ri)
+                          : undefined
+                      }
+                      className={cn(
+                        onRowClick != null ? 'cursor-pointer' : undefined,
+                        rowOpts?.className
+                      )}
+                    >
+                      {columns.map((col) => {
+                        const value = getPath(row, col.key);
+                        const alignClass =
+                          col.align != null ? alignCls[col.align] : 'text-left';
+                        const hideClass = col.hideBelow
+                          ? hideBelowCls[col.hideBelow]
+                          : '';
+                        return (
+                          <TableCell
+                            key={col.key}
+                            className={[
+                              alignClass,
+                              hideClass,
+                              col.className ?? '',
+                            ]
+                              .filter(Boolean)
+                              .join(' ')}
+                          >
+                            {col.render != null ? (
+                              col.render(value, row, ri)
+                            ) : value == null || value === '' ? (
+                              <span className="text-slate-300">—</span>
+                            ) : (
+                              String(value)
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </div>
 
         {showPagination == true && (
-          <TableFooter colSpan={colCount}>
+          <div className="px-4 py-3">
             <TablePagination
               currentPage={t.page}
               totalPage={t.totalPages}
@@ -246,9 +273,9 @@ export const ApiTable = <
               prevOnClick={() => t.setPage(Math.max(t.page - 1, 1))}
               nextOnClick={() => t.setPage(Math.min(t.page + 1, t.totalPages))}
             />
-          </TableFooter>
+          </div>
         )}
-      </Table>
+      </div>
     </div>
   );
 

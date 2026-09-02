@@ -626,7 +626,8 @@ export default function ApiTablePage() {
             <CardBody>
               <ApiTable
                 t={t}
-                responsive={true}
+                bordered
+                responsive
                 columns={columns}
                 onRowClick={(row) => console.log('row clicked:', row)}
                 // rowOptions={(data, key, index) => {
@@ -641,11 +642,7 @@ export default function ApiTablePage() {
           </Card>
         </MainSection>
 
-        <MainSection
-          title="Dynamic Column"
-          className="overflow-auto"
-          code={exampleDynamicColumnApiTable}
-        >
+        <MainSection title="Dynamic Column" code={exampleDynamicColumnApiTable}>
           <Card>
             <CardHeader
               divider
@@ -681,7 +678,11 @@ export default function ApiTablePage() {
             </CardHeader>
 
             <CardBody>
-              <ApiTable t={tDynamic} columns={visibility.visibleColumns} />
+              <ApiTable
+                t={tDynamic}
+                showPagination
+                columns={visibility.visibleColumns}
+              />
             </CardBody>
           </Card>
         </MainSection>
