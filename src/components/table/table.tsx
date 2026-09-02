@@ -263,7 +263,7 @@ export function TablePagination({
   return (
     <div
       className={clsx(
-        'flex w-full items-center justify-between md:flex-nowrap',
+        'flex w-full flex-col items-center justify-center gap-2 md:flex-row md:justify-between',
         wrapperClassName
       )}
     >

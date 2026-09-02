@@ -326,7 +326,7 @@ export default function TablePage() {
           </Table>
         </MainSection>
         <MainSection title="Advanced Table" className="overflow-auto">
-          <Table className="w-full table-auto">
+          <Table className="w-full table-auto" responsive>
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />

@@ -4,6 +4,7 @@ import {
   InputFile,
   type FileItem,
   type InputFileRef,
+  type InputFileValue,
 } from '../../../components/input-file';
 import { useRef, useState } from 'react';
 import { createMockFile } from '../../../components/input-file/helpers';
@@ -16,7 +17,9 @@ import { useInputFile } from '../../../components/input-file/use-input-file';
 
 export default function InputFilePage() {
   const fileRef = useRef<InputFileRef>(null);
-  const [files, setFiles] = useState([
+
+  // InputFileValue[]: menampung entry remote (dari server) maupun FileItem hasil onChange.
+  const [files, setFiles] = useState<InputFileValue[]>([
     {
       id: 1,
       url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
@@ -24,14 +27,19 @@ export default function InputFilePage() {
       type: 'png',
     },
   ]);
-  const [defaultFiles, setDefaultFiles] = useState<FileItem[]>([
+
+  // Lazy initializer: createMockFile mengalokasikan Blob 1.2 MB, jangan dijalankan tiap render.
+  const [defaultFiles, setDefaultFiles] = useState<FileItem[]>(() => [
     createMockFile({
+      id: 'mock-example-photo',
       name: 'example-photo.jpg',
       type: 'image/jpeg',
       hint: 'Uploading...',
       sizeMb: 1.2,
     }),
   ]);
+
+  const [serverFiles, setServerFiles] = useState<InputFileValue[]>([]);
 
   const basicInput = dedent(`
     <div className="flex gap-4">
@@ -59,6 +67,7 @@ export default function InputFilePage() {
     //   fieldName: 'file',
     // },
   });
+
   return (
     <>
       <HeroSection
@@ -68,7 +77,7 @@ export default function InputFilePage() {
         description="Field yang memungkinkan user mengunggah file dari perangkat mereka."
       />
 
-      <form onSubmit={() => console.log('jir')}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <GridWrapper>
           <MainSection
             title="Basic Input File"
@@ -76,15 +85,8 @@ export default function InputFilePage() {
             code={basicInput}
           >
             <InputFile
-              value={[
-                {
-                  id: 1,
-                  url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
-                  name: 'a.png',
-                  type: 'png',
-                },
-              ]}
-              onChange={(e) => console.log(e)}
+              value={files}
+              onChange={setFiles}
               accept="image/*,.pdf"
             />
             <InputFile
@@ -127,24 +129,23 @@ export default function InputFilePage() {
             <InputFile
               variant="large"
               value={files}
-              onChange={setDefaultFiles}
+              onChange={setFiles}
               errorMessage="Upload file terlebih dahulu sebelum melanjutkan"
             />
           </MainSection>
           <MainSection title="Input File Medium With Input Field">
             <InputFile
               ref={fileRef}
-              useCustomName
+              allowCustomName
               variant="medium"
               value={defaultFiles}
-              onChange={setFiles}
+              onChange={setDefaultFiles}
               accept="*"
             />
           </MainSection>
           <MainSection title="Input File Large With Input Field">
             <InputFile
-              ref={fileRef}
-              useCustomName
+              allowCustomName
               variant="large"
               value={defaultFiles}
               onChange={setDefaultFiles}
@@ -155,14 +156,14 @@ export default function InputFilePage() {
             <InputFile
               accept=".png"
               variant="medium"
-              value={files}
+              value={serverFiles}
+              onChange={setServerFiles}
               uploadConfig={{
                 url: 'https://httpbin.org/post',
                 fieldName: 'file',
               }}
               onUploadSuccess={(results) => {
                 console.log(results);
-                console.log(files);
               }}
             />
           </MainSection>
@@ -180,7 +181,7 @@ export default function InputFilePage() {
             <div className="flex flex-col gap-6">
               <InputFile
                 inputFile={fileInput}
-                useCustomName
+                allowCustomName
                 variant="large"
                 selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"
               />
@@ -191,7 +192,7 @@ export default function InputFilePage() {
             <div className="flex flex-col gap-6">
               <InputFile
                 inputFile={fileInput}
-                useCustomName
+                allowCustomName
                 buttonVariant="outline"
                 variant="large"
                 selectedFilesClassName="[&>div:last-child]:max-h-[100px] [&>div:last-child]:overflow-scroll"

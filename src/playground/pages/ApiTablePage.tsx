@@ -679,7 +679,7 @@ export default function ApiTablePage() {
             </CardHeader>
 
             <CardBody>
-              <ApiTable t={tDynamic} columns={visibility.visibleColumns} res />
+              <ApiTable t={tDynamic} columns={visibility.visibleColumns} />
             </CardBody>
           </Card>
         </MainSection>

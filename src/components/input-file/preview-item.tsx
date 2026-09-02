@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormLabel } from '../form';
 import { Icon } from '../icons';
 import { Input } from '../input/input';
@@ -30,20 +30,38 @@ const PreviewItem = ({
     isOpen: false,
     isVisible: false,
   });
+  const [imageFailed, setImageFailed] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Read normalized fields (works for BOTH local File items and remote items).
   // For a local file these resolve exactly as before; for a remote file there is
   // no `data.file`, so reading `data.file.*` here would crash.
-  const isImage = data.type?.startsWith('image/');
-  const isMp3 = data.type?.startsWith('audio/');
-  const isVideo = data.type?.startsWith('video/');
+  const isImage = data.type?.startsWith('image/') === true;
+  const isMp3 = data.type?.startsWith('audio/') === true;
+  const isVideo = data.type?.startsWith('video/') === true;
   const isPdf = data.type === 'application/pdf';
 
   const isNotViewable = !isImage && !isMp3 && !isVideo && !isPdf;
+  const showImage = isImage && !imageFailed && Boolean(data.preview);
 
-  const iconName = getIconName({ fileType: data.type });
+  const iconName = getIconName({ fileType: data.type, fileName: data.name });
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [data.preview]);
+
+  useEffect(
+    () => () => {
+      if (closeTimerRef.current != null) clearTimeout(closeTimerRef.current);
+    },
+    []
+  );
 
   const handleOpenPreview = () => {
+    if (closeTimerRef.current != null) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
     setPreviewShow({ isOpen: true, isVisible: false });
     requestAnimationFrame(() => {
       setPreviewShow({ isOpen: true, isVisible: true });
@@ -52,7 +70,9 @@ const PreviewItem = ({
 
   const handleClosePreview = () => {
     setPreviewShow((s) => ({ ...s, isVisible: false }));
-    setTimeout(() => {
+    if (closeTimerRef.current != null) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => {
+      closeTimerRef.current = null;
       setPreviewShow({ isOpen: false, isVisible: false });
     }, 200);
   };
@@ -64,16 +84,15 @@ const PreviewItem = ({
           <div
             className={clsx(
               'relative flex size-15 items-center justify-center overflow-hidden rounded-lg border bg-gray-50',
-              data?.uploadStatus === 'error'
-                ? 'text-grat-200 border'
-                : 'border-gray-200'
+              data?.uploadStatus === 'error' ? 'border' : 'border-gray-200'
             )}
           >
-            {isImage ? (
+            {showImage ? (
               <img
                 src={data.preview}
                 alt={data.name}
                 className="size-full object-cover"
+                onError={() => setImageFailed(true)}
               />
             ) : (
               <Icon name={iconName ?? 'doc'} className="size-10" />
@@ -85,6 +104,7 @@ const PreviewItem = ({
                 onClick={onReplace}
                 disabled={disabled}
                 title="Replace file"
+                aria-label={`Replace ${data.name}`}
                 className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/30 transition-colors hover:bg-black/40 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon name="rotate-right" className="size-6 text-white" />
@@ -99,6 +119,7 @@ const PreviewItem = ({
                   type="button"
                   onClick={handleOpenPreview}
                   title="Preview"
+                  aria-label={`Preview ${data.name}`}
                   className="absolute inset-0 cursor-pointer"
                 />
               )
@@ -110,6 +131,7 @@ const PreviewItem = ({
             onClick={onRemove}
             disabled={disabled}
             title="Remove file"
+            aria-label={`Remove ${data.name}`}
             className={clsx(
               'absolute -top-1 -right-1 z-10 flex size-6 items-center justify-center rounded-full text-white shadow-sm disabled:cursor-not-allowed disabled:opacity-50',
               data?.uploadStatus === 'error' ? 'bg-danger-500' : 'bg-gray-900'
@@ -127,7 +149,7 @@ const PreviewItem = ({
                 type="text"
                 onChange={onCustomNameChange}
                 placeholder={customNamePlaceholder}
-                value={customName}
+                value={customName ?? ''}
                 className={'truncate'}
               />
             </div>
@@ -141,12 +163,15 @@ const PreviewItem = ({
                   className="cursor-pointer disabled:cursor-not-allowed"
                   onClick={handleOpenPreview}
                   disabled={isNotViewable}
+                  title={isNotViewable ? undefined : 'Preview'}
+                  aria-label={`Preview ${data.name}`}
                 >
-                  {data.type?.startsWith('image/') ? (
+                  {showImage ? (
                     <img
                       src={data.preview}
                       alt={data.name}
                       className="size-11 rounded-md object-cover"
+                      onError={() => setImageFailed(true)}
                     />
                   ) : (
                     <Icon name={iconName ?? 'doc'} className="size-11" />
@@ -200,6 +225,7 @@ const PreviewItem = ({
                       disabled={disabled}
                       className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                       title="Replace file"
+                      aria-label={`Replace ${data.name}`}
                     >
                       <Icon
                         name="rotate-right"
@@ -217,6 +243,8 @@ const PreviewItem = ({
                   onClick={onRemove}
                   disabled={disabled}
                   className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                  title="Remove file"
+                  aria-label={`Remove ${data.name}`}
                 >
                   <Icon name="times" className="size-4 text-gray-700" />
                 </button>
@@ -242,18 +270,31 @@ const PreviewItem = ({
         </div>
       )}
 
-      <ModalPreviewAttachment
-        type={data.type}
-        name={data?.customName ?? data.name}
-        src={data?.preview}
-        open={previewShow}
-        onDownload={() => onDownload?.({ src: data?.preview, name: data.name })}
-        onClose={() => handleClosePreview()}
-        audioProps={audioPlayerProps}
-        videoProps={videoPlayerProps}
-        iframeProps={pdfViewerProps}
-        hideDownloadButton={hideDownloadButton}
-      />
+      {/* Di-mount hanya saat dibutuhkan: sebelumnya tiap file selalu mem-mount modal
+          (termasuk iframe/audio/video) walau tidak pernah dibuka. */}
+      {previewShow.isOpen && (
+        <ModalPreviewAttachment
+          type={data.type}
+          name={data?.customName ?? data.name}
+          src={data?.preview}
+          open={previewShow}
+          onDownload={() =>
+            onDownload?.({
+              src: data?.preview,
+              name: data.name,
+              id: data.id,
+              url:
+                data.uploadedUrl ??
+                (data.source === 'remote' ? data.url : undefined),
+            })
+          }
+          onClose={() => handleClosePreview()}
+          audioProps={audioPlayerProps}
+          videoProps={videoPlayerProps}
+          iframeProps={pdfViewerProps}
+          hideDownloadButton={hideDownloadButton}
+        />
+      )}
     </>
   );
 };

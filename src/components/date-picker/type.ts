@@ -29,17 +29,11 @@ export type CalendarRangeOverrideProps = Omit<
   | 'mode'
 >;
 
-export interface DatePickerProps {
+interface DatePickerBaseProps {
   format?: DateFormat;
-  mode?: DatePickerMode;
-  value?: Date | null;
-  rangeValue?: DateRange;
-  onChange?: (date: Date | null) => void;
-  onRangeChange?: (range: DateRange) => void;
   trigger?: ReactNode;
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
-
   minDate?: Date;
   maxDate?: Date;
   disabledDateClassName?: string;
@@ -50,12 +44,10 @@ export interface DatePickerProps {
   size?: 'sm' | 'lg' | 'md';
   showController?: boolean;
   align?: 'start' | 'center' | 'end';
-
   containerClassName?: string;
   placeholder?: string;
   isClearable?: boolean;
   autoWidth?: boolean;
-
   label?: string;
   hint?: string;
   required?: boolean;
@@ -63,6 +55,24 @@ export interface DatePickerProps {
   description?: string;
   errorMessages?: string;
 }
+
+export type DatePickerProps = DatePickerBaseProps &
+  (
+    | {
+        mode?: 'single';
+        value?: Date | null;
+        rangeValue?: never;
+        onChange?: (date: Date | null) => void;
+        onRangeChange?: never;
+      }
+    | {
+        mode: 'range';
+        value?: DateRange;
+        rangeValue?: DateRange; // Opsional untuk backward compatibility
+        onChange?: (range: DateRange) => void;
+        onRangeChange?: (range: DateRange) => void;
+      }
+  );
 
 export type DateFormat =
   | 'DD-MM-YYYY'

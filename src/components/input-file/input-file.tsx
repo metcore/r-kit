@@ -5,15 +5,22 @@ import { Text } from '../text';
 import { InputFilePreview } from './input-file-preview';
 import { inputFileVariants } from './input-file-variants';
 import type { InputFileProps, InputFileRef } from './type';
-import { useInputFile, type UseInputFileReturn } from './use-input-file';
+import {
+  useInputFile,
+  type UseInputFileOptions,
+  type UseInputFileReturn,
+} from './use-input-file';
 
 const DEFAULT_DROPZONE_HINT = 'Klik atau drag & drop file di sini';
 
+const EMPTY_HOOK_OPTIONS: UseInputFileOptions = {};
+
 type InputFileComponentProps = InputFileProps & {
   inputFile?: UseInputFileReturn;
+  standalone?: boolean;
 };
 
-const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
+const InputFileRaw = forwardRef<InputFileRef, InputFileComponentProps>(
   (props, ref) => {
     const {
       inputFile: external,
@@ -30,12 +37,17 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
       audioPlayerProps,
       videoPlayerProps,
       onDownload,
-      ...hookOptions
+      previewMode,
+      hideDownloadButton,
+      standalone: standaloneProp,
+      ...restProps
     } = props;
 
-    const ownHook = useInputFile(hookOptions);
+    const hookOptions: UseInputFileOptions = { ...restProps, multiple };
+
+    const ownHook = useInputFile(external ? EMPTY_HOOK_OPTIONS : hookOptions);
     const fileInput = external ?? ownHook;
-    const standalone = external === undefined;
+    const standalone = standaloneProp ?? external === undefined;
 
     const {
       inputRef,
@@ -53,8 +65,12 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
         clearAll: fileInput.clearAll,
         openFilePicker: fileInput.openFilePicker,
         getFiles: fileInput.getFiles,
+        isUploading: () =>
+          Object.values(fileInput.uploadState).some(
+            (s) => s.uploadStatus === 'uploading'
+          ),
       }),
-      [fileInput.clearAll, fileInput.openFilePicker, fileInput.getFiles]
+      [fileInput]
     );
 
     const isDefault =
@@ -90,6 +106,8 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
           >
             {buttonLabel}
           </Button>
+          {/* `hidden` (bukan absolute inset-0 -z-10): input tidak lagi melar
+              menutupi ancestor ber-position. Klik label & .click() tetap jalan. */}
           <input
             ref={inputRef}
             type="file"
@@ -97,14 +115,14 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
             accept={accept}
             onChange={handleChange}
             disabled={disabled}
-            className="absolute inset-0 -z-10 cursor-pointer opacity-0"
+            className="hidden"
           />
         </>
       );
     };
 
     const dropzone = (
-      <div className="">
+      <div>
         <label {...dragHandlers} className={labelClassName}>
           {!isDefault ? (
             <div
@@ -153,8 +171,8 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
     if (!standalone) return dropzone;
 
     return (
-      <div className={cn(isDefault == false && 'flex flex-col gap-6')}>
-        {isDefault == false ? dropzone : renderButton()}
+      <div className={cn(!isDefault && 'flex flex-col gap-6')}>
+        {!isDefault ? dropzone : renderButton()}
         <InputFilePreview
           inputFile={fileInput}
           className={selectedFilesClassName}
@@ -163,13 +181,14 @@ const InputFile = forwardRef<InputFileRef, InputFileComponentProps>(
           audioPlayerProps={audioPlayerProps}
           videoPlayerProps={videoPlayerProps}
           onDownload={onDownload}
-          hideDownloadButton={props.hideDownloadButton}
+          mode={previewMode}
+          hideDownloadButton={hideDownloadButton}
         />
       </div>
     );
   }
 );
 
-InputFile.displayName = 'InputFile';
+InputFileRaw.displayName = 'InputFileRaw';
 
-export { InputFile };
+export { InputFileRaw };
