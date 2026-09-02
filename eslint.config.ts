@@ -76,6 +76,7 @@ export default defineConfig([
       'eslint.config.ts',
       'commitlint.config.js',
       'tsup.config.ts',
+      '.claude/',
     ],
   },
 ]);
