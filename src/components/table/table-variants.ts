@@ -83,7 +83,7 @@ export const tableCellVariants = cva('border-gray-300 px-4 py-3', {
     bordered: { true: 'border-r border-b last:border-r-0', false: '' },
     last: { true: 'border-b-0', false: '' },
     responsive: {
-      true: 'border-0 px-0 py-0 max-md:min-w-0 md:border-b md:px-4 md:py-3',
+      true: 'px-0 py-0 max-md:min-w-0 md:border-b md:px-4 md:py-3',
       false: '',
     },
   },

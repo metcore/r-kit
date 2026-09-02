@@ -7,7 +7,13 @@ import type {
   InputFileValue,
   UploadedFile,
 } from './type';
-import { genId, guessType, normalizeEntry, normalizeValue } from './normalize';
+import {
+  coerceType,
+  genId,
+  normalizeEntry,
+  normalizeValue,
+  type NormalizeCaches,
+} from './normalize';
 
 export type FileUploadState = Pick<
   FileItem,
@@ -20,6 +26,7 @@ export type UseInputFileOptions = Pick<
   | 'accept'
   | 'maxSize'
   | 'maxFiles'
+  | 'multiple'
   | 'disabled'
   | 'uploadConfig'
   | 'onUploadSuccess'
@@ -31,6 +38,13 @@ export type UseInputFileOptions = Pick<
   | 'useCustomName'
   | 'allowCustomName'
 >;
+
+/**
+ * Saat `multiple === false`, pilihan/drop baru MENGGANTI file yang ada
+ * (sama seperti perilaku native `<input type="file">`).
+ * Set ke `false` kalau mau perilaku lama (menumpuk terus).
+ */
+const SINGLE_SELECTION_REPLACES = true;
 
 const defaultExtractUrl = (res: unknown): string => {
   if (
@@ -44,6 +58,25 @@ const defaultExtractUrl = (res: unknown): string => {
   return '';
 };
 
+const matchesAccept = (file: File, accept: string): boolean => {
+  const rules = accept
+    .split(',')
+    .map((t) => t.trim().toLowerCase())
+    .filter((t) => t !== '');
+
+  if (rules.length === 0) return true;
+
+  return rules.some((rule) => {
+    if (rule === '*' || rule === '*/*' || rule === '.*') return true;
+    if (rule.startsWith('.')) return file.name.toLowerCase().endsWith(rule);
+    if (rule.endsWith('/*')) {
+      const baseType = rule.slice(0, -2);
+      return file.type.toLowerCase().startsWith(`${baseType}/`);
+    }
+    return file.type.toLowerCase() === rule;
+  });
+};
+
 export function useInputFile(opts: UseInputFileOptions = {}) {
   const {
     value,
@@ -51,6 +84,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     accept,
     maxSize,
     maxFiles,
+    multiple,
     disabled = false,
     uploadConfig,
     onUploadSuccess,
@@ -63,16 +97,27 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     allowCustomName,
   } = opts;
 
+  // `multiple` sengaja tri-state: undefined = tidak dibatasi (dipakai hook standalone),
+  // false = benar-benar single file.
+  const allowMultiple = multiple !== false;
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const replaceInputRef = useRef<HTMLInputElement | null>(null);
   const uploadedFilesRef = useRef<UploadedFile<unknown>[]>([]);
+  const xhrRef = useRef<Map<string, XMLHttpRequest>>(new Map());
+  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const pendingReplaceIdRef = useRef<string | null>(null);
+  const mountedRef = useRef(true);
 
-  const fileIdCache = useRef<WeakMap<File, string>>(new WeakMap());
-  const fileUrlCache = useRef<WeakMap<File, string>>(new WeakMap());
-  const caches = { id: fileIdCache.current, url: fileUrlCache.current };
+  const cachesRef = useRef<NormalizeCaches>({
+    id: new WeakMap<File, string>(),
+    url: new WeakMap<File, string>(),
+  });
+  const caches = cachesRef.current;
 
-  const [internalFiles, setInternalFiles] = useState<FileItem[]>([]);
-  const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
+  const [internalFiles, setInternalFiles] = useState<FileItem[]>(() =>
+    value ? normalizeValue(value as InputFileValue[], cachesRef.current) : []
+  );
   const [isDragging, setIsDragging] = useState(false);
   const [internalError, setInternalError] = useState<string | undefined>(
     undefined
@@ -86,16 +131,41 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     Record<string, FileUploadState>
   >({});
 
+  const customNamesRef = useRef<Record<string, string>>(customNames);
+  customNamesRef.current = customNames;
+
   const customNameEnabled = (allowCustomName ?? useCustomName) === true;
 
   const normalizedFromValue = useMemo<FileItem[] | null>(
     () => (value ? normalizeValue(value as InputFileValue[], caches) : null),
-    [value]
+    [value, caches]
   );
 
-  const files = normalizedFromValue ?? internalFiles;
+  const controlled = value != null && typeof onChange === 'function';
+  const files = controlled
+    ? (normalizedFromValue ?? internalFiles)
+    : internalFiles;
+
   const filesRef = useRef<FileItem[]>(files);
   filesRef.current = files;
+
+  const valueSignature = useMemo<string | null>(
+    () =>
+      normalizedFromValue == null
+        ? null
+        : normalizedFromValue
+            .map((f) => `${f.id}|${f.name}|${f.size ?? ''}|${f.preview}`)
+            .join('~'),
+    [normalizedFromValue]
+  );
+  const appliedSignatureRef = useRef<string | null>(valueSignature);
+
+  useEffect(() => {
+    if (controlled || valueSignature === null) return;
+    if (appliedSignatureRef.current === valueSignature) return;
+    appliedSignatureRef.current = valueSignature;
+    setInternalFiles(normalizedFromValue ?? []);
+  }, [controlled, valueSignature, normalizedFromValue]);
 
   const updateFiles = (
     updater: FileItem[] | ((prev: FileItem[]) => FileItem[])
@@ -103,19 +173,40 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const next =
       typeof updater === 'function' ? updater(filesRef.current) : updater;
     filesRef.current = next;
-    if (onChange) {
-      onChange(next);
-    } else {
-      setInternalFiles(next);
-    }
+    if (!controlled) setInternalFiles(next);
+    onChange?.(next);
   };
 
   const revokeLocal = (item: FileItem) => {
     if (!isLocalFile(item)) return;
-    const url = fileUrlCache.current.get(item.file);
+    const url = caches.url.get(item.file);
     if (url != null) {
       URL.revokeObjectURL(url);
-      fileUrlCache.current.delete(item.file);
+      caches.url.delete(item.file);
+    }
+  };
+
+  const schedule = (fn: () => void, ms: number) => {
+    const timer = setTimeout(() => {
+      timersRef.current.delete(timer);
+      if (mountedRef.current) fn();
+    }, ms);
+    timersRef.current.add(timer);
+  };
+
+  const abortUpload = (id: string) => {
+    const xhr = xhrRef.current.get(id);
+    if (!xhr) return;
+    xhrRef.current.delete(id);
+    xhr.upload.onprogress = null;
+    xhr.onload = null;
+    xhr.onerror = null;
+    xhr.onabort = null;
+    xhr.ontimeout = null;
+    try {
+      xhr.abort();
+    } catch {
+      /* noop */
     }
   };
 
@@ -123,14 +214,26 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     setUploadState((prev) => ({ ...prev, [id]: { ...prev[id], ...patch } }));
 
   const dropKey = <T>(rec: Record<string, T>, id: string) => {
+    if (!(id in rec)) return rec;
     const next = { ...rec };
     delete next[id];
     return next;
   };
 
+  const handleUploadError = (fileItem: FileItem, message: string) => {
+    patchUploadState(fileItem.id, {
+      uploadStatus: 'error',
+      errorMessage: message,
+      hint: undefined,
+    });
+  };
+
   const uploadFile = (fileItem: FileItem) => {
     if (!uploadConfig) return;
     if (!isLocalFile(fileItem)) return;
+
+    const id = fileItem.id;
+    abortUpload(id);
 
     const {
       url,
@@ -143,70 +246,98 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const formData = new FormData();
     formData.append(fieldName, fileItem.file);
 
-    patchUploadState(fileItem.id, {
+    xhrRef.current.set(id, xhr);
+    const isStale = () => xhrRef.current.get(id) !== xhr;
+
+    patchUploadState(id, {
       uploadStatus: 'uploading',
       errorMessage: undefined,
       hint: undefined,
     });
-    setUploadProgress((prev) => ({ ...prev, [fileItem.id]: 0 }));
+    setUploadProgress((prev) => ({ ...prev, [id]: 0 }));
 
     xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = event.loaded / event.total; // 0–1
-        patchUploadState(fileItem.id, { hint: 'Uploading...' });
-        setUploadProgress((prev) => ({ ...prev, [fileItem.id]: percent }));
-      }
+      if (isStale() || !event.lengthComputable) return;
+      patchUploadState(id, { hint: 'Uploading...' });
+      setUploadProgress((prev) => ({
+        ...prev,
+        [id]: event.loaded / event.total, // 0–1
+      }));
+    };
+
+    const fail = (message: string) => {
+      xhrRef.current.delete(id);
+      handleUploadError(fileItem, message);
+      schedule(() => setUploadProgress((prev) => dropKey(prev, id)), 800);
+      uploadConfig.onError?.(fileItem, message);
     };
 
     xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        setUploadProgress((prev) => ({ ...prev, [fileItem.id]: 1 }));
+      if (isStale()) return;
 
-        let parsed: unknown = null;
-        try {
-          parsed = JSON.parse(xhr.responseText);
-        } catch (err) {
-          console.error(err);
-        }
-
-        const extractUrl = uploadConfig.extractUrl ?? defaultExtractUrl;
-        const uploadedUrl = extractUrl(parsed);
-
-        patchUploadState(fileItem.id, {
-          uploadStatus: 'success',
-          hint: 'Completed',
-          uploadedUrl,
-        });
-
-        setTimeout(() => {
-          setUploadProgress((prev) => dropKey(prev, fileItem.id));
-        }, 800);
-
-        const result: UploadedFile<unknown> = {
-          id: fileItem.id,
-          originalName: fileItem.file.name,
-          customName: fileItem.customName,
-          uploadedData: parsed,
-        };
-
-        uploadedFilesRef.current = [
-          ...uploadedFilesRef.current.filter((f) => f.id !== result.id),
-          result,
-        ];
-        onUploadSuccess?.(uploadedFilesRef.current);
-      } else {
-        handleUploadError(fileItem, `Server error: ${xhr.status}`);
-        uploadConfig.onError?.(fileItem, `Server error: ${xhr.status}`);
+      if (xhr.status < 200 || xhr.status >= 300) {
+        fail(`Server error: ${xhr.status}`);
+        return;
       }
+
+      xhrRef.current.delete(id);
+      setUploadProgress((prev) => ({ ...prev, [id]: 1 }));
+
+      let parsed: unknown = null;
+      try {
+        parsed = JSON.parse(xhr.responseText);
+      } catch {
+        parsed = xhr.responseText !== '' ? xhr.responseText : null;
+      }
+
+      const extractUrl = uploadConfig.extractUrl ?? defaultExtractUrl;
+      let uploadedUrl = '';
+      try {
+        uploadedUrl = extractUrl(parsed) ?? '';
+      } catch {
+        uploadedUrl = '';
+      }
+
+      patchUploadState(id, {
+        uploadStatus: 'success',
+        hint: 'Completed',
+        uploadedUrl,
+      });
+      schedule(() => setUploadProgress((prev) => dropKey(prev, id)), 800);
+
+      // File yang sudah dihapus/diganti tidak boleh masuk hasil upload.
+      const current = filesRef.current.find((f) => f.id === id);
+      if (!current) return;
+
+      const result: UploadedFile<unknown> = {
+        id,
+        originalName: fileItem.file.name,
+        customName:
+          customNamesRef.current[id] ??
+          current.customName ??
+          fileItem.customName,
+        uploadedData: parsed,
+      };
+
+      uploadedFilesRef.current = [
+        ...uploadedFilesRef.current.filter((f) => f.id !== result.id),
+        result,
+      ];
+      onUploadSuccess?.(uploadedFilesRef.current);
     };
 
     xhr.onerror = () => {
-      const message = uploadConfig.errorMessage ?? 'Failed Try Again';
-      handleUploadError(fileItem, message);
-      uploadConfig.onError?.(fileItem, message);
-      setTimeout(() => {
-        setUploadProgress((prev) => dropKey(prev, fileItem.id));
-      }, 800);
+      if (isStale()) return;
+      fail(uploadConfig.errorMessage ?? 'Failed Try Again');
+    };
+
+    xhr.ontimeout = () => {
+      if (isStale()) return;
+      fail(uploadConfig.errorMessage ?? 'Failed Try Again');
+    };
+
+    xhr.onabort = () => {
+      xhrRef.current.delete(id);
     };
 
     xhr.open(method, url);
@@ -216,25 +347,25 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     xhr.send(formData);
   };
 
-  const handleUploadError = (fileItem: FileItem, message: string) => {
-    patchUploadState(fileItem.id, {
-      uploadStatus: 'error',
-      errorMessage: message,
-      hint: undefined,
-    });
-  };
+  const processFiles = (selectedFiles: File[], pendingError?: string) => {
+    if (disabled) return;
 
-  const processFiles = (selectedFiles: File[]) => {
-    if (
-      maxFiles !== undefined &&
-      files.length + selectedFiles.length > maxFiles
-    ) {
+    const incoming = allowMultiple ? selectedFiles : selectedFiles.slice(0, 1);
+    if (incoming.length === 0) {
+      setInternalError(pendingError);
+      return;
+    }
+
+    const replaceExisting = !allowMultiple && SINGLE_SELECTION_REPLACES;
+    const base = replaceExisting ? [] : filesRef.current;
+
+    if (maxFiles !== undefined && base.length + incoming.length > maxFiles) {
       setInternalError(maxFilesErrorMessage ?? `Maksimal ${maxFiles} file`);
       return;
     }
 
     if (maxSize !== undefined) {
-      const oversized = selectedFiles.filter((file) => file.size > maxSize);
+      const oversized = incoming.filter((file) => file.size > maxSize);
       if (oversized.length > 0) {
         setInternalError(
           maxSizeErrorMessage ??
@@ -244,13 +375,20 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       }
     }
 
-    setInternalError(undefined);
+    setInternalError(pendingError);
 
-    const mapped: FileItem[] = selectedFiles.map((file) => {
+    if (replaceExisting) {
+      filesRef.current.forEach((item) => {
+        abortUpload(item.id);
+        revokeLocal(item);
+      });
+    }
+
+    const mapped: FileItem[] = incoming.map((file) => {
       const id = genId();
       const preview = URL.createObjectURL(file);
-      fileIdCache.current.set(file, id);
-      fileUrlCache.current.set(file, preview);
+      caches.id.set(file, id);
+      caches.url.set(file, preview);
       return {
         source: 'local',
         id,
@@ -258,12 +396,19 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
         customName: file.name,
         preview,
         name: file.name,
-        type: file.type || guessType(file.name),
+        type: coerceType(file.type, file.name),
         size: file.size,
       };
     });
 
-    updateFiles([...files, ...mapped]);
+    updateFiles([...base, ...mapped]);
+
+    if (replaceExisting) {
+      uploadedFilesRef.current = [];
+      setUploadProgress({});
+      setUploadState({});
+      setCustomNames({});
+    }
 
     if (uploadConfig) {
       mapped.forEach((fileItem) => uploadFile(fileItem));
@@ -271,39 +416,39 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selected = Array.from(e.target.files ?? []);
+    const input = e.target;
+    const selected = Array.from(input.files ?? []);
+    input.value = ''; // supaya file yang sama bisa dipilih lagi
     processFiles(selected);
-    if (inputRef.current) inputRef.current.value = '';
   };
 
   const handleReplace = (e: ChangeEvent<HTMLInputElement>) => {
-    if (replaceIndex === null) return;
+    const input = e.target;
+    const selected = input.files?.[0];
+    input.value = '';
 
-    const selected = e.target.files?.[0];
-    if (!selected) {
-      setReplaceIndex(null);
-      return;
-    }
+    const targetId = pendingReplaceIdRef.current;
+    pendingReplaceIdRef.current = null;
+    if (!selected || targetId == null) return;
+
+    const index = filesRef.current.findIndex((f) => f.id === targetId);
+    if (index === -1) return;
+    const target = filesRef.current[index];
 
     if (maxSize !== undefined && selected.size > maxSize) {
       setInternalError(
         maxSizeErrorMessage ??
           `File ${selected.name} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
       );
-      setReplaceIndex(null);
-      if (replaceInputRef.current) replaceInputRef.current.value = '';
       return;
     }
 
-    const target = files[replaceIndex];
-    if (!target) {
-      setReplaceIndex(null);
-      return;
-    }
-
+    abortUpload(target.id);
     revokeLocal(target);
 
-    const base = normalizeEntry(selected, caches) as FileItem;
+    const base = normalizeEntry(selected, caches);
+    if (base == null) return;
+
     const newFileItem: FileItem = {
       ...base,
       id: target.id,
@@ -314,30 +459,28 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       errorMessage: undefined,
       hint: undefined,
     };
-    fileIdCache.current.set(selected, target.id);
+    caches.id.set(selected, target.id);
 
-    const newFiles = [...files];
-    newFiles[replaceIndex] = newFileItem;
+    const newFiles = [...filesRef.current];
+    newFiles[index] = newFileItem;
     updateFiles(newFiles);
 
-    setUploadState((prev) => dropKey(prev, newFileItem.id));
-    setUploadProgress((prev) => dropKey(prev, newFileItem.id));
+    setUploadState((prev) => dropKey(prev, target.id));
+    setUploadProgress((prev) => dropKey(prev, target.id));
     uploadedFilesRef.current = uploadedFilesRef.current.filter(
-      (f) => f.id !== newFileItem.id
+      (f) => f.id !== target.id
     );
 
     if (uploadConfig) uploadFile(newFileItem);
-
-    setReplaceIndex(null);
-    if (replaceInputRef.current) replaceInputRef.current.value = '';
   };
 
   const removeFile = (index: number) => {
-    const removed = files[index];
+    const removed = filesRef.current[index];
     if (!removed) return;
 
+    abortUpload(removed.id);
     revokeLocal(removed);
-    updateFiles(files.filter((_, i) => i !== index));
+    updateFiles(filesRef.current.filter((_, i) => i !== index));
 
     uploadedFilesRef.current = uploadedFilesRef.current.filter(
       (f) => f.id !== removed.id
@@ -347,42 +490,48 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     setUploadProgress((prev) => dropKey(prev, removed.id));
     setUploadState((prev) => dropKey(prev, removed.id));
     setCustomNames((prev) => dropKey(prev, removed.id));
+    setInternalError(undefined);
   };
 
   const clearAll = () => {
-    files.forEach((f) => revokeLocal(f));
+    filesRef.current.forEach((f) => {
+      abortUpload(f.id);
+      revokeLocal(f);
+    });
     updateFiles([]);
     onClear?.();
     uploadedFilesRef.current = [];
     setUploadProgress({});
     setUploadState({});
     setCustomNames({});
+    setInternalError(undefined);
     if (inputRef.current) inputRef.current.value = '';
   };
 
   const triggerReplace = (index: number) => {
-    setReplaceIndex(index);
+    if (disabled) return;
+    const target = filesRef.current[index];
+    if (!target) return;
+    pendingReplaceIdRef.current = target.id;
     replaceInputRef.current?.click();
   };
 
   const openFilePicker = () => {
+    if (disabled) return;
     inputRef.current?.click();
   };
 
   const setCustomName = (id: string, valueName: string) => {
-    if (replaceIndex !== null) return;
     setCustomNames((prev) => ({ ...prev, [id]: valueName }));
   };
 
   const getFiles = (): FileItem[] =>
-    files.map((f) => {
+    filesRef.current.map((f) => {
+      const merged = { ...f, ...(uploadState[f.id] ?? {}) } as FileItem;
       if (customNameEnabled) {
-        return {
-          ...f,
-          customName: customNames[f.id] ?? f.customName ?? f.name,
-        };
+        merged.customName = customNames[f.id] ?? f.customName ?? f.name;
       }
-      return { ...f };
+      return merged;
     });
 
   const handleDragEnter = (e: DragEvent<HTMLElement>) => {
@@ -423,70 +572,90 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     setIsDragging(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-    let filteredFiles = droppedFiles;
+    if (droppedFiles.length === 0) return;
 
-    if (accept !== undefined) {
-      const acceptedTypes = accept
-        .split(',')
-        .map((t) => t.trim().toLowerCase());
+    let filteredFiles = droppedFiles;
+    let typeError: string | undefined;
+
+    if (accept !== undefined && accept.trim() !== '') {
       filteredFiles = droppedFiles.filter((file) =>
-        acceptedTypes.some((acceptedType) => {
-          if (acceptedType.startsWith('.')) {
-            return file.name.toLowerCase().endsWith(acceptedType);
-          }
-          if (acceptedType.endsWith('/*')) {
-            const baseType = acceptedType.split('/')[0];
-            return file.type.toLowerCase().startsWith(baseType + '/');
-          }
-          return file.type.toLowerCase() === acceptedType;
-        })
+        matchesAccept(file, accept)
       );
 
       if (filteredFiles.length !== droppedFiles.length) {
-        setInternalError(
-          `Some files do not match the allowed types: ${accept}`
-        );
-        if (filteredFiles.length === 0) return;
+        typeError = `Some files do not match the allowed types: ${accept}`;
+        if (filteredFiles.length === 0) {
+          setInternalError(typeError);
+          return;
+        }
       }
     }
 
-    processFiles(filteredFiles);
+    // typeError diteruskan supaya tidak langsung ditimpa `setInternalError(undefined)`.
+    processFiles(filteredFiles, typeError);
   };
 
   const prevFilesRef = useRef<FileItem[]>([]);
   useEffect(() => {
     const prev = prevFilesRef.current;
+    prevFilesRef.current = files;
+
     const currentIds = new Set(files.map((f) => f.id));
     prev.forEach((f) => {
-      if (isLocalFile(f) && !currentIds.has(f.id)) {
-        const u = fileUrlCache.current.get(f.file);
-        if (u != null) {
-          URL.revokeObjectURL(u);
-          fileUrlCache.current.delete(f.file);
-        }
+      if (!isLocalFile(f) || currentIds.has(f.id)) return;
+      const u = caches.url.get(f.file);
+      if (u != null) {
+        URL.revokeObjectURL(u);
+        caches.url.delete(f.file);
       }
     });
-    prevFilesRef.current = files;
-  }, [files]);
+  }, [files, caches]);
 
   useEffect(() => {
+    mountedRef.current = true;
+    const cache = caches;
+    const xhrs = xhrRef.current;
+    const timers = timersRef.current;
+
     return () => {
+      mountedRef.current = false;
+
+      timers.forEach((t) => clearTimeout(t));
+      timers.clear();
+
+      xhrs.forEach((xhr) => {
+        xhr.upload.onprogress = null;
+        xhr.onload = null;
+        xhr.onerror = null;
+        xhr.onabort = null;
+        xhr.ontimeout = null;
+        try {
+          xhr.abort();
+        } catch {
+          /* noop */
+        }
+      });
+      xhrs.clear();
+
+      // Hapus juga dari cache: kalau komponen di-mount ulang (StrictMode),
+      // preview harus dibuat baru, bukan memakai object URL yang sudah di-revoke.
       filesRef.current.forEach((f) => {
-        if (isLocalFile(f)) {
-          const u = fileUrlCache.current.get(f.file);
-          if (u != null) URL.revokeObjectURL(u);
+        if (!isLocalFile(f)) return;
+        const u = cache.url.get(f.file);
+        if (u != null) {
+          URL.revokeObjectURL(u);
+          cache.url.delete(f.file);
         }
       });
     };
-  }, []);
-
-  useEffect(() => {
-    if (errorMessage !== undefined) setInternalError(errorMessage);
-  }, [errorMessage]);
+  }, [caches]);
 
   return {
     files,
-    errorMessage: internalError,
+    // Error internal (maxSize/maxFiles/tipe file) menang: itu akibat langsung aksi
+    // terakhir user dan selalu dibersihkan oleh aksi berikutnya. Error dari props
+    // (mis. react-hook-form) dipakai saat tidak ada error internal.
+    errorMessage: internalError ?? errorMessage,
     isDragging,
     uploadProgress,
     uploadState,

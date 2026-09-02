@@ -80,21 +80,21 @@ const exampleHovered = dedent(`
   <Table variant="hovered">...</Table>
 `);
 
-const exampleAdvanced = dedent(`
-  // TableFooter menampung paginasi agar menyatu dengan tabel.
-  <Table variant="wrapped-row-bordered">
-    <TableHead>...</TableHead>
-    <TableBody>...</TableBody>
+// const exampleAdvanced = dedent(`
+//   // TableFooter menampung paginasi agar menyatu dengan tabel.
+//   <Table variant="wrapped-row-bordered">
+//     <TableHead>...</TableHead>
+//     <TableBody>...</TableBody>
 
-    <TableFooter colSpan={6}>
-      <TablePagination
-        currentPage={page}
-        totalPage={lastPage}
-        numberOnClick={setPage}
-      />
-    </TableFooter>
-  </Table>
-`);
+//     <TableFooter colSpan={6}>
+//       <TablePagination
+//         currentPage={page}
+//         totalPage={lastPage}
+//         numberOnClick={setPage}
+//       />
+//     </TableFooter>
+//   </Table>
+// `);
 
 const examplePagination = dedent(`
   // TablePagination juga bisa berdiri sendiri di luar tabel.
@@ -207,7 +207,8 @@ export default function TablePage() {
           code={exampleBasic}
           className="overflow-auto"
         >
-          <Table variant="row-bordered" className="w-full table-auto">
+          {/* variant="row-bordered" */}
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow>
                 <TableCellHead value={'No'} />
@@ -260,7 +261,8 @@ export default function TablePage() {
           code={exampleHeaded}
           className="overflow-auto"
         >
-          <Table variant="headed" className="w-full table-auto">
+          {/* variant="headed" */}
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
@@ -306,7 +308,8 @@ export default function TablePage() {
           code={exampleBordered}
           className="overflow-auto"
         >
-          <Table variant="bordered" className="w-full table-auto">
+          {/* variant="bordered" */}
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow>
                 <TableCellHead value={'No'} />
@@ -348,7 +351,8 @@ export default function TablePage() {
           code={exampleStripped}
           className="overflow-auto"
         >
-          <Table variant="stripped" className="w-full table-auto">
+          {/* variant="stripped" */}
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
@@ -390,7 +394,8 @@ export default function TablePage() {
           code={exampleHovered}
           className="overflow-auto"
         >
-          <Table variant="hovered" className="w-full table-auto">
+          {/* variant="hovered" */}
+          <Table className="w-full table-auto">
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />
@@ -427,12 +432,8 @@ export default function TablePage() {
             </TableBody>
           </Table>
         </MainSection>
-        <MainSection
-          title="Advanced Table"
-          code={exampleAdvanced}
-          className="overflow-auto"
-        >
-          <Table variant="wrapped-row-bordered" className="w-full table-auto">
+        <MainSection title="Advanced Table" className="overflow-auto">
+          <Table className="w-full table-auto" responsive>
             <TableHead>
               <TableRow isHeader>
                 <TableCellHead value={'No'} />

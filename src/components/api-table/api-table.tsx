@@ -47,6 +47,9 @@ export const ApiTable = <
   rowOptions,
   showPagination,
   responsive,
+  bordered = true,
+  striped = true,
+  hoverable = true,
 }: ApiTableProps<T, F>): ReactElement => {
   const colCount = columns.length;
   const skeletonCount = loadingRowCount ?? Math.min(t.pageSize, 8);
@@ -73,9 +76,9 @@ export const ApiTable = <
 
       <Table
         className="w-full table-auto"
-        // variant={variant}
-        bordered
-        hoverable
+        bordered={bordered}
+        hoverable={hoverable}
+        striped={striped}
         aria-busy={t.isFetching}
         responsive={responsive}
       >

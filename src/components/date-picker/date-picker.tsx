@@ -7,11 +7,7 @@ import { Input } from '../input';
 import { formatDateToString, getFormatConfig, parseMonthName } from './helpers';
 import { Button } from '../button';
 import { ChipGroup, type ChipOptionProps, type ChipValue } from '../chip';
-import {
-  DATE_PICKER_SHORTCUT_ORDER,
-  DEFAULT_DATE_PICKER_SHORTCUT_LABELS,
-  type DatePickerProps,
-} from './type';
+import { type DatePickerProps, type DateRange } from './type';
 import clsx from 'clsx';
 import { FormField } from '../form';
 
@@ -50,34 +46,59 @@ const DatePicker = ({
   confirmLabel = 'Apply',
   startDatePlaceholder = 'Start Date',
   endDatePlaceholder = 'End Date',
-  shortcutLabels,
 }: DatePickerProps) => {
+  // Helper untuk menentukan initial value pada mode range
+  const getInitialRange = (): DateRangeProps => {
+    if (mode === 'range') {
+      if (controlledRangeValue) return controlledRangeValue;
+      if (
+        controlledValue &&
+        typeof controlledValue === 'object' &&
+        'start' in controlledValue
+      ) {
+        return controlledValue as DateRangeProps;
+      }
+    }
+    return { start: null, end: null };
+  };
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    controlledValue || null
+    mode === 'single' ? (controlledValue as Date | null) || null : null
   );
-  const [dateRange, setDateRange] = useState<DateRangeProps>(
-    controlledRangeValue || { start: null, end: null }
-  );
+
+  const [dateRange, setDateRange] = useState<DateRangeProps>(getInitialRange());
   const [inputValue, setInputValue] = useState<string>('');
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isCalendarShow, setIsCalendarShow] = useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = useState<ChipValue[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filterCalendar: ChipOptionProps[] = DATE_PICKER_SHORTCUT_ORDER.map(
-    (shortcut, index) => ({
-      label:
-        shortcutLabels?.[shortcut] ??
-        DEFAULT_DATE_PICKER_SHORTCUT_LABELS[shortcut],
-      value: index,
-    })
-  );
+  const filterCalendar: ChipOptionProps[] = [
+    {
+      label: 'Last Week',
+      value: 0,
+    },
+    {
+      label: 'Last 7 Days',
+      value: 1,
+    },
+    {
+      label: 'Last 30 Days',
+      value: 2,
+    },
+    {
+      label: 'Current Month',
+      value: 3,
+    },
+    {
+      label: 'Last Year',
+      value: 4,
+    },
+  ];
 
-  // Check if format uses month names
   const usesMonthName = format.includes('MMM');
   const formatConfig = getFormatConfig(format);
 
-  // Format date range to string
   const formatRangeToString = (range: DateRangeProps): string => {
     if (!range.start && !range.end) return '';
     if (range.start && !range.end)
@@ -86,7 +107,6 @@ const DatePicker = ({
     return `${formatDateToString(range.start, format)} - ${formatDateToString(range.end, format)}`;
   };
 
-  // Parse custom format to Date
   const parseStringToDate = (dateString: string): Date | null => {
     let day = 0;
     let month = 0;
@@ -171,14 +191,10 @@ const DatePicker = ({
     }
   };
 
-  // Auto-format input as user types
   const autoFormatInput = (value: string): string => {
-    if (usesMonthName) {
-      return value;
-    }
+    if (usesMonthName) return value;
 
     const { separator } = formatConfig;
-
     const separatorRegex = separator === '/' ? '\\/' : separator;
     const regex = new RegExp(`[^\\d${separatorRegex}]`, 'g');
     let formatted = value.replace(regex, '');
@@ -219,7 +235,6 @@ const DatePicker = ({
     return formatted;
   };
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const formatted = usesMonthName ? value : autoFormatInput(value);
@@ -231,42 +246,38 @@ const DatePicker = ({
         const parsedDate = parseStringToDate(formatted);
         if (parsedDate) {
           setSelectedDate(parsedDate);
-          controlledOnChange?.(parsedDate);
+          (controlledOnChange as (date: Date | null) => void)?.(parsedDate);
         }
       } else {
         if (formatted.length === formatConfig.maxLength) {
           const parsedDate = parseStringToDate(formatted);
           if (parsedDate) {
             setSelectedDate(parsedDate);
-            controlledOnChange?.(parsedDate);
+            (controlledOnChange as (date: Date | null) => void)?.(parsedDate);
           }
         } else {
           setSelectedDate(null);
-          controlledOnChange?.(null);
+          (controlledOnChange as (date: Date | null) => void)?.(null);
         }
       }
     }
   };
 
-  // Handle calendar selection for single mode
   const handleCalendarChange = (date: Date) => {
     setSelectedDate(date);
     setInputValue(formatDateToString(date, format));
-    controlledOnChange?.(date);
+    (controlledOnChange as (date: Date | null) => void)?.(date);
 
     setIsCalendarShow(false);
     onOpenChange?.(false);
   };
 
-  // Handle calendar selection for range mode
   const handleRangeCalendarChange = (date: Date) => {
     let newRange: DateRangeProps;
 
     if (!dateRange.start || (dateRange.start !== null && dateRange.end)) {
-      // Start new range
       newRange = { start: date, end: null };
     } else {
-      // Complete the range
       if (date < dateRange.start) {
         newRange = { start: date, end: dateRange.start };
       } else {
@@ -280,13 +291,15 @@ const DatePicker = ({
 
   const handleApplyDateRange = () => {
     setInputValue(formatRangeToString(dateRange));
-    controlledOnRangeChange?.(dateRange);
+    if (mode === 'range') {
+      (controlledOnChange as (range: DateRange) => void)?.(dateRange);
+      controlledOnRangeChange?.(dateRange);
+    }
 
     onOpenChange?.(false);
     setIsCalendarShow(false);
   };
 
-  // Get next month for second calendar
   const getNextMonth = () => {
     const today = new Date();
     const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
@@ -298,28 +311,27 @@ const DatePicker = ({
 
   const nextMonthData = getNextMonth();
 
-  // Sync with controlled value
+  // Sinkronisasi state saat props berubah dari parent
   useEffect(() => {
-    if (mode === 'single' && controlledValue) {
-      setSelectedDate(controlledValue);
-      setInputValue(formatDateToString(controlledValue, format));
+    if (mode === 'single') {
+      const val = controlledValue as Date | null;
+      if (val instanceof Date || val === null) {
+        setSelectedDate(val);
+        setInputValue(val ? formatDateToString(val, format) : '');
+      }
+    } else if (mode === 'range') {
+      const activeRange =
+        controlledRangeValue || (controlledValue as DateRangeProps);
+      if (activeRange != null) {
+        setDateRange(activeRange);
+        setInputValue(formatRangeToString(activeRange));
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue, mode]);
+  }, [controlledValue, controlledRangeValue, mode, format]);
 
-  // Sync with controlled range value
-  useEffect(() => {
-    if (mode === 'range' && controlledRangeValue) {
-      setDateRange(controlledRangeValue);
-      setInputValue(formatRangeToString(controlledRangeValue));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledRangeValue, mode, open]);
-
-  // Check screen size
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // md breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
 
     checkMobile();
@@ -353,8 +365,12 @@ const DatePicker = ({
             setIsCalendarShow(open);
             onOpenChange?.(open);
 
-            if (mode === 'range' && controlledRangeValue) {
-              setDateRange(controlledRangeValue);
+            if (mode === 'range') {
+              const activeRange =
+                controlledRangeValue || (controlledValue as DateRangeProps);
+              if (activeRange != null) {
+                setDateRange(activeRange);
+              }
             }
           }}
         >
@@ -383,8 +399,19 @@ const DatePicker = ({
                         e.stopPropagation();
 
                         setInputValue('');
-                        controlledOnRangeChange?.({ start: null, end: null });
-                        controlledOnChange?.(null);
+                        if (mode === 'range') {
+                          const emptyRange = { start: null, end: null };
+                          setDateRange(emptyRange);
+                          (controlledOnChange as (range: DateRange) => void)?.(
+                            emptyRange
+                          );
+                          controlledOnRangeChange?.(emptyRange);
+                        } else {
+                          setSelectedDate(null);
+                          (controlledOnChange as (date: Date | null) => void)?.(
+                            null
+                          );
+                        }
                       }}
                     >
                       <Icon
@@ -443,12 +470,11 @@ const DatePicker = ({
                         onSelect={(val) => {
                           setSelectedFilter(val);
                           const now = new Date();
-
                           const end = new Date();
                           const start = new Date();
 
                           if (val[0] === 0) {
-                            const day = now.getDay(); // 0 = Minggu
+                            const day = now.getDay();
                             const diffToMonday = day === 0 ? -6 : 1 - day;
 
                             const startOfThisWeek = new Date(now);
@@ -474,53 +500,33 @@ const DatePicker = ({
                             });
                           } else if (val[0] === 1) {
                             start.setDate(end.getDate() - 7);
-
                             start.setHours(0, 0, 0, 0);
                             end.setHours(23, 59, 59, 999);
-
-                            setDateRange({
-                              start,
-                              end,
-                            });
+                            setDateRange({ start, end });
                           } else if (val[0] === 2) {
                             start.setDate(end.getDate() - 29);
-
                             start.setHours(0, 0, 0, 0);
                             end.setHours(23, 59, 59, 999);
-
-                            setDateRange({
-                              start,
-                              end,
-                            });
+                            setDateRange({ start, end });
                           } else if (val[0] === 3) {
-                            const start = new Date(
+                            const startMonth = new Date(
                               now.getFullYear(),
                               now.getMonth(),
                               1
                             );
-                            const end = new Date(
+                            const endMonth = new Date(
                               now.getFullYear(),
                               now.getMonth() + 1,
                               0
                             );
-
-                            start.setHours(0, 0, 0, 0);
-                            end.setHours(23, 59, 59, 999);
-
-                            setDateRange({
-                              start,
-                              end,
-                            });
+                            startMonth.setHours(0, 0, 0, 0);
+                            endMonth.setHours(23, 59, 59, 999);
+                            setDateRange({ start: startMonth, end: endMonth });
                           } else if (val[0] === 4) {
                             start.setFullYear(end.getFullYear() - 1);
-
                             start.setHours(0, 0, 0, 0);
                             end.setHours(23, 59, 59, 999);
-
-                            setDateRange({
-                              start,
-                              end,
-                            });
+                            setDateRange({ start, end });
                           }
                         }}
                         color="gray"

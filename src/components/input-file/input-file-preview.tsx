@@ -39,6 +39,13 @@ export function InputFilePreview({
   const infinite = onLoadMore !== undefined;
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  // Sentinel bisa tetap terlihat setelah onLoadMore dipanggil (parent belum sempat
+  // set isLoadingMore), jadi kunci per-batch supaya tidak memanggil berkali-kali.
+  const loadMoreLockRef = useRef(false);
+
+  useEffect(() => {
+    loadMoreLockRef.current = false;
+  }, [files.length, hasMore, isLoadingMore]);
 
   useEffect(() => {
     if (!infinite) return;
@@ -48,7 +55,13 @@ export function InputFilePreview({
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+        if (
+          entries[0].isIntersecting &&
+          hasMore &&
+          !isLoadingMore &&
+          !loadMoreLockRef.current
+        ) {
+          loadMoreLockRef.current = true;
           onLoadMore?.();
         }
       },
@@ -63,10 +76,10 @@ export function InputFilePreview({
 
   const list = (
     <div
-      className={`flex ${mode == 'compact' ? 'flex-wrap' : 'flex-col'} gap-3`}
+      className={`flex ${mode === 'compact' ? 'flex-wrap' : 'flex-col'} gap-3`}
     >
       {files.map((item, i) => {
-        const data: FileItem = { ...item, ...(uploadState[item.id] ?? {}) };
+        const data = { ...item, ...(uploadState[item.id] ?? {}) } as FileItem;
         return (
           <PreviewItem
             key={item.id}
@@ -82,7 +95,9 @@ export function InputFilePreview({
             customNamePlaceholder={customNamePlaceholder}
             progress={uploadProgress[item.id]}
             customName={customNames[item.id] ?? item.customName ?? item.name}
-            onDownload={(d) => onDownload?.({ src: d?.src, name: d?.name })}
+            onDownload={(d) =>
+              onDownload?.({ src: d?.src, name: d?.name, id: d?.id })
+            }
             onCustomNameChange={
               customNameEnabled
                 ? (e) => setCustomName(item.id, e.target.value)

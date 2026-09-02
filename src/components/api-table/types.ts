@@ -189,4 +189,7 @@ export interface ApiTableProps<
   responsive?: boolean;
   showPagination?: boolean;
   showFooter?: boolean;
+  bordered?: boolean;
+  striped?: boolean;
+  hoverable?: boolean;
 }

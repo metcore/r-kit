@@ -1,5 +1,7 @@
+export * from './input-file-typed';
 export * from './input-file';
 export * from './preview-item';
+export * from './public-value';
 export * from './type';
 export * from '../modal/modal-preview-attachment';
 export * from './input-file-preview';
