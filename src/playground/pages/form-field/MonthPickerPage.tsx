@@ -138,6 +138,24 @@ const exampleDefaultValue = dedent(`
   )
 `);
 
+const exampleLanguage = dedent(`
+  import { MonthPicker } from '@herca/r-kit/clients';
+
+  return (
+    <>
+      <MonthPicker
+        label="Bulan"
+        onChange={(e) => console.log(e)}
+      />
+      <MonthPicker
+        language="en"
+        label="Month"
+        onChange={(e) => console.log(e)}
+      />
+    </>
+  )
+`);
+
 const exampleCustomLabel = dedent(`
   import { MonthPicker } from '@herca/r-kit/clients';
 
@@ -240,6 +258,15 @@ export default function MonthPickerPage() {
             mode="multiple"
             label="Multiple"
             defaultValue={[1, 4, 7, 10]}
+            onChange={(e) => console.log(e)}
+          />
+        </MainSection>
+
+        <MainSection title="Language" code={exampleLanguage}>
+          <MonthPicker label="Bulan" onChange={(e) => console.log(e)} />
+          <MonthPicker
+            language="en"
+            label="Month"
             onChange={(e) => console.log(e)}
           />
         </MainSection>

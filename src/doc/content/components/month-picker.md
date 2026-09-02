@@ -51,6 +51,16 @@ memberi nilai akhirnya, sedangkan `onChange` mengikuti setiap perubahan:
 <MonthPicker defaultValue={{ month: 0, year: 2026 }} />
 ```
 
+## Bahasa
+
+Nama bulan bawaannya Bahasa Indonesia (`'Jan'`, `'Mei'`, `'Agu'`, dst). Pakai
+`language="en"` untuk versi Inggris — label `cancelLabel`/`confirmLabel`
+bawaan ikut menyesuaikan kecuali kamu set sendiri:
+
+```tsx
+<MonthPicker language="en" /> // 'Jan' … 'May' … 'Dec', tombol "Cancel"/"Apply"
+```
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -70,6 +80,7 @@ memberi nilai akhirnya, sedangkan `onChange` mengikuti setiap perubahan:
 | `tooltip` | `string` | — | Keterangan saat disentuh |
 | `required` | `boolean` | `false` | Menandai wajib diisi |
 | `disabled` | `boolean` | `false` | Menonaktifkan |
+| `language` | `en \| id` | `id` | Bahasa nama bulan serta `cancelLabel`/`confirmLabel` bawaan |
 
 ## Catatan
 

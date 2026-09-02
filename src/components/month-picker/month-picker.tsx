@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Chip } from '../chip';
 import { type InputSize } from '../input';
 import { generateMonthOptions } from './helpers';
@@ -10,6 +11,8 @@ import {
   type PickerModeValueProps,
   type PickerValue,
 } from '../base/components/picker-base';
+
+type MonthPickerLanguage = 'en' | 'id';
 
 type MonthPickerProps = PickerModeValueProps & {
   placeholder?: string;
@@ -25,13 +28,17 @@ type MonthPickerProps = PickerModeValueProps & {
   cancelLabel?: string;
   confirmLabel?: string;
   title?: string;
+  /** Bahasa nama bulan & label tombol default (cancel/confirm). Default `'id'`. */
+  language?: MonthPickerLanguage;
 };
 
-const MONTH_OPTIONS = generateMonthOptions();
-
-const MONTH_LABEL: Record<number, string> = Object.fromEntries(
-  MONTH_OPTIONS.map(({ value, label }) => [value, label])
-);
+const DEFAULT_LABELS: Record<
+  MonthPickerLanguage,
+  { cancel: string; confirm: string }
+> = {
+  id: { cancel: 'Batalkan', confirm: 'Terapkan' },
+  en: { cancel: 'Cancel', confirm: 'Apply' },
+};
 
 export const MonthPicker: React.FC<MonthPickerProps> = ({
   mode = 'single',
@@ -47,10 +54,27 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   hint,
   errorMessages,
   tooltip,
-  cancelLabel = 'Batalkan',
-  confirmLabel = 'Terapkan',
+  language = 'id',
+  cancelLabel,
+  confirmLabel,
   title = 'Month',
 }) => {
+  const monthOptions = useMemo(
+    () => generateMonthOptions(language),
+    [language]
+  );
+
+  const monthLabelMap = useMemo<Record<number, string>>(
+    () =>
+      Object.fromEntries(
+        monthOptions.map(({ value, label }) => [value, label])
+      ),
+    [monthOptions]
+  );
+
+  const resolvedCancelLabel = cancelLabel ?? DEFAULT_LABELS[language].cancel;
+  const resolvedConfirmLabel = confirmLabel ?? DEFAULT_LABELS[language].confirm;
+
   const {
     open,
     setOpen,
@@ -76,7 +100,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
     committedSingle,
     committedRange,
     committedMultiple,
-    (v) => MONTH_LABEL[v] ?? ''
+    (v) => monthLabelMap[v] ?? ''
   );
 
   return (
@@ -96,7 +120,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
       renderHeader={title == null ? <PickerHeader title={title} /> : undefined}
       renderOptions={
         <div className="grid grid-cols-3 gap-2">
-          {MONTH_OPTIONS.map(({ value: monthVal, label: monthLabel }) => (
+          {monthOptions.map(({ value: monthVal, label: monthLabel }) => (
             <Chip
               key={monthVal}
               onClick={() => handleSelect(monthVal)}
@@ -110,8 +134,8 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
       }
       renderFooter={
         <PickerFooter
-          cancelLabel={cancelLabel}
-          confirmLabel={confirmLabel}
+          cancelLabel={resolvedCancelLabel}
+          confirmLabel={resolvedConfirmLabel}
           onCancel={handleCancel}
           onApply={handleApply}
         />
