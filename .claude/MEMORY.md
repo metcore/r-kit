@@ -10,6 +10,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 
 - [Use caveman-commit](memory/use-caveman-commit.md) — semua commit message lewat skill caveman-commit, tanpa trailer Co-Authored-By/AI attribution
 - [Catch bug and learn](memory/catch-bug-and-learn.md) — bug non-obvious yang kefix wajib jadi entry memory baru (root cause), bukan cuma difix diem-diem
+- [.claude/ breaks typed lint](memory/dot-claude-breaks-typed-lint.md) — file js/ts di bawah .claude/ ke-lint pakai rule typed yang butuh tsconfig project, bikin pre-commit hook crash; eslint.config.ts udah exclude .claude/, jangan dihapus
 
 ## Cara nambah entri baru
 
