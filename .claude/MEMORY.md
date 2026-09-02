@@ -14,6 +14,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Table cell className butuh prop responsive](memory/table-cell-classnames-need-responsive-prop.md) — className kolom `max-md:flex`/`col-span-*`/`col-start-*` di ApiTable cuma valid kalau `responsive` di-set di tabelnya juga, kalau enggak border antar-td jadi gak sejajar di bawah breakpoint md
 - [Flex min-width blokir overflow scroll](memory/flex-min-width-blocks-overflow-scroll.md) — `overflow-x-auto` bisa diam-diam gak pernah aktif (layout malah tumbuh ngelewatin viewport) kalau ada ancestor flex item di antaranya yang gak punya `min-w-0`; jangan curigain wrapper overflow-nya duluan, telusuri ancestor chain-nya
 - [Border outer ApiTable harus scoped md:](memory/api-table-outer-border-must-stay-md-scoped.md) — border/rounded card di wrapper luar ApiTable cuma boleh nyala di `md:` ke atas kalau `responsive` true, kalau enggak border itu numpuk sama border per-row-card di mobile
+- [Scan skill sebelum lapor selesai](memory/scan-skills-before-finishing.md) — sebelum bilang kerjaan kelar, cek satu-satu semua skill yang ada relevan gak, jangan cuma andelin ingatan — user gak mau denger alasan lagi soal skill yang kelewat
 
 ## Cara nambah entri baru
 

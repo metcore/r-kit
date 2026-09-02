@@ -68,15 +68,43 @@ diletakkan di luar tabel.
 
 ## Props — ApiTable
 
-| Prop | Tipe | Keterangan |
-| --- | --- | --- |
-| `t` | hasil `useApiTable` | Keadaan tabel. Wajib |
-| `columns` | `ApiTableColumn<T>[]` | Definisi kolom. Wajib |
-| `emptyText` | `ReactNode` | Tampilan saat data kosong |
-| `rowKey` | `(row, index) => Key` | Kunci unik tiap baris |
-| `onRowClick` | `(row, index) => void` | Dipanggil saat baris diklik |
+| Prop | Tipe | Bawaan | Keterangan |
+| --- | --- | --- | --- |
+| `t` | hasil `useApiTable` | — | Keadaan tabel. Wajib |
+| `columns` | `ApiTableColumn<T>[]` | — | Definisi kolom. Wajib |
+| `emptyText` | `ReactNode` | `'No data found.'` | Tampilan saat data kosong |
+| `rowKey` | `(row, index) => Key` | — | Kunci unik tiap baris |
+| `onRowClick` | `(row, index) => void` | — | Dipanggil saat baris diklik, sekaligus nyalain cursor pointer di baris |
+| `renderEmptyData` | `ReactNode` | — | Ganti tampilan bawaan saat data kosong |
+| `loadingRowCount` | `number` | `min(pageSize, 8)` | Jumlah baris skeleton saat memuat |
+| `rowOptions` | `(row, key, index) => { className? }` | — | Kelas tambahan per baris (mis. highlight baris tertentu) |
+| `showPagination` | `boolean` | `false` | Menampilkan bar paginasi di bawah tabel |
+| `responsive` | `boolean` | `false` | Di bawah breakpoint `md`, tiap baris jadi kartu tersendiri (bukan tabel horizontal) — lihat Mode Responsif |
+| `bordered` | `boolean` | `true` | Garis pembatas antar kolom/baris + border card di luar |
+| `striped` | `boolean` | `false` | Warna selang-seling baris genap |
+| `hoverable` | `boolean` | `false` | Highlight baris saat hover |
+
+## Mode Responsif
+
+Kalau `responsive` dinyalakan, di bawah `md` tiap baris berubah jadi
+kartu terpisah (bukan lagi baris tabel horizontal) — border pembungkus
+di luar cuma nyala mulai `md` ke atas, karena di bawahnya tiap kartu baris
+udah punya border sendiri. Kalau kolom butuh tata letak khusus buat mode
+kartu ini (mis. `className: 'col-span-2'` atau `max-md:flex ...`), itu
+cuma masuk akal kalau `responsive` beneran dinyalakan di tabelnya — kalau
+enggak, border antar sel bisa jadi gak sejajar.
+
+Kalau `responsive` dimatikan (bawaan) dan kolomnya kebanyakan buat muat
+di satu layar, `ApiTable` sendiri yang nyediain scroll horizontal di
+dalam — gak perlu bungkus `overflow-auto` manual dari luar. Baris
+paginasi ditaruh di luar area yang di-scroll itu, jadi tetap kelihatan
+utuh (gak ikut ke-drag pas tabelnya di-scroll ke samping).
 
 ## Catatan
 
 Hook ini juga mengekspor `useTableQuery` untuk kebutuhan yang lebih
 rendah tingkatnya.
+
+Tipe `ApiTableProps` juga punya `showFooter` dan `rowOptionsLabel`,
+tapi keduanya belum benar-benar dipakai di implementasi `ApiTable`
+saat ini — sengaja gak didokumentasikan di sini sampai itu beres.
