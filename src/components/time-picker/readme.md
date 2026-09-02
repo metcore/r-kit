@@ -7,10 +7,11 @@ dan error konsisten dengan komponen form lainnya.
 Fitur utama:
 
 - kolom roller yang bisa dipilih: jam, menit, detik, AM/PM
+- roller berputar tanpa henti (infinite) — lewati 23 balik ke 00, lewati 00 mundur ke 23, begitu juga menit/detik
 - format 12 jam atau 24 jam
 - pola **draft → apply**: perubahan roller baru tersimpan setelah tombol konfirmasi ditekan
-- tombol **Sekarang** untuk mengisi roller dengan waktu saat ini
-- label tombol bisa diganti (`nowLabel`, `confirmLabel`) untuk kebutuhan dua bahasa
+- tombol **Batalkan** untuk menutup dropdown tanpa menyimpan perubahan roller
+- label tombol bisa diganti (`cancelLabel`, `confirmLabel`) untuk kebutuhan dua bahasa
 - dropdown dirender lewat Portal dari Radix, jadi tidak terpotong `overflow: hidden`
 
 ---
@@ -87,19 +88,19 @@ i18n dan perlu menampilkan bahasa selain default Indonesia.
 ```tsx
 <TimePicker
   label="Start time"
-  nowLabel="Now"
+  cancelLabel="Cancel"
   confirmLabel="Apply"
   placeholder="Select time"
 />
 ```
 
-Tombol kiri **bukan** tombol batal — tombol itu mengisi roller dengan waktu saat ini,
-karena itu default labelnya `"Sekarang"`. Untuk menutup dropdown tanpa menyimpan,
-klik di luar dropdown atau tekan `Escape`.
+Tombol kiri **adalah** tombol batal — menutup dropdown tanpa memanggil
+`onChange`/`onApply`, roller kembali ke nilai tersimpan begitu dibuka lagi.
+Klik di luar dropdown atau tekan `Escape` punya efek yang sama.
 
 | Prop           | Default       |
 | -------------- | ------------- |
-| `nowLabel`     | `'Sekarang'`  |
+| `cancelLabel`  | `'Batalkan'`  |
 | `confirmLabel` | `'Terapkan'`  |
 | `placeholder`  | `'Pilih waktu'` |
 
@@ -151,7 +152,7 @@ TimePicker, sehingga tidak terpotong ancestor yang punya `overflow: hidden`.
 | onChange          | (val: string) => void    | –                | Dipanggil saat pilihan disimpan                                   |
 | onApply           | (val: string) => void    | –                | Sama dengan `onChange`, dipanggil setelahnya                      |
 | placeholder       | string                   | 'Pilih waktu'    | Placeholder input                                                 |
-| nowLabel          | string                   | 'Sekarang'       | Label tombol pengisi waktu saat ini                               |
+| cancelLabel       | string                   | 'Batalkan'       | Label tombol batal (menutup tanpa menyimpan)                      |
 | confirmLabel      | string                   | 'Terapkan'       | Label tombol simpan                                               |
 | label             | string                   | –                | Label field                                                       |
 | hint              | string                   | –                | Teks bantuan di bawah field                                       |

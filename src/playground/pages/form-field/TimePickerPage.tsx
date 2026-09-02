@@ -43,7 +43,7 @@ export default function TimePickerPage() {
     <TimePicker
       label="Start time"
       placeholder="Select time"
-      nowLabel="Now"
+      cancelLabel="Cancel"
       confirmLabel="Apply"
     />
   `);
@@ -127,7 +127,7 @@ export default function TimePickerPage() {
             <TimePicker
               label="Start time"
               placeholder="Select time"
-              nowLabel="Now"
+              cancelLabel="Cancel"
               confirmLabel="Apply"
             />
           </MainSection>

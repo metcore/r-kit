@@ -40,7 +40,7 @@ interface TimePickerProps {
   errorMessages?: string | string[];
   required?: boolean;
   size?: InputSize;
-  nowLabel?: string;
+  cancelLabel?: string;
   confirmLabel?: string;
 }
 
@@ -63,7 +63,7 @@ export function TimePicker({
   errorMessages,
   required,
   size,
-  nowLabel = 'Sekarang',
+  cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
 }: TimePickerProps) {
   const hourOpts = use12Hour ? HOURS_12 : HOURS_24;
@@ -156,22 +156,8 @@ export function TimePicker({
     setOpen(true);
   };
 
-  const handleNow = () => {
-    const now = new Date();
-
-    let h = now.getHours();
-    const ap: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
-
-    if (use12Hour) {
-      h = h % 12 || 12;
-    }
-
-    setDraft({
-      h: use12Hour ? String(h) : pad2(h),
-      m: pad2(now.getMinutes()),
-      s: pad2(now.getSeconds()),
-      ap,
-    });
+  const handleCancel = () => {
+    setOpen(false);
   };
 
   const handleApply = () => {
@@ -228,6 +214,7 @@ export function TimePicker({
               options={hourOpts}
               value={draft.h}
               onChange={(v) => setDraft((d) => ({ ...d, h: v }))}
+              circular
             />
           )}
           {showMinutes && (
@@ -235,6 +222,7 @@ export function TimePicker({
               options={MINUTES}
               value={draft.m}
               onChange={(v) => setDraft((d) => ({ ...d, m: v }))}
+              circular
             />
           )}
           {showSeconds && (
@@ -242,6 +230,7 @@ export function TimePicker({
               options={SECONDS}
               value={draft.s}
               onChange={(v) => setDraft((d) => ({ ...d, s: v }))}
+              circular
             />
           )}
           {showAmPm && (
@@ -257,8 +246,8 @@ export function TimePicker({
         </div>
 
         <div className="flex items-center justify-between gap-2 border-t border-gray-100 px-5 py-3">
-          <Button onClick={handleNow} variant="tertiary">
-            {nowLabel}
+          <Button onClick={handleCancel} variant="tertiary">
+            {cancelLabel}
           </Button>
           <Button onClick={handleApply}>{confirmLabel}</Button>
         </div>

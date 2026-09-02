@@ -31,7 +31,8 @@ const notifications: NotificationItem[] = [
     id: 'time-picker',
     icon: 'clock',
     title: 'Time Picker diperbarui',
-    description: 'Label tombol bisa dikustom lewat nowLabel dan confirmLabel.',
+    description:
+      'Tombol "Sekarang" diganti jadi Batalkan, dikustom lewat cancelLabel dan confirmLabel.',
     time: '2 jam lalu',
   },
   {

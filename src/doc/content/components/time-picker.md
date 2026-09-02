@@ -29,6 +29,10 @@ Nilainya berupa string, bukan objek `Date`.
 
 Bawaannya hanya jam dan menit; detik dimatikan.
 
+Setiap roller berputar tanpa henti: lewati batas atas (mis. jam 23) balik
+lagi ke 00, dan sebaliknya — jadi bisa diputar terus ke arah manapun tanpa
+pernah mentok.
+
 ## Format 12 Jam
 
 ```tsx
@@ -38,10 +42,16 @@ Bawaannya hanya jam dan menit; detik dimatikan.
 ## Perubahan yang Ditunda
 
 `onApply` dipanggil hanya saat tombol konfirmasi ditekan, sedangkan
-`onChange` dipanggil setiap roller digeser:
+`onChange` dipanggil setiap roller digeser. Tombol batal menutup panel
+tanpa memanggil `onChange`/`onApply` — roller kembali ke nilai terakhir
+yang tersimpan begitu panel dibuka lagi:
 
 ```tsx
-<TimePicker onApply={(waktu) => simpan(waktu)} confirmLabel="Terapkan" />
+<TimePicker
+  onApply={(waktu) => simpan(waktu)}
+  cancelLabel="Batalkan"
+  confirmLabel="Terapkan"
+/>
 ```
 
 ## Props
@@ -58,7 +68,7 @@ Bawaannya hanya jam dan menit; detik dimatikan.
 | `showAmPm` | `boolean` | `false` | Menampilkan kolom AM/PM |
 | `use12Hour` | `boolean` | `false` | Memakai format 12 jam |
 | `initialPosition` | `string` | — | Posisi roller saat pertama dibuka |
-| `nowLabel` | `string` | — | Teks tombol "sekarang" |
+| `cancelLabel` | `string` | `Batalkan` | Teks tombol batal (menutup tanpa menyimpan) |
 | `confirmLabel` | `string` | — | Teks tombol konfirmasi |
 | `placeholder` | `string` | — | Teks saat belum ada pilihan |
 | `size` | `InputSize` | `md` | Ukuran isian |

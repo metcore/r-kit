@@ -14,7 +14,12 @@ interface RollerColumnProps {
   circular?: boolean;
 }
 
-const CIRCULAR_REPEAT = 40;
+// Buffer of repeated blocks on each side of the middle block. Doesn't need to
+// cover a whole session — recenterIfNeeded() silently snaps back to the
+// middle block whenever the scroll position drifts within one block of
+// either edge, so the reel behaves as infinite without pre-rendering
+// thousands of repeated rows for large option sets (e.g. 60 minutes).
+const CIRCULAR_REPEAT = 8;
 
 export function RollerColumn({
   options: rawOptions,
@@ -73,6 +78,29 @@ export function RollerColumn({
     scrollTo(idx, true);
   }, [value, scrollTo]);
 
+  // Keeps the reel from ever running out of room to scroll: whenever the
+  // position drifts within one block of either edge of the repeated buffer,
+  // silently jump to the equivalent offset in the middle block. Content is
+  // identical across blocks, so the jump is imperceptible — the reel just
+  // keeps going, in either direction, indefinitely.
+  const recenterIfNeeded = useCallback(() => {
+    if (!circular) return;
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const blockSize = rawOptions.length;
+    const idx = Math.round(el.scrollTop / ITEM_H);
+
+    if (idx >= blockSize && idx < listOptions.length - blockSize) return;
+
+    const middleBlock = Math.floor((CIRCULAR_REPEAT * 2) / 2);
+    const offset = ((idx % blockSize) + blockSize) % blockSize;
+    const recentered = middleBlock * blockSize + offset;
+
+    el.scrollTop = recentered * ITEM_H;
+    setLiveIdx(recentered);
+  }, [circular, rawOptions.length, listOptions.length]);
+
   const commit = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -83,7 +111,8 @@ export function RollerColumn({
       : listOptions[clamped];
     prevVal.current = actual;
     onChangeRef.current(actual);
-  }, [circular, listOptions, rawOptions]);
+    recenterIfNeeded();
+  }, [circular, listOptions, rawOptions, recenterIfNeeded]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -97,6 +126,7 @@ export function RollerColumn({
         if (!scrollRef.current) return;
         const idx = Math.round(scrollRef.current.scrollTop / ITEM_H);
         setLiveIdx(Math.max(0, Math.min(idx, listOptions.length - 1)));
+        recenterIfNeeded();
       });
       clearTimeout(fallback);
       fallback = setTimeout(commit, 200);
@@ -116,7 +146,7 @@ export function RollerColumn({
       clearTimeout(fallback);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [commit, listOptions.length]);
+  }, [commit, listOptions.length, recenterIfNeeded]);
 
   return (
     <div className="relative flex-1 overflow-hidden" style={{ height: COL_H }}>
