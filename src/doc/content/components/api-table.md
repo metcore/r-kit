@@ -94,9 +94,11 @@ kartu ini (mis. `className: 'col-span-2'` atau `max-md:flex ...`), itu
 cuma masuk akal kalau `responsive` beneran dinyalakan di tabelnya — kalau
 enggak, border antar sel bisa jadi gak sejajar.
 
-Kalau `responsive` dimatikan (bawaan) dan kolomnya kebanyakan buat muat
-di satu layar, `ApiTable` sendiri yang nyediain scroll horizontal di
-dalam — gak perlu bungkus `overflow-auto` manual dari luar. Baris
+`ApiTable` sendiri yang nyediain scroll horizontal di dalam kalau
+kolomnya kebanyakan buat muat di satu layar — gak perlu bungkus
+`overflow-auto` manual dari luar, dan ini berlaku baik `responsive`
+dinyalakan atau enggak (di atas breakpoint `md`, mode kartu balik jadi
+tabel biasa dan tetap butuh scroll ini kalau kolomnya lebar). Baris
 paginasi ditaruh di luar area yang di-scroll itu, jadi tetap kelihatan
 utuh (gak ikut ke-drag pas tabelnya di-scroll ke samping).
 

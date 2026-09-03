@@ -83,7 +83,7 @@ export const ApiTable = <
               : 'border border-gray-300')
         )}
       >
-        <div className={responsive ? undefined : 'overflow-x-auto'}>
+        <div className="overflow-x-auto">
           <Table
             className="w-full table-auto rounded-none! border-0!"
             bordered={bordered}
