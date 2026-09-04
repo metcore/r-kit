@@ -16,6 +16,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Border outer ApiTable harus scoped md:](memory/api-table-outer-border-must-stay-md-scoped.md) — border/rounded card di wrapper luar ApiTable cuma boleh nyala di `md:` ke atas kalau `responsive` true, kalau enggak border itu numpuk sama border per-row-card di mobile
 - [Scan skill sebelum lapor selesai](memory/scan-skills-before-finishing.md) — sebelum bilang kerjaan kelar, cek satu-satu semua skill yang ada relevan gak, jangan cuma andelin ingatan — user gak mau denger alasan lagi soal skill yang kelewat
 - [ApiTable scroll wrapper harus unconditional](memory/api-table-scroll-must-be-unconditional.md) — `overflow-x-auto` pembungkus Table gak boleh digantung ke prop `responsive`, karena mode itu cuma ganti layout di bawah `md`, tetap bisa overflow horizontal di `md` ke atas
+- [Select menu harus portal di dalam Sheet/Modal](memory/select-menu-portal-inside-dialog.md) — portal ke `document.body` bikin search input di Select gak bisa fokus kalau Select-nya di dalam Sheet/Modal, karena FocusScope Radix nolak fokus yang ke luar subtree dialog
 
 ## Cara nambah entri baru
 
