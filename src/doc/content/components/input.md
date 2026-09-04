@@ -65,6 +65,7 @@ DOM biasa — bukan nilai langsung.
 | `disabled` | `boolean` | `false` | Menonaktifkan isian |
 | `inputSize` | `number` | — | Lebar isian dalam karakter |
 | `className` | `string` | — | Kelas tambahan |
+| `clearAble` | `boolean` | `false` | Tombol hapus isi, cuma tampil kalau isiannya gak kosong |
 
 Seluruh prop `<input>` lain — `type`, `value`, `onChange`, `placeholder`,
 `maxLength`, dan sebagainya — diteruskan apa adanya.

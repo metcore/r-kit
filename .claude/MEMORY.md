@@ -17,6 +17,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Scan skill sebelum lapor selesai](memory/scan-skills-before-finishing.md) — sebelum bilang kerjaan kelar, cek satu-satu semua skill yang ada relevan gak, jangan cuma andelin ingatan — user gak mau denger alasan lagi soal skill yang kelewat
 - [ApiTable scroll wrapper harus unconditional](memory/api-table-scroll-must-be-unconditional.md) — `overflow-x-auto` pembungkus Table gak boleh digantung ke prop `responsive`, karena mode itu cuma ganti layout di bawah `md`, tetap bisa overflow horizontal di `md` ke atas
 - [Select menu harus portal di dalam Sheet/Modal](memory/select-menu-portal-inside-dialog.md) — portal ke `document.body` bikin search input di Select gak bisa fokus kalau Select-nya di dalam Sheet/Modal, karena FocusScope Radix nolak fokus yang ke luar subtree dialog
+- [Input clearAble harus ngecek hasValue](memory/input-clearable-must-track-hasvalue.md) — tombol clear di Input dulu selalu tampil biarpun isiannya kosong, gak kayak Textarea yang udah bener; sekarang Input niru pola hasValue Textarea
 
 ## Cara nambah entri baru
 

@@ -437,9 +437,37 @@ const codeQuickCommand = dedent(`
   }
 `);
 
+const codeClearableShortcut = dedent(`
+  import { useState } from 'react';
+  import { InputGroup, InputGroupText } from '@herca/r-kit/input-group/input-group';
+  import { InputGroupKbd } from '@herca/r-kit/input-group/input-group-kbd';
+  import { Input } from '@herca/r-kit/input';
+  import { Icon } from '@herca/r-kit/icons';
+
+  export default function ClearableShortcutExample() {
+    const [search, setSearch] = useState('');
+
+    return (
+      <InputGroup label="Cari">
+        <InputGroupText>
+          <Icon name="search" size={18} />
+        </InputGroupText>
+        <Input
+          placeholder="Cari sesuatu..."
+          clearAble
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <InputGroupKbd>Esc</InputGroupKbd>
+      </InputGroup>
+    );
+  }
+`);
+
 export default function InputGroupPage() {
   const [modal, setModal] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [clearableSearch, setClearableSearch] = useState<string>('');
   const countries: Countries[] = [
     { name: 'Afghanistan', flag: afghanistan, phone: '+93' },
     { name: 'Albania', flag: albania, phone: '+355' },
@@ -748,6 +776,29 @@ export default function InputGroupPage() {
               <InputGroupKbd> Ctrl </InputGroupKbd>
 
               <InputGroupKbd> K </InputGroupKbd>
+            </InputGroup>
+          </MainSection>
+
+          <MainSection
+            code={codeClearableShortcut}
+            title="Clearable + Shortcut"
+            className="flex-1"
+          >
+            <InputGroup label="Cari">
+              <InputGroupText>
+                <Icon name="search" size={18} />
+              </InputGroupText>
+
+              <InputGroupControl>
+                <Input
+                  placeholder="Cari sesuatu..."
+                  clearAble
+                  value={clearableSearch}
+                  onChange={(e) => setClearableSearch(e.target.value)}
+                />
+              </InputGroupControl>
+
+              <InputGroupKbd> Esc </InputGroupKbd>
             </InputGroup>
           </MainSection>
         </GridWrapper>
