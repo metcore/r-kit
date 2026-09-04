@@ -124,6 +124,21 @@ mendekati ujung:
 | `isLoadingMore` | `boolean` | `false` | Menandai sedang memuat tambahan |
 | `treshold` | `number` | — | Jarak piksel pemicu `onLoadMore` |
 | `getOptionByValue` | `(value) => SelectOption` | — | Mencari opsi dari nilai mentah |
+| `portalContainer` | `HTMLElement \| null` | — | Elemen tempat menu dropdown di-portal, lihat Portal Menu |
+
+## Portal Menu
+
+Menu dropdown di-portal, bukan dirender di tempat — biar gak kepotong
+`overflow` container di sekitarnya. Secara default `Select` mencari
+ancestor terdekat `[data-slot="sheet-content"]`/`[role="dialog"]`
+(`Sheet`, `Modal`) dan portal ke situ; kalau gak ketemu, portal ke
+`document.body` seperti biasa.
+
+Ini penting kalau `Select` dipakai di dalam `Sheet`/`Modal`: keduanya
+mengunci fokus ke dalam kontennya sendiri, jadi menu yang ke-portal ke
+`document.body` gak akan pernah bisa dapet fokus (input pencarian gak
+bisa diketik). Set `portalContainer` manual cuma perlu kalau punya
+wrapper modal/dialog sendiri di luar `Sheet`/`Modal` bawaan kit ini.
 
 ## Catatan
 

@@ -99,6 +99,13 @@ type BaseSelectProps<Extra extends object = object> = {
   onCreate?: (value: SelectOnCreateValue) => void;
   loadingOnCreate?: boolean;
   size?: SelectSize;
+
+  /**
+   * Elemen tempat menu dropdown di-portal. Default: ancestor terdekat
+   * `[data-slot="sheet-content"]`/`[role="dialog"]` (Sheet/Modal), atau
+   * `document.body` kalau gak ada — biar gak lolos dari focus trap dialog.
+   */
+  portalContainer?: HTMLElement | null;
 };
 
 type SelectPropsWithCustomRender<Extra extends object = EmptyObject> = {

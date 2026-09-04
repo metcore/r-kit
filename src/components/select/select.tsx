@@ -119,6 +119,7 @@ export function Select<Extra extends object = object>({
   filterOption = true,
   isLoading = false,
   getOptionByValue,
+  portalContainer,
 }: SelectProps<Extra> & {
   filterOption?: SelectFilterOption<Extra>;
   isLoading?: boolean;
@@ -788,7 +789,14 @@ export function Select<Extra extends object = object>({
 
       {isOpen &&
         typeof document !== 'undefined' &&
-        createPortal(menu, document.body)}
+        createPortal(
+          menu,
+          portalContainer ??
+            containerRef.current?.closest<HTMLElement>(
+              '[data-slot="sheet-content"], [role="dialog"]'
+            ) ??
+            document.body
+        )}
     </div>
   );
 
