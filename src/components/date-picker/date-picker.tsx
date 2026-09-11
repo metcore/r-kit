@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { cn } from '../../lib/utils';
+import { cn, fieldHasError } from '../../lib/utils';
 import { Calendar, type DateRangeProps } from '../calendar';
 import { Dropdown, DropdownContent, DropdownTrigger } from '../dropdown';
 import { Icon } from '../icons';
@@ -98,6 +98,8 @@ const DatePicker = ({
 
   const usesMonthName = format.includes('MMM');
   const formatConfig = getFormatConfig(format);
+
+  const hasError = fieldHasError(errorMessages);
 
   const formatRangeToString = (range: DateRangeProps): string => {
     if (!range.start && !range.end) return '';
@@ -378,6 +380,7 @@ const DatePicker = ({
             {Boolean(trigger) === false ? (
               <Input
                 mergedAddon
+                isError={hasError}
                 type="text"
                 autoWidth={autoWidth}
                 className={`pl-0`}

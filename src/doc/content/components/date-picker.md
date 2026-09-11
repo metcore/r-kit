@@ -48,6 +48,20 @@ const [rentang, setRentang] = useState<DateRange>({ start: null, end: null });
 <DatePicker format="dd/MM/yyyy" />
 ```
 
+## Keadaan Salah
+
+`errorMessages` memerahkan garis tepi isian sekaligus mencetak pesannya di
+bawah, sama seperti `Input`:
+
+```tsx
+<DatePicker
+  label="Tanggal mulai"
+  value={tanggal}
+  onChange={setTanggal}
+  errorMessages="Tanggal mulai wajib diisi"
+/>
+```
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -67,7 +81,7 @@ const [rentang, setRentang] = useState<DateRange>({ start: null, end: null });
 | `size` | `sm \| md \| lg` | `md` | Ukuran isian |
 | `placeholder` | `string` | — | Teks saat belum ada pilihan |
 | `label`, `hint`, `description` | `string` | — | Prop form baku |
-| `errorMessages` | `string \| string[]` | — | Mengaktifkan keadaan salah |
+| `errorMessages` | `string \| string[]` | — | Memerahkan garis tepi isian dan mencetak pesannya |
 | `calendarProps` | `CalendarOverrideProps` | — | Meneruskan prop ke kalender di dalamnya |
 | `autoWidth` | `boolean` | — | Lebar mengikuti isi |
 | `showController` | `boolean` | — | Menampilkan tombol navigasi bulan |

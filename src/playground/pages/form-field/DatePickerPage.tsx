@@ -29,9 +29,19 @@ export default function DatePickerPage() {
     end: new Date(),
   });
   const [open, setOpen] = useState(false);
+  const [errorValue, setErrorValue] = useState<Date | null>(null);
 
   const minDate = new Date();
   const maxDate = addDays(new Date(), 7);
+
+  const errorExample = dedent(`
+      <DatePicker
+        label="Tanggal mulai"
+        errorMessages="Tanggal mulai wajib diisi"
+        value={errorValue}
+        onChange={setErrorValue}
+      />
+    `);
 
   const defaultExample = dedent(`
       <DatePicker
@@ -214,6 +224,17 @@ export default function DatePickerPage() {
                 format="MM/DD/YYYY"
               />
             </div>
+          </MainSection>
+        </GridWrapper>
+
+        <GridWrapper>
+          <MainSection title="Error State" code={errorExample}>
+            <DatePicker
+              label="Tanggal mulai"
+              errorMessages="Tanggal mulai wajib diisi"
+              value={errorValue}
+              onChange={setErrorValue}
+            />
           </MainSection>
         </GridWrapper>
 
