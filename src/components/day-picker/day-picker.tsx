@@ -7,18 +7,11 @@ import {
   PickerHeader,
   buildDisplayValue,
   usePickerState,
-  type PickerMode,
   type PickerValue,
+  type PickerModeValueProps,
 } from '../base/components/picker-base';
 
-type DayPickerMode = PickerMode;
-type DayPickerValue = PickerValue;
-
-interface DayPickerProps {
-  mode?: DayPickerMode;
-  defaultValue?: DayPickerValue;
-  onChange?: (value: DayPickerValue) => void;
-  onApply?: (value: DayPickerValue) => void;
+type DayPickerProps = PickerModeValueProps & {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
@@ -32,7 +25,7 @@ interface DayPickerProps {
   cancelLabel?: string;
   confirmLabel?: string;
   title?: string;
-}
+};
 
 const DAY_OPTIONS = dayOptions();
 
@@ -43,6 +36,7 @@ const DAY_LABEL: Record<number, string> = Object.fromEntries(
 export const DayPicker: React.FC<DayPickerProps> = ({
   mode = 'single',
   defaultValue,
+  value,
   onChange,
   onApply,
   placeholder,
@@ -55,7 +49,7 @@ export const DayPicker: React.FC<DayPickerProps> = ({
   tooltip,
   cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
-  title,
+  title = 'Day',
 }) => {
   const {
     open,
@@ -68,7 +62,14 @@ export const DayPicker: React.FC<DayPickerProps> = ({
     isSelected,
     handleApply,
     handleCancel,
-  } = usePickerState({ mode, defaultValue, onChange, onApply, disabled });
+  } = usePickerState({
+    mode,
+    value,
+    defaultValue,
+    onChange: onChange as ((value: PickerValue) => void) | undefined,
+    onApply: onApply as ((value: PickerValue) => void) | undefined,
+    disabled,
+  });
 
   const displayValue = buildDisplayValue(
     mode,
@@ -92,7 +93,7 @@ export const DayPicker: React.FC<DayPickerProps> = ({
       hint={hint}
       errorMessages={errorMessages}
       tooltip={tooltip}
-      renderHeader={title == null ? <PickerHeader title="Day" /> : undefined}
+      renderHeader={title == null ? <PickerHeader title={title} /> : undefined}
       renderOptions={
         <div className="grid grid-cols-2 gap-2">
           {DAY_OPTIONS.map(({ value: dayVal, label: dayLabel }) => (

@@ -4,7 +4,7 @@ import GridWrapper from '../../components/GridWrapper';
 import Footer from '../../components/Footer';
 import HeroSection from '../../components/HeroSection';
 import dedent from 'dedent';
-import ColorInput from '../../../components/collor-picker/color-picker';
+import { ColorInput } from '../../../components/collor-picker/color-picker';
 
 export default function ColorPickerPage() {
   const exampleBasic = dedent(`
@@ -22,6 +22,21 @@ export default function ColorPickerPage() {
         <ColorInput
           label="Input Color"
           placeholder="Choose color"
+        />
+      );
+    }
+  `);
+  const exampleInitialValue = dedent(`
+    import { ColorInput } from '@herca/r-kit/clients';
+
+    export default function Example() {
+      const brandColorFromDb = '#F04438';
+
+      return (
+        <ColorInput
+          label="Brand color"
+          placeholder="#2563EB"
+          value={brandColorFromDb}
         />
       );
     }
@@ -109,8 +124,8 @@ export default function ColorPickerPage() {
       <HeroSection
         illust={illust}
         title="Form"
-        subtitle="Checkbox"
-        description="Memungkinkan user memilih satu, beberapa, atau tidak memilih opsi sama sekali dari daftar pilihan."
+        subtitle="Color Picker"
+        description="Memungkinkan user memilih warna melalui panel pemilih maupun dengan memasukkan nilai heksadesimal secara langsung."
       />
 
       <div className="flex flex-1 flex-col gap-4">
@@ -118,24 +133,28 @@ export default function ColorPickerPage() {
           <MainSection title="Color picker default" code={exampleBasic}>
             <ColorInput />
           </MainSection>
-          <MainSection title="Color picker with label">
+          <MainSection
+            title="Color picker initial value"
+            code={exampleInitialValue}
+          >
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
-              label="Input Color"
+              placeholder="#2563EB"
+              label="Brand color"
+              value="#F04438"
             />
           </MainSection>
           <MainSection title="Color picker with label" code={exampleLabel}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               label="Input Color"
             />
           </MainSection>
           <MainSection title="Color picker required" code={exampleRequired}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               required
               hint="Message for hint"
               label="Input Color"
@@ -144,7 +163,7 @@ export default function ColorPickerPage() {
           <MainSection title="Color picker disabled" code={exampleDisabled}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               required
               disabled
               hint="Message for hint"
@@ -154,7 +173,7 @@ export default function ColorPickerPage() {
           <MainSection title="Color picker invalid" code={exampleInvalid}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               required
               errorMessages="This field is required."
               hint="Message for hint"
@@ -164,7 +183,7 @@ export default function ColorPickerPage() {
           <MainSection title="Color picker with tooltip" code={exampleTooltip}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               hint="Message for hint"
               label="Input Color"
               tooltip="Please change a color"
@@ -174,7 +193,7 @@ export default function ColorPickerPage() {
           <MainSection title="Color picker size" code={exampleSizes}>
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               hint="Message for hint"
               label="Input Color"
               tooltip="Please change a color"
@@ -183,7 +202,7 @@ export default function ColorPickerPage() {
             />
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               hint="Message for hint"
               label="Input Color"
               tooltip="Please change a color"
@@ -192,7 +211,7 @@ export default function ColorPickerPage() {
             />
             <ColorInput
               onChange={(e) => console.log(e)}
-              placeholder="Tes"
+              placeholder="#2563EB"
               hint="Message for hint"
               label="Input Color"
               tooltip="Please change a color"
@@ -203,9 +222,11 @@ export default function ColorPickerPage() {
         </GridWrapper>
 
         <Footer
-          title="Checkbox"
-          nextTo="/input-field"
-          nextToTitle="Input Field"
+          title="Color Picker"
+          backTo="/playground/input-otp"
+          backToTitle="Input OTP"
+          nextTo="/playground/input-password"
+          nextToTitle="Input Password"
         />
       </div>
     </>

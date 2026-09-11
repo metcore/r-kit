@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import PlaygroundSidebar from '../components/PlaygroundSidebar';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '../../clients';
 import {
@@ -7,16 +8,30 @@ import {
   HeaderRight,
   HeaderTitle,
   HeaderDivider,
-  HeaderSearch,
-  HeaderAction,
 } from '../../components/header/header';
-import { Icon } from '../../components/icons';
+import CommandPalette, {
+  CommandPaletteTrigger,
+  useCommandPalette,
+} from '../../landing/components/CommandPalette';
+import HeaderNotifications from '../components/HeaderNotifications';
+import HeaderProfile from '../components/HeaderProfile';
+import SectionNav from '../../shared/SectionNav';
 
 export default function PlaygroundLayout() {
+  const { open: isSearchOpen, setOpen: setSearchOpen } = useCommandPalette();
+  const { pathname } = useLocation();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Yang men-scroll adalah div di bawah, bukan window, jadi React Router
+  // tidak bisa mengembalikan posisinya sendiri saat pindah halaman.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [pathname]);
+
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh min-h-0">
       <PlaygroundSidebar />
-      <SidebarInset>
+      <SidebarInset className="h-svh min-h-0 overflow-hidden">
         <Header>
           <HeaderLeft>
             <SidebarTrigger />
@@ -24,21 +39,21 @@ export default function PlaygroundLayout() {
             <HeaderTitle subtitle="Eksplorasi komponen">Playground</HeaderTitle>
           </HeaderLeft>
           <HeaderRight>
-            <HeaderSearch placeholder="Cari komponen..." />
+            <SectionNav />
             <HeaderDivider className="hidden sm:block" />
-            <HeaderAction label="Notifikasi" badge={3}>
-              <Icon name="bell" size={18} />
-            </HeaderAction>
-            <HeaderAction label="Akun">
-              <Icon name="user" size={18} />
-            </HeaderAction>
+            <CommandPaletteTrigger onClick={() => setSearchOpen(true)} />
+            <HeaderDivider className="hidden sm:block" />
+            <HeaderNotifications />
+            <HeaderProfile />
           </HeaderRight>
         </Header>
 
-        <div className="flex-1 overflow-auto p-5">
+        <div ref={scrollRef} className="min-h-0 flex-1 overflow-auto p-5">
           <Outlet />
         </div>
       </SidebarInset>
+
+      <CommandPalette open={isSearchOpen} onOpenChange={setSearchOpen} />
     </SidebarProvider>
   );
 }

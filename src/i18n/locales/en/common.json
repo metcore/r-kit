@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "docs": "Docs",
+    "components": "Components",
+    "colors": "Colors",
+    "typography": "Typography",
+    "menu": "Menu"
+  },
+  "search": {
+    "trigger": "Search components…",
+    "placeholder": "Search components…",
+    "empty": "No results for “{{query}}”.",
+    "navigate": "navigate",
+    "open": "open",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "close": "Close search",
+    "pages": "Pages"
+  },
+  "actions": {
+    "details": "Details",
+    "copy": "Copy {{command}}",
+    "documentation": "Documentation",
+    "playground": "Playground",
+    "github": "GitHub"
+  },
+  "version": {
+    "npmTitle": "Latest version on npm"
+  },
+  "language": {
+    "label": "Language",
+    "id": "Indonesia",
+    "en": "English"
+  },
+  "footer": {
+    "tagline": "Open source on <github>GitHub</github>. Made by the team at <herca>Herca</herca>.",
+    "links": {
+      "issues": "Issues"
+    }
+  }
+}

@@ -4,7 +4,6 @@ import ButtonPage from '../playground/pages/components/ButtonPage';
 import ButtonGroupPage from '../playground/pages/components/ButtonGroupPage';
 import CardPage from '../playground/pages/CardPage';
 import ChipPage from '../playground/pages/ChipPage';
-import InputPage from '../playground/pages/InputPage';
 import ModalPage from '../playground/pages/ModalPage';
 import RadioButtonPage from '../playground/pages/RadioButtonPage';
 import SelectPage from '../playground/pages/form-field/SelectPage';
@@ -27,7 +26,7 @@ import TimelinePage from '../playground/pages/components/TimelinePage';
 import IconPage from '../playground/pages/components/IconPage';
 import { NotFoundPage } from '../playground/pages/NotFoundPage';
 import SheetPage from '../playground/pages/SheetPage';
-import BreadcrumbPage from '../playground/pages/BreadCrumPage';
+import BreadcrumbPage from '../playground/pages/BreadcrumbPage';
 import PaginationPage from '../playground/pages/PaginationPage';
 import AvatarPage from '../playground/pages/AvatarPage';
 import PlaygroundLayout from '../playground/layouts/PlaygroundLayout';
@@ -44,11 +43,11 @@ import ColorPickerPage from '../playground/pages/form-field/ColorPickerPage';
 import InputPasswordPage from '../playground/pages/form-field/InputPasswordPage';
 import InputPhoneNumberPage from '../playground/pages/form-field/InputPhoneNumberPage';
 import FileViewPage from '../playground/pages/FileViewPage';
+import DndPage from '../playground/pages/DndPage';
 import AlertPage from '../playground/pages/AlertPage';
 import TextAreaPage from '../playground/pages/form-field/TextAreaPage';
 import ListPage from '../playground/pages/data-display/ListPage';
 import AccordionPage from '../playground/pages/data-display/AccordionPage';
-import StepPage from '../playground/pages/data-display/StepPage';
 import { SliderPage } from '../playground/pages/form-field/SliderPage';
 import { DrawingPage } from '../playground/pages/form-field/DrawingPage';
 import TimePickerpage from '../playground/pages/form-field/TimePickerPage';
@@ -71,7 +70,6 @@ export default function PlaygroundRouter() {
         <Route path="/dropdown" element={<DropdownPage />} />
         <Route path="/card" element={<CardPage />} />
         <Route path="/chip" element={<ChipPage />} />
-        <Route path="/input" element={<InputPage />} />
         <Route path="/modal" element={<ModalPage />} />
         <Route path="/image" element={<ImagePage />} />
         <Route path="/radio-button" element={<RadioButtonPage />} />
@@ -103,10 +101,10 @@ export default function PlaygroundRouter() {
         <Route path="/list" element={<ListPage />} />
         <Route path="/accordion" element={<AccordionPage />} />
         <Route path="/input-otp" element={<InputOtpPage />} />
-        <Route path="/step" element={<StepPage />} />
         <Route path="/slider" element={<SliderPage />} />
         <Route path="/drawing" element={<DrawingPage />} />
         <Route path="/badge" element={<BadgePage />} />
+        <Route path="/dnd" element={<DndPage />} />
         <Route path="/file-view" element={<FileViewPage />} />
         <Route path="/alert" element={<AlertPage />} />
         <Route path="/time-picker" element={<TimePickerpage />} />

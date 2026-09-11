@@ -176,7 +176,7 @@ function HeaderAction({
       title={label}
       data-slot="header-action"
       className={cn(
-        'relative inline-flex size-9 items-center justify-center rounded-md text-gray-700 transition-colors',
+        'relative inline-flex size-9 cursor-pointer items-center justify-center rounded-md text-gray-700 transition-colors',
         'hover:bg-gray-100 active:bg-gray-200',
         'focus-visible:ring-primary-500 focus-visible:ring-2 focus-visible:outline-none',
         className
@@ -187,7 +187,7 @@ function HeaderAction({
       {hasBadge && (
         <span
           aria-hidden="true"
-          className="absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] leading-none font-semibold text-white"
+          className="bg-danger-500 absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none font-semibold text-white ring-2 ring-white"
         >
           {typeof badge === 'number' && badge > 99 ? '99+' : badge}
         </span>
@@ -195,7 +195,7 @@ function HeaderAction({
       {!hasBadge && dot == true && (
         <span
           aria-hidden="true"
-          className="absolute top-1.5 right-1.5 size-2 rounded-full bg-red-500 ring-2 ring-white"
+          className="bg-danger-500 absolute top-1.5 right-1.5 size-2 rounded-full ring-2 ring-white"
         />
       )}
     </button>

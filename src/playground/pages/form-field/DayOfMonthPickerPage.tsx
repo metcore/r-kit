@@ -1,5 +1,8 @@
 import dedent from 'dedent';
+import illust from '../../../assets/images/forms.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 import { DayOfMonthPicker } from '../../../components/day-of-month-picker/day-of-month-picker';
 
@@ -151,10 +154,18 @@ const exampleCustomLabel = dedent(`
 export default function DayOfMonthPickerPage() {
   return (
     <>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Day Of Month Picker"
+        description="Memilih tanggal ke berapa dalam sebulan, berguna untuk penagihan atau pengingat bulanan."
+      />
+
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
           <DayOfMonthPicker
             label="Day of Month"
+            value={1}
             onChange={(e) => console.log(e)}
           />
         </MainSection>
@@ -220,6 +231,7 @@ export default function DayOfMonthPickerPage() {
         <MainSection title="Default Value" code={exampleDefaultValue}>
           <DayOfMonthPicker
             label="Single"
+            mode="multiple"
             defaultValue={[15]}
             onChange={(e) => console.log(e)}
           />
@@ -246,6 +258,14 @@ export default function DayOfMonthPickerPage() {
           />
         </MainSection>
       </GridWrapper>
+
+      <Footer
+        title="Day Of Month Picker"
+        backTo="/playground/day-picker"
+        backToTitle="Day Picker"
+        nextTo="/playground/time-picker"
+        nextToTitle="Time Picker"
+      />
     </>
   );
 }

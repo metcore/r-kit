@@ -15,6 +15,7 @@ import type {
   SelectOption,
   SelectProps,
   SelectRawValue,
+  SelectValue,
 } from './type';
 import { Icon } from '../icons';
 import { cn, fieldHasError } from '../../lib/utils';
@@ -34,6 +35,13 @@ const isGroup = <Extra extends object>(
 
 const isRawValue = (v: unknown): v is SelectRawValue =>
   typeof v === 'string' || typeof v === 'number';
+
+const valuesEqual = (a: string | number, b: string | number): boolean =>
+  a === b || String(a) === String(b);
+
+const getValueKey = <Extra extends object>(
+  v: SelectOption<Extra> | SelectRawValue
+): string | number => (isRawValue(v) ? v : v.value);
 
 const getSearchText = <Extra extends object>(
   option: SelectOption<Extra>
@@ -70,7 +78,8 @@ const fontSizeMap = {
 
 export function Select<Extra extends object = object>({
   options = [],
-  value = null,
+  value: valueProp,
+  defaultValue = null,
   onChange,
   isMulti = false,
   multiple = false,
@@ -110,9 +119,11 @@ export function Select<Extra extends object = object>({
   filterOption = true,
   isLoading = false,
   getOptionByValue,
+  portalContainer,
 }: SelectProps<Extra> & {
   filterOption?: SelectFilterOption<Extra>;
   isLoading?: boolean;
+  defaultValue?: SelectValue<Extra>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -132,6 +143,19 @@ export function Select<Extra extends object = object>({
 
   const isMultiMode: boolean = isMulti || multiple;
   const isDisabledMode: boolean = isDisabled || disabled;
+  const isControlled = valueProp !== undefined && valueProp !== null;
+  const [internalValue, setInternalValue] =
+    useState<SelectValue<Extra>>(defaultValue);
+  const value = isControlled ? valueProp : internalValue;
+
+  const commit = useCallback(
+    (next: SelectOption<Extra> | SelectOption<Extra>[] | null) => {
+      if (!isControlled) setInternalValue(next);
+      onChange?.(next);
+    },
+    [isControlled, onChange]
+  );
+
   const isSearchControlled =
     searchOptions !== undefined || searchValue !== undefined;
 
@@ -220,12 +244,15 @@ export function Select<Extra extends object = object>({
 
   const toOption = useCallback(
     (v: SelectOption<Extra> | SelectRawValue): SelectOption<Extra> => {
+      const key = getValueKey(v);
+
+      const match =
+        getOptionByValue?.(key) ??
+        flatOptions.find((o) => valuesEqual(o.value, key));
+      if (match) return match;
+
       if (!isRawValue(v)) return v;
-      return (
-        getOptionByValue?.(v) ??
-        flatOptions.find((o) => o.value === v) ??
-        ({ value: v, label: String(v) } as SelectOption<Extra>)
-      );
+      return { value: v, label: String(v) } as SelectOption<Extra>;
     },
     [flatOptions, getOptionByValue]
   );
@@ -242,7 +269,7 @@ export function Select<Extra extends object = object>({
       | SelectOption<Extra>
       | SelectRawValue
     )[];
-    return arr.map(toOption);
+    return arr.filter((v) => v != null).map(toOption);
   }, [value, toOption]);
 
   const handleScroll = useCallback(() => {
@@ -289,37 +316,37 @@ export function Select<Extra extends object = object>({
         const newValue = exists
           ? selectedOptions.filter((v) => v.value !== option.value)
           : [...selectedOptions, option];
-        onChange?.(newValue);
+        commit(newValue);
         const idx = filteredOptions.findIndex((o) => o.value === option.value);
         setHighlightedIndex(idx);
         containerRef.current?.focus();
         return;
       }
-      onChange?.(option);
+      commit(option);
       setIsOpen(false);
       setSearchTerm('');
     },
-    [isMultiMode, selectedOptions, onChange, filteredOptions]
+    [isMultiMode, selectedOptions, commit, filteredOptions]
   );
 
   const handleRemove = useCallback(
     (option: SelectOption<Extra>, e: RMouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (isMultiMode) {
-        onChange?.(selectedOptions.filter((v) => v.value !== option.value));
+        commit(selectedOptions.filter((v) => v.value !== option.value));
       } else {
-        onChange?.(null);
+        commit(null);
       }
     },
-    [isMultiMode, selectedOptions, onChange]
+    [isMultiMode, selectedOptions, commit]
   );
 
   const handleClear = useCallback(
     (e: RMouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      onChange?.(isMultiMode ? [] : null);
+      commit(isMultiMode ? [] : null);
     },
-    [isMultiMode, onChange]
+    [isMultiMode, commit]
   );
 
   const handleKeyDown = useCallback(
@@ -498,7 +525,10 @@ export function Select<Extra extends object = object>({
         <Text
           variant={getFontSize(size, multiple)}
           weight="semibold"
-          className={cn('text-gray-800', isDisabledMode && 'text-gray-600')}
+          className={cn(
+            'truncate text-gray-800',
+            isDisabledMode && 'text-gray-600'
+          )}
         >
           {selected.label}
         </Text>
@@ -759,7 +789,14 @@ export function Select<Extra extends object = object>({
 
       {isOpen &&
         typeof document !== 'undefined' &&
-        createPortal(menu, document.body)}
+        createPortal(
+          menu,
+          portalContainer ??
+            containerRef.current?.closest<HTMLElement>(
+              '[data-slot="sheet-content"], [role="dialog"]'
+            ) ??
+            document.body
+        )}
     </div>
   );
 

@@ -140,6 +140,8 @@ export interface CalendarEvent {
     | (string & {});
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
+  startDateTime?: Date; // precise start time, positions the event in week view's hourly grid
+  endDateTime?: Date; // precise end time, positions the event in week view's hourly grid
   tooltip?: {
     title?: string;
     subtitle?: string;
@@ -159,3 +161,26 @@ export interface CalendarEvent {
 }
 
 export type CalendarTypes = 'week' | 'month' | 'year' | 'day' | 'agenda';
+
+export interface TimeGridProps {
+  days: CalendarDay[];
+  daysOfWeek: string[];
+  events?: CalendarEvent[];
+  showCalendarTooltip?: boolean;
+  backdropOnClick?: (day?: CalendarDay) => void;
+  onEventClick?: (event?: CalendarEvent) => void;
+  useLimitEvent?: boolean;
+  wrapperClassName?: string;
+}
+
+export interface YearGridProps {
+  currentYear: number;
+  months: string[];
+  daysOfWeek: string[];
+  helpers: ReturnType<typeof createCalendarHelpers>;
+  size: CalendarProps['size'];
+  mode: CalendarProps['mode'];
+  styleConfig?: CalendarStyleConfig;
+  onClick: (day: CalendarDay) => void;
+  disabledDateClassName?: string;
+}

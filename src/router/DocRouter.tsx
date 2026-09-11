@@ -1,12 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
-import DocsLayout from '../doc/layouts/DocLayout';
-import HomePage from '../doc/pages/HomePage';
+import DocLayout from '../doc/layouts/DocLayout';
+import DocPage from '../doc/pages/DocPage';
+import NotFoundPage from '../doc/pages/NotFoundPage';
 
 export default function DocRouter() {
   return (
     <Routes>
-      <Route element={<DocsLayout />}>
-        <Route index element={<HomePage />} />
+      <Route element={<DocLayout />}>
+        <Route index element={<DocPage />} />
+        <Route path=":slug" element={<DocPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

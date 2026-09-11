@@ -12,34 +12,56 @@ import { Text } from '../../text';
 
 export type PickerMode = 'single' | 'range' | 'multiple';
 export type RangeValue = { startDate: number | null; endDate: number | null };
-export type PickerValue = number[] | RangeValue;
-
+export type PickerValue = number | null | number[] | RangeValue;
 interface UsePickerStateOptions {
   mode?: PickerMode;
   defaultValue?: PickerValue;
+  value?: PickerValue;
   onChange?: (value: PickerValue) => void;
   onApply?: (value: PickerValue) => void;
   disabled?: boolean;
   isValueDisabled?: (value: number) => boolean;
 }
+export type PickerModeValueProps =
+  | {
+      mode?: 'single';
+      value?: number | null;
+      defaultValue?: number | null;
+      onChange?: (value: number | null) => void;
+      onApply?: (value: number | null) => void;
+    }
+  | {
+      mode: 'multiple';
+      value?: number[];
+      defaultValue?: number[];
+      onChange?: (value: number[]) => void;
+      onApply?: (value: number[]) => void;
+    }
+  | {
+      mode: 'range';
+      value?: RangeValue;
+      defaultValue?: RangeValue;
+      onChange?: (value: RangeValue) => void;
+      onApply?: (value: RangeValue) => void;
+    };
 
-export function parseDefault(
-  defaultValue: PickerValue | undefined,
-  mode: PickerMode
-) {
+export function parseDefault(value: PickerValue | undefined, mode: PickerMode) {
   const empty = {
     single: null as number | null,
     range: { startDate: null, endDate: null } as RangeValue,
     multiple: [] as number[],
   };
-  if (!defaultValue) return empty;
-  if (Array.isArray(defaultValue)) {
-    if (mode === 'single') return { ...empty, single: defaultValue[0] ?? null };
-    if (mode === 'multiple') return { ...empty, multiple: defaultValue };
-  } else if (mode === 'range') {
-    return { ...empty, range: defaultValue };
+  if (value === undefined || value === null) return empty;
+
+  if (mode === 'single') {
+    return typeof value === 'number' ? { ...empty, single: value } : empty;
   }
-  return empty;
+  if (mode === 'multiple') {
+    return Array.isArray(value) ? { ...empty, multiple: value } : empty;
+  }
+  return typeof value === 'object' && !Array.isArray(value)
+    ? { ...empty, range: value }
+    : empty;
 }
 
 export function buildDisplayValue(
@@ -66,8 +88,19 @@ export function buildDisplayValue(
     .join(', ');
 }
 
+interface UsePickerStateOptions {
+  mode?: PickerMode;
+  value?: PickerValue;
+  defaultValue?: PickerValue;
+  onChange?: (value: PickerValue) => void;
+  onApply?: (value: PickerValue) => void;
+  disabled?: boolean;
+  isValueDisabled?: (value: number) => boolean;
+}
+
 export function usePickerState({
   mode = 'single',
+  value,
   defaultValue,
   onChange,
   onApply,
@@ -75,6 +108,8 @@ export function usePickerState({
   isValueDisabled,
 }: UsePickerStateOptions) {
   const [open, setOpen] = useState(false);
+
+  const isControlled = value !== undefined;
 
   const init = useMemo(
     () => parseDefault(defaultValue, mode),
@@ -93,17 +128,28 @@ export function usePickerState({
   const [draftRange, setDraftRange] = useState<RangeValue>(init.range);
   const [draftMultiple, setDraftMultiple] = useState<number[]>(init.multiple);
 
+  const controlled = useMemo(
+    () => (isControlled ? parseDefault(value, mode) : null),
+    [isControlled, value, mode]
+  );
+
+  const effectiveSingle = controlled ? controlled.single : committedSingle;
+  const effectiveRange = controlled ? controlled.range : committedRange;
+  const effectiveMultiple = controlled
+    ? controlled.multiple
+    : committedMultiple;
+
   const handleOpen = () => {
     if (disabled) return;
-    setDraftSingle(committedSingle);
-    setDraftRange({ ...committedRange });
-    setDraftMultiple([...committedMultiple]);
+    setDraftSingle(effectiveSingle);
+    setDraftRange({ ...effectiveRange });
+    setDraftMultiple([...effectiveMultiple]);
     setOpen(true);
   };
 
   const handleSelect = useCallback(
     (value: number) => {
-      if (isValueDisabled && isValueDisabled?.(value)) return;
+      if (isValueDisabled && isValueDisabled(value)) return; // ganti dari `isValueDisabled?.()` yang redundan
       if (mode === 'single') {
         setDraftSingle(value);
       } else if (mode === 'range') {
@@ -142,19 +188,19 @@ export function usePickerState({
   );
 
   const handleApply = () => {
-    let value: PickerValue;
+    let next: PickerValue;
     if (mode === 'single') {
-      value = draftSingle !== null ? [draftSingle] : [];
-      setCommittedSingle(draftSingle);
+      next = draftSingle;
+      if (!isControlled) setCommittedSingle(draftSingle);
     } else if (mode === 'range') {
-      value = { ...draftRange };
-      setCommittedRange({ ...draftRange });
+      next = { ...draftRange };
+      if (!isControlled) setCommittedRange({ ...draftRange });
     } else {
-      value = [...draftMultiple];
-      setCommittedMultiple([...draftMultiple]);
+      next = [...draftMultiple];
+      if (!isControlled) setCommittedMultiple([...draftMultiple]);
     }
-    onChange?.(value);
-    onApply?.(value);
+    onChange?.(next);
+    onApply?.(next);
     setOpen(false);
   };
 
@@ -169,9 +215,9 @@ export function usePickerState({
     setDraftRange,
     draftMultiple,
     setDraftMultiple,
-    committedSingle,
-    committedRange,
-    committedMultiple,
+    committedSingle: effectiveSingle,
+    committedRange: effectiveRange,
+    committedMultiple: effectiveMultiple,
     handleOpen,
     handleSelect,
     isSelected,

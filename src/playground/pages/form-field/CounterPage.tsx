@@ -18,7 +18,7 @@ export default function CounterPage() {
       <Counter
         value={String(defaultValue)}
         onChange={(val) => setDefaultValue(Number(val))}
-        canMinus
+        allowMinus
       />
       <Counter
         value={String(defaultValue)}
@@ -33,7 +33,7 @@ export default function CounterPage() {
       <Counter
         value={String(decimalValue)}
         onChange={(val) => setDecimalValue(Number(val))}
-        canMinus
+        allowMinus
       />
       <Counter
         value={String(decimalValue)}
@@ -51,7 +51,7 @@ export default function CounterPage() {
         iconLeft={
           <Icon name="trash-regular" className="size-5 text-gray-700" />
         }
-        canMinus
+        allowMinus
       />
       <Counter
         value={String(defaultValue)}
@@ -70,7 +70,7 @@ export default function CounterPage() {
           className="w-full justify-between"
           value={String(defaultValue)}
           onChange={(val) => setDefaultValue(Number(val))}
-          canMinus
+          allowMinus
         />
         <Counter
           className="w-full justify-between"
@@ -86,7 +86,7 @@ export default function CounterPage() {
       <Counter
         value={String(defaultValue)}
         onChange={(val) => setDefaultValue(Number(val))}
-        canMinus
+        allowMinus
         disabled
       />
       <Counter
@@ -106,7 +106,7 @@ export default function CounterPage() {
               size="sm"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Small" className="text-gray-700!" />
           </div>
@@ -115,7 +115,7 @@ export default function CounterPage() {
               size="md"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Medium" className="text-gray-700!" />
           </div>
@@ -124,7 +124,7 @@ export default function CounterPage() {
               size="lg"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Large" className="text-gray-700!" />
           </div>
@@ -136,7 +136,7 @@ export default function CounterPage() {
               variant="secondary"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Small" className="text-gray-700!" />
           </div>
@@ -146,7 +146,7 @@ export default function CounterPage() {
               variant="secondary"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Medium" className="text-gray-700!" />
           </div>
@@ -156,7 +156,7 @@ export default function CounterPage() {
               variant="secondary"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Text value="Large" className="text-gray-700!" />
           </div>
@@ -193,7 +193,7 @@ export default function CounterPage() {
             <Counter
               value={String(decimalValue)}
               onChange={(val) => setDecimalValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Counter
               value={String(decimalValue)}
@@ -211,7 +211,7 @@ export default function CounterPage() {
               iconLeft={
                 <Icon name="trash-regular" className="size-5 text-gray-700" />
               }
-              canMinus
+              allowMinus
             />
             <Counter
               value={String(defaultValue)}
@@ -230,7 +230,7 @@ export default function CounterPage() {
               className="w-full justify-between"
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Counter
               className="w-full justify-between"
@@ -247,7 +247,7 @@ export default function CounterPage() {
               disabled
               value={String(defaultValue)}
               onChange={(val) => setDefaultValue(Number(val))}
-              canMinus
+              allowMinus
             />
             <Counter
               disabled
@@ -269,7 +269,7 @@ export default function CounterPage() {
                 size="sm"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Small" className="text-gray-700!" />
@@ -279,7 +279,7 @@ export default function CounterPage() {
                 size="md"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Medium" className="text-gray-700!" />
@@ -289,7 +289,7 @@ export default function CounterPage() {
                 size="lg"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Large" className="text-gray-700!" />
@@ -303,7 +303,7 @@ export default function CounterPage() {
                 variant="secondary"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Small" className="text-gray-700!" />
@@ -314,7 +314,7 @@ export default function CounterPage() {
                 variant="secondary"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Medium" className="text-gray-700!" />
@@ -325,7 +325,7 @@ export default function CounterPage() {
                 variant="secondary"
                 value={String(defaultValue)}
                 onChange={(val) => setDefaultValue(Number(val))}
-                canMinus
+                allowMinus
               />
 
               <Text value="Large" className="text-gray-700!" />
@@ -336,9 +336,9 @@ export default function CounterPage() {
 
       <Footer
         title="Counter"
-        backTo="/input-group"
+        backTo="/playground/input-group"
         backToTitle="Input Group"
-        nextTo="/input-file"
+        nextTo="/playground/input-file"
         nextToTitle="Input File"
       />
     </>

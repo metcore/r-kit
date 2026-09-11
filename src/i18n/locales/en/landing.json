@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "badge": "{{version}} · {{count}} components",
+    "badgeFallback": "Latest · {{count}} components",
+    "title": "React components, ready to ship",
+    "subtitle": "An open source component library built with Tailwind v4, Radix UI, and TypeScript. Free to use in any project.",
+    "specimenLabel": "Preview + code"
+  },
+  "preview": {
+    "title": "Rendered from the package",
+    "description": "Every example below uses the same components you would import."
+  },
+  "tech": {
+    "title": "Built with"
+  },
+  "catalog": {
+    "title": "{{count}} components",
+    "description": "Press ⌘K anywhere to jump straight to a component.",
+    "foundation": "Foundation",
+    "form": "Form",
+    "components": "Components",
+    "navigation": "Navigation",
+    "feedback": "Feedback",
+    "dataDisplay": "Data Display",
+    "examples": "Examples"
+  },
+  "install": {
+    "title": "Installation",
+    "description": "Install the package, import the stylesheet once in your entry point, then use the components.",
+    "credit": "Built and maintained by the product team at <herca>Herca</herca>.",
+    "stepInstall": "01 · Install",
+    "stepImport": "02 · Import"
+  },
+  "spec": {
+    "title": "Technical summary",
+    "description": "Every row below can be verified against package.json and tsup.config.ts — no invented numbers.",
+    "caption": "Technical specification for @herca/r-kit",
+    "components": {
+      "label": "Components",
+      "note": "across {{categories}} categories"
+    },
+    "peer": {
+      "label": "Peer dependency",
+      "note": "react & react-dom ^19.1.1"
+    },
+    "styling": {
+      "label": "Styling",
+      "note": "peer dependency ^4.0.0"
+    },
+    "language": {
+      "label": "Written in",
+      "note": "type definitions are bundled"
+    },
+    "primitives": {
+      "label": "Primitives",
+      "note": "dialog, dropdown, tooltip, collapsible"
+    },
+    "bundle": {
+      "label": "Bundle format",
+      "note": "built with tsup, sourcemaps included"
+    },
+    "tokens": {
+      "label": "Design tokens",
+      "note": "a single block in src/index.css"
+    },
+    "license": {
+      "label": "License",
+      "note": "free to use in any project"
+    },
+    "version": {
+      "label": "Latest version",
+      "note": "read straight from the npm registry"
+    }
+  }
+}

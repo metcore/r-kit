@@ -86,7 +86,6 @@ export const Button = (props: ButtonProps) => {
 
   let buttonElement: React.ReactNode;
 
-  // anchor button
   if (isAnchorButton(props)) {
     const { href, disabled, children, ...anchorProps } = props;
 

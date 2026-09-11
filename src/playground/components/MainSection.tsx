@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from '../../components/tooltip';
 import { useCopy } from '../../hooks/use-copy';
+import { cn } from '../../lib/utils';
 
 interface Props {
   title: string;
@@ -72,7 +73,9 @@ export default function MainSection({
         )}
       </CardHeader>
 
-      <CardBody className={contentClassName}>{children}</CardBody>
+      <CardBody className={cn('relative z-0', contentClassName)}>
+        {children}
+      </CardBody>
 
       {code != null && code.length > 0 && (
         <CardFooter className="flex flex-col gap-3 border-t">

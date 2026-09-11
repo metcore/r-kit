@@ -15,7 +15,11 @@ export function BrandLogo({ brandLogo, className, name }: Props) {
         className
       )}
     >
-      <img src={brandLogo} alt={name ?? 'logo'} className="size-8" />
+      <img
+        src={brandLogo}
+        alt={name ?? 'logo'}
+        className="size-8 -translate-y-1"
+      />
       {name != null && name.length > 0 && (
         <Text value={name} variant="t1" weight="semibold" />
       )}

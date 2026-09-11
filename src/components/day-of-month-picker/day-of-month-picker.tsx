@@ -1,25 +1,18 @@
 import { Chip } from '../chip';
 import { type InputSize } from '../input';
-import { dayOptions } from '../base/helpers/date';
 import {
   PickerBase,
   PickerFooter,
   PickerHeader,
   buildDisplayValue,
   usePickerState,
-  type PickerMode,
+  type PickerModeValueProps,
   type PickerValue,
 } from '../base/components/picker-base';
 
-type DayOfMonthPickerMode = PickerMode;
-type DayOfMonthPickerValue = PickerValue;
-
-interface DayOfMonthPickerProps {
-  mode?: DayOfMonthPickerMode;
-  defaultValue?: DayOfMonthPickerValue;
-  onChange?: (value: DayOfMonthPickerValue) => void;
-  onApply?: (value: DayOfMonthPickerValue) => void;
+type DayOfMonthPickerProps = PickerModeValueProps & {
   placeholder?: string;
+  value?: PickerValue;
   disabled?: boolean;
   required?: boolean;
   size?: InputSize;
@@ -32,16 +25,11 @@ interface DayOfMonthPickerProps {
   cancelLabel?: string;
   confirmLabel?: string;
   title?: string;
-}
-
-const DAY_OPTIONS = dayOptions();
-
-const DAY_LABEL: Record<number, string> = Object.fromEntries(
-  DAY_OPTIONS.map(({ value, label }) => [value, label])
-);
+};
 
 export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
   mode = 'single',
+  value,
   defaultValue,
   onChange,
   onApply,
@@ -55,7 +43,7 @@ export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
   tooltip,
   cancelLabel = 'Batalkan',
   confirmLabel = 'Terapkan',
-  title,
+  title = 'Day',
 }) => {
   const {
     open,
@@ -68,14 +56,20 @@ export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
     isSelected,
     handleApply,
     handleCancel,
-  } = usePickerState({ mode, defaultValue, onChange, onApply, disabled });
-
+  } = usePickerState({
+    mode,
+    defaultValue,
+    value,
+    onChange: onChange as ((value: PickerValue) => void) | undefined,
+    onApply: onApply as ((value: PickerValue) => void) | undefined,
+    disabled,
+  });
   const displayValue = buildDisplayValue(
     mode,
     committedSingle,
     committedRange,
     committedMultiple,
-    (v) => DAY_LABEL[v] ?? ''
+    (v) => String(v)
   );
 
   return (
@@ -92,7 +86,7 @@ export const DayOfMonthPicker: React.FC<DayOfMonthPickerProps> = ({
       hint={hint}
       errorMessages={errorMessages}
       tooltip={tooltip}
-      renderHeader={title == null ? <PickerHeader title="Day" /> : undefined}
+      renderHeader={title == null ? <PickerHeader title={title} /> : undefined}
       renderOptions={
         <div className="flex max-h-64 flex-col gap-2 overflow-y-auto">
           {Array.from({ length: 31 }, (_, index) => {

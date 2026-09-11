@@ -3,6 +3,7 @@ import { Badge } from '../../components/badge';
 import HeroSection from '../components/HeroSection';
 import illust from '../../assets/images/forms.png';
 import MainSection from '../components/MainSection';
+import Footer from '../components/Footer';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { Text } from '../../components/text';
 import {
@@ -368,6 +369,7 @@ export default function ApiTablePage() {
         render: (_value, row) => (
           <span className="font-mono text-xs text-slate-400">#{row.id}</span>
         ),
+        className: 'hidden md:table-cell',
       },
       {
         key: 'firstName',
@@ -378,20 +380,34 @@ export default function ApiTablePage() {
             {row.firstName} {row.lastName}
           </span>
         ),
+        className: 'max-md:flex max-md:items-center',
       },
-      { key: 'birthDate', header: 'Birth Date', sortable: true }, // dulu: 'birthDate' OK, tapi interface-nya 'birthday'
+      { key: 'birthDate', header: 'Birth Date', sortable: true },
       {
         key: 'age',
         header: 'Age',
         sortable: true,
         render: (_value, row) => <Badge>{row.age}</Badge>,
+        className: 'col-span-2',
       },
-      { key: 'university', header: 'University', sortable: true },
-      { key: 'role', header: 'Role', sortable: true },
+      {
+        key: 'university',
+        header: 'University',
+        sortable: true,
+        className: 'col-span-2',
+      },
+      {
+        key: 'role',
+        header: 'Role',
+        sortable: true,
+        className: 'col-span-2',
+      },
       {
         key: 'action',
         header: 'Action',
         align: 'right',
+        className:
+          'max-md:col-start-2 max-md:row-start-1 max-md:flex max-md:min-w-0 max-md:flex-col max-md:items-end',
         render: () => (
           <Dropdown>
             <DropdownTrigger>
@@ -534,8 +550,8 @@ export default function ApiTablePage() {
       <HeroSection
         illust={illust}
         title="Data Display"
-        subtitle="Table"
-        description="Struktur data yang menampilkan informasi dalam format baris dan kolom untuk mendukung pemahaman dan interaksi user."
+        subtitle="API Table"
+        description="Tabel yang mengambil data langsung dari API, lengkap dengan paginasi, pengurutan, dan pengaturan kolom di sisi server."
       />
       <div className="flex flex-wrap gap-2">
         <MainSection
@@ -557,9 +573,10 @@ export default function ApiTablePage() {
                   value={t.filters.category}
                   className="w-50"
                   onChange={(value) => {
+                    const dipilih = Array.isArray(value) ? value[0] : value;
                     t.setFilter(
                       'category',
-                      value != null ? String(value?.value) : ''
+                      dipilih != null ? String(dipilih.value) : ''
                     );
                   }}
                   placeholder="Cari & Kategori"
@@ -609,7 +626,8 @@ export default function ApiTablePage() {
             <CardBody>
               <ApiTable
                 t={t}
-                responsive="cards"
+                bordered
+                responsive
                 columns={columns}
                 onRowClick={(row) => console.log('row clicked:', row)}
                 // rowOptions={(data, key, index) => {
@@ -624,11 +642,7 @@ export default function ApiTablePage() {
           </Card>
         </MainSection>
 
-        <MainSection
-          title="Dynamic Column"
-          className="overflow-auto"
-          code={exampleDynamicColumnApiTable}
-        >
+        <MainSection title="Dynamic Column" code={exampleDynamicColumnApiTable}>
           <Card>
             <CardHeader
               divider
@@ -664,10 +678,22 @@ export default function ApiTablePage() {
             </CardHeader>
 
             <CardBody>
-              <ApiTable t={tDynamic} columns={visibility.visibleColumns} />
+              <ApiTable
+                t={tDynamic}
+                showPagination
+                columns={visibility.visibleColumns}
+              />
             </CardBody>
           </Card>
         </MainSection>
+
+        <Footer
+          title="API Table"
+          backTo="/playground/table"
+          backToTitle="Table"
+          nextTo="/playground/dnd"
+          nextToTitle="Drag and Drop"
+        />
       </div>
     </div>
   );

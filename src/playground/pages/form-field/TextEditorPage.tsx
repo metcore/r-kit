@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import dedent from 'dedent';
 import illust from '../../../assets/images/forms.png';
-import { TextEditor } from '../../../clients';
+import { Button, TextEditor, type TextEditorRef } from '../../../clients';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
@@ -16,6 +16,15 @@ export default function TextEditorPage() {
   const [disabledValue, setDisabledValue] = useState(
     '<p>Konten ini tidak bisa diedit.</p>'
   );
+  const [variableValue, setVariableValue] = useState('');
+
+  const editorRef = useRef<TextEditorRef>(null);
+
+  const variables = [
+    { label: 'nama_pelanggan', value: 'customer_name' },
+    { label: 'nomor_invoice', value: 'invoice_number' },
+    { label: 'total_tagihan', value: 'total_amount' },
+  ];
 
   const defaultExample = dedent(`
     <TextEditor
@@ -98,6 +107,35 @@ export default function TextEditorPage() {
         onChange={(v) => setValue(v.getHTML())}
       />
     </div>
+  `);
+
+  const variableExample = dedent(`
+    const editorRef = useRef<TextEditorRef>(null);
+
+    return (
+      <div className="flex gap-4">
+        <TextEditor
+          ref={editorRef}
+          label="Description"
+          value={value}
+          onChange={(v) => setValue(v.getHTML())}
+        />
+
+        {variables?.data?.map((variable) => (
+          <Button
+            key={variable.value}
+            color="gray"
+            variant="tertiary"
+            className="w-full justify-start"
+            // cegah editor kehilangan seleksi saat tombol ditekan
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editorRef.current?.insertText(\`{{\${variable.label}}}\`)}
+          >
+            {\`{{\${variable.label}}}\`}
+          </Button>
+        ))}
+      </div>
+    );
   `);
 
   const disabledExample = dedent(`
@@ -225,6 +263,40 @@ export default function TextEditorPage() {
           </MainSection>
 
           <MainSection
+            title="Text Editor Insert Variable"
+            code={variableExample}
+            className="col-span-2"
+          >
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <TextEditor
+                  ref={editorRef}
+                  label="Description"
+                  value={variableValue}
+                  onChange={(v) => setVariableValue(v.getHTML())}
+                />
+              </div>
+
+              <div className="flex w-56 shrink-0 flex-col gap-2">
+                {variables.map((variable) => (
+                  <Button
+                    key={variable.value}
+                    color="gray"
+                    variant="tertiary"
+                    className="w-full justify-start"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editorRef.current?.insertText(`{{${variable.label}}}`)
+                    }
+                  >
+                    {`{{${variable.label}}}`}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </MainSection>
+
+          <MainSection
             title="Text Editor Disabled"
             code={disabledExample}
             className="col-span-2"
@@ -239,11 +311,11 @@ export default function TextEditorPage() {
         </GridWrapper>
 
         <Footer
-          backTo="/color-picker"
-          backToTitle="Color Picker"
-          nextTo="/[next-page]"
           title="Text Editor"
-          nextToTitle="[Next Page]"
+          backTo="/playground/slider"
+          backToTitle="Slider"
+          nextTo="/playground/text-area"
+          nextToTitle="Text Area"
         />
       </div>
     </>

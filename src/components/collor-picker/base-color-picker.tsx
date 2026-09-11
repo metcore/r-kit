@@ -5,11 +5,13 @@ import { hsvToRgb, parseColor, rgbToHex } from './helpers';
 import type { BaseColorPickerProps, ColorValue, HSV } from './type';
 
 export function BaseColorPicker({
+  value,
   defaultColor = '',
   onChange,
   children,
 }: BaseColorPickerProps): React.ReactElement {
-  const init = parseColor(defaultColor);
+  const initialInput = typeof value === 'string' ? value : defaultColor;
+  const init = parseColor(initialInput);
   const [hsv, setHsv] = useState<HSV>(init.hsv);
   const [alpha, setAlpha] = useState<number>(init.alpha);
   const [hasValue, setHasValue] = useState<boolean>(init.valid);
@@ -44,6 +46,15 @@ export function BaseColorPicker({
   useEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
+
+  useEffect(() => {
+    if (typeof value !== 'string') return;
+
+    const next = parseColor(value);
+    setHsv(next.hsv);
+    setAlpha(next.alpha);
+    setHasValue(next.valid);
+  }, [value]);
 
   const didMountRef = useRef(false);
   const lastEmittedRef = useRef<{ hex: string; alpha: number } | null>(null);

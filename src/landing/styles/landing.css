@@ -1,0 +1,331 @@
+/* Token dan kelas khusus halaman landing.
+ *
+ * Terpisah dari src/index.css karena file itu ikut ter-publish sebagai
+ * dist/index.css; yang di sini tidak. Prefix --rk-* / .rk-* menjaga agar tidak
+ * pernah bentrok dengan skala @theme milik library.
+ */
+
+:root {
+  --rk-paper: oklch(98.6% 0.004 272);
+  --rk-paper-2: oklch(97% 0.006 272);
+  --rk-paper-3: oklch(94.6% 0.008 272);
+  --rk-paper-blur: color-mix(in oklab, oklch(98.6% 0.004 272) 86%, transparent);
+  --rk-scrim: color-mix(in oklab, oklch(21% 0.03 272) 45%, transparent);
+
+  --rk-ink: oklch(23% 0.028 272);
+  --rk-ink-2: oklch(38% 0.022 272);
+  --rk-muted: oklch(52.5% 0.017 272);
+
+  --rk-rule: oklch(91.5% 0.008 272);
+  --rk-rule-2: oklch(85% 0.012 272);
+  /* Dipakai untuk batas kontrol interaktif, bukan garis dekoratif: 3.30:1 di
+   * atas paper, ambang minimum WCAG 1.4.11. */
+  --rk-rule-strong: oklch(63.5% 0.02 272);
+
+  --rk-accent: oklch(53.4% 0.261 275);
+  --rk-accent-hover: oklch(48.2% 0.294 271);
+  --rk-accent-ink: oklch(98.6% 0.004 272);
+  --rk-accent-soft: oklch(96.4% 0.017 283);
+  --rk-focus: oklch(53.4% 0.261 275);
+
+  --rk-graphite: oklch(21% 0.03 272);
+  --rk-graphite-2: oklch(26% 0.028 272);
+  --rk-graphite-rule: oklch(33% 0.026 272);
+  --rk-graphite-rule-strong: oklch(54% 0.03 272);
+  --rk-on-graphite: oklch(93% 0.01 272);
+  --rk-on-graphite-2: oklch(72% 0.014 272);
+  --rk-on-graphite-3: oklch(64% 0.014 272);
+  /* Aksen perlu lebih terang dan kurang jenuh di atas latar gelap. */
+  --rk-accent-lift: oklch(74% 0.145 279);
+
+  --rk-font-display: 'Metropolis', ui-sans-serif, system-ui, sans-serif;
+  --rk-font-body: 'Metropolis', ui-sans-serif, system-ui, sans-serif;
+  --rk-font-mono:
+    ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  --rk-text-display: clamp(2.25rem, 3.4vw + 1rem, 3.5rem);
+  --rk-text-section: clamp(1.5rem, 1.2vw + 1rem, 1.875rem);
+  --rk-tracking-display: -0.03em;
+  --rk-tracking-label: 0.08em;
+
+  --rk-radius-control: 6px;
+  --rk-radius-card: 10px;
+
+  --rk-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --rk-dur-micro: 120ms;
+}
+
+/* `clip`, bukan `hidden` — `hidden` akan mematikan position: sticky di navbar. */
+html,
+body {
+  overflow-x: clip;
+}
+
+.rk-page {
+  background: var(--rk-paper);
+  color: var(--rk-ink-2);
+  font-family: var(--rk-font-body);
+}
+
+.rk-display {
+  font-family: var(--rk-font-display);
+  font-weight: 700;
+  letter-spacing: var(--rk-tracking-display);
+  color: var(--rk-ink);
+  /* Kata panjang berhubung ("open-source") hanya punya satu titik potong di
+   * tanda hubung, dan itu tidak cukup di layar 320px. */
+  overflow-wrap: anywhere;
+  min-width: 0;
+  text-wrap: balance;
+}
+
+.rk-display--on-dark {
+  color: var(--rk-on-graphite);
+}
+
+.rk-h1 {
+  font-size: var(--rk-text-display);
+  line-height: 1.06;
+}
+
+.rk-h2 {
+  font-size: var(--rk-text-section);
+  line-height: 1.15;
+}
+
+.rk-head-inline {
+  font-family: var(--rk-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: var(--rk-tracking-label);
+  text-transform: uppercase;
+  color: var(--rk-muted);
+}
+
+.rk-head-inline--on-dark {
+  color: var(--rk-on-graphite-2);
+}
+
+.rk-mono {
+  font-family: var(--rk-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ring fokus tidak pernah ikut transisi — pengguna keyboard butuh penanda
+ * yang muncul seketika. */
+.rk-page :focus-visible,
+.rk-cmdk :focus-visible {
+  outline: 2px solid var(--rk-focus);
+  outline-offset: 2px;
+  border-radius: var(--rk-radius-control);
+}
+
+/* Kecuali field pencarian palette: ia satu-satunya input di dalam modal dan
+ * langsung difokus saat dibuka, jadi caret sudah cukup jadi penanda. */
+.rk-cmdk-input:focus-visible {
+  outline: none;
+}
+
+.rk-on-dark :focus-visible {
+  outline-color: var(--rk-accent-lift);
+}
+
+.rk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding-inline: 1.125rem;
+  /* Metropolis duduk tinggi di dalam em box-nya sehingga label terbaca naik.
+   * Padding atas 2px menggeser isi yang ter-center turun 1px. */
+  padding-block: 2px 0;
+  border-radius: var(--rk-radius-control);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color var(--rk-dur-micro) var(--rk-ease-out),
+    border-color var(--rk-dur-micro) var(--rk-ease-out),
+    color var(--rk-dur-micro) var(--rk-ease-out);
+}
+
+.rk-btn:active {
+  translate: 0 1px;
+}
+
+.rk-btn:disabled,
+.rk-btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.rk-btn--sm {
+  height: 2rem;
+  padding-inline: 0.875rem;
+  font-size: 0.8125rem;
+}
+
+.rk-btn--primary {
+  background: var(--rk-accent);
+  color: var(--rk-accent-ink);
+}
+
+.rk-btn--primary:hover {
+  background: var(--rk-accent-hover);
+}
+
+.rk-btn--ghost {
+  border: 1px solid var(--rk-rule-strong);
+  color: var(--rk-ink);
+}
+
+.rk-btn--ghost:hover {
+  background: var(--rk-paper-3);
+}
+
+.rk-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--rk-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rk-rule-2);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition:
+    text-decoration-color var(--rk-dur-micro) var(--rk-ease-out),
+    text-decoration-thickness var(--rk-dur-micro) var(--rk-ease-out);
+}
+
+.rk-link:hover {
+  text-decoration-color: var(--rk-accent);
+  text-decoration-thickness: 2px;
+}
+
+.rk-link--on-dark {
+  color: var(--rk-on-graphite);
+  text-decoration-color: var(--rk-graphite-rule-strong);
+}
+
+.rk-link--on-dark:hover {
+  text-decoration-color: var(--rk-accent-lift);
+}
+
+.rk-index-link {
+  display: inline-flex;
+  align-items: center;
+  height: 1.75rem;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--rk-rule);
+  border-radius: var(--rk-radius-control);
+  background: var(--rk-paper);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  color: var(--rk-ink-2);
+  transition:
+    border-color var(--rk-dur-micro) var(--rk-ease-out),
+    color var(--rk-dur-micro) var(--rk-ease-out);
+}
+
+.rk-index-link:hover {
+  border-color: var(--rk-accent);
+  color: var(--rk-accent);
+}
+
+.rk-surface {
+  background: var(--rk-paper);
+  border: 1px solid var(--rk-rule);
+  border-radius: var(--rk-radius-card);
+}
+
+.rk-code {
+  background: var(--rk-graphite);
+  color: var(--rk-on-graphite-2);
+  font-family: var(--rk-font-mono);
+  /* Kode tidak pernah dibungkus, jadi ukurannya yang turun di layar sempit
+   * supaya baris import muat tanpa harus digeser. */
+  font-size: 0.75rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+@media (min-width: 40rem) {
+  .rk-code {
+    font-size: 0.8125rem;
+  }
+}
+
+.rk-tok-key {
+  color: var(--rk-accent-lift);
+}
+
+.rk-tok-str,
+.rk-tok-text {
+  color: var(--rk-on-graphite);
+}
+
+.rk-tok-attr {
+  color: var(--rk-on-graphite-2);
+}
+
+.rk-tok-dim {
+  color: var(--rk-on-graphite-3);
+}
+
+.rk-tick {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 1px;
+  background: var(--rk-accent);
+}
+
+@media (pointer: coarse) {
+  .rk-btn {
+    min-height: 44px;
+  }
+
+  /* Chip katalog jadi lebih tinggi di layar sentuh: ini direktori 54 tujuan,
+   * target sebesar jari lebih penting daripada halaman yang pendek. */
+  .rk-index-link {
+    min-height: 44px;
+    padding-inline: 0.75rem;
+  }
+
+  .rk-nav-control {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Memperbesar area sentuh tanpa mengubah ukuran visual. Hanya untuk kontrol
+   * kecil yang berdiri sendiri — pada elemen berdempetan, areanya akan saling
+   * menimpa dan yang terakhir di DOM akan menang. */
+  .rk-hit,
+  .rk-link {
+    position: relative;
+  }
+
+  .rk-hit::after,
+  .rk-link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rk-page *,
+  .rk-cmdk * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

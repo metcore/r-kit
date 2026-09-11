@@ -1,8 +1,5 @@
 import illust from '../../../assets/images/forms.png';
 import MainSection from '../../components/MainSection';
-import { useMarkdown } from '../../hooks/useMarkdown';
-import { Card, CardBody } from '../../../components/card';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
 import dedent from 'dedent';
 import HeroSection from '../../components/HeroSection';
 import GridWrapper from '../../components/GridWrapper';
@@ -13,8 +10,7 @@ import {
 } from '../../../components/input/input-phone-number';
 import { useState } from 'react';
 
-export default function InputPasswordPage() {
-  const { doc } = useMarkdown(`/docs/input-field.md`);
+export default function InputPhoneNumberPage() {
   const [value, setValue] = useState<PhoneNumberValue>();
 
   const exampleBasic = dedent(`
@@ -148,7 +144,7 @@ export default function InputPasswordPage() {
         illust={illust}
         title="Form"
         subtitle="Input Phone Number"
-        description="Komponen input khusus untuk memasukkan memasukkan nomor telepon, termasuk kode negara dan kode identifikasi lainnya."
+        description="Komponen input khusus untuk memasukkan nomor telepon, termasuk kode negara dan kode identifikasi lainnya."
       />
 
       <div className="flex flex-col gap-4">
@@ -245,18 +241,13 @@ export default function InputPasswordPage() {
             <InputPhoneNumber label="Large" size="lg" required />
           </MainSection>
         </GridWrapper>
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
 
         <Footer
-          backTo="/checkbox"
-          backToTitle="Checkbox"
-          nextTo="/input-group"
-          title="Input Field"
-          nextToTitle="Input Group"
+          title="Input Phone Number"
+          backTo="/playground/input-password"
+          backToTitle="Input Password"
+          nextTo="/playground/drawing"
+          nextToTitle="Drawing"
         />
       </div>
     </>

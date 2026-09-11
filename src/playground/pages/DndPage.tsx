@@ -3,14 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card, CardBody, CardHeader } from '../../components/card';
 import { DndBoard, DndColumn, DndItem } from '../../components/dnd';
 
-import illust from '../assets/images/navigation.png';
+import illust from '../../assets/images/navigation.png';
 import { Text } from '../../components/text';
 import { Icon } from '../../components/icons';
 import Footer from '../components/Footer';
 import HeroSection from '../components/HeroSection';
 import MainSection from '../components/MainSection';
-import MarkdownRenderer from '../components/MarkdownRenderer';
-import { useMarkdown } from '../hooks/useMarkdown';
 
 type FormField = {
   id: string;
@@ -199,8 +197,6 @@ const formConfigurationCode = `const [formFields, setFormFields] = useState({
 </DndBoard>`;
 
 export default function DndPage() {
-  const { doc } = useMarkdown('/docs/dnd.md');
-
   const sections: FormSection[] = useMemo(() => {
     return [
       ...formConfiguration.sections.map((section) => ({
@@ -240,7 +236,7 @@ export default function DndPage() {
     <>
       <HeroSection
         illust={illust}
-        title="Components"
+        title="Data Display"
         subtitle="Drag and Drop"
         description="Board interaktif untuk mengatur item di dalam kolom atau memindahkan
           item ke kolom lain."
@@ -396,18 +392,12 @@ export default function DndPage() {
         </DndBoard>
       </MainSection>
 
-      <Card className="mt-4">
-        <CardBody>
-          <MarkdownRenderer content={doc?.content ?? ''} />
-        </CardBody>
-      </Card>
-
       <Footer
         title="Drag and Drop"
-        backTo="/timeline"
-        backToTitle="Timeline"
-        nextTo="/calendar"
-        nextToTitle="Calendar"
+        backTo="/playground/api-table"
+        backToTitle="API Table"
+        nextTo="/playground/file-view"
+        nextToTitle="File View"
       />
     </>
   );

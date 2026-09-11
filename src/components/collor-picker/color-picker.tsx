@@ -4,7 +4,7 @@ import { BaseColorPicker } from './base-color-picker';
 import { CHECKER } from './constants';
 import type { ColorInputProps } from './type';
 
-export default function ColorInput({
+export function ColorInput({
   label,
   required,
   disabled,

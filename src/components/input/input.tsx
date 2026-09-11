@@ -68,6 +68,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       style,
       disabled,
       clearAble = false,
+      value,
+      defaultValue,
+      onChange,
       ...props
     },
     ref
@@ -85,9 +88,27 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? generatedId;
     const fieldRef = React.useRef<HTMLDivElement | null>(null);
 
+    const isControlled = value !== undefined;
+    const [uncontrolledHasValue, setUncontrolledHasValue] = React.useState(
+      () => String(defaultValue ?? '').length > 0
+    );
+    const hasValue = isControlled
+      ? String(value ?? '').length > 0
+      : uncontrolledHasValue;
+
+    const handleChange = React.useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!isControlled) {
+          setUncontrolledHasValue(event.target.value.length > 0);
+        }
+        onChange?.(event);
+      },
+      [isControlled, onChange]
+    );
+
     const measureValue =
-      props.value != null
-        ? String(props.value)
+      value != null
+        ? String(value)
         : props.placeholder != null
           ? String(props.placeholder)
           : '';
@@ -125,15 +146,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       )?.set;
 
       nativeInputValueSetter?.call(input, '');
-
-      const event = new Event('input', { bubbles: true });
-      input.dispatchEvent(event);
-
-      props.onChange?.({
-        target: input,
-        currentTarget: input,
-      } as React.ChangeEvent<HTMLInputElement>);
-    }, [isDisabled, ref, inputId, props]);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }, [isDisabled, ref, inputId]);
 
     const field = (
       <div
@@ -177,6 +191,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           size={inputSize}
           {...props}
           id={inputId}
+          value={value}
+          defaultValue={defaultValue}
+          onChange={handleChange}
           disabled={isDisabled}
           required={false}
           style={mergedStyle}
@@ -194,7 +211,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         />
 
-        {clearAble && disabled == false && (
+        {clearAble && !isDisabled && hasValue && (
           <Button
             variant="tertiary"
             onClick={handleClear}

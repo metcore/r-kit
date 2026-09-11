@@ -25,15 +25,16 @@ interface RenderOptionState {
 }
 
 export type SelectOnCreateValue = string | number;
-
+export type SelectValue<Extra extends object = object> =
+  | SelectOption<Extra>
+  | SelectOption<Extra>[]
+  | SelectRawValue
+  | SelectRawValue[]
+  | null;
 type BaseSelectProps<Extra extends object = object> = {
   options?: (SelectOption<Extra> | SelectGroup<Extra>)[];
-  value?:
-    | SelectOption<Extra>
-    | SelectOption<Extra>[]
-    | SelectRawValue
-    | SelectRawValue[]
-    | null;
+  value?: SelectValue<Extra>;
+  defaultValue?: SelectValue<Extra>;
   getOptionByValue?: (value: SelectRawValue) => SelectOption<Extra> | undefined;
 
   isClearable?: boolean;
@@ -98,6 +99,13 @@ type BaseSelectProps<Extra extends object = object> = {
   onCreate?: (value: SelectOnCreateValue) => void;
   loadingOnCreate?: boolean;
   size?: SelectSize;
+
+  /**
+   * Elemen tempat menu dropdown di-portal. Default: ancestor terdekat
+   * `[data-slot="sheet-content"]`/`[role="dialog"]` (Sheet/Modal), atau
+   * `document.body` kalau gak ada — biar gak lolos dari focus trap dialog.
+   */
+  portalContainer?: HTMLElement | null;
 };
 
 type SelectPropsWithCustomRender<Extra extends object = EmptyObject> = {

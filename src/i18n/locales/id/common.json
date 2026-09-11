@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "docs": "Docs",
+    "components": "Components",
+    "colors": "Colors",
+    "typography": "Typography",
+    "menu": "Menu"
+  },
+  "search": {
+    "trigger": "Cari component…",
+    "placeholder": "Cari component…",
+    "empty": "Tidak ada hasil untuk “{{query}}”.",
+    "navigate": "navigasi",
+    "open": "buka",
+    "results_other": "{{count}} hasil",
+    "close": "Tutup pencarian",
+    "pages": "Halaman"
+  },
+  "actions": {
+    "details": "Detail",
+    "copy": "Copy {{command}}",
+    "documentation": "Dokumentasi",
+    "playground": "Playground",
+    "github": "GitHub"
+  },
+  "version": {
+    "npmTitle": "Versi terbaru di npm"
+  },
+  "language": {
+    "label": "Bahasa",
+    "id": "Indonesia",
+    "en": "English"
+  },
+  "footer": {
+    "tagline": "Open source di <github>GitHub</github>. Dibuat oleh tim <herca>Herca</herca>.",
+    "links": {
+      "issues": "Issues"
+    }
+  }
+}

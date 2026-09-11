@@ -1,6 +1,9 @@
 import dedent from 'dedent';
 import { YearPicker } from '../../../components/year-picker';
+import illust from '../../../assets/images/forms.png';
 import GridWrapper from '../../components/GridWrapper';
+import HeroSection from '../../components/HeroSection';
+import Footer from '../../components/Footer';
 import MainSection from '../../components/MainSection';
 
 const exampleDefault = dedent(`
@@ -175,6 +178,13 @@ const exampleCustomLabel = dedent(`
 export default function YearPickerPage() {
   return (
     <>
+      <HeroSection
+        illust={illust}
+        title="Form"
+        subtitle="Year Picker"
+        description="Memilih tahun dari daftar yang dapat digulir, cocok untuk data historis atau periode laporan."
+      />
+
       <GridWrapper>
         <MainSection title="Default" code={exampleDefault}>
           <YearPicker label="Year" onChange={(e) => console.log(e)} />
@@ -281,6 +291,14 @@ export default function YearPickerPage() {
           />
         </MainSection>
       </GridWrapper>
+
+      <Footer
+        title="Year Picker"
+        backTo="/playground/month-picker"
+        backToTitle="Month Picker"
+        nextTo="/playground/day-picker"
+        nextToTitle="Day Picker"
+      />
     </>
   );
 }

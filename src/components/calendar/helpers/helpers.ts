@@ -92,7 +92,7 @@ function getWeekEventSegments({
   }));
 
   const weekStartTs = toDateOnly(week[0].fullDate);
-  const weekEndTs = toDateOnly(week[6].fullDate);
+  const weekEndTs = toDateOnly(week[week.length - 1].fullDate);
 
   const segments = [];
 
@@ -115,7 +115,7 @@ function getWeekEventSegments({
     );
 
     const resolvedStartCol = startCol === -1 ? 0 : startCol;
-    const resolvedEndCol = endCol === -1 ? 6 : endCol;
+    const resolvedEndCol = endCol === -1 ? week.length - 1 : endCol;
 
     segments.push({
       event,
@@ -127,6 +127,253 @@ function getWeekEventSegments({
   return segments;
 }
 
+type EventSegment = { event: CalendarEvent; startCol: number; span: number };
+type PackedEventSegment = EventSegment & { level: number };
+
+function packEventSegments({
+  segments,
+  threshold,
+  columns = 7,
+}: {
+  segments: EventSegment[];
+  threshold: number;
+  columns?: number;
+}) {
+  const sortedSegments = [...segments].sort(
+    (a, b) => a.startCol - b.startCol || b.span - a.span
+  );
+
+  const segmentLevels = new Map<EventSegment, number>();
+
+  sortedSegments.forEach((seg) => {
+    let placed = false;
+
+    for (let level = 0; level < threshold; level++) {
+      const conflict = sortedSegments.some((other) => {
+        if (other === seg) return false;
+
+        const otherLevel = segmentLevels.get(other);
+        if (otherLevel !== level) return false;
+
+        const segStart = seg.startCol;
+        const segEnd = seg.startCol + seg.span - 1;
+
+        const otherStart = other.startCol;
+        const otherEnd = other.startCol + other.span - 1;
+
+        return !(segEnd < otherStart || segStart > otherEnd);
+      });
+
+      if (!conflict) {
+        segmentLevels.set(seg, level);
+        placed = true;
+        break;
+      }
+    }
+
+    if (!placed) {
+      segmentLevels.set(seg, threshold);
+    }
+  });
+
+  const columnLevelOccupied = Array.from(
+    { length: columns },
+    () => new Array(threshold).fill(false) as boolean[]
+  );
+
+  segments.forEach((seg) => {
+    const level = segmentLevels.get(seg) ?? 0;
+    if (level < threshold) {
+      for (let i = 0; i < seg.span; i++) {
+        const col = seg.startCol + i;
+        if (col >= 0 && col < columns) columnLevelOccupied[col][level] = true;
+      }
+    }
+  });
+
+  const renderSegments: PackedEventSegment[] = [];
+
+  segments.forEach((seg) => {
+    const level = segmentLevels.get(seg) ?? 0;
+    if (level < threshold) renderSegments.push({ ...seg, level });
+  });
+
+  sortedSegments.forEach((seg) => {
+    if ((segmentLevels.get(seg) ?? 0) < threshold) return;
+
+    const segEnd = Math.min(seg.startCol + seg.span - 1, columns - 1);
+
+    let runStart = -1;
+    let runLevel = -1;
+
+    const flushRun = (endExclusive: number) => {
+      if (runStart !== -1) {
+        renderSegments.push({
+          event: seg.event,
+          startCol: runStart,
+          span: endExclusive - runStart,
+          level: runLevel,
+        });
+      }
+      runStart = -1;
+      runLevel = -1;
+    };
+
+    const pickLevel = (col: number): number => {
+      let bestLevel = -1;
+      let bestRun = 0;
+      for (let l = 0; l < threshold; l++) {
+        if (columnLevelOccupied[col][l] !== false) continue;
+        let run = 0;
+        for (let c = col; c <= segEnd; c++) {
+          if (columnLevelOccupied[c][l] !== false) break;
+          run++;
+        }
+        if (run > bestRun) {
+          bestRun = run;
+          bestLevel = l;
+        }
+      }
+      return bestLevel;
+    };
+
+    for (let i = 0; i < seg.span; i++) {
+      const col = seg.startCol + i;
+      if (col < 0 || col >= columns) {
+        flushRun(col);
+        continue;
+      }
+
+      if (runLevel !== -1) {
+        if (columnLevelOccupied[col][runLevel] === false) {
+          columnLevelOccupied[col][runLevel] = true;
+        } else {
+          flushRun(col);
+          const availableLevel = pickLevel(col);
+          if (availableLevel !== -1) {
+            runStart = col;
+            runLevel = availableLevel;
+            columnLevelOccupied[col][availableLevel] = true;
+          }
+        }
+      } else {
+        const availableLevel = pickLevel(col);
+        if (availableLevel !== -1) {
+          runStart = col;
+          runLevel = availableLevel;
+          columnLevelOccupied[col][availableLevel] = true;
+        }
+      }
+    }
+    flushRun(seg.startCol + seg.span);
+  });
+
+  const columnHiddenSegments: EventSegment[][] = Array.from(
+    { length: columns },
+    () => []
+  );
+
+  segments.forEach((seg) => {
+    if ((segmentLevels.get(seg) ?? 0) < threshold) return;
+    for (let i = 0; i < seg.span; i++) {
+      const col = seg.startCol + i;
+      if (col < 0 || col >= columns) continue;
+      const rendered = renderSegments.some(
+        (rs) =>
+          rs.event === seg.event &&
+          rs.startCol <= col &&
+          col < rs.startCol + rs.span
+      );
+      if (!rendered) columnHiddenSegments[col].push(seg);
+    }
+  });
+
+  const columnMoreCount = columnHiddenSegments.map((segs) => segs.length);
+
+  const allSegments: PackedEventSegment[] = segments.map((seg) => ({
+    ...seg,
+    level: segmentLevels.get(seg) ?? 0,
+  }));
+
+  return { renderSegments, columnHiddenSegments, columnMoreCount, allSegments };
+}
+
+function getWeekDays(weekStart: Date): CalendarDay[] {
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + i);
+    return {
+      date: date.getDate(),
+      month: 'current',
+      fullDate: date,
+    };
+  });
+}
+
+function isTimedEvent(event: CalendarEvent): boolean {
+  return (
+    event.startDate === event.endDate &&
+    event.startDateTime != null &&
+    event.endDateTime != null
+  );
+}
+
+function isSameLocalDay(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function groupTimedEventsByHour({
+  days,
+  events,
+}: {
+  days: CalendarDay[];
+  events: CalendarEvent[];
+}): Map<string, CalendarEvent[]> {
+  const groups = new Map<string, CalendarEvent[]>();
+
+  events.forEach((event) => {
+    if (event.startDateTime == null) return;
+
+    const dayIndex = days.findIndex((day) =>
+      isSameLocalDay(day.fullDate, event.startDateTime!)
+    );
+    if (dayIndex === -1) return;
+
+    const hour = event.startDateTime.getHours();
+    const key = `${dayIndex}-${hour}`;
+    const list = groups.get(key);
+    if (list) {
+      list.push(event);
+    } else {
+      groups.set(key, [event]);
+    }
+  });
+
+  groups.forEach((list) =>
+    list.sort((a, b) => a.startDateTime!.getTime() - b.startDateTime!.getTime())
+  );
+
+  return groups;
+}
+
+function formatHourLabel(hour: number): string {
+  if (hour === 0) return '12 AM';
+  if (hour === 12) return '12 PM';
+  return hour < 12 ? `${hour} AM` : `${hour - 12} PM`;
+}
+
+function formatClock(date: Date): string {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours < 12 ? 'AM' : 'PM';
+  const displayHour = hours % 12 === 0 ? 12 : hours % 12;
+  return `${displayHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+}
+
 export {
   getCalendarDays,
   isSameDate,
@@ -134,4 +381,10 @@ export {
   getWeekEventSegments,
   parseLocalDate,
   toDateOnly,
+  packEventSegments,
+  getWeekDays,
+  isTimedEvent,
+  groupTimedEventsByHour,
+  formatHourLabel,
+  formatClock,
 };

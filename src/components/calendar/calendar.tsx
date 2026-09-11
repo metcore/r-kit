@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
 import { createCalendarHelpers } from './helpers/create-calendar-helpers';
-import { getCalendarDays } from './helpers/helpers';
+import { getCalendarDays, getWeekDays } from './helpers/helpers';
 import { ButtonNavigator } from './partials/button-navigator';
 import { CalendarGrid } from './partials/calendar-grid';
 import { CalendarHeader } from './partials/calendar-header';
 import DaysOfWeek from './partials/days-of-week';
 import { ButtonDropdown, ItemDropdown } from './partials/dropdown';
+import { TimeGrid } from './partials/time-grid';
+import { YearGrid } from './partials/year-grid';
 import type { CalendarDay, CalendarProps, CalendarTypes } from './type';
 import clsx from 'clsx';
 import { Icon } from '../icons';
@@ -92,6 +94,12 @@ const Calendar = ({
     return start;
   });
 
+  const [currentDay, setCurrentDay] = useState<Date>(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+  });
+
   const calendarDays = getCalendarDays({ currentMonth, currentYear });
 
   const calendarHelpers = createCalendarHelpers({
@@ -128,22 +136,24 @@ const Calendar = ({
     onChange?.(day.fullDate);
   };
 
-  const getWeekDaysLabel = (weekStart: Date): string[] => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(weekStart);
-      d.setDate(weekStart.getDate() + i);
-      const dayName = daysOfWeek[d.getDay()]; // "Min", "Sen", dll
-      const date = d.getDate();
-      return `${dayName} ${date}`; // e.g. "Sen 23"
-    });
-  };
-
   const changeWeek = (delta: number) => {
     setCurrentWeekStart((prev) => {
       const next = new Date(prev);
       next.setDate(prev.getDate() + delta * 7);
 
       // sync currentMonth & currentYear ke minggu aktif
+      setCurrentMonth(next.getMonth());
+      setCurrentYear(next.getFullYear());
+      return next;
+    });
+  };
+
+  const changeDay = (delta: number) => {
+    setCurrentDay((prev) => {
+      const next = new Date(prev);
+      next.setDate(prev.getDate() + delta);
+
+      // sync currentMonth & currentYear ke hari aktif
       setCurrentMonth(next.getMonth());
       setCurrentYear(next.getFullYear());
       return next;
@@ -183,9 +193,25 @@ const Calendar = ({
 
     if (type === 'week') {
       if (action === 'prev') {
-        return changeWeek(1);
-      } else {
         return changeWeek(-1);
+      } else {
+        return changeWeek(1);
+      }
+    }
+
+    if (type === 'day') {
+      if (action === 'prev') {
+        return changeDay(-1);
+      } else {
+        return changeDay(1);
+      }
+    }
+
+    if (type === 'year') {
+      if (action === 'prev') {
+        return setCurrentYear((prev) => prev - 1);
+      } else {
+        return setCurrentYear((prev) => prev + 1);
       }
     }
   };
@@ -230,7 +256,9 @@ const Calendar = ({
                 weight="semibold"
                 className="-translate-y-0.5 text-gray-900"
               >
-                {months[currentMonth]} {currentYear}
+                {selectedType === 'year'
+                  ? currentYear
+                  : `${months[currentMonth]} ${currentYear}`}
               </Text>
             </div>
 
@@ -242,7 +270,24 @@ const Calendar = ({
                   color="gray"
                   variant={'outline'}
                   className="capitalize"
-                  onClick={() => setCurrentMonth(new Date().getMonth())}
+                  onClick={() => {
+                    const today = new Date();
+                    setCurrentMonth(today.getMonth());
+                    setCurrentYear(today.getFullYear());
+
+                    if (selectedType === 'week') {
+                      const start = new Date(today);
+                      start.setDate(today.getDate() - today.getDay());
+                      start.setHours(0, 0, 0, 0);
+                      setCurrentWeekStart(start);
+                    }
+
+                    if (selectedType === 'day') {
+                      const start = new Date(today);
+                      start.setHours(0, 0, 0, 0);
+                      setCurrentDay(start);
+                    }
+                  }}
                 >
                   Today
                 </Button>
@@ -294,16 +339,46 @@ const Calendar = ({
           )}
         >
           {/* type week */}
-          {selectedType === 'week' && (
-            <div>
-              <DaysOfWeek
-                type="week"
-                size={size}
-                variant={variant}
-                daysOfWeek={getWeekDaysLabel(currentWeekStart)}
-                wrapperClassName={weekWrapperClassname}
-              />
-            </div>
+          {selectedType === 'week' && variant === 'default' && (
+            <TimeGrid
+              days={getWeekDays(currentWeekStart)}
+              daysOfWeek={daysOfWeek}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+              backdropOnClick={backdropOnClick}
+              onEventClick={onEventClick}
+              useLimitEvent={useLimitEvent}
+              wrapperClassName={weekWrapperClassname}
+            />
+          )}
+          {/* type day */}
+          {selectedType === 'day' && variant === 'default' && (
+            <TimeGrid
+              days={[
+                { date: currentDay.getDate(), month: 'current', fullDate: currentDay }, //prettier-ignore
+              ]}
+              daysOfWeek={daysOfWeek}
+              events={events}
+              showCalendarTooltip={showCalendarTooltip}
+              backdropOnClick={backdropOnClick}
+              onEventClick={onEventClick}
+              useLimitEvent={useLimitEvent}
+              wrapperClassName={weekWrapperClassname}
+            />
+          )}
+          {/* type year */}
+          {selectedType === 'year' && variant === 'default' && (
+            <YearGrid
+              currentYear={currentYear}
+              months={months}
+              daysOfWeek={daysOfWeek}
+              helpers={calendarHelpers}
+              size={size}
+              mode={mode}
+              styleConfig={styleConfig}
+              onClick={handleDateClick}
+              disabledDateClassName={disabledDateClassName}
+            />
           )}
           {/* type month */}
           {selectedType === 'month' && (

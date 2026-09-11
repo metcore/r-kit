@@ -26,7 +26,7 @@ export default function Footer({
         <div className="flex items-center gap-2">
           <Button
             color="primary"
-            size={'icon'}
+            className="h-6 w-6 p-0"
             onClick={() => navigate(backTo ?? '/')}
             disabled={backTo === undefined}
           >
@@ -57,7 +57,7 @@ export default function Footer({
           )}
           <Button
             color="primary"
-            size={'icon'}
+            className="h-6 w-6 p-0"
             onClick={() => navigate(nextTo ?? '/')}
             disabled={nextTo === undefined}
           >

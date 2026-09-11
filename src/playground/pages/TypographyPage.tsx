@@ -1,10 +1,7 @@
 import dedent from 'dedent';
-import { Card, CardBody } from '../../components/card';
 import { Text } from '../../components/text';
 import illust from '../../assets/images/typography.png';
 import MainSection from '../components/MainSection';
-import MarkdownRenderer from '../components/MarkdownRenderer';
-import { useMarkdown } from '../hooks/useMarkdown';
 import HeroSection from '../components/HeroSection';
 import Footer from '../components/Footer';
 
@@ -16,7 +13,6 @@ interface FontVariantProps {
 }
 
 export default function TypographyPage() {
-  const { doc } = useMarkdown(`/docs/typography.md`);
   const exampleCodeH1 = dedent(`
     <Text 
       value="Bold" 
@@ -366,13 +362,11 @@ export default function TypographyPage() {
           </div>
         </MainSection>
 
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
-
-        <Footer title="Typography" nextTo="/colors" nextToTitle="Colors" />
+        <Footer
+          title="Typography"
+          nextTo="/playground/colors"
+          nextToTitle="Color"
+        />
       </div>
     </>
   );

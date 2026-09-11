@@ -16,7 +16,7 @@ export default function HeroSection({
   illust = illustrator,
 }: Props) {
   return (
-    <Hero className="relative mb-4 flex gap-5 overflow-hidden">
+    <Hero className="relative z-0 mb-4 flex gap-5 overflow-hidden">
       <div className="flex flex-1 flex-col gap-2">
         <Text
           as={'h5'}

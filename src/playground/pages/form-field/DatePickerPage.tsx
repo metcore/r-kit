@@ -1,7 +1,6 @@
 import dedent from 'dedent';
 import { useState } from 'react';
 import { Button } from '../../../components/button';
-import { Card, CardBody } from '../../../components/card';
 import {
   DatePicker,
   formatDateToString,
@@ -13,8 +12,6 @@ import Footer from '../../components/Footer';
 import GridWrapper from '../../components/GridWrapper';
 import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
-import MarkdownRenderer from '../../components/MarkdownRenderer';
-import { useMarkdown } from '../../hooks/useMarkdown';
 
 const addDays = (date: Date, days: number) => {
   const next = new Date(date);
@@ -23,7 +20,6 @@ const addDays = (date: Date, days: number) => {
 };
 
 export default function DatePickerPage() {
-  const { doc } = useMarkdown(`/docs/date-picker.md`);
   const [singleValue, setSingleValue] = useState<Date | null>(new Date());
   const [singleMonthNameValue, setSingleMonthNameValue] = useState<Date | null>(
     null
@@ -33,9 +29,19 @@ export default function DatePickerPage() {
     end: new Date(),
   });
   const [open, setOpen] = useState(false);
+  const [errorValue, setErrorValue] = useState<Date | null>(null);
 
   const minDate = new Date();
   const maxDate = addDays(new Date(), 7);
+
+  const errorExample = dedent(`
+      <DatePicker
+        label="Tanggal mulai"
+        errorMessages="Tanggal mulai wajib diisi"
+        value={errorValue}
+        onChange={setErrorValue}
+      />
+    `);
 
   const defaultExample = dedent(`
       <DatePicker
@@ -221,17 +227,22 @@ export default function DatePickerPage() {
           </MainSection>
         </GridWrapper>
 
-        <Card>
-          <CardBody>
-            <MarkdownRenderer content={doc?.content ?? ''} />
-          </CardBody>
-        </Card>
+        <GridWrapper>
+          <MainSection title="Error State" code={errorExample}>
+            <DatePicker
+              label="Tanggal mulai"
+              errorMessages="Tanggal mulai wajib diisi"
+              value={errorValue}
+              onChange={setErrorValue}
+            />
+          </MainSection>
+        </GridWrapper>
 
         <Footer
-          backTo="/input-file"
-          backToTitle="Input File"
           title="Date Picker"
-          nextTo="/radio-button"
+          backTo="/playground/input-file"
+          backToTitle="Input File"
+          nextTo="/playground/radio-button"
           nextToTitle="Radio Button"
         />
       </div>
