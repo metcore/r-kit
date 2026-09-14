@@ -78,3 +78,7 @@ kedua prop itu tidak perlu kamu berikan.
 Karena itu pula, anak `List` harus berupa `ListItem` — bukan elemen DOM
 biasa. Menaruh `<div>` atau `<button>` langsung sebagai anak membuat
 prop internal itu bocor ke DOM dan memunculkan peringatan React.
+
+Baris pertama dan terakhir ikut melengkung mengikuti sudut kartu
+pembungkusnya, jadi tidak perlu lagi mengurung sudutnya dari sisi
+pemakai.
