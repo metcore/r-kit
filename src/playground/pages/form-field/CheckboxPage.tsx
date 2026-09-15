@@ -43,6 +43,7 @@ export default function CheckboxPage() {
               onChange={setCheckedBasic}
               label={checkedBasic ? 'Checked' : 'Unchecked'}
             />
+            <Checkbox />
           </MainSection>
           <MainSection
             title="Checkbox Indeterminate"

@@ -266,27 +266,31 @@ export const Checkbox: React.FC<
   const showHintAndError = !isInGroup;
 
   const hasError = Boolean(errorMessages);
+  const hasLabelOrDescription =
+    label !== undefined || description !== undefined;
   return (
     <div className={cn('flex flex-col', className)}>
-      <div className={cn('inline-flex gap-2')}>
+      <div className={cn('inline-flex', hasLabelOrDescription && 'gap-2')}>
         <BaseCheckbox {...props} id={id} size={size} icon={icon} />
 
-        <div className={cn('flex flex-col')}>
-          {label !== undefined && (
-            <FormLabel
-              htmlFor={id}
-              size={size}
-              tooltip={tooltip}
-              className={cn('cursor-pointer')}
-            >
-              {label}
-            </FormLabel>
-          )}
+        {hasLabelOrDescription && (
+          <div className={cn('flex flex-col')}>
+            {label !== undefined && (
+              <FormLabel
+                htmlFor={id}
+                size={size}
+                tooltip={tooltip}
+                className={cn('cursor-pointer')}
+              >
+                {label}
+              </FormLabel>
+            )}
 
-          {description !== undefined && (
-            <FormDescription size={size}>{description}</FormDescription>
-          )}
-        </div>
+            {description !== undefined && (
+              <FormDescription size={size}>{description}</FormDescription>
+            )}
+          </div>
+        )}
       </div>
 
       {showHintAndError && hint !== undefined && (
