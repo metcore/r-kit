@@ -97,3 +97,8 @@ Dua prop berikut **sudah usang**: `onCheckedChange` pada `Checkbox` dan
 <Checkbox onCheckedChange={setNilai} />  // usang
 <Checkbox onChange={setNilai} />         // gunakan ini
 ```
+
+`label` dan `description` sama-sama opsional. Bila keduanya kosong,
+`Checkbox` merender kotaknya saja — tanpa pembungkus teks dan tanpa
+jarak sisa di sebelah kanannya — jadi aman dipakai di dalam sel tabel
+atau sebagai penanda baris.

@@ -13,7 +13,9 @@ export function ListItem({
     variant === 'striped' ? (index % 2 === 0 ? 'bg-white' : 'bg-gray-50') : '';
 
   const baseClass = [
-    'block w-full text-left appearance-none p-3 rounded-t-md',
+    'block w-full text-left appearance-none p-3',
+    index === 0 && 'rounded-t-xl',
+    isLast && 'rounded-b-xl',
     stripedBg,
     active == true && 'bg-primary-50',
     !isLast && 'border-b border-gray-100',

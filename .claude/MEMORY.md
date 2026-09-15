@@ -18,6 +18,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [ApiTable scroll wrapper harus unconditional](memory/api-table-scroll-must-be-unconditional.md) — `overflow-x-auto` pembungkus Table gak boleh digantung ke prop `responsive`, karena mode itu cuma ganti layout di bawah `md`, tetap bisa overflow horizontal di `md` ke atas
 - [Select menu harus portal di dalam Sheet/Modal](memory/select-menu-portal-inside-dialog.md) — portal ke `document.body` bikin search input di Select gak bisa fokus kalau Select-nya di dalam Sheet/Modal, karena FocusScope Radix nolak fokus yang ke luar subtree dialog
 - [Input clearAble harus ngecek hasValue](memory/input-clearable-must-track-hasvalue.md) — tombol clear di Input dulu selalu tampil biarpun isiannya kosong, gak kayak Textarea yang udah bener; sekarang Input niru pola hasValue Textarea
+- [Sudut ListItem ikut radius Card](memory/list-item-corners-follow-card-radius.md) — radius dulu dipasang `rounded-t-md` di semua baris sehingga menonjol keluar lengkung Card; sekarang ikut posisi (baris pertama `rounded-t-xl`, terakhir `rounded-b-xl`), bukan diakalin `overflow-hidden` dari sisi pemakai
 
 ## Cara nambah entri baru
 

@@ -1,7 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { List } from '../list';
 import { ListItem } from '../list';
+import type { ListItemProps } from '../list';
 import type { AccordionItemProps, AccordionProps } from './type';
+
+interface AccordionHeaderProps extends ListItemProps {
+  onToggle: () => void;
+}
+
+function AccordionHeader({
+  children,
+  onToggle,
+  index,
+  isLast,
+  variant,
+}: AccordionHeaderProps) {
+  return (
+    <button type="button" onClick={onToggle} className="w-full cursor-pointer">
+      <ListItem index={index} isLast={isLast} variant={variant}>
+        {children}
+      </ListItem>
+    </button>
+  );
+}
 
 export function Accordion({
   children,
@@ -30,13 +51,7 @@ export function Accordion({
     <div>
       <List variant={variant}>
         {renderHeader != null && (
-          <button
-            type="button"
-            onClick={toggle}
-            className="w-full cursor-pointer"
-          >
-            <ListItem> {renderHeader} </ListItem>
-          </button>
+          <AccordionHeader onToggle={toggle}>{renderHeader}</AccordionHeader>
         )}
 
         {isExpanded &&

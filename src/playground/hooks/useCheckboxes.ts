@@ -69,6 +69,10 @@ export default function useCheckboxes() {
       onChange={setChecked}
       label={checked ? 'Checked' : 'Unchecked'}
     />
+
+    // Tanpa label dan description, kotaknya berdiri sendiri
+    // tanpa menyisakan jarak di sebelah kanannya.
+    <Checkbox />
   `);
 
   const exampleIndeterminate = dedent(`

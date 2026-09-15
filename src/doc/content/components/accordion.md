@@ -67,7 +67,8 @@ const [terbuka, setTerbuka] = useState(false);
 `Accordion` tidak meneruskan prop `className`. Untuk mengatur tampilan
 luarnya, bungkus dengan elemen sendiri.
 
-Kartu pembungkusnya memakai sudut membulat tanpa `overflow-hidden`,
-sehingga sudut baris di dalamnya dapat menonjol keluar lengkung — paling
-terlihat saat accordion tertutup. Bungkus dengan
-`[&_.rounded-xl]:overflow-hidden` bila mengganggu.
+Baris pertama dan terakhir ikut melengkung mengikuti sudut kartu
+pembungkusnya, jadi tidak perlu lagi mengurung sudutnya dari sisi
+pemakai. Saat tertutup, baris header adalah baris pertama sekaligus
+terakhir: sudut atas dan bawahnya membulat dan garis pemisah bawahnya
+hilang.
