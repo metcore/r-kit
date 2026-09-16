@@ -19,6 +19,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Select menu harus portal di dalam Sheet/Modal](memory/select-menu-portal-inside-dialog.md) — portal ke `document.body` bikin search input di Select gak bisa fokus kalau Select-nya di dalam Sheet/Modal, karena FocusScope Radix nolak fokus yang ke luar subtree dialog
 - [Input clearAble harus ngecek hasValue](memory/input-clearable-must-track-hasvalue.md) — tombol clear di Input dulu selalu tampil biarpun isiannya kosong, gak kayak Textarea yang udah bener; sekarang Input niru pola hasValue Textarea
 - [Sudut ListItem ikut radius Card](memory/list-item-corners-follow-card-radius.md) — radius dulu dipasang `rounded-t-md` di semua baris sehingga menonjol keluar lengkung Card; sekarang ikut posisi (baris pertama `rounded-t-xl`, terakhir `rounded-b-xl`), bukan diakalin `overflow-hidden` dari sisi pemakai
+- [Re-seed gema bikin upload kebuang](memory/input-file-echo-reseed-drops-uploads.md) — efek sinkronisasi `value` di InputFile ikut jalan waktu value-nya gema dari emisi sendiri, bikin file yang masih uploading kebuang; mode `uploadFile` + `multiple` jadi cuma nyimpen satu file
 
 ## Cara nambah entri baru
 

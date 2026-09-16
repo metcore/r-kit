@@ -5,6 +5,7 @@ import {
   type FileItem,
   type InputFileRef,
   type InputFileValue,
+  type UploadedFileValue,
 } from '../../../components/input-file';
 import { useRef, useState } from 'react';
 import { createMockFile } from '../../../components/input-file/helpers';
@@ -39,7 +40,7 @@ export default function InputFilePage() {
     }),
   ]);
 
-  const [serverFiles, setServerFiles] = useState<InputFileValue[]>([]);
+  const [serverFiles, setServerFiles] = useState<UploadedFileValue[]>([]);
 
   const basicInput = dedent(`
     <div className="flex gap-4">
@@ -91,13 +92,20 @@ export default function InputFilePage() {
   `);
 
   const exampleServer = dedent(`
-    // uploadConfig mengunggah berkas segera setelah dipilih,
-    // lengkap dengan indikator progres per berkas.
+    // mode="uploadFile" mengunggah berkas segera setelah dipilih, lengkap
+    // dengan indikator progres per berkas. Nilainya berupa
+    // { id, url, original_name } — saat multiple, semua berkas ikut masuk,
+    // bukan cuma yang unggahannya selesai duluan.
+    const [files, setFiles] = useState<UploadedFileValue[]>([]);
+
     <InputFile
+      mode="uploadFile"
+      multiple
       accept=".png"
       variant="medium"
+      value={files}
+      onChange={setFiles}
       uploadConfig={{ url: '/api/upload', fieldName: 'file' }}
-      onUploadSuccess={(results) => simpan(results)}
     />
   `);
 
@@ -227,6 +235,8 @@ export default function InputFilePage() {
           </MainSection>
           <MainSection title="Input File Mode Server" code={exampleServer}>
             <InputFile
+              mode="uploadFile"
+              multiple
               accept=".png"
               variant="medium"
               value={serverFiles}

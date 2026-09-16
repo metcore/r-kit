@@ -53,15 +53,26 @@ boleh dipilih.
 
 ## Unggah Langsung ke Server
 
-Dengan `uploadConfig`, berkas dikirim begitu dipilih, lengkap dengan
-indikator progres per berkas:
+Dengan `mode="uploadFile"`, berkas dikirim begitu dipilih, lengkap dengan
+indikator progres per berkas. Nilainya bukan lagi `File`, melainkan
+`{ id, url, original_name }` hasil unggahan:
 
 ```tsx
+const [berkas, setBerkas] = useState<UploadedFileValue[]>([]);
+
 <InputFile
+  mode="uploadFile"
+  multiple
+  value={berkas}
+  onChange={setBerkas}
   uploadConfig={{ url: '/api/upload', fieldName: 'file' }}
-  onUploadSuccess={(hasil) => simpan(hasil)}
-/>
+/>;
 ```
+
+`uploadConfig` hanya berlaku di mode ini — tanpa `mode="uploadFile"`
+berkas tidak pernah dikirim. Saat `multiple`, tiap berkas diunggah
+sendiri-sendiri dan semuanya masuk ke `onChange` begitu selesai, tidak
+peduli urutan selesainya.
 
 ## Nama Tampilan Kustom
 
@@ -93,6 +104,7 @@ const berkas = useInputFile({
 
 | Prop | Tipe | Bawaan | Keterangan |
 | --- | --- | --- | --- |
+| `mode` | `file \| uploadFile` | `file` | `uploadFile` mengunggah tiap berkas lewat `uploadConfig` |
 | `value` | `FileItem[]` | — | Mode terkendali |
 | `onChange` | `(files: FileItem[]) => void` | — | Dipanggil saat daftar berubah |
 | `multiple` | `boolean` | `false` | Mengizinkan banyak berkas |

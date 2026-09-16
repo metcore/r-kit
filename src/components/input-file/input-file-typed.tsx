@@ -130,11 +130,16 @@ const InputFile = forwardRef<InputFileRef, InputFileTypedProps>(
     useEffect(() => {
       if (appliedSignatureRef.current === incomingSignature) return;
       appliedSignatureRef.current = incomingSignature;
-      emittedSignatureRef.current = signatureOfSeededItems(
-        mode,
-        multiple,
-        value
-      );
+
+      const seededSignature = signatureOfSeededItems(mode, multiple, value);
+
+      // `value` yang balik sama persis dengan emisi terakhir = gema dari
+      // komponen ini sendiri, bukan perubahan dari luar. Jangan seed ulang:
+      // file yang masih uploading belum punya url sehingga tidak ikut
+      // diemit, dan seed ulang akan membuangnya dari daftar.
+      if (seededSignature === emittedSignatureRef.current) return;
+
+      emittedSignatureRef.current = seededSignature;
       setItems(toInternalValue(mode, multiple, value));
     }, [incomingSignature, mode, multiple, value]);
 
