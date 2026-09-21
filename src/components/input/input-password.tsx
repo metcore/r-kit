@@ -38,7 +38,11 @@ export function InputPassword({
         />
       </InputGroupControl>
 
-      <Button variant="tertiary" onClick={() => setShowPassword(!showPassword)}>
+      <Button
+        variant="tertiary"
+        onClick={() => setShowPassword(!showPassword)}
+        type="button"
+      >
         <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />
       </Button>
     </InputGroup>
