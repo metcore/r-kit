@@ -121,7 +121,7 @@ export function InputPhoneNumber({
     <InputGroup
       label={label}
       errorMessages={errorMessages}
-      size={size}
+      size={size ?? 'md'}
       required={required}
       hint={hint}
       tooltip={tooltip}

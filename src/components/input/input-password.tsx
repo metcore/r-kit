@@ -9,7 +9,7 @@ export function InputPassword({
   value,
   onChange,
   errorMessages,
-  size,
+  size = 'md',
   hint,
   tooltip,
   required,
@@ -20,7 +20,7 @@ export function InputPassword({
     <InputGroup
       label={label}
       errorMessages={errorMessages}
-      size={size}
+      size={size ?? 'md'}
       required={required}
       hint={hint}
       tooltip={tooltip}
