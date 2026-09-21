@@ -60,6 +60,22 @@ Selain larik opsi, `options` juga menerima larik kelompok:
 />
 ```
 
+## Ukuran & Ikon Awalan
+
+`size` mengatur tinggi kontrol, ukuran teks, **dan ukuran ikon awalan**
+sekaligus — tidak ada prop terpisah untuk ikonnya:
+
+| `size` | Tinggi minimum | Teks | Ikon |
+| --- | --- | --- | --- |
+| `sm` | 32px | `t3` | 16px |
+| `md` | 36px | `t2` | 18px |
+| `lg` | 40px | `t1` | 20px |
+
+```tsx
+<Select size="sm" icon="user" options={OPSI} />
+<Select size="lg" icon="user" options={OPSI} />
+```
+
 ## Opsi dengan Keterangan & Ikon
 
 ```tsx
@@ -110,6 +126,8 @@ mendekati ujung:
 | `multiple` | `boolean` | `false` | Mengizinkan lebih dari satu pilihan |
 | `isSearchable` | `boolean` | `false` | Menampilkan kolom pencarian |
 | `isClearable` | `boolean` | `false` | Menampilkan tombol hapus pilihan |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Tinggi kontrol, ukuran teks, dan ukuran ikon awalan |
+| `icon` | `IconName` | — | Ikon awalan di kiri kontrol; ukurannya mengikuti `size` |
 | `placeholder` | `string` | — | Teks saat belum ada pilihan |
 | `searchPlaceholder` | `string` | — | Teks pada kolom pencarian |
 | `label` | `string` | — | Teks di atas isian |

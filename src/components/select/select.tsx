@@ -76,6 +76,12 @@ const fontSizeMap = {
   },
 } as const;
 
+const iconSizeMap = {
+  sm: 16,
+  md: 18,
+  lg: 20,
+} as const;
+
 export function Select<Extra extends object = object>({
   options = [],
   value: valueProp,
@@ -752,7 +758,11 @@ export function Select<Extra extends object = object>({
         >
           {icon && (
             <div className="flex items-center border-r border-gray-200 px-3 py-2">
-              <Icon name={icon} size={22} className="text-gray-600" />
+              <Icon
+                name={icon}
+                size={iconSizeMap[size ?? 'md']}
+                className="text-gray-600"
+              />
             </div>
           )}
 

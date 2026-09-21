@@ -104,6 +104,26 @@ export const codeExampleSelectDescription = dedent(`
   }
 `);
 
+export const codeExampleSelectSize = dedent(`
+
+  import type { SelectOption } from '@herca/r-kit/clients';
+
+  const data: SelectOption[] = [
+    { value: '1', label: 'Jhon' },
+  ];
+
+  export default function SelectPage() {
+    // Ikon mengikuti size: sm 16px, md 18px, lg 20px
+    return (
+      <>
+        <Select options={data} size="sm" icon="user" placeholder="Pilih user…" />
+        <Select options={data} size="md" icon="user" placeholder="Pilih user…" />
+        <Select options={data} size="lg" icon="user" placeholder="Pilih user…" />
+      </>
+    );
+  }
+`);
+
 export const codeExampleSelectDisabled = dedent(`
   
   import { useState } from 'react';
