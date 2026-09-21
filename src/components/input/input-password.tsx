@@ -9,7 +9,7 @@ export function InputPassword({
   value,
   onChange,
   errorMessages,
-  size,
+  size = 'md',
   hint,
   tooltip,
   required,
@@ -20,7 +20,7 @@ export function InputPassword({
     <InputGroup
       label={label}
       errorMessages={errorMessages}
-      size={size}
+      size={size ?? 'md'}
       required={required}
       hint={hint}
       tooltip={tooltip}
@@ -38,7 +38,11 @@ export function InputPassword({
         />
       </InputGroupControl>
 
-      <Button variant="tertiary" onClick={() => setShowPassword(!showPassword)}>
+      <Button
+        variant="tertiary"
+        onClick={() => setShowPassword(!showPassword)}
+        type="button"
+      >
         <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />
       </Button>
     </InputGroup>
