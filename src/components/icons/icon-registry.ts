@@ -177,6 +177,7 @@ import LogOutIcon from './icons/LogOutIcon';
 import MapLocationIcon from './icons/MapLocationIcon';
 import MenuLeftIcon from './icons/MenuLeftIcon';
 import MessageTextNotificationIcon from './icons/MessageTextNotificationIcon';
+import MinusCircleIcon from './icons/MinusCircleIcon';
 import MinusIcon from './icons/MinusIcon';
 import MobileIcon from './icons/MobileIcon';
 import MoneyBillBanIcon from './icons/MoneyBillBanIcon';
@@ -604,6 +605,7 @@ export const iconRegistry = {
   'menu-left': MenuLeftIcon,
   'message-text-notification': MessageTextNotificationIcon,
   'minus': MinusIcon,
+  'minus-circle': MinusCircleIcon,
   'mobile': MobileIcon,
   'money-bill-ban': MoneyBillBanIcon,
   'money-bill-check': MoneyBillCheckIcon,
