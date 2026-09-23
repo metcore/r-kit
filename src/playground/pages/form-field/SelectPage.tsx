@@ -17,6 +17,7 @@ import {
   codeExampleSelectCreatable,
   codeExampleSelectDescription,
   codeExampleSelectDisabled,
+  codeExampleSelectSize,
   codeExampleSelectGroup,
   codeExampleSelectTooltip,
 } from '../../../example-code/Select';
@@ -271,7 +272,7 @@ function SelectPage() {
           <MainSection
             title="Select Size"
             className="flex-1"
-            code={codeExampleSelectDisabled}
+            code={codeExampleSelectSize}
           >
             <Select
               options={dataSingle}
@@ -282,6 +283,7 @@ function SelectPage() {
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
               }
               size="sm"
+              icon="user"
               placeholder="Cari & pilih user…"
               isClearable
               onLoadMore={posts.hasMore ? users.loadMore : undefined}
@@ -293,6 +295,7 @@ function SelectPage() {
               searchValue={searchValue}
               value={selectedUserBasic}
               size="md"
+              icon="user"
               onChange={(v) =>
                 setSelectedUserBasic(v as SelectOption<ExtraUser> | null)
               }
@@ -307,6 +310,7 @@ function SelectPage() {
               searchValue={searchValue}
               value={selectedUserBasic}
               size="lg"
+              icon="user"
               onChange={(v) =>
                 setSelectedUser(v as SelectOption<ExtraUser> | null)
               }
