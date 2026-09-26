@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { formatFileSize } from '../../lib/utils';
 import { FormLabel } from '../form';
 import { Icon } from '../icons';
 import { Input } from '../input/input';
@@ -188,7 +189,7 @@ const PreviewItem = ({
                   <div className="flex flex-wrap items-center gap-1">
                     {data.size !== undefined && (
                       <Text
-                        value={`${(data.size / 1024 / 1024).toFixed(2)} MB`}
+                        value={formatFileSize(data.size)}
                         className="truncate text-gray-700!"
                       />
                     )}

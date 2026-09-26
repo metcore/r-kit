@@ -30,3 +30,22 @@ export function hexToRgba(hex: string, opacity = 1) {
 
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
+
+export function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return '0 MB';
+  }
+
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const exponent = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(1024)),
+    units.length - 1
+  );
+  const value = bytes / 1024 ** exponent;
+  const rounded =
+    value >= 10 || Number.isInteger(value)
+      ? Math.round(value)
+      : Math.round(value * 10) / 10;
+
+  return `${rounded} ${units[exponent]}`;
+}
