@@ -74,6 +74,45 @@ berkas tidak pernah dikirim. Saat `multiple`, tiap berkas diunggah
 sendiri-sendiri dan semuanya masuk ke `onChange` begitu selesai, tidak
 peduli urutan selesainya.
 
+### Ukuran Berkas yang Sudah Ada
+
+Ukuran hanya terbaca sendiri dari berkas yang baru dipilih user. Untuk
+berkas yang sudah tersimpan di server, komponen tidak pernah mengukurnya
+sendiri — tidak ada permintaan `HEAD`/`Content-Length` — jadi tanpa
+`size` barisnya memang tidak ditampilkan. Isi `size` dalam byte kalau
+ukurannya perlu terlihat:
+
+```tsx
+<InputFile
+  mode="uploadFile"
+  multiple
+  value={[
+    {
+      id: 12,
+      url: 'https://cdn.contoh.id/kontrak.pdf',
+      original_name: 'kontrak.pdf',
+      size: 182,
+    },
+  ]}
+  onChange={setBerkas}
+  uploadConfig={{ url: '/api/upload' }}
+/>
+```
+
+`size` dibaca saat entry disemai dari `value`. Kalau ukurannya baru
+diketahui belakangan sementara `id`, `url`, dan namanya tidak berubah,
+nilainya tidak ikut diperbarui — sertakan sejak awal.
+
+### Value yang Datang Belakangan
+
+Form edit yang dirender sebelum data detail selesai di-fetch — nilainya
+masuk menyusul lewat `reset()` — tetap mempertahankan `id` tiap lampiran
+lama. Komponen tidak lagi mengirim `onChange([])` lebih dulu saat
+nilainya berganti dari luar, jadi `id` tidak pernah berubah menjadi
+`null` dan backend tidak salah menyimpan lampiran lama sebagai berkas
+baru. Perubahan yang datang dari `onChange` komponen sendiri tidak
+terpengaruh, sehingga unggahan yang masih berjalan tetap aman.
+
 ## Nama Tampilan Kustom
 
 ```tsx
@@ -132,6 +171,12 @@ const berkas = useInputFile({
 | `disabled` | `boolean` | `false` | Menonaktifkan |
 
 ## Catatan
+
+Entry `value` di mode `uploadFile` wajib punya `url` bertipe string;
+selain `url`, semua kolom opsional — `original_name` -> `name` ->
+`file_name` dipakai berurutan sebagai nama tampilan, dan `size` dalam
+byte untuk menampilkan ukuran. Ukurannya diformat mengikuti besarannya,
+jadi 182 byte tampil sebagai `182 B`, bukan `0.00 MB`.
 
 Setiap `FileItem` sebaiknya punya `id` yang unik. Berkas yang dibuat
 sendiri tanpa `id` membuat React kehilangan kunci daftar, dan seluruh

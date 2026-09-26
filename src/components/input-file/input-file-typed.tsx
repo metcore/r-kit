@@ -81,6 +81,12 @@ const InputFile = forwardRef<InputFileRef, InputFileTypedProps>(
     );
     const appliedSignatureRef = useRef<string>(incomingSignature);
     const emittedSignatureRef = useRef<string | null>(null);
+    // Seed dari `value` luar baru terpasang di render berikutnya, sementara
+    // `nextSignature` di commit yang sama masih dihitung dari daftar SEBELUM
+    // seed. Emisinya wajib dilewati sekali; kalau tidak, parent menerima
+    // `onChange` berisi daftar basi (kosong saat data detail baru datang) dan
+    // id file lama ikut hilang dari `publicIds` sesudahnya.
+    const pendingSeedRef = useRef(false);
 
     const hook = useInputFile({
       value: items,
@@ -140,6 +146,7 @@ const InputFile = forwardRef<InputFileRef, InputFileTypedProps>(
       if (seededSignature === emittedSignatureRef.current) return;
 
       emittedSignatureRef.current = seededSignature;
+      pendingSeedRef.current = true;
       setItems(toInternalValue(mode, multiple, value));
     }, [incomingSignature, mode, multiple, value]);
 
@@ -148,6 +155,10 @@ const InputFile = forwardRef<InputFileRef, InputFileTypedProps>(
       if (!mountedRef.current) {
         mountedRef.current = true;
         emittedSignatureRef.current = nextSignature;
+        return;
+      }
+      if (pendingSeedRef.current) {
+        pendingSeedRef.current = false;
         return;
       }
       if (emittedSignatureRef.current === nextSignature) return;

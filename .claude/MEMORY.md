@@ -19,8 +19,10 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Select menu harus portal di dalam Sheet/Modal](memory/select-menu-portal-inside-dialog.md) — portal ke `document.body` bikin search input di Select gak bisa fokus kalau Select-nya di dalam Sheet/Modal, karena FocusScope Radix nolak fokus yang ke luar subtree dialog
 - [Input clearAble harus ngecek hasValue](memory/input-clearable-must-track-hasvalue.md) — tombol clear di Input dulu selalu tampil biarpun isiannya kosong, gak kayak Textarea yang udah bener; sekarang Input niru pola hasValue Textarea
 - [Sudut ListItem ikut radius Card](memory/list-item-corners-follow-card-radius.md) — radius dulu dipasang `rounded-t-md` di semua baris sehingga menonjol keluar lengkung Card; sekarang ikut posisi (baris pertama `rounded-t-xl`, terakhir `rounded-b-xl`), bukan diakalin `overflow-hidden` dari sisi pemakai
-- [Re-seed gema bikin upload kebuang](memory/input-file-echo-reseed-drops-uploads.md) — efek sinkronisasi `value` di InputFile ikut jalan waktu value-nya gema dari emisi sendiri, bikin file yang masih uploading kebuang; mode `uploadFile` + `multiple` jadi cuma nyimpen satu file
+- [Handshake dua efek di InputFile](memory/input-file-echo-reseed-drops-uploads.md) — efek seed & efek emit `value` jalan di satu commit dan saling nimpa signature ref: bikin upload kebuang (gema) DAN bikin `onChange([])` + `id: null` waktu value datang belakangan
 - [Jumlah ikon di doc di-hardcode](memory/icon-count-in-docs-must-be-bumped.md) — nambah/hapus ikon wajib bump angka ikon di `icon.md` (3 tempat) + tabel `01-introduction.md`, dan daftarin ikonnya di `icon-registry.ts`
+- [Adapter value publik gampang buang field](memory/public-value-adapter-drops-fields.md) — data "ada tapi gak nampil" biasanya kepotong di adapter `value` -> internal, bukan di komponen yang me-render; nambah field di `UploadFileEntry` harus sekalian disisipkan di `toInternalValue`
+- [Format byte lewat formatFileSize](memory/format-bytes-with-format-file-size.md) — jangan `/1024/1024 + toFixed(2)` lagi, 178 byte harus tampil `178 B` bukan `0.00 MB`
 
 ## Cara nambah entri baru
 
