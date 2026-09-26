@@ -20,6 +20,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Input clearAble harus ngecek hasValue](memory/input-clearable-must-track-hasvalue.md) — tombol clear di Input dulu selalu tampil biarpun isiannya kosong, gak kayak Textarea yang udah bener; sekarang Input niru pola hasValue Textarea
 - [Sudut ListItem ikut radius Card](memory/list-item-corners-follow-card-radius.md) — radius dulu dipasang `rounded-t-md` di semua baris sehingga menonjol keluar lengkung Card; sekarang ikut posisi (baris pertama `rounded-t-xl`, terakhir `rounded-b-xl`), bukan diakalin `overflow-hidden` dari sisi pemakai
 - [Re-seed gema bikin upload kebuang](memory/input-file-echo-reseed-drops-uploads.md) — efek sinkronisasi `value` di InputFile ikut jalan waktu value-nya gema dari emisi sendiri, bikin file yang masih uploading kebuang; mode `uploadFile` + `multiple` jadi cuma nyimpen satu file
+- [Jumlah ikon di doc di-hardcode](memory/icon-count-in-docs-must-be-bumped.md) — nambah/hapus ikon wajib bump angka ikon di `icon.md` (3 tempat) + tabel `01-introduction.md`, dan daftarin ikonnya di `icon-registry.ts`
 
 ## Cara nambah entri baru
 

@@ -1,11 +1,11 @@
 ---
 title: Icon
-description: Menampilkan salah satu dari 402 ikon bawaan kit.
+description: Menampilkan salah satu dari 404 ikon bawaan kit.
 group: Foundation
 playground: /playground/icons
 ---
 
-Kit membawa **402 ikon**. Semuanya dipanggil lewat satu komponen dengan
+Kit membawa **404 ikon**. Semuanya dipanggil lewat satu komponen dengan
 menyebut namanya.
 
 ## Impor
@@ -75,5 +75,5 @@ Nama ikon yang tidak dikenal membuat komponen merender `null` tanpa
 melempar galat, sehingga kesalahan mudah terlewat saat dijalankan.
 Andalkan `IconNameProps` untuk menangkapnya lebih awal.
 
-Daftar lengkap 402 ikon beserta pencariannya ada di halaman Icon pada
+Daftar lengkap 404 ikon beserta pencariannya ada di halaman Icon pada
 Playground; kartu ikonnya bisa diklik untuk menyalin kode pemakaian.
