@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { InputGroup, InputGroupControl } from '../input-group';
 import { Input, type InputProps } from './input';
 import { Select, type SelectGroup, type SelectOption } from '../select';
@@ -49,23 +49,44 @@ export type InputPhoneNumberProps = Omit<InputProps, 'value' | 'onChange'> & {
   onChange?: (value: PhoneNumberValue) => void;
 };
 
+const CountryOption = memo(function CountryOption({
+  flag,
+  dialCode,
+  name,
+  selected,
+}: {
+  flag?: string;
+  dialCode?: string;
+  name?: string;
+  selected: boolean;
+}) {
+  return (
+    <Chip selected={selected} className="flex w-full flex-col items-start">
+      <div className="flex gap-2">
+        {flag}
+        <Text variant="t2" weight="medium" className="text-primary-1000">
+          {dialCode}
+        </Text>
+      </div>
+      <Text variant="t3" weight="medium" className="text-gray-700">
+        {name}
+      </Text>
+    </Chip>
+  );
+});
+
 function UserOptionRenderer(
   option: SelectOption,
   { selected }: { selected: boolean }
 ) {
   const u = option as Country;
   return (
-    <Chip selected={selected} className="flex w-full flex-col items-start">
-      <div className="flex gap-2">
-        {u.flag}
-        <Text variant="t2" weight="medium" className="text-primary-1000">
-          {u.value}
-        </Text>
-      </div>
-      <Text variant="t3" weight="medium" className="text-gray-700">
-        {u.label}
-      </Text>
-    </Chip>
+    <CountryOption
+      flag={u.flag}
+      dialCode={u.value}
+      name={u.label}
+      selected={selected}
+    />
   );
 }
 
@@ -93,29 +114,39 @@ export function InputPhoneNumber({
   clearAble = true,
   placeholder,
 }: InputPhoneNumberProps): React.ReactElement {
-  const [selectedDialCode, setSelectedDialCode] = useState<string>();
-  const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [internalValue, setInternalValue] = useState<PhoneNumberValue>({});
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+
+  const emitChange = useCallback(
+    (next: PhoneNumberValue) => {
+      if (!isControlled) setInternalValue(next);
+      onChange?.(next);
+    },
+    [isControlled, onChange]
+  );
 
   const selectedFlag = useMemo(
     () =>
-      otherCountries.find((option) => option.value === value?.dialCode) ?? null,
-    [value?.dialCode]
+      otherCountries.find(
+        (option) => option.value === currentValue?.dialCode
+      ) ?? null,
+    [currentValue?.dialCode]
   );
 
   const handleCodeChange = (option: SelectOption | null) => {
-    setSelectedDialCode(option?.value as string);
+    emitChange({
+      value: currentValue?.value,
+      dialCode: option?.value as string | undefined,
+    });
   };
 
   const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(event.target.value);
-  };
-
-  useEffect(() => {
-    onChange?.({
-      value: phoneNumber,
-      dialCode: selectedDialCode,
+    emitChange({
+      value: event.target.value,
+      dialCode: currentValue?.dialCode,
     });
-  }, [phoneNumber, selectedDialCode, onChange]);
+  };
 
   return (
     <InputGroup
@@ -138,7 +169,7 @@ export function InputPhoneNumber({
       <InputGroupControl>
         <Input
           placeholder={placeholder}
-          value={value?.value ?? ''}
+          value={currentValue?.value ?? ''}
           disabled={disabled}
           onChange={handleNumberChange}
           clearAble={clearAble}
