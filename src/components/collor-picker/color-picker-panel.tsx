@@ -189,7 +189,7 @@ export default function ColorPickerPanel({
               : 'cursor-not-allowed text-[#c4c8cf]'
           }`}
         >
-          <Icon name="pencil" size={20} />
+          <Icon name="color-picker" size={20} />
         </button>
 
         <div className="flex flex-1 flex-col gap-2.5">

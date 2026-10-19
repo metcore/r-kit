@@ -43,7 +43,7 @@ export function InputPassword({
         onClick={() => setShowPassword(!showPassword)}
         type="button"
       >
-        <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />
+        <Icon name={showPassword ? 'eye-slash' : 'eye'} size={16} />
       </Button>
     </InputGroup>
   );

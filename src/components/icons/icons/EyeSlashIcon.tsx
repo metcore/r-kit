@@ -1,7 +1,7 @@
 import React from 'react';
 import type { BaseIconProps } from '../type';
 
-const EyeOpen: React.FC<BaseIconProps> = ({
+const EyeSlashIcon: React.FC<BaseIconProps> = ({
   size = 24,
   color = 'currentColor',
   className,
@@ -20,4 +20,4 @@ const EyeOpen: React.FC<BaseIconProps> = ({
   </svg>
 );
 
-export default EyeOpen;
+export default EyeSlashIcon;

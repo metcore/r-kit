@@ -154,7 +154,7 @@ const codePassword = dedent(`
           variant="default"
           onClick={() => setShowPassword(!showPassword)}
         >
-          <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />
+          <Icon name={showPassword ? 'eye-slash' : 'eye'} size={16} />
         </Button>
       </InputGroup>
     );
@@ -598,7 +598,7 @@ export default function InputGroupPage() {
                 variant="default"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <Icon name={showPassword ? 'eye-open' : 'eye'} size={16} />
+                <Icon name={showPassword ? 'eye-slash' : 'eye'} size={16} />
               </Button>
             </InputGroup>
           </MainSection>
