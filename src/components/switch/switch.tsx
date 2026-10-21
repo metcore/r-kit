@@ -112,12 +112,7 @@ export const Switch: React.FC<
   const resolvedSize = size ?? group?.size;
 
   return (
-    <FormField
-      hint={hint}
-      errorMessages={errorMessages}
-      className={className}
-      tooltip={tooltip}
-    >
+    <FormField hint={hint} errorMessages={errorMessages} className={className}>
       <div
         className={cn(
           'flex flex-col items-center gap-2',
@@ -130,7 +125,11 @@ export const Switch: React.FC<
         {(label !== undefined || description !== undefined) && (
           <div className="flex flex-col">
             {label !== undefined && (
-              <FormLabel htmlFor={id} className={labelSizeClasses[size]}>
+              <FormLabel
+                htmlFor={id}
+                tooltip={tooltip}
+                className={labelSizeClasses[size]}
+              >
                 {label}
               </FormLabel>
             )}
