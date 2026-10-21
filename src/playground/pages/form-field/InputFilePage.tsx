@@ -5,6 +5,7 @@ import {
   type FileItem,
   type InputFileRef,
   type InputFileValue,
+  type UploadFileValueInput,
   type UploadedFileValue,
 } from '../../../components/input-file';
 import { useRef, useState } from 'react';
@@ -41,6 +42,30 @@ export default function InputFilePage() {
   ]);
 
   const [serverFiles, setServerFiles] = useState<UploadedFileValue[]>([]);
+
+  // Meniru form edit: value-nya baru datang setelah data detail selesai
+  // di-fetch, bukan sudah final sejak mount.
+  const [lateFiles, setLateFiles] = useState<UploadFileValueInput[]>([]);
+
+  const [existingFiles, setExistingFiles] = useState<UploadFileValueInput[]>([
+    {
+      id: 1,
+      url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+      original_name: 'tanda-tangan.png',
+      size: 182,
+    },
+    {
+      id: 2,
+      url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+      original_name: 'lampiran-sedang.png',
+      size: 348160,
+    },
+    {
+      id: 3,
+      url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+      original_name: 'tanpa-ukuran.png',
+    },
+  ]);
 
   const basicInput = dedent(`
     <div className="flex gap-4">
@@ -102,6 +127,48 @@ export default function InputFilePage() {
       mode="uploadFile"
       multiple
       accept=".png"
+      variant="medium"
+      value={files}
+      onChange={setFiles}
+      uploadConfig={{ url: '/api/upload', fieldName: 'file' }}
+    />
+  `);
+
+  const exampleExistingSize = dedent(`
+    // Ukuran berkas yang sudah tersimpan di server tidak pernah diukur
+    // sendiri oleh komponen — tidak ada permintaan HEAD/Content-Length.
+    // Isi \`size\` dalam byte supaya ukurannya ikut tampil; entry tanpa
+    // \`size\` hanya menampilkan namanya saja.
+    const [files, setFiles] = useState<UploadFileValueInput[]>([
+      { id: 1, url: '/berkas/tanda-tangan.png', original_name: 'tanda-tangan.png', size: 182 },
+      { id: 2, url: '/berkas/lampiran.png', original_name: 'lampiran-sedang.png', size: 348160 },
+      { id: 3, url: '/berkas/lain.png', original_name: 'tanpa-ukuran.png' },
+    ]);
+
+    <InputFile
+      mode="uploadFile"
+      multiple
+      variant="medium"
+      value={files}
+      onChange={setFiles}
+      uploadConfig={{ url: '/api/upload', fieldName: 'file' }}
+    />
+  `);
+
+  const exampleLateValue = dedent(`
+    // Form edit yang dirender sebelum data detail datang: value-nya awalnya
+    // kosong, lalu terisi lewat reset(). Id lampiran lama harus tetap utuh
+    // sesudahnya — kalau jadi null, backend menyimpannya sebagai file baru.
+    const [files, setFiles] = useState<UploadFileValueInput[]>([]);
+
+    useEffect(() => {
+      if (!detail) return;
+      reset({ attachments: detail.attachments });
+    }, [detail, reset]);
+
+    <InputFile
+      mode="uploadFile"
+      multiple
       variant="medium"
       value={files}
       onChange={setFiles}
@@ -249,6 +316,63 @@ export default function InputFilePage() {
                 console.log(results);
               }}
             />
+          </MainSection>
+          <MainSection
+            title="Ukuran Berkas yang Sudah Ada"
+            code={exampleExistingSize}
+          >
+            <InputFile
+              mode="uploadFile"
+              multiple
+              variant="medium"
+              label="Berkas tersimpan"
+              hint="182 B, 340 KB, dan satu entry tanpa size"
+              value={existingFiles}
+              onChange={(files) => setExistingFiles(files)}
+              uploadConfig={{
+                url: 'https://httpbin.org/post',
+                fieldName: 'file',
+              }}
+            />
+          </MainSection>
+          <MainSection
+            title="Value yang Datang Belakangan"
+            code={exampleLateValue}
+          >
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                className="w-fit cursor-pointer rounded-lg border border-gray-200 px-3 py-2"
+                onClick={() =>
+                  setLateFiles([
+                    {
+                      id: 42,
+                      url: 'https://stg.cdn.herca.id//test//OFjI62VmGggcHMB13vCnjUTHafweMhcq5oTzLb5R.png',
+                      original_name: 'surat-resmi-lama.png',
+                      size: 182,
+                    },
+                  ])
+                }
+              >
+                Muat data detail (reset)
+              </button>
+              <InputFile
+                mode="uploadFile"
+                multiple
+                variant="medium"
+                label="Lampiran surat resmi"
+                hint="Id 42 harus tetap 42 setelah data detail dimuat"
+                value={lateFiles}
+                onChange={(files) => setLateFiles(files)}
+                uploadConfig={{
+                  url: 'https://httpbin.org/post',
+                  fieldName: 'file',
+                }}
+              />
+              <pre className="overflow-x-auto rounded-lg bg-gray-50 p-3 text-xs">
+                {JSON.stringify(lateFiles, null, 2)}
+              </pre>
+            </div>
           </MainSection>
           <MainSection title="Menggunakan Hooks" code={exampleHooks}>
             <div className="flex flex-col gap-6">

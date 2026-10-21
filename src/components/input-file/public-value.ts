@@ -55,6 +55,13 @@ const resolveDisplayName = (entry: UploadFileEntry): string =>
   firstString(entry.original_name, entry.name, entry.file_name) ??
   deriveNameFromUrl(entry.url);
 
+const sizeOfEntry = (entry: UploadFileEntry): number | undefined =>
+  typeof entry.size === 'number' &&
+  Number.isFinite(entry.size) &&
+  entry.size >= 0
+    ? entry.size
+    : undefined;
+
 const publicIdOfEntry = (entry: UploadFileEntry): UploadedFileId => {
   if (!isValidPublicId(entry.id)) {
     if (typeof console !== 'undefined') {
@@ -113,6 +120,7 @@ export const toInternalValue = (
       id: internalIdOfEntry(entry, index),
       url: entry.url,
       name: resolveDisplayName(entry),
+      size: sizeOfEntry(entry),
     });
   });
   return out;

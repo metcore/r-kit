@@ -196,6 +196,12 @@ export interface UploadFileEntry {
   original_name?: string | null;
   name?: string | null;
   file_name?: string | null;
+  /**
+   * Ukuran file dalam bytes. Komponen tidak pernah mengukur file remote sendiri
+   * (tidak ada request HEAD/Content-Length), jadi ukuran file yang sudah ada
+   * hanya tampil kalau diisi di sini. Dibaca saat entry di-seed dari `value`.
+   */
+  size?: number | null;
 }
 
 /**

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, DragEvent } from 'react';
+import { formatFileSize } from '../../lib/utils';
 import { isLocalFile } from './type';
 import type {
   FileItem,
@@ -369,7 +370,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
       if (oversized.length > 0) {
         setInternalError(
           maxSizeErrorMessage ??
-            `File ${oversized.map((f) => f.name).join(', ')} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
+            `File ${oversized.map((f) => f.name).join(', ')} melebihi ukuran maksimal ${formatFileSize(maxSize)}`
         );
         return;
       }
@@ -438,7 +439,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     if (maxSize !== undefined && selected.size > maxSize) {
       setInternalError(
         maxSizeErrorMessage ??
-          `File ${selected.name} melebihi ukuran maksimal ${(maxSize / 1024 / 1024).toFixed(2)} MB`
+          `File ${selected.name} melebihi ukuran maksimal ${formatFileSize(maxSize)}`
       );
       return;
     }

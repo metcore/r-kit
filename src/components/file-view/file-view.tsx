@@ -7,6 +7,7 @@ import {
   type MouseEvent,
 } from 'react';
 import { cx } from 'class-variance-authority';
+import { formatFileSize } from '../../lib/utils';
 import { Icon } from '../icons';
 import { Divider } from '../devider/devider';
 import { Text } from '../text';
@@ -193,24 +194,7 @@ function parseDataUrl(src: string): DataUrlInfo | null {
   return { mime, isBase64, byteLength };
 }
 
-export function formatFileSize(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes <= 0) {
-    return '0 MB';
-  }
-
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const exponent = Math.min(
-    Math.floor(Math.log(bytes) / Math.log(1024)),
-    units.length - 1
-  );
-  const value = bytes / 1024 ** exponent;
-  const rounded =
-    value >= 10 || Number.isInteger(value)
-      ? Math.round(value)
-      : Math.round(value * 10) / 10;
-
-  return `${rounded} ${units[exponent]}`;
-}
+export { formatFileSize } from '../../lib/utils';
 
 interface PreviewButtonProps {
   label: string;

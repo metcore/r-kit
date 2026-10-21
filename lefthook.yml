@@ -7,6 +7,13 @@ pre-commit:
     types:
       glob: "**/*.{js,ts,jsx,tsx}"
       run: npx tsc --noEmit
+    byte-format:
+      glob: "**/*.{ts,tsx}"
+      run: |
+        if grep -nE '/ ?1024 ?/ ?1024' {staged_files}; then
+          echo "Pakai formatFileSize dari src/lib/utils.ts untuk menampilkan ukuran file, bukan pembagian manual ke MB."
+          exit 1
+        fi
 
 commit-msg:
   parallel: true
