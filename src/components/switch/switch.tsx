@@ -2,7 +2,7 @@ import React, { useId } from 'react';
 import type { SwitchProps } from './type';
 import { SwitchVariants, SwitchThumbVariants } from './switch-variants';
 import { cn } from '../../lib/utils';
-import { FormField, FormLabel } from '../form';
+import { FormDescription, FormField, FormLabel } from '../form';
 import { useInputGroup } from '../input-group';
 
 export const BaseSwitch: React.FC<SwitchProps> = ({
@@ -89,6 +89,7 @@ export const Switch: React.FC<
   }
 > = ({
   label,
+  description,
   hint,
   className,
   size = 'md',
@@ -111,12 +112,7 @@ export const Switch: React.FC<
   const resolvedSize = size ?? group?.size;
 
   return (
-    <FormField
-      hint={hint}
-      errorMessages={errorMessages}
-      className={className}
-      tooltip={tooltip}
-    >
+    <FormField hint={hint} errorMessages={errorMessages} className={className}>
       <div
         className={cn(
           'flex flex-col items-center gap-2',
@@ -126,10 +122,23 @@ export const Switch: React.FC<
           inGroup && 'px-2'
         )}
       >
-        {Boolean(label) && (
-          <FormLabel htmlFor={id} className={labelSizeClasses[size]}>
-            {label}
-          </FormLabel>
+        {(label !== undefined || description !== undefined) && (
+          <div className="flex flex-col">
+            {label !== undefined && (
+              <FormLabel
+                htmlFor={id}
+                tooltip={tooltip}
+                className={labelSizeClasses[size]}
+              >
+                {label}
+              </FormLabel>
+            )}
+            {description !== undefined && (
+              <FormDescription size={resolvedSize}>
+                {description}
+              </FormDescription>
+            )}
+          </div>
         )}
         <BaseSwitch {...props} id={id} size={resolvedSize} />
       </div>
