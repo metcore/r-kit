@@ -43,6 +43,8 @@ const [aktif, setAktif] = useState(false);
 | `checked` | `boolean` | — | Mode terkendali |
 | `defaultChecked` | `boolean` | — | Nilai awal mode tak terkendali |
 | `onCheckedChange` | `(checked: boolean) => void` | — | Dipanggil saat berubah |
+| `label` | `string` | — | Teks label di samping sakelar |
+| `description` | `string` | — | Teks bantu di bawah label |
 | `size` | `sm \| md \| lg` | `md` | Ukuran sakelar |
 | `color` | `BaseColor` | `primary` | Warna saat menyala |
 | `disabled` | `boolean` | `false` | Menonaktifkan |
@@ -57,12 +59,13 @@ const [aktif, setAktif] = useState(false);
 Berbeda dari `Checkbox` yang memakai `onChange`, `Switch` memakai
 `onCheckedChange`. Penamaan ini memang belum seragam di seluruh kit.
 
-`Switch` tidak punya prop `label`. Pasangkan sendiri dengan teks bila
-perlu:
+Gunakan `label` dan `description` untuk teks di samping sakelar:
 
 ```tsx
-<div className="flex items-center justify-between">
-  <Text variant="t2">Notifikasi email</Text>
-  <Switch checked={aktif} onCheckedChange={setAktif} />
-</div>
+<Switch
+  label="Notifikasi email"
+  description="Kirim ringkasan harian ke email kamu"
+  checked={aktif}
+  onCheckedChange={setAktif}
+/>
 ```

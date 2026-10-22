@@ -19,7 +19,7 @@ import ArrowDown from './icons/ArrowDown';
 import ArrowUp from './icons/ArrowUp';
 import Search from './icons/Search';
 import ArrowLeft from './icons/ArrowLeft';
-import EyeOpen from './icons/EyeOpen';
+import EyeSlashIcon from './icons/EyeSlashIcon';
 import ExclamationMark from './icons/ExclamationMark';
 import FileListCheck from './icons/FileListCheck';
 import FileText from './icons/FileText';
@@ -402,6 +402,61 @@ import BadgeDiscountAltIcon from './icons/BadgeDiscountAltIcon';
 import DoorClosedIcon from './icons/DoorClosedIcon';
 import ColorPicker from './icons/ColorPicker';
 import CheckCircleIcon from './icons/CheckCircle';
+import Angles45Icon from './icons/Angles45Icon';
+import ArrowDownCircleIcon from './icons/ArrowDownCircleIcon';
+import ArrowDownLeftCircleIcon from './icons/ArrowDownLeftCircleIcon';
+import ArrowDownRightCircleIcon from './icons/ArrowDownRightCircleIcon';
+import ArrowUpLeftCircleIcon from './icons/ArrowUpLeftCircleIcon';
+import ArrowUpRightCircleIcon from './icons/ArrowUpRightCircleIcon';
+import BuildingServerIcon from './icons/BuildingServerIcon';
+import CalculatorSimpleIcon from './icons/CalculatorSimpleIcon';
+import CalendarPlusAltIcon from './icons/CalendarPlusAltIcon';
+import CalendarMoneyIcon from './icons/CalendarMoneyIcon';
+import CalendarSettingIcon from './icons/CalendarSettingIcon';
+import CaptureSelfieIcon from './icons/CaptureSelfieIcon';
+import CarIcon from './icons/CarIcon';
+import ClockAltIcon from './icons/ClockAltIcon';
+import ClockLeftCircleIcon from './icons/ClockLeftCircleIcon';
+import ClockPlusAltIcon from './icons/ClockPlusAltIcon';
+import ClockSquareIcon from './icons/ClockSquareIcon';
+import CreditCardOutlineIcon from './icons/CreditCardOutlineIcon';
+import EmojiReactionIcon from './icons/EmojiReactionIcon';
+import EnvelopeSettingsIcon from './icons/EnvelopeSettingsIcon';
+import FaceIdIcon from './icons/FaceIdIcon';
+import FileClockIcon from './icons/FileClockIcon';
+import FileExportIcon from './icons/FileExportIcon';
+import FileListStarIcon from './icons/FileListStarIcon';
+import GasPumpIcon from './icons/GasPumpIcon';
+import GlassesIcon from './icons/GlassesIcon';
+import LocationArrowIcon from './icons/LocationArrowIcon';
+import LocationPinOutlineIcon from './icons/LocationPinOutlineIcon';
+import MessagesTextIcon from './icons/MessagesTextIcon';
+import MirrorIcon from './icons/MirrorIcon';
+import MoneyBillBackIcon from './icons/MoneyBillBackIcon';
+import MoneyBillClockIcon from './icons/MoneyBillClockIcon';
+import MoneyBillReceiveIcon from './icons/MoneyBillReceiveIcon';
+import MoneyBillServerIcon from './icons/MoneyBillServerIcon';
+import NoteListSquareIcon from './icons/NoteListSquareIcon';
+import NotebookIcon from './icons/NotebookIcon';
+import PenLineIcon from './icons/PenLineIcon';
+import ReceiptDollarIcon from './icons/ReceiptDollarIcon';
+import Refresh1LineIcon from './icons/Refresh1LineIcon';
+import RotateIcon from './icons/RotateIcon';
+import Sort45Icon from './icons/Sort45Icon';
+import SpeedometerIcon from './icons/SpeedometerIcon';
+import StickyNoteSquareWinkIcon from './icons/StickyNoteSquareWinkIcon';
+import StopwatchCheckOutlineIcon from './icons/StopwatchCheckOutlineIcon';
+import SunIcon from './icons/SunIcon';
+import TaskIcon from './icons/TaskIcon';
+import TaxSearchIcon from './icons/TaxSearchIcon';
+import TaxIcon from './icons/TaxIcon';
+import TextInputIcon from './icons/TextInputIcon';
+import UserCheckAltIcon from './icons/UserCheckAltIcon';
+import UserHourglassIcon from './icons/UserHourglassIcon';
+import UserMoneyIcon from './icons/UserMoneyIcon';
+import UserUncheckIcon from './icons/UserUncheckIcon';
+import UsersGroupSlashIcon from './icons/UsersGroupSlashIcon';
+import UsersGroupIcon from './icons/UsersGroupIcon';
 
 export const iconRegistry = {
   'arrow-left-circle': ArrowLeftCircle,
@@ -409,7 +464,9 @@ export const iconRegistry = {
   'search': Search,
   'user': User,
   'eye': Eye,
-  'eye-open': EyeOpen,
+  'eye-slash': EyeSlashIcon,
+  /** @deprecated Pakai `eye-slash`; nama lama ini gambarnya mata dicoret. */
+  'eye-open': EyeSlashIcon,
   'arrow-right': ArrowRight,
   'arrow-left': ArrowLeft,
   'document': Document,
@@ -808,4 +865,59 @@ export const iconRegistry = {
   'door-closed': DoorClosedIcon,
   'color-picker': ColorPicker,
   'command': Command,
+  'angles-45': Angles45Icon,
+  'arrow-down-circle': ArrowDownCircleIcon,
+  'arrow-down-left-circle': ArrowDownLeftCircleIcon,
+  'arrow-down-right-circle': ArrowDownRightCircleIcon,
+  'arrow-up-left-circle': ArrowUpLeftCircleIcon,
+  'arrow-up-right-circle': ArrowUpRightCircleIcon,
+  'building-server': BuildingServerIcon,
+  'calculator-simple': CalculatorSimpleIcon,
+  'calendar-plus-alt': CalendarPlusAltIcon,
+  'calendar-money': CalendarMoneyIcon,
+  'calendar-setting': CalendarSettingIcon,
+  'capture-selfie': CaptureSelfieIcon,
+  'car': CarIcon,
+  'clock-alt': ClockAltIcon,
+  'clock-left-circle': ClockLeftCircleIcon,
+  'clock-plus-alt': ClockPlusAltIcon,
+  'clock-square': ClockSquareIcon,
+  'credit-card-outline': CreditCardOutlineIcon,
+  'emoji-reaction': EmojiReactionIcon,
+  'envelope-settings': EnvelopeSettingsIcon,
+  'face-id': FaceIdIcon,
+  'file-clock': FileClockIcon,
+  'file-export': FileExportIcon,
+  'file-list-star': FileListStarIcon,
+  'gas-pump': GasPumpIcon,
+  'glasses': GlassesIcon,
+  'location-arrow': LocationArrowIcon,
+  'location-pin-outline': LocationPinOutlineIcon,
+  'messages-text': MessagesTextIcon,
+  'mirror': MirrorIcon,
+  'money-bill-back': MoneyBillBackIcon,
+  'money-bill-clock': MoneyBillClockIcon,
+  'money-bill-receive': MoneyBillReceiveIcon,
+  'money-bill-server': MoneyBillServerIcon,
+  'note-list-square': NoteListSquareIcon,
+  'notebook': NotebookIcon,
+  'pen-line': PenLineIcon,
+  'receipt-dollar': ReceiptDollarIcon,
+  'refresh-1-line': Refresh1LineIcon,
+  'rotate': RotateIcon,
+  'sort-45': Sort45Icon,
+  'speedometer': SpeedometerIcon,
+  'sticky-note-square-wink': StickyNoteSquareWinkIcon,
+  'stopwatch-check-outline': StopwatchCheckOutlineIcon,
+  'sun': SunIcon,
+  'task': TaskIcon,
+  'tax-search': TaxSearchIcon,
+  'tax': TaxIcon,
+  'text-input': TextInputIcon,
+  'user-check-alt': UserCheckAltIcon,
+  'user-hourglass': UserHourglassIcon,
+  'user-money': UserMoneyIcon,
+  'user-uncheck': UserUncheckIcon,
+  'users-group-slash': UsersGroupSlashIcon,
+  'users-group': UsersGroupIcon,
 };

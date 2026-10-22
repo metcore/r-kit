@@ -20,7 +20,7 @@ hal yang sama di hampir semua komponen.
 | --- | --- |
 | Komponen | 58 |
 | Hook | 17 |
-| Ikon | 404 |
+| Ikon | 459 |
 
 ## Docs dan playground
 

@@ -12,6 +12,10 @@ import { useState } from 'react';
 
 export default function InputPhoneNumberPage() {
   const [value, setValue] = useState<PhoneNumberValue>();
+  const [labeledValue, setLabeledValue] = useState<PhoneNumberValue>({
+    dialCode: '+62',
+    value: '8960403339',
+  });
 
   const exampleBasic = dedent(`
     import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
@@ -26,16 +30,20 @@ export default function InputPhoneNumberPage() {
   `);
 
   const exampleLabel = dedent(`
-    import { InputPhoneNumber } from '@herca/r-kit/InputPhoneNumber';
+    import { InputPhoneNumber, type PhoneNumberValue } from '@herca/r-kit/InputPhoneNumber';
+    import { useState } from 'react';
 
     export default function Example() {
+      const [value, setValue] = useState<PhoneNumberValue>({
+        dialCode: '+62',
+        value: '8960403339',
+      });
+
       return (
         <InputPhoneNumber
           label="Phone Number"
-          value={{
-            dialCode: '',
-            value: '8960403339',
-          }}
+          value={value}
+          onChange={setValue}
         />
       );
     }
@@ -167,10 +175,8 @@ export default function InputPhoneNumberPage() {
           >
             <InputPhoneNumber
               label="Label"
-              value={{
-                dialCode: '',
-                value: '8960403339',
-              }}
+              value={labeledValue}
+              onChange={setLabeledValue}
             />
           </MainSection>
           <MainSection
