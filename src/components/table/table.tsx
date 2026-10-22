@@ -225,6 +225,13 @@ export function TableFooter({
   );
 }
 
+function pageHrefWithCurrentQuery(page: number): string {
+  if (typeof window === 'undefined') return `?page=${page}`;
+  const sp = new URLSearchParams(window.location.search);
+  sp.set('page', String(page));
+  return `?${sp.toString()}`;
+}
+
 export function TablePagination({
   perPages = [10, 20, 100],
   currentPage,
@@ -252,6 +259,14 @@ export function TablePagination({
     useState<number>(defaultPerpage);
 
   const value = isControlled ? selectedPerpage : internalPerpage;
+
+  // Rendered href stays `?page=N` so server and client markup match; the
+  // real link (current query + page) is filled in right before the user can
+  // open it, e.g. "Open link in new tab" or a middle/cmd click.
+  const refreshHref = (anchor: HTMLAnchorElement, page: number) => {
+    if (setNumberLink !== undefined) return;
+    anchor.setAttribute('href', pageHrefWithCurrentQuery(page));
+  };
 
   const handleChange = (val: number) => {
     if (!isControlled) {
@@ -369,7 +384,20 @@ export function TablePagination({
                       ? setNumberLink?.(`?page=${item}`, item)
                       : `?page=${item}`
                   }
+                  onMouseEnter={(e) => refreshHref(e.currentTarget, item)}
+                  onFocus={(e) => refreshHref(e.currentTarget, item)}
+                  onMouseDown={(e) => refreshHref(e.currentTarget, item)}
+                  onContextMenu={(e) => refreshHref(e.currentTarget, item)}
+                  onTouchStart={(e) => refreshHref(e.currentTarget, item)}
                   onClick={(e) => {
+                    if (
+                      e.metaKey ||
+                      e.ctrlKey ||
+                      e.shiftKey ||
+                      e.button !== 0
+                    ) {
+                      return;
+                    }
                     e.preventDefault();
                     numberOnClick?.(item);
                   }}
