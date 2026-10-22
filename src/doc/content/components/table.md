@@ -84,6 +84,13 @@ Dua prop mengatur bagian mana yang tampil, dan namanya mudah tertukar:
 | `showController` | Pemilih jumlah baris di kiri |
 | `showNumber` | Nomor halaman beserta tombol maju/mundur di kanan |
 
+Nomor halaman adalah link. Klik biasa memanggil `numberOnClick` tanpa
+pindah halaman, sedangkan "Open link in new tab", klik tengah, atau
+Cmd/Ctrl+klik membuka URL saat ini dengan `page` diganti — query lain
+seperti pencarian dan penyaring ikut terbawa. Untuk bentuk URL lain,
+pakai `setNumberLink(url, page)`; kalau prop itu diisi, nilainya dipakai
+apa adanya.
+
 ## Props — TableCell & TableCellHead
 
 | Prop | Tipe | Keterangan |
