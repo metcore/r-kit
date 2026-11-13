@@ -213,6 +213,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {clearAble && !isDisabled && hasValue && (
           <Button
+            type="button"
             variant="tertiary"
             onClick={handleClear}
             className="cursor-pointer rounded text-center text-gray-700"

@@ -396,6 +396,7 @@ const DatePicker = ({
                   isClearable &&
                   inputValue && (
                     <button
+                      type="button"
                       className="shrink-0 cursor-pointer"
                       onClick={(e) => {
                         e.preventDefault();

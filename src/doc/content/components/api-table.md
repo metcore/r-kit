@@ -79,10 +79,25 @@ diletakkan di luar tabel.
 | `loadingRowCount` | `number` | `min(pageSize, 8)` | Jumlah baris skeleton saat memuat |
 | `rowOptions` | `(row, key, index) => { className? }` | — | Kelas tambahan per baris (mis. highlight baris tertentu) |
 | `showPagination` | `boolean` | `false` | Menampilkan bar paginasi di bawah tabel |
+| `perPages` | `number[]` | `[10, 20, 100]` | Pilihan jumlah baris di dropdown "Showing". Sertakan juga nilai `defaultPageSize` di daftar ini biar nilai awalnya ikut ke-highlight |
 | `responsive` | `boolean` | `false` | Di bawah breakpoint `md`, tiap baris jadi kartu tersendiri (bukan tabel horizontal) — lihat Mode Responsif |
 | `bordered` | `boolean` | `true` | Garis pembatas antar kolom/baris + border card di luar |
 | `striped` | `boolean` | `false` | Warna selang-seling baris genap |
 | `hoverable` | `boolean` | `false` | Highlight baris saat hover |
+
+## Pilihan Jumlah Baris
+
+Pilihan di dropdown "Showing" diatur lewat `perPages`. Jumlah baris awalnya
+tetap dari `defaultPageSize` di `useApiTable`:
+
+```tsx
+const t = useApiTable<Pengguna>({
+  url: '/api/pengguna',
+  defaultPageSize: 25,
+});
+
+<ApiTable t={t} columns={KOLOM} showPagination perPages={[25, 50, 75, 150]} />;
+```
 
 ## Mode Responsif
 
