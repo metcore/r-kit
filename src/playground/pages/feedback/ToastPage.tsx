@@ -1,6 +1,8 @@
 import dedent from 'dedent';
+import { useState } from 'react';
 import { Button } from '../../../components/button';
 import { useToast } from '../../../components/toast';
+import { Modal, ModalBody, ModalFooter } from '../../../components/modal';
 import Toast from '../../../components/toast/toast-card';
 import type { BaseColor } from '../../../components/base';
 import illust from '../../../assets/images/feedback.png';
@@ -137,8 +139,31 @@ const exampleClose = dedent(`
   />
 `);
 
+const exampleOverModal = dedent(`
+  // Toast tampil di atas Modal beserta overlay-nya,
+  // jadi tetap terlihat saat dipicu dari dalam modal.
+  <Modal isOpen={open} onClose={() => setOpen(false)} title="Simpan Data">
+    <ModalBody>...</ModalBody>
+    <ModalFooter>
+      <Button
+        onClick={() =>
+          toast.show({
+            color: 'success',
+            title: 'Perubahan tersimpan',
+            description: 'Data profil berhasil diperbarui.',
+            duration: 3000,
+          })
+        }
+      >
+        Simpan
+      </Button>
+    </ModalFooter>
+  </Modal>
+`);
+
 export default function ToastPage() {
   const toast = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -171,6 +196,34 @@ export default function ToastPage() {
               {tone.color}
             </Button>
           ))}
+        </MainSection>
+
+        <MainSection title="Di Atas Modal" code={exampleOverModal}>
+          <Button onClick={() => setIsModalOpen(true)}>Buka Modal</Button>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Simpan Data"
+            size="sm"
+          >
+            <ModalBody>
+              Tekan Simpan — toast harus muncul di atas modal dan overlay-nya.
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                onClick={() =>
+                  toast.show({
+                    color: 'success',
+                    title: 'Perubahan tersimpan',
+                    description: 'Data profil berhasil diperbarui.',
+                    duration: 3000,
+                  })
+                }
+              >
+                Simpan
+              </Button>
+            </ModalFooter>
+          </Modal>
         </MainSection>
 
         <MainSection
