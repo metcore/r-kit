@@ -90,3 +90,6 @@ bawah, sama seperti `Input`:
 
 Memakai `value` pada mode `range` — atau sebaliknya — membuat pilihan
 tidak pernah tampil. Pastikan pasangan propnya sesuai modenya.
+
+Kalender selalu tampil di atas `Modal` — termasuk overlay gelapnya — jadi
+`DatePicker` aman dipasang di form di dalam modal.

@@ -7,6 +7,7 @@ import {
   type DateRange,
 } from '../../../components/date-picker';
 import { Icon } from '../../../components/icons';
+import { Modal, ModalBody, ModalFooter } from '../../../components/modal';
 import illust from '../../../assets/images/forms.png';
 import Footer from '../../components/Footer';
 import GridWrapper from '../../components/GridWrapper';
@@ -30,6 +31,12 @@ export default function DatePickerPage() {
   });
   const [open, setOpen] = useState(false);
   const [errorValue, setErrorValue] = useState<Date | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalValue, setModalValue] = useState<Date | null>(null);
+  const [modalRangeValue, setModalRangeValue] = useState<DateRange>({
+    start: null,
+    end: null,
+  });
 
   const minDate = new Date();
   const maxDate = addDays(new Date(), 7);
@@ -41,6 +48,21 @@ export default function DatePickerPage() {
         value={errorValue}
         onChange={setErrorValue}
       />
+    `);
+
+  const insideModalExample = dedent(`
+      // Kalender tampil di atas Modal beserta overlay-nya.
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Jadwalkan">
+        <ModalBody>
+          <DatePicker label="Tanggal" value={value} onChange={setValue} />
+          <DatePicker
+            label="Periode"
+            mode="range"
+            rangeValue={range}
+            onRangeChange={setRange}
+          />
+        </ModalBody>
+      </Modal>
     `);
 
   const defaultExample = dedent(`
@@ -235,6 +257,35 @@ export default function DatePickerPage() {
               value={errorValue}
               onChange={setErrorValue}
             />
+          </MainSection>
+        </GridWrapper>
+
+        <GridWrapper>
+          <MainSection title="Di Dalam Modal" code={insideModalExample}>
+            <Button onClick={() => setIsModalOpen(true)}>Buka Modal</Button>
+            <Modal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              title="Jadwalkan"
+              size="sm"
+            >
+              <ModalBody className="flex flex-col gap-4">
+                <DatePicker
+                  label="Tanggal"
+                  value={modalValue}
+                  onChange={setModalValue}
+                />
+                <DatePicker
+                  label="Periode"
+                  mode="range"
+                  rangeValue={modalRangeValue}
+                  onRangeChange={setModalRangeValue}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button onClick={() => setIsModalOpen(false)}>Simpan</Button>
+              </ModalFooter>
+            </Modal>
           </MainSection>
         </GridWrapper>
 

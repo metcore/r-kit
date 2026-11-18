@@ -77,20 +77,24 @@ Posisi yang tersedia: `top-right` (bawaan), `top-left`, `top-center`,
 
 ## Props
 
-| Prop | Tipe | Bawaan | Keterangan |
-| --- | --- | --- | --- |
-| `title` | `string` | — | Judul pesan. Wajib |
-| `description` | `string` | — | Keterangan. Wajib |
-| `color` | `BaseColor` | — | Warna pesan |
-| `variant` | `outline` | — | Gaya latar |
-| `icon` | `IconNameProps` | — | Ikon di kiri |
-| `iconSize` | `number` | — | Ukuran ikon |
-| `actionLabel` | `string` | — | Teks tombol aksi |
-| `onClickAction` | `() => void` | — | Dipanggil saat tombol aksi ditekan |
-| `onClose` | `() => void` | — | Menampilkan tombol silang |
-| `duration` | `number` | — | Lama tampil, dalam milidetik |
+| Prop            | Tipe            | Bawaan | Keterangan                         |
+| --------------- | --------------- | ------ | ---------------------------------- |
+| `title`         | `string`        | —      | Judul pesan. Wajib                 |
+| `description`   | `string`        | —      | Keterangan. Wajib                  |
+| `color`         | `BaseColor`     | —      | Warna pesan                        |
+| `variant`       | `outline`       | —      | Gaya latar                         |
+| `icon`          | `IconNameProps` | —      | Ikon di kiri                       |
+| `iconSize`      | `number`        | —      | Ukuran ikon                        |
+| `actionLabel`   | `string`        | —      | Teks tombol aksi                   |
+| `onClickAction` | `() => void`    | —      | Dipanggil saat tombol aksi ditekan |
+| `onClose`       | `() => void`    | —      | Menampilkan tombol silang          |
+| `duration`      | `number`        | —      | Lama tampil, dalam milidetik       |
 
 ## Catatan
 
 Berbeda dari komponen lain, `title` dan `description` keduanya **wajib**
 diisi.
+
+Toast selalu tampil di atas `Modal` — termasuk overlay gelapnya — jadi
+notifikasi yang dipicu dari dalam modal (misalnya setelah submit form)
+tetap kelihatan.
