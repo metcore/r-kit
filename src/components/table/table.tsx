@@ -314,17 +314,20 @@ export function TablePagination({
 
             <DropdownContent
               className={clsx(
-                'w-19 gap-0 rounded-lg p-1',
+                'w-19 gap-1 rounded-lg p-1',
                 dropdownContentClassName
               )}
               sideOffset={8}
+              align="start"
             >
               {perPages.map((item) => (
                 <DropdownItem
                   key={item}
-                  className={clsx(
-                    value === item && 'bg-primary-50 border-primary-300',
-                    'justify-center rounded-sm! border-0',
+                  className={cn(
+                    'cursor-pointer justify-center rounded-sm! border border-transparent p-1! text-gray-800',
+                    'hover:border-primary-300 hover:bg-primary-50 hover:text-primary-1000',
+                    'data-highlighted:border-primary-300 data-highlighted:bg-primary-50 data-highlighted:text-primary-1000',
+                    value === item && 'border-primary-300 bg-primary-100 text-primary-1000', //prettier-ignore
                     dropdownItemClassName
                   )}
                   onClick={() => handleChange(item)}

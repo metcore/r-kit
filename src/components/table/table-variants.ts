@@ -5,7 +5,7 @@ export const tableVariants = cva(
   {
     variants: {
       bordered: {
-        true: 'border border-b-0 border-gray-300',
+        true: 'border border-gray-300 [&>tbody:last-child>tr:last-child>td]:border-b-0',
         false: '',
       },
       responsive: {

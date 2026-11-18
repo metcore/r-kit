@@ -165,6 +165,23 @@ const exampleBasicApiTable = dedent(`
   }
 `);
 
+const examplePerPagesApiTable = dedent(`
+const t = useApiTable<User>({
+  url: 'https://dummyjson.com/users',
+  dataPath: 'users',
+  totalPath: 'total',
+  defaultPageSize: 5,
+});
+
+<ApiTable
+  t={t}
+  columns={columns}
+  responsive
+  showPagination
+  perPages={[5, 15, 30, 50]}
+/>
+`);
+
 const exampleDynamicColumnApiTable = dedent(`
 import { useMemo } from 'react';
 import {
@@ -545,6 +562,21 @@ export default function ApiTablePage() {
     },
   });
 
+  const tPerPages = useApiTable<User>({
+    url: 'https://dummyjson.com/users',
+    pageMode: 'offset',
+    defaultPageSize: 5,
+    dataPath: 'users',
+    totalPath: 'total',
+    urlSync: false,
+    buildUrl: ({ pageSize, offset }) => {
+      const qp = new URLSearchParams();
+      qp.set('limit', String(pageSize));
+      qp.set('skip', String(offset));
+      return `https://dummyjson.com/users?${qp.toString()}`;
+    },
+  });
+
   return (
     <div>
       <HeroSection
@@ -682,6 +714,24 @@ export default function ApiTablePage() {
                 t={tDynamic}
                 showPagination
                 columns={visibility.visibleColumns}
+              />
+            </CardBody>
+          </Card>
+        </MainSection>
+
+        <MainSection
+          title="Custom Per Page"
+          code={examplePerPagesApiTable}
+          className="w-full"
+        >
+          <Card>
+            <CardBody>
+              <ApiTable
+                t={tPerPages}
+                columns={columns}
+                responsive
+                showPagination
+                perPages={[5, 15, 30, 50]}
               />
             </CardBody>
           </Card>

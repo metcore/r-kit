@@ -45,6 +45,7 @@ export const ApiTable = <
   loadingRowCount,
   rowOptions,
   showPagination,
+  perPages,
   responsive = false,
   bordered = true,
   striped = false,
@@ -265,6 +266,7 @@ export const ApiTable = <
         {showPagination == true && (
           <div className="px-4 py-3">
             <TablePagination
+              perPages={perPages}
               currentPage={t.page}
               totalPage={t.totalPages}
               selectedPerpage={t.pageSize}

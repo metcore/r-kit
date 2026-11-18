@@ -9,6 +9,8 @@ import Footer from '../../components/Footer';
 
 export default function InputFieldPage() {
   const [filledInput, setFilledInput] = useState('Maman_alkatiri23');
+  const [clearableValue, setClearableValue] = useState('Herca');
+  const [submittedValue, setSubmittedValue] = useState<string | null>(null);
   const exampleBasic = dedent(`
     <Input />
   `);
@@ -77,6 +79,23 @@ export default function InputFieldPage() {
       placeholder="Search..."
       icon="search"
     />
+  `);
+
+  const exampleClearableInForm = dedent(`
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        setSubmittedValue(clearableValue);
+      }}
+    >
+      <Input
+        clearAble
+        label="Username"
+        placeholder="Ketik lalu tekan Enter"
+        value={clearableValue}
+        onChange={(e) => setClearableValue(e.target.value)}
+      />
+    </form>
   `);
 
   return (
@@ -181,6 +200,30 @@ export default function InputFieldPage() {
         <GridWrapper>
           <MainSection title="Icon" className="flex-1" code={exampleIcon}>
             <Input placeholder="Search..." icon="search" />
+          </MainSection>
+          <MainSection
+            title="Clearable di dalam Form"
+            className="flex-1"
+            code={exampleClearableInForm}
+          >
+            <form
+              className="flex flex-col gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubmittedValue(clearableValue);
+              }}
+            >
+              <Input
+                clearAble
+                label="Username"
+                placeholder="Ketik lalu tekan Enter"
+                value={clearableValue}
+                onChange={(e) => setClearableValue(e.target.value)}
+              />
+              <p className="text-sm text-gray-600">
+                Submitted: {submittedValue ?? '-'}
+              </p>
+            </form>
           </MainSection>
         </GridWrapper>
 

@@ -188,6 +188,7 @@ export interface ApiTableProps<
   rowOptionsLabel?: ReactNode;
   responsive?: boolean;
   showPagination?: boolean;
+  perPages?: number[];
   showFooter?: boolean;
   bordered?: boolean;
   striped?: boolean;

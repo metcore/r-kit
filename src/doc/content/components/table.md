@@ -110,5 +110,11 @@ apa adanya.
 
 ## Catatan
 
+Dengan prop `bordered`, bingkai luar tabel selalu tertutup di keempat
+sisi — garis bawah baris terakhir otomatis menyatu dengan bingkai, jadi
+`isLast` tidak wajib untuk itu. Kalau ada `TableFooter`, garis pemisah
+antara isi dan footer tetap tampil — asal baris terakhir **tidak** diberi
+`isLast`, karena `isLast` menghapus garis bawah barisnya.
+
 Bungkus tabel dengan elemen ber-`overflow-x: auto` agar tabel lebar tidak
 membuat seluruh halaman bergeser ke samping.

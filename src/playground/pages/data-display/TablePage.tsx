@@ -65,8 +65,34 @@ const exampleHeaded = dedent(`
 `);
 
 const exampleBordered = dedent(`
-  // variant="bordered" memberi garis pada seluruh sisi sel.
-  <Table variant="bordered">...</Table>
+  // bordered memberi garis pada seluruh sisi sel + bingkai luar.
+  // Garis bawah baris terakhir otomatis menyatu dengan bingkai.
+  <Table bordered>...</Table>
+`);
+
+const exampleBorderedFooter = dedent(`
+  // Dengan TableFooter, garis pemisah isi–footer tetap tampil dan
+  // bingkai luar menutup di bawah footer.
+  // Jangan pasang isLast di baris terakhir — itu menghapus garis pemisahnya.
+  <Table bordered>
+    <TableHead>...</TableHead>
+    <TableBody>...</TableBody>
+
+    <TableFooter colSpan={6}>
+      <TablePagination
+        currentPage={page}
+        totalPage={lastPage}
+        selectedPerpage={perPage}
+        onChangePerpage={(val) => {
+          setPerPage(val);
+          setPage(1);
+        }}
+        numberOnClick={setPage}
+        prevOnClick={() => setPage((p) => Math.max(p - 1, 1))}
+        nextOnClick={() => setPage((p) => Math.min(p + 1, lastPage))}
+      />
+    </TableFooter>
+  </Table>
 `);
 
 const exampleStripped = dedent(`
@@ -117,6 +143,9 @@ export default function TablePage() {
   const [perPage, setPerPage] = useState(10);
   const [data, setData] = useState<any[]>([]);
   const [lastPage, setLastPage] = useState(1);
+  // State terpisah untuk demo "Bordered Table with Footer" (data statis).
+  const [borderedPage, setBorderedPage] = useState(1);
+  const [borderedPerPage, setBorderedPerPage] = useState(10);
 
   const sample_data = [
     {
@@ -308,8 +337,49 @@ export default function TablePage() {
           code={exampleBordered}
           className="overflow-auto"
         >
-          {/* variant="bordered" */}
-          <Table className="w-full table-auto">
+          <Table className="w-full table-auto" bordered>
+            <TableHead>
+              <TableRow>
+                <TableCellHead value={'No'} />
+                <TableCellHead value={'Nama'} />
+                <TableCellHead value={'Username'} />
+                <TableCellHead value={'Status'} />
+                <TableCellHead value={'Phone'} />
+                <TableCellHead value={'Divisi'} />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sample_data.map((item, index) => (
+                <TableRow key={index} isLast={index === sample_data.length - 1}>
+                  <TableCell value={index + 1} textClassName="text-gray-800" />
+                  <TableCell
+                    value={item.name}
+                    textClassName="text-gray-800"
+                    className="min-w-30"
+                  />
+                  <TableCell
+                    value={item.username}
+                    textClassName="text-gray-800"
+                  />
+                  <TableCell>
+                    <Badge color={status_map[item.status]}>{item.status}</Badge>
+                  </TableCell>
+                  <TableCell value={item.phone} textClassName="text-gray-800" />
+                  <TableCell
+                    value={item.divisi}
+                    textClassName="text-gray-800"
+                  />
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </MainSection>
+        <MainSection
+          title="Bordered Table with Footer"
+          code={exampleBorderedFooter}
+          className="overflow-auto"
+        >
+          <Table className="w-full table-auto" bordered>
             <TableHead>
               <TableRow>
                 <TableCellHead value={'No'} />
@@ -344,6 +414,24 @@ export default function TablePage() {
                 </TableRow>
               ))}
             </TableBody>
+            <TableFooter colSpan={6}>
+              <TablePagination
+                currentPage={borderedPage}
+                totalPage={5}
+                selectedPerpage={borderedPerPage}
+                onChangePerpage={(val) => {
+                  setBorderedPerPage(val);
+                  setBorderedPage(1);
+                }}
+                numberOnClick={setBorderedPage}
+                prevOnClick={() =>
+                  setBorderedPage((prev) => Math.max(prev - 1, 1))
+                }
+                nextOnClick={() =>
+                  setBorderedPage((prev) => Math.min(prev + 1, 5))
+                }
+              />
+            </TableFooter>
           </Table>
         </MainSection>
         <MainSection
