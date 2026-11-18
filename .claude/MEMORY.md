@@ -24,6 +24,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Adapter value publik gampang buang field](memory/public-value-adapter-drops-fields.md) — data "ada tapi gak nampil" biasanya kepotong di adapter `value` -> internal, bukan di komponen yang me-render; nambah field di `UploadFileEntry` harus sekalian disisipkan di `toInternalValue`
 - [Format byte lewat formatFileSize](memory/format-bytes-with-format-file-size.md) — jangan `/1024/1024 + toFixed(2)` lagi, 178 byte harus tampil `178 B` bukan `0.00 MB`
 - [Emit onChange dari useEffect bikin loop](memory/effect-emitted-onchange-loops-render.md) — `useEffect(() => onChange?.(...), [..., onChange])` = infinite render loop buat consumer yang ngasih arrow inline/RHF; emit dari handler, dan komponen `value`+`onChange` jangan nyimpen copy state kedua yang gak ke-render
+- [Jangan override z-index DropdownContent](memory/dropdown-content-z-index-override.md) — `z-*` rendah di className DropdownContent nimpa z-99999 bawaan (tailwind-merge), bikin dropdown/kalender ketutup overlay Modal
 
 ## Cara nambah entri baru
 
