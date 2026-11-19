@@ -336,7 +336,7 @@ const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
               } as React.CSSProperties
             }
             className={clsx(
-              '*:translate-y-1 *:px-5 *:py-2 *:outline-none',
+              '*:h-(--editor-height) *:translate-y-1 *:px-5 *:py-2 *:outline-none',
               textEditorClassName,
               isHtmlMode && 'hidden',
               resolvedDisabled && 'cursor-not-allowed opacity-50',
