@@ -264,7 +264,17 @@ export const ApiTable = <
         </div>
 
         {showPagination == true && (
-          <div className="px-4 py-3">
+          <div
+            className={cn(
+              'px-4 py-3',
+              // Table bordered menghapus garis bawah baris terakhir (biar
+              // menyatu dengan bingkai), jadi pemisah ke pagination dipasang di sini.
+              bordered &&
+                (responsive
+                  ? 'md:border-t md:border-gray-300'
+                  : 'border-t border-gray-300')
+            )}
+          >
             <TablePagination
               perPages={perPages}
               currentPage={t.page}

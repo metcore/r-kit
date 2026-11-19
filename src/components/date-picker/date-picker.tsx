@@ -443,7 +443,9 @@ const DatePicker = ({
             align={align}
             sideOffset={5}
             alignOffset={-40}
-            className={clsx('z-99 overflow-hidden p-0', wrapperClassName)}
+            // Jangan override z-index bawaan DropdownContent (z-99999): nilai
+            // lebih rendah bikin kalender ketutup overlay Modal (z-[999]).
+            className={clsx('overflow-hidden p-0', wrapperClassName)}
           >
             <div className="top-full z-10">
               {mode === 'single' ? (

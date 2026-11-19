@@ -41,7 +41,8 @@ export function ToastProvider({
 
       <div
         className={clsx(
-          'fixed z-50 flex flex-col gap-3 duration-300',
+          // Di atas overlay Modal (z-[999]) & preview lampiran (z-1000).
+          'fixed z-[1001] flex flex-col gap-3 duration-300',
           position === 'top-right' && 'top-4 right-4',
           position === 'top-left' && 'top-4 left-4',
           position === 'bottom-right' && 'right-4 bottom-4',
