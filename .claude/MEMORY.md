@@ -25,6 +25,7 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [Format byte lewat formatFileSize](memory/format-bytes-with-format-file-size.md) — jangan `/1024/1024 + toFixed(2)` lagi, 178 byte harus tampil `178 B` bukan `0.00 MB`
 - [Emit onChange dari useEffect bikin loop](memory/effect-emitted-onchange-loops-render.md) — `useEffect(() => onChange?.(...), [..., onChange])` = infinite render loop buat consumer yang ngasih arrow inline/RHF; emit dari handler, dan komponen `value`+`onChange` jangan nyimpen copy state kedua yang gak ke-render
 - [Jangan override z-index DropdownContent](memory/dropdown-content-z-index-override.md) — `z-*` rendah di className DropdownContent nimpa z-99999 bawaan (tailwind-merge), bikin dropdown/kalender ketutup overlay Modal
+- [CSS global bocor ke editor consumer](memory/global-css-leaks-to-consumer-editors.md) — rule `.ProseMirror { height }` di text-editor.css dulu kena ke semua Tiptap di app consumer (fallback 100px, isi meluber); selector library pihak ketiga harus di-scope ke wrapper r-kit
 
 ## Cara nambah entri baru
 
