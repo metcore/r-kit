@@ -42,6 +42,7 @@ import ApiTablePage from '../playground/pages/ApiTablePage';
 import ColorPickerPage from '../playground/pages/form-field/ColorPickerPage';
 import InputPasswordPage from '../playground/pages/form-field/InputPasswordPage';
 import InputPhoneNumberPage from '../playground/pages/form-field/InputPhoneNumberPage';
+import InputNumberPage from '../playground/pages/form-field/InputNumberPage';
 import FileViewPage from '../playground/pages/FileViewPage';
 import DndPage from '../playground/pages/DndPage';
 import AlertPage from '../playground/pages/AlertPage';
@@ -87,6 +88,7 @@ export default function PlaygroundRouter() {
         <Route path="/input-file" element={<InputFilePage />} />
         <Route path="/input-password" element={<InputPasswordPage />} />
         <Route path="/input-phone-number" element={<InputPhoneNumberPage />} />
+        <Route path="/input-number" element={<InputNumberPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/date-picker" element={<DatePickerPage />} />
         <Route path="/table" element={<TablePage />} />

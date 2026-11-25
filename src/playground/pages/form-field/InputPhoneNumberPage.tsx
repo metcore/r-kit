@@ -252,8 +252,8 @@ export default function InputPhoneNumberPage() {
           title="Input Phone Number"
           backTo="/playground/input-password"
           backToTitle="Input Password"
-          nextTo="/playground/drawing"
-          nextToTitle="Drawing"
+          nextTo="/playground/input-number"
+          nextToTitle="Input Number"
         />
       </div>
     </>
