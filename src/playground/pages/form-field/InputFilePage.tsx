@@ -216,6 +216,15 @@ export default function InputFilePage() {
       <form onSubmit={(e) => e.preventDefault()}>
         <GridWrapper>
           <MainSection
+            title="Input File Hanya PDF"
+            code={
+              '<InputFile accept=".pdf" variant="medium" hint="Hanya PDF" />'
+            }
+          >
+            <InputFile accept=".pdf" variant="medium" hint="Hanya PDF" />
+          </MainSection>
+
+          <MainSection
             title="Basic Input File"
             contentClassName="grid grid-cols-3 gap-5 "
             code={basicInput}

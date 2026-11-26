@@ -348,10 +348,28 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     xhr.send(formData);
   };
 
-  const processFiles = (selectedFiles: File[], pendingError?: string) => {
+  const filterByAccept = (
+    candidates: File[]
+  ): { accepted: File[]; typeError?: string } => {
+    if (accept === undefined || accept.trim() === '') {
+      return { accepted: candidates };
+    }
+    const accepted = candidates.filter((file) => matchesAccept(file, accept));
+    if (accepted.length === candidates.length) return { accepted };
+    return {
+      accepted,
+      typeError: `Some files do not match the allowed types: ${accept}`,
+    };
+  };
+
+  // Semua jalur masuk file (dialog, drag, script) lewat sini, jadi `accept`
+  // dicek di satu tempat. Atribut `accept` di <input> cuma saran untuk
+  // dialog dan bisa dilewati lewat opsi "All files" atau script.
+  const processFiles = (selectedFiles: File[]) => {
     if (disabled) return;
 
-    const incoming = allowMultiple ? selectedFiles : selectedFiles.slice(0, 1);
+    const { accepted, typeError: pendingError } = filterByAccept(selectedFiles);
+    const incoming = allowMultiple ? accepted : accepted.slice(0, 1);
     if (incoming.length === 0) {
       setInternalError(pendingError);
       return;
@@ -435,6 +453,12 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const index = filesRef.current.findIndex((f) => f.id === targetId);
     if (index === -1) return;
     const target = filesRef.current[index];
+
+    const { typeError } = filterByAccept([selected]);
+    if (typeError !== undefined) {
+      setInternalError(typeError);
+      return;
+    }
 
     if (maxSize !== undefined && selected.size > maxSize) {
       setInternalError(
@@ -575,25 +599,7 @@ export function useInputFile(opts: UseInputFileOptions = {}) {
     const droppedFiles = Array.from(e.dataTransfer.files);
     if (droppedFiles.length === 0) return;
 
-    let filteredFiles = droppedFiles;
-    let typeError: string | undefined;
-
-    if (accept !== undefined && accept.trim() !== '') {
-      filteredFiles = droppedFiles.filter((file) =>
-        matchesAccept(file, accept)
-      );
-
-      if (filteredFiles.length !== droppedFiles.length) {
-        typeError = `Some files do not match the allowed types: ${accept}`;
-        if (filteredFiles.length === 0) {
-          setInternalError(typeError);
-          return;
-        }
-      }
-    }
-
-    // typeError diteruskan supaya tidak langsung ditimpa `setInternalError(undefined)`.
-    processFiles(filteredFiles, typeError);
+    processFiles(droppedFiles);
   };
 
   const prevFilesRef = useRef<FileItem[]>([]);
