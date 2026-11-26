@@ -39,6 +39,9 @@ const ButtonNode = Node.create({
           const attrs: Record<string, string> = {};
 
           for (const attr of element.attributes) {
+            // atribut event (onclick, onmouseover, ...) bisa menjalankan
+            // script di dalam editor, jadi tidak ikut disimpan.
+            if (attr.name.toLowerCase().startsWith('on') === true) continue;
             attrs[attr.name] = attr.value;
           }
 

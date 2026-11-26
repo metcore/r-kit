@@ -159,6 +159,14 @@ export default function TextEditorPage() {
       <div className="flex flex-col gap-8">
         <GridWrapper>
           <MainSection
+            title="Text Editor Toolbar Tidak Dilipat"
+            code={'<TextEditor toolbarCollapsible={false} />'}
+            className="col-span-2"
+          >
+            <TextEditor label="Description" toolbarCollapsible={false} />
+          </MainSection>
+
+          <MainSection
             title="Text Editor"
             code={defaultExample}
             className="col-span-2"
