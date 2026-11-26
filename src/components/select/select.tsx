@@ -17,7 +17,7 @@ import type {
   SelectRawValue,
   SelectValue,
 } from './type';
-import { Icon } from '../icons';
+import { Icon, type IconNameProps } from '../icons';
 import { cn, fieldHasError } from '../../lib/utils';
 import { FormField } from '../form';
 import { RoundedSpinner } from '../loading';
@@ -95,6 +95,7 @@ export function Select<Extra extends object = object>({
   isDisabled = false,
   disabled = false,
   renderOption = null,
+  color = 'primary',
   renderValue = null,
   className,
   label,
@@ -315,8 +316,22 @@ export function Select<Extra extends object = object>({
     [selectedOptions]
   );
 
+  // Lompati opsi nonaktif saat navigasi panah; berputar di ujung daftar.
+  const nextEnabledIndex = useCallback(
+    (from: number, step: 1 | -1): number => {
+      const total = filteredOptions.length;
+      for (let i = 1; i <= total; i++) {
+        const idx = (from + step * i + total) % total;
+        if (filteredOptions[idx]?.disabled !== true) return idx;
+      }
+      return from;
+    },
+    [filteredOptions]
+  );
+
   const handleSelect = useCallback(
     (option: SelectOption<Extra>) => {
+      if (option.disabled === true) return;
       if (isMultiMode) {
         const exists = selectedOptions.some((v) => v.value === option.value);
         const newValue = exists
@@ -368,20 +383,12 @@ export function Select<Extra extends object = object>({
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setHighlightedIndex(() =>
-            highlightedIndex < filteredOptions.length - 1
-              ? highlightedIndex + 1
-              : 0
-          );
+          setHighlightedIndex(() => nextEnabledIndex(highlightedIndex, 1));
           break;
 
         case 'ArrowUp':
           e.preventDefault();
-          setHighlightedIndex(() =>
-            highlightedIndex > 0
-              ? highlightedIndex - 1
-              : filteredOptions.length - 1
-          );
+          setHighlightedIndex(() => nextEnabledIndex(highlightedIndex, -1));
           break;
 
         case 'Enter': {
@@ -400,7 +407,7 @@ export function Select<Extra extends object = object>({
           break;
       }
     },
-    [isOpen, filteredOptions, highlightedIndex, handleSelect]
+    [isOpen, filteredOptions, highlightedIndex, handleSelect, nextEnabledIndex]
   );
   function getFontSize(size: SelectSize, multiple?: boolean) {
     const currentSize = size ?? 'md';
@@ -557,22 +564,47 @@ export function Select<Extra extends object = object>({
         ref={(el) => {
           optionRefs.current[index] = el;
         }}
+        aria-disabled={option.disabled === true ? true : undefined}
+        className={cn(option.disabled === true && 'cursor-not-allowed')}
         onMouseEnter={() => setHighlightedIndex(index)}
         onClick={() => handleSelect(option)}
       >
         {renderOption != null ? (
           renderOption(option, { selected })
         ) : (
-          <Chip className="text-left" block selected={highlighted || selected}>
+          <Chip
+            className="text-left"
+            block
+            // opsi nonaktif selalu abu-abu tipis, apa pun `color` Select-nya
+            color={option.disabled === true ? 'gray' : color}
+            disabled={option.disabled === true}
+            selected={highlighted || selected}
+          >
             <div className="flex-1">
               <>
                 <div className="flex items-center gap-2">
-                  {option?.icon != undefined && <Icon name="user" size={12} />}
-                  <Text variant="t2" weight="medium" className="text-gray-900">
+                  {option?.icon != undefined && (
+                    <Icon name={option.icon as IconNameProps} size={12} />
+                  )}
+                  <Text
+                    variant="t2"
+                    weight="medium"
+                    className={
+                      option.disabled === true
+                        ? 'text-gray-400'
+                        : 'text-gray-900'
+                    }
+                  >
                     {option.label}
                   </Text>
                 </div>
-                <Text variant="t3" weight="regular" className="text-gray-700">
+                <Text
+                  variant="t3"
+                  weight="regular"
+                  className={
+                    option.disabled === true ? 'text-gray-400' : 'text-gray-700'
+                  }
+                >
                   {option.description}
                 </Text>
               </>

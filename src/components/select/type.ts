@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { BaseColor } from '../base/type/base-color';
 import type { IconNameProps } from '../icons';
 import type { SelectSize } from './selectSize';
 
@@ -8,7 +9,10 @@ export interface BaseOption {
   value: string | number | '';
   label: string;
   description?: string;
+  /** Nama ikon (lihat `iconNames`). Nama yang tidak dikenal tidak dirender. */
   icon?: string;
+  /** Opsi tampil tapi tidak bisa dipilih, baik lewat klik maupun keyboard. */
+  disabled?: boolean;
 }
 
 type EmptyObject = Record<string, never>;
@@ -50,6 +54,8 @@ type BaseSelectProps<Extra extends object = object> = {
    */
   isDisabled?: boolean;
   disabled?: boolean;
+  /** Warna opsi yang disorot/terpilih di daftar. Bawaannya `primary`. */
+  color?: BaseColor;
 
   renderOption?:
     | ((

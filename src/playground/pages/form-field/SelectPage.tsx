@@ -206,6 +206,45 @@ function SelectPage() {
       <div className="flex flex-col gap-4">
         <GridWrapper>
           <MainSection
+            title="Select Warna Opsi"
+            code={'<Select color="success" options={OPSI} />'}
+          >
+            <Select
+              label="Jenis cuti"
+              color="success"
+              options={[
+                { value: 'tahunan', label: 'Cuti tahunan' },
+                { value: 'besar', label: 'Cuti besar', disabled: true },
+                { value: 'sakit', label: 'Cuti sakit' },
+              ]}
+            />
+          </MainSection>
+          <MainSection
+            title="Select Opsi Nonaktif"
+            code={`<Select
+  options={[
+    { value: 'tahunan', label: 'Cuti tahunan', icon: 'calendar' },
+    { value: 'besar', label: 'Cuti besar', icon: 'lock', disabled: true },
+    { value: 'sakit', label: 'Cuti sakit', icon: 'bell' },
+  ]}
+/>`}
+          >
+            <Select
+              label="Jenis cuti"
+              options={[
+                { value: 'tahunan', label: 'Cuti tahunan', icon: 'calendar' },
+                {
+                  value: 'besar',
+                  label: 'Cuti besar',
+                  icon: 'lock',
+                  disabled: true,
+                },
+                { value: 'sakit', label: 'Cuti sakit', icon: 'bell' },
+              ]}
+            />
+          </MainSection>
+
+          <MainSection
             title="Basic Select"
             className="flex-1"
             code={codeExampleSelectBasic}
