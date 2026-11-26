@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import dedent from 'dedent';
 import { Input } from '../../../clients';
-import { Icon, type IconNameProps } from '../../../components/icons';
-import { iconRegistry } from '../../../components/icons/icon-registry';
+import { Icon, iconNames, type IconNameProps } from '../../../components/icons';
 import { Text } from '../../../components/text';
 import { useCopy } from '../../../hooks/use-copy';
 import illust from '../../../assets/images/typography.png';
@@ -11,7 +10,7 @@ import HeroSection from '../../components/HeroSection';
 import MainSection from '../../components/MainSection';
 import Footer from '../../components/Footer';
 
-const ICON_NAMES = Object.keys(iconRegistry) as IconNameProps[];
+const ICON_NAMES = iconNames;
 
 const exampleBasic = dedent(`
   import { Icon } from '@herca/r-kit';

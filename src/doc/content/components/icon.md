@@ -1,11 +1,11 @@
 ---
 title: Icon
-description: Menampilkan salah satu dari 459 ikon bawaan kit.
+description: Menampilkan salah satu dari 460 ikon bawaan kit.
 group: Foundation
 playground: /playground/icons
 ---
 
-Kit membawa **459 ikon**. Semuanya dipanggil lewat satu komponen dengan
+Kit membawa **460 ikon**. Semuanya dipanggil lewat satu komponen dengan
 menyebut namanya.
 
 ## Impor
@@ -60,6 +60,32 @@ const AKSI: { nama: IconNameProps; label: string }[] = [
 ];
 ```
 
+## Daftar Nama Ikon
+
+`iconNames` berisi seluruh nama ikon saat runtime, misalnya untuk
+Select pemilih ikon:
+
+```tsx
+import { Icon, iconNames, type IconNameProps } from '@herca/r-kit';
+import { Select } from '@herca/r-kit/clients';
+
+const opsiIkon = iconNames.map((nama) => ({ label: nama, value: nama }));
+
+<Select
+  isSearchable
+  options={opsiIkon}
+  renderOption={(opsi) => (
+    <span className="flex items-center gap-2">
+      <Icon name={opsi.value as IconNameProps} size={18} />
+      {opsi.label}
+    </span>
+  )}
+/>;
+```
+
+Nilainya bertipe `readonly IconNameProps[]`, jadi setiap item langsung
+bisa dipakai sebagai `name` di `<Icon />`.
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -75,5 +101,5 @@ Nama ikon yang tidak dikenal membuat komponen merender `null` tanpa
 melempar galat, sehingga kesalahan mudah terlewat saat dijalankan.
 Andalkan `IconNameProps` untuk menangkapnya lebih awal.
 
-Daftar lengkap 459 ikon beserta pencariannya ada di halaman Icon pada
+Daftar lengkap 460 ikon beserta pencariannya ada di halaman Icon pada
 Playground; kartu ikonnya bisa diklik untuk menyalin kode pemakaian.
