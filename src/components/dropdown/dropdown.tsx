@@ -52,17 +52,41 @@ export function DropdownContent({
 export function DropdownItem({
   children,
   className,
+  asChild = false,
+  onSelect,
+  textValue,
   ...props
 }: DropdownItemProps) {
-  return (
-    <DropdownMenu.Item asChild>
-      <BaseButton
-        className={cn(
-          'flex flex-wrap items-center gap-2 px-2 py-2 outline-0 transition-all',
-          className
-        )}
-        {...props}
+  // Prop khusus Radix (asChild, onSelect, textValue) untuk Item, bukan untuk
+  // elemen DOM. Dengan `asChild`, child milik pemanggil yang jadi item, jadi
+  // tidak dibungkus BaseButton lagi (hindari <button> di dalam <button>).
+  const itemClassName = cn(
+    'flex flex-wrap items-center gap-2 px-2 py-2 outline-0 transition-all',
+    className
+  );
+
+  if (asChild) {
+    return (
+      <DropdownMenu.Item
+        asChild
+        onSelect={onSelect}
+        textValue={textValue}
+        disabled={props.disabled}
+        className={itemClassName}
       >
+        {children}
+      </DropdownMenu.Item>
+    );
+  }
+
+  return (
+    <DropdownMenu.Item
+      asChild
+      onSelect={onSelect}
+      textValue={textValue}
+      disabled={props.disabled}
+    >
+      <BaseButton className={itemClassName} {...props}>
         {children}
       </BaseButton>
     </DropdownMenu.Item>

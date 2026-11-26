@@ -98,9 +98,15 @@ dipakai:
 | `sideOffset` | `DropdownContent` | `15` | Jarak dari pemicu |
 | `href` | `DropdownItem` | — | Merender item sebagai tautan |
 | `disabled` | `DropdownItem` | `false` | Menonaktifkan item |
+| `asChild` | `DropdownItem` | `false` | Memakai child sendiri sebagai item, tanpa tombol bawaan |
+| `onSelect` | `DropdownItem` | — | Dipanggil saat item dipilih (klik atau Enter) |
 | `modal` | `Dropdown` | `true` | Mengunci scroll saat menu terbuka |
 
 ## Catatan
+
+Dengan `asChild`, child langsung menjadi item dan tidak dibungkus tombol
+bawaan lagi. Jangan menaruh `<button>` di dalam `DropdownItem` tanpa
+`asChild`, karena hasilnya tombol bersarang.
 
 Menu terbuka pada `pointerdown`, bukan `click`. Ini penting saat menulis
 pengujian otomatis.

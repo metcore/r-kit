@@ -52,6 +52,8 @@ const [aktif, setAktif] = useState(false);
 | `name` | `string` | — | Nama field dalam form |
 | `id` | `string` | — | Id elemen |
 | `tooltip` | `string` | — | Keterangan saat disentuh |
+| `aria-label` | `string` | — | Nama untuk pembaca layar saat tanpa `label`, misal di baris tabel |
+| `aria-labelledby` | `string` | — | Id elemen yang menjadi nama sakelar |
 | `className` | `string` | — | Kelas tambahan |
 
 ## Catatan

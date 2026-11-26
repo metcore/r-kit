@@ -38,6 +38,13 @@ export default function CheckboxPage() {
 
       <div className="flex flex-1 flex-col gap-4">
         <GridWrapper>
+          <MainSection
+            title="Checkbox Tanpa Label (aria-label)"
+            code={'<Checkbox aria-label="Pilih baris Herca" />'}
+          >
+            <Checkbox aria-label="Pilih baris Herca" />
+          </MainSection>
+
           <MainSection title="Checkbox Default" code={exampleDefault}>
             <Checkbox
               onChange={setCheckedBasic}

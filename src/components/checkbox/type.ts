@@ -6,22 +6,26 @@ export type IconType = 'check' | 'minus';
 
 export type CheckboxValue = number | string;
 export interface CheckboxProps {
-  id?: string;
-  value?: CheckboxValue;
-  checked?: boolean;
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  required?: boolean;
-  size?: SizeType;
-  color?: BaseColor;
-  icon?: IconType;
+  'id'?: string;
+  'value'?: CheckboxValue;
+  'checked'?: boolean;
+  'defaultChecked'?: boolean;
+  'disabled'?: boolean;
+  'required'?: boolean;
+  'size'?: SizeType;
+  'color'?: BaseColor;
+  'icon'?: IconType;
   /**
    * @deprecated Gunakan onChange
    */
-  onCheckedChange?: (checked: boolean) => void;
-  onChange?: (checked: boolean) => void;
-  className?: string;
-  tooltip?: string;
+  'onCheckedChange'?: (checked: boolean) => void;
+  'onChange'?: (checked: boolean) => void;
+  'className'?: string;
+  'tooltip'?: string;
+  /** Nama untuk pembaca layar kalau tidak ada `label` yang terlihat (misal di baris tabel). */
+  'aria-label'?: string;
+  /** Id elemen yang menjadi nama kontrol ini. */
+  'aria-labelledby'?: string;
 }
 
 export interface CheckboxGroupProps {
