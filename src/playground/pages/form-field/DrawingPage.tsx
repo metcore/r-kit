@@ -138,8 +138,8 @@ export const DrawingPage = () => {
 
         <Footer
           title="Drawing"
-          backTo="/playground/input-phone-number"
-          backToTitle="Input Phone Number"
+          backTo="/playground/input-number"
+          backToTitle="Input Number"
           nextTo="/playground/avatar"
           nextToTitle="Avatar"
         />

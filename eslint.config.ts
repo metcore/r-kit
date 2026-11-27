@@ -69,6 +69,14 @@ export default defineConfig([
     },
   },
   {
+    // describe/it dari node:test mengembalikan promise yang memang tidak
+    // perlu di-await; runner yang menunggunya.
+    files: ['tests/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
+  {
     ignores: [
       'node_modules/',
       'dist/',

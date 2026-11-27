@@ -55,6 +55,7 @@ export const componentCategories: ComponentCategory[] = [
       { name: 'Input OTP', to: '/playground/input-otp' },
       { name: 'Input Password', to: '/playground/input-password' },
       { name: 'Input Phone Number', to: '/playground/input-phone-number' },
+      { name: 'Input Number', to: '/playground/input-number' },
       { name: 'Text Area', to: '/playground/text-area' },
       { name: 'Text Editor', to: '/playground/text-editor' },
       { name: 'Select', to: '/playground/select' },
