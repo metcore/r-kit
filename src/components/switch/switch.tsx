@@ -6,7 +6,7 @@ import { FormDescription, FormField, FormLabel } from '../form';
 import { useInputGroup } from '../input-group';
 
 export const BaseSwitch: React.FC<SwitchProps> = ({
-  id: providedId,
+  'id': providedId,
   checked,
   defaultChecked = false,
   onCheckedChange,
@@ -16,6 +16,8 @@ export const BaseSwitch: React.FC<SwitchProps> = ({
   size = 'md',
   color = 'primary',
   className,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }) => {
   const generatedId = useId();
   const id = providedId ?? generatedId;
@@ -40,6 +42,8 @@ export const BaseSwitch: React.FC<SwitchProps> = ({
       type="button"
       role="switch"
       id={id}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       aria-checked={isChecked}
       aria-required={required}
       disabled={disabled}

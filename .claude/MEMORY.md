@@ -28,6 +28,8 @@ isi. `metadata.type: project` = fakta/konvensi soal codebase ini.
 - [CSS global bocor ke editor consumer](memory/global-css-leaks-to-consumer-editors.md) — rule `.ProseMirror { height }` di text-editor.css dulu kena ke semua Tiptap di app consumer (fallback 100px, isi meluber); selector library pihak ketiga harus di-scope ke wrapper r-kit
 - [Keypad desimal HP ikut locale perangkat](memory/mobile-decimal-keypad-follows-device-locale.md) — `inputMode="decimal"` di HP berbahasa Inggris cuma punya `.`; input angka format ID harus anggap `.`/`,` yang baru diketik sebagai desimal, kalau enggak desimal gak bisa diketik sama sekali
 - [Test pakai node --test di tests/](memory/node-test-lives-outside-src.md) — `npm test` tanpa vitest; file test wajib di `tests/` bukan `src/` karena `tsconfig.app.json` cuma punya types `vite/client`, dan yang dites harus modul murni
+- [Tiptap buang HTML di luar skema](memory/tiptap-drops-unknown-html.md) — style di td/mark/div hilang setelah mode kode; atribut yang disimpan PreserveAttributes ikut ke DOM editor, jadi jangan pernah daftarkan `on*`
+- [Mode InputFile menyaring uploadConfig](memory/input-file-mode-gates-upload-config.md) — InputFile typed membuang uploadConfig kalau mode bukan `uploadFile`; komponen internal pakai InputFileRaw; `accept` dicek di processFiles
 
 ## Cara nambah entri baru
 

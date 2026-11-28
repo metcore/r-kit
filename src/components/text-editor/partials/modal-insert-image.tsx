@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../button';
 import { Icon } from '../../icons';
 import { Input } from '../../input';
-import { InputFile, type FileItem, type UploadedFile } from '../../input-file';
+import {
+  InputFileRaw,
+  type FileItem,
+  type UploadedFile,
+} from '../../input-file';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../modal';
 import { Select } from '../../select';
 import type { BaseOption } from '../../select/type';
@@ -360,7 +364,7 @@ export default function ModalInsertImage({
               />
             </TabsContent>
             <TabsContent value="2">
-              <InputFile
+              <InputFileRaw
                 key={uploadInputKey}
                 label={resolvedUpladLabel}
                 accept={resolvedAccept}

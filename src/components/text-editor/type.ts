@@ -12,6 +12,11 @@ export interface TextEditorProps {
   errorMessages?: string | string[];
   size?: 'sm' | 'md' | 'lg';
   height?: 'fit-content' | number;
+  /**
+   * Toolbar dilipat jadi satu baris; grup yang tidak muat disembunyikan
+   * dan bisa dibuka lewat tombol di ujung toolbar. Bawaannya `true`.
+   */
+  toolbarCollapsible?: boolean;
   disabled?: boolean;
   value?: string;
   placeholder?: string;

@@ -137,6 +137,27 @@ export default function DropdownPage() {
 
       <div className="flex flex-col gap-4">
         <GridWrapper>
+          <MainSection
+            title="Item dengan asChild"
+            code={`<DropdownItem asChild>
+  <a href="#ekspor">Ekspor Excel</a>
+</DropdownItem>`}
+          >
+            <Dropdown>
+              <DropdownTrigger>
+                <Button>Aksi</Button>
+              </DropdownTrigger>
+              <DropdownContent>
+                <DropdownItem asChild>
+                  <a href="#ekspor">Ekspor Excel</a>
+                </DropdownItem>
+                <DropdownItem onSelect={() => undefined}>
+                  Lihat detail
+                </DropdownItem>
+              </DropdownContent>
+            </Dropdown>
+          </MainSection>
+
           <MainSection title="Basic" code={exampleBasic}>
             <Dropdown>
               <DropdownTrigger>

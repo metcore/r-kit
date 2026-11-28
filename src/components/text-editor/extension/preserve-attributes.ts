@@ -21,8 +21,20 @@ export const PreserveAttributes = Extension.create({
           'link',
           'button',
           'table',
+          'tableRow',
+          'tableCell',
+          'tableHeader',
+          'div',
           'iframe',
           'a',
+          // mark: tanpa ini style di <strong>/<em>/... hilang waktu
+          // keluar dari mode kode
+          'bold',
+          'italic',
+          'underline',
+          'strike',
+          'code',
+          'subscript',
         ],
         attributes: {
           style: {
@@ -47,14 +59,6 @@ export const PreserveAttributes = Extension.create({
             renderHTML: (attrs) => {
               const id = attrs['id'] as string;
               return id ? { id } : {};
-            },
-          },
-          onclick: {
-            default: null,
-            parseHTML: (el) => el.getAttribute('onclick'),
-            renderHTML: (attrs) => {
-              const onclick = attrs['onclick'] as string;
-              return onclick ? { onclick } : {};
             },
           },
           src: {

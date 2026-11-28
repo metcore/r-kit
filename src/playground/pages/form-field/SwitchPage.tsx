@@ -119,6 +119,13 @@ export const SwitchPage = () => {
       <div className="flex flex-col gap-8">
         <GridWrapper>
           <MainSection
+            title="Switch Tanpa Label (aria-label)"
+            code={'<Switch aria-label="Aktifkan karyawan Herca" />'}
+          >
+            <Switch aria-label="Aktifkan karyawan Herca" />
+          </MainSection>
+
+          <MainSection
             title="Switches"
             code={defaultExample}
             className="col-span-2"

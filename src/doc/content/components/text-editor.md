@@ -52,6 +52,17 @@ terstruktur.
 <TextEditor height="fit-content" />
 ```
 
+## Bilah Alat Terlipat
+
+Bawaannya bilah alat cuma menampilkan satu baris. Tombol yang tidak muat
+disembunyikan, dan di ujung kanan muncul tombol panah untuk membuka
+semuanya. Setelah dibuka, panahnya berbalik untuk melipat lagi. Kalau semua tombol muat satu baris, tombol itu tidak muncul.
+
+```tsx
+// semua tombol selalu tampil, boleh lebih dari satu baris
+<TextEditor toolbarCollapsible={false} />
+```
+
 ## Props
 
 | Prop | Tipe | Bawaan | Keterangan |
@@ -60,6 +71,7 @@ terstruktur.
 | `onChange` | `(editor: Editor) => void` | — | Dipanggil saat isi berubah |
 | `plugins` | `Plugins` | — | Mengatur fitur yang aktif di bilah alat |
 | `height` | `number \| 'fit-content'` | — | Tinggi area sunting |
+| `toolbarCollapsible` | `boolean` | `true` | Melipat bilah alat jadi satu baris |
 | `size` | `sm \| md \| lg` | `md` | Ukuran bilah alat |
 | `label` | `string` | — | Teks di atas penyunting |
 | `hint` | `string` | — | Keterangan di bawah penyunting |
@@ -70,6 +82,11 @@ terstruktur.
 | `disabled` | `boolean` | `false` | Menonaktifkan |
 
 ## Catatan
+
+Di mode kode, setiap ketikan langsung diteruskan ke `onChange`, jadi form
+yang disimpan sebelum keluar dari mode kode tetap mendapat isinya. Style
+pada `<div>`, sel tabel, dan teks tebal/miring/garis bawah ikut tersimpan.
+Tag `<style>` dan atribut event seperti `onclick` selalu dibuang.
 
 Prop `ui` **sudah usang**. Gunakan `size` dan `disabled` di tingkat atas.
 

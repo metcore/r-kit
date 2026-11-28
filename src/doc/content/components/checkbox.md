@@ -76,6 +76,8 @@ untuk induk yang sebagian anaknya tercentang:
 | `icon` | `check \| minus` | `check` | Tanda di dalam kotak |
 | `disabled` | `boolean` | `false` | Menonaktifkan |
 | `tooltip` | `string` | — | Keterangan saat disentuh |
+| `aria-label` | `string` | — | Nama untuk pembaca layar saat tanpa `label`, misal di baris tabel |
+| `aria-labelledby` | `string` | — | Id elemen yang menjadi nama kotak |
 
 ## Props — CheckboxGroup
 

@@ -89,6 +89,33 @@ const OPSI: SelectOption[] = [
 ];
 ```
 
+`icon` diisi nama ikon (lihat `iconNames` di [Icon](/docs/icon)).
+
+## Opsi Nonaktif
+
+Opsi dengan `disabled: true` tetap tampil, tetapi tidak bisa dipilih lewat
+klik maupun keyboard. Navigasi panah melompatinya.
+
+```tsx
+const OPSI: SelectOption[] = [
+  { value: 'tahunan', label: 'Cuti tahunan' },
+  { value: 'besar', label: 'Cuti besar', disabled: true },
+];
+```
+
+Opsi nonaktif selalu tampil abu-abu tipis, apa pun `color` Select-nya.
+Berlaku juga untuk `AsyncSelect`.
+
+## Warna Opsi
+
+`color` mengatur warna opsi yang disorot dan terpilih di daftar.
+Bawaannya `primary`.
+
+```tsx
+<Select color="success" options={OPSI} />
+<Select color="purple" options={OPSI} />
+```
+
 ## Tampilan Opsi Kustom
 
 ```tsx
@@ -124,6 +151,7 @@ mendekati ujung:
 | `value` | opsi, larik opsi, atau nilai mentah | — | Pilihan saat ini |
 | `onChange` | `(value) => void` | — | Dipanggil saat pilihan berubah |
 | `multiple` | `boolean` | `false` | Mengizinkan lebih dari satu pilihan |
+| `color` | `BaseColor` | `primary` | Warna opsi yang disorot dan terpilih |
 | `isSearchable` | `boolean` | `false` | Menampilkan kolom pencarian |
 | `isClearable` | `boolean` | `false` | Menampilkan tombol hapus pilihan |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Tinggi kontrol, ukuran teks, dan ukuran ikon awalan |

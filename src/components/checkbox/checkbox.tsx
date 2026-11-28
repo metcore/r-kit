@@ -100,17 +100,19 @@ export const CheckboxGroup: React.FC<
 };
 
 export const BaseCheckbox: React.FC<CheckboxProps> = ({
-  id: providedId,
+  'id': providedId,
   value,
   checked,
-  disabled: disabledProp = false,
+  'disabled': disabledProp = false,
   required = false,
-  size: sizeProp,
-  color: colorProp,
-  icon: iconProp,
+  'size': sizeProp,
+  'color': colorProp,
+  'icon': iconProp,
   onCheckedChange,
   onChange,
   className,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }) => {
   const [internalChecked, setInternalChecked] = React.useState(
     checked ?? false
@@ -171,6 +173,8 @@ export const BaseCheckbox: React.FC<CheckboxProps> = ({
       type="button"
       role="checkbox"
       id={id}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       aria-checked={isChecked}
       aria-required={required}
       disabled={disabled}

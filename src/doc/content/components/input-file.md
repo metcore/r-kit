@@ -147,7 +147,7 @@ const berkas = useInputFile({
 | `value` | `FileItem[]` | — | Mode terkendali |
 | `onChange` | `(files: FileItem[]) => void` | — | Dipanggil saat daftar berubah |
 | `multiple` | `boolean` | `false` | Mengizinkan banyak berkas |
-| `accept` | `string` | — | Jenis berkas yang diterima |
+| `accept` | `string` | — | Jenis berkas yang diterima. Dicek untuk semua jalur masuk: dialog, seret, script, dan ganti berkas |
 | `maxSize` | `number` | — | Ukuran maksimum per berkas, dalam byte |
 | `maxFiles` | `number` | — | Jumlah berkas maksimum |
 | `variant` | `primary \| secondary \| gray \| medium \| large` | — | Gaya area unggah |
